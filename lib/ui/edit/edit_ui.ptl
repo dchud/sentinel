@@ -1,3 +1,5 @@
+# $Id$
+
 _q_exports = [
     '_q_index',
     'find',
@@ -429,8 +431,7 @@ def pubmed [html] (request):
                         """
                             </ul>
                             <br />
-                            If you're certain it's not a duplicate, you may
-                            still 
+                            If you're certain it's not a duplicate, you can still 
                             [<a href='pubmed?pmid=%s&batch_id=%s&queue=add'>queue</a>]
                             this record.
                         </td>

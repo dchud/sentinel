@@ -161,7 +161,7 @@ class QueuedRecord (DTable):
                 select_clause = """
                         SELECT DISTINCT queued_record_id
                         FROM queued_record_metadata
-                        WHERE term_id =""", term_map[field].uid
+                        WHERE term_id = %s""" % term_map[field].uid
                     
             cursor.execute(select_clause + """
                 AND value = %s
@@ -175,45 +175,10 @@ class QueuedRecord (DTable):
                 except:
                     potential_dupes[rec_id] = [field]
                 if save_changes:
-                    try:
-                        cursor.execute("""
-                            INSERT INTO duplicates
-                            (uid, new_record_id, old_record_id, term_id)
-                            VALUES 
-                            (NULL, %s, %s, %s)
-                            """, (self.uid, rec_id, term_map[field].uid))
-                    except:
-                        print traceback.print_exc()
-                    
                     self.duplicate_score += 10
                     self.save(cursor)
         
         return potential_dupes
-        
-    def get_duplicates (self, cursor):
-        """
-        Create a dictionary of apparent duplicates for a given record.
-        Dict is keyed by pre-existing duplicate record's uid, with
-        matching metadata term uids in a list as values.
-        
-        Assume calling function will load records as needed.
-        """
-        duplicates = {}
-        cursor.execute("""
-            SELECT old_record_id, term_id
-            FROM duplicates
-            WHERE new_record_id = %s
-            """, self.uid)
-        rows = cursor.fetchall()
-        for row in rows:
-            old_record_id = row[0]
-            term_id = row[1]
-            try:
-                duplicates[old_record_id].append(term_id)
-            except:
-                duplicates[old_record_id] = [term_id]
-                
-        return duplicates
         
 
     def load (self, cursor, load_metadata=True, source=None):

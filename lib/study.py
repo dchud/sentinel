@@ -1102,6 +1102,7 @@ class Study (DTable):
         'outcomes only' : 5,
         'exposures only' : 6,
         'curated' : 7,
+        'duplicate' : 8,
         }
             
     # For dynamic iteration over related tables
@@ -1497,7 +1498,7 @@ class Study (DTable):
                     self.uid)
                     )
             except:
-                print 'MySQL exception on study.update'
+                print 'MySQL exception on study.save()'
                 print 'exception:', traceback.print_exc()
             #print 'updated study %s' % self.uid
         # FIXME: should this be set from the SQL?
@@ -1538,10 +1539,6 @@ class Study (DTable):
                 for item in getattr(self, table_name):
                     print 'Deleting %s [%s]' % (table_name, item.uid)
                     item.delete(cursor)
-                #delete_string = "DELETE FROM %s " % table_name
-                #cursor.execute(delete_string + """
-                #    WHERE study_id = %s
-                #    """, self.uid)
                 
             cursor.execute("""
                 DELETE FROM studies

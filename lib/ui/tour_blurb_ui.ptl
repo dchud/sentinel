@@ -1,3 +1,5 @@
+# $Id$
+
 from quixote.html import htmltext
 
 from canary.ui.tour_blurb import blurbs
@@ -10,13 +12,13 @@ def render_blurb_row [html] (id=1):
     """
     <tr>
         <td align='center' valign='middle' width='150'>
-	    <img src='/%s' width='144' alt='%s'>
-	</td>
+        <img src='/%s' width='144' alt='%s'>
+    </td>
         <td align='left' valign='top'>
-	    <p>
-		<font size='-1'>%s</font>
-	    </p>
-	</td>
+        <p>
+        <font size='-1'>%s</font>
+        </p>
+    </td>
     </tr>
     """ % (blurb[0], blurb[1], htmltext(blurb[2]))
 

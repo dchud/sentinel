@@ -66,20 +66,6 @@ CREATE TABLE `category_groups` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
--- Table structure for table `duplicates`
---
-
-DROP TABLE IF EXISTS `duplicates`;
-CREATE TABLE `duplicates` (
-  `uid` int(11) NOT NULL auto_increment,
-  `new_record_id` int(11) NOT NULL default '0',
-  `old_record_id` int(11) NOT NULL default '0',
-  `term_id` int(4) NOT NULL default '0',
-  PRIMARY KEY  (`uid`),
-  UNIQUE KEY `new_record_id` (`new_record_id`,`old_record_id`,`term_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
---
 -- Table structure for table `dv_group`
 --
 

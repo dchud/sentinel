@@ -1,17 +1,23 @@
-_q_exports = ['_q_index',
-              'view',
-             ]
+# $Id$
+
+_q_exports = [
+    '_q_index',
+    'view',
+    'update',
+    ]
 
 from log4py import Logger
 
 from quixote import get_publisher
 from quixote.errors import AccessError, PublishError, TraversalError
 
-from canary.loader import Batch, Queue
+from canary.loader import Batch, Queue, QueuedRecord
+from canary.source_catalog import SourceCatalog
+from canary.study import Study
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found
+from canary.ui.pages import has_messages, add_message, render_messages
 from canary.ui.edit.study.utils import get_sfx_link
-from canary.source_catalog import SourceCatalog
 
 
 def title_bar [html] (action=''):
@@ -37,8 +43,9 @@ def _q_index [html] (request):
 
 class BatchActions:
 
-    _q_exports = ['_q_index',
-                 ]
+    _q_exports = [
+        '_q_index',
+        ]
 
     def __init__ (self, batch_id):
         self.batch_id = batch_id
@@ -52,19 +59,20 @@ class BatchActions:
 
     def _q_lookup [html] (self, request, action):
         try:
+            start = int(request.get_form_var('start', default=0))
+            size = int(request.get_form_var('size', default=25))
+            show = request.get_form_var('show', default='unfinished')
             if action == 'view':
-                start = request.get_form_var('start', default=0)
-                size = request.get_form_var('size', default=25)
-                show = request.get_form_var('show', default='unfinished')
-                try:
-                    start = int(start)
-                    size = int(size)
-                except ValueError:
-                    return view(request, batch_id=self.batch_id, show=show)
-                return view(request, batch_id=self.batch_id, show=show, start=start, size=size)
+                return view(request, batch_id=self.batch_id, 
+                    show=show, start=start, size=size)
+            elif action == 'update':
+                return update(request, batch_id=self.batch_id, 
+                    start=start, size=size)
             else:
                 raise TraversalError
         except:
+            import traceback
+            print traceback.print_exc()
             return not_found('batch')
 
 
@@ -76,6 +84,7 @@ def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
     
     try:
         cursor = get_publisher().get_cursor()
+        source_catalog = get_publisher().get_source_catalog()
         batch = Batch()
         batch.uid = int(batch_id)
         #batch.load(cursor, start=start, size=size)
@@ -91,7 +100,10 @@ def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
             """
             <h4>Batch: (unnamed)</h4>
             """
-            
+
+        if has_messages():
+            render_messages()
+        
         if batch_stats['total'] > 0:
             """
             <p>
@@ -119,6 +131,7 @@ def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
                     <th>Source</th>
                     <th>Actions</th>
                 </tr>
+                <form action='update' method='post'>
             """
             sort_list = [(id, rec) for id, rec in batch.queued_records.items()]
             sort_list.sort()
@@ -136,13 +149,25 @@ def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
                     """
                     <tr>
                         <td %s>%s</td>
+                    """ % (class_text, record_id)
+                    """
+                        <td %s>%s
+                    """ % (class_text, record.get_status(text=True))
+                    if record.get_status() == record.STATUS_UNCLAIMED:
+                        """
+                        <br />
+                        <span style='font-size:x-small;'>
+                        irrelevant?
+                        <input type='checkbox' name='record_%s_irrelevant'>
+                        </span>
+                        """ % record_id
+                        
+                    """
+                        </td>
                         <td %s>%s</td>
                         <td %s>%s</td>
                         <td %s>%s</td>
-                        <td %s>%s</td>
-                    """ % (class_text, record_id, 
-                        class_text, record.get_status(text=True),
-                        class_text, record.user_id, 
+                    """ % (class_text, record.user_id, 
                         class_text, record.title, 
                         class_text, record.source)
                         
@@ -176,12 +201,72 @@ def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
                         """
                             [<a href='/edit/study/%s/curate_one'>edit</a>]
                         """ % record_id
-                """
-                    </td>
-                </tr>
-                """    
+                    """
+                        </td>
+                    </tr>
+                    """ 
+                    if record.duplicate_score:
+                        mapped_terms = source_catalog.get_mapped_terms(batch.source_id)
+                        complete_mapping = source_catalog.get_complete_mapping()
+
+                        dupes = record.check_for_duplicates(cursor, mapped_terms, 
+                            complete_mapping=complete_mapping, save_changes=False)
+                        mapped_metadata = record.get_mapped_metadata(term_map=mapped_terms)
+                        
+                        """
+                        <tr>
+                            <td colspan='6' class='highlight'>
+                                Possible matches:
+                                <ul>
+                        """
+                        sort_list = [(k, v) for k, v in dupes.items()]
+                        sort_list.sort()
+                        for dupe_rec_id, dupe_fields in sort_list:
+                            dupe_rec = QueuedRecord(dupe_rec_id)
+                            dupe_rec.load(cursor, load_metadata=False)
+                            """
+                                <li>
+                                #%s (%s)
+                                [<a href='/record/%s' target='_blank'>public view</a>]
+                                [<a href='/edit/study/%s/history' target='_blank'>history</a>]
+                                [<a href='/edit/study/%s/curate_one'>curate</a>]
+                                <br />
+                                %s
+                                <br />
+                                %s
+                                </li> 
+                            """ % (dupe_rec_id, dupe_rec.get_status(True),
+                                dupe_rec_id, 
+                                dupe_rec_id, 
+                                dupe_rec_id, 
+                                dupe_rec.title, dupe_rec.source)
+                        """
+                                </ul>
+                        """
+                        if record.get_status() == record.STATUS_UNCLAIMED:
+                            """
+                            Mark this as a duplicate?
+                            <input type='checkbox' name='record_%s_duplicate'>
+                            """ % record_id
+                    
+                        """
+                            </td>
+                        </tr>
+                        """
+            """
+                        <tr>
+                            <td colspan='6'>
+                                Click here to update irrelevant and duplicate records:
+                                <input type='submit' name='update' value='update' />
+                                <!-- Don't forget the start and size params -->
+                                <input type='hidden' name='start' value='%s' />
+                                <input type='hidden' name='size' value='%s' />
+                            </tr>
+                        </tr>
+            """ % (start, size)
             """
             </table>
+            
             <p>
             Show:
             """
@@ -200,6 +285,8 @@ def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
             """
         cursor.close()
     except:
+        import traceback
+        print traceback.print_exc()
         raise PublishError
 
     footer()
@@ -243,3 +330,73 @@ def pager [html] (batch, show, start, size, stats):
                     (i * size, size, show, text)
             else:
                 ' [<b>%s</b>] ' % text
+
+
+def update [html] (request, batch_id, start, size):
+
+    cursor = get_publisher().get_cursor()
+    source_catalog = get_publisher().get_source_catalog()
+    user_id = request.session.user.get_id()
+    
+    header('Edit: Update batch %s' % batch_id)
+    title_bar('Update batch %s' % batch_id)
+    
+    if has_messages():
+        render_messages()
+        
+    try:
+        batch = Batch()
+        batch.uid = int(batch_id)
+        batch.load(cursor, start=start, size=size, load_metadata=False)
+        for rec_id, rec in batch.queued_records.items():
+            is_irrelevant = is_duplicate = False
+            
+            is_irrelevant = request.get_form_var('record_%s_irrelevant' % rec_id, 
+                default=False)
+            is_duplicate = request.get_form_var('record_%s_duplicate' % rec_id,
+                default=False)
+                
+            if is_irrelevant \
+                or is_duplicate:
+                    
+                study = Study()
+                history_messages = []
+                history_messages.append('Created study')
+                study.record_id = rec_id
+                history_messages.append('Set study record id to %s' % study.record_id)
+                study.set_status(str('curated'))
+                history_messages.append('Set status to %s' % study.get_status(True))
+                study.curator_user_id = user_id
+                history_messages.append('Set curator id to %s' % study.curator_user_id)
+                
+                if is_duplicate:
+                    study.set_article_type(str('duplicate'))
+                    history_messages.append('Set status to duplicate')
+                else:
+                    study.set_article_type(str('irrelevant'))
+                    history_messages.append('Set type to irrelevant')
+
+                study.add_history(curator_user_id=user_id,
+                    message='; '.join(history_messages))
+                study.save(cursor)
+                
+                add_message('Set record %s to %s and curated' % (rec_id, 
+                    study.get_article_type(True)))
+                
+                rec.study_id = study.uid
+                rec.status = rec.STATUS_CURATED
+                rec.save(cursor)
+
+        """
+        <p>
+        Return to <a href='/edit/batch/%s/view'>batch %s</a>.
+        </p>
+        """ % (batch_id, batch_id)
+        request.redirect(str('/edit/batch/%s/view' % batch_id))
+        
+    except:
+        import traceback
+        print traceback.print_exc()
+        return not_found('batch')
+    
+    footer()

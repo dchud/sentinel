@@ -1,4 +1,6 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+
+# $Id$
 
 from quixote import enable_ptl
 from scgi.quixote_handler import QuixoteHandler, main
