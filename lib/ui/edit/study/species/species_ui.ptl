@@ -103,7 +103,8 @@ def find [html] (request):
         size=1,
         options=select_options,
         required=True)
-    form.add_submit('find', 'find')
+    form.add_submit('find_find', 'find')
+    form.add_submit('find_add', 'add')
     
         
     def render [html] ():

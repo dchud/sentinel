@@ -376,13 +376,14 @@ def curate_three [html] (request, queued_record_id):
         """
         <form method='POST' action='exposure/find'>
             <p>
-            Add any exposure:
-            <input type='text' name='search_term' size='30' /> <br />
+            Find an exposure:
+            <input type='text' name='search_term' size='30' /> 
+            <input type='submit' name='find_find' value='find' /><br />
             Or use index term:
         """
         render_subject_selector(queued_record, study, 'exposures')
         """
-            <input type='submit' name='find' value='find' />
+            <input type='submit' name='find_add' value='add' />
             </p>
         </form>
     </fieldset>
@@ -397,13 +398,14 @@ def curate_three [html] (request, queued_record_id):
         """
         <form method='POST' action='outcome/find'>
             <p>
-            Add any outcome:
-            <input type='text' name='search_term' size='30' /> <br />
+            Find an outcome:
+            <input type='text' name='search_term' size='30' />
+            <input type='submit' name='find_find' value='find' /> <br />
             Or use index term:
         """
         render_subject_selector(queued_record, study, 'outcomes')
         """
-            <input type='submit' name='find' value='find' />
+            <input type='submit' name='find_add' value='add' />
             </p>
         </form>
     </fieldset>
@@ -417,13 +419,15 @@ def curate_three [html] (request, queued_record_id):
     """
         <form method='POST' action='species/find'>
             <p>
-            Add any species:
-            <input type='text' name='search_term' size='30' /> <br />
+            Find a species:
+            <input type='text' name='search_term' size='30' /> 
+            <input type='submit' name='find_find' value='find' />
+            <br />
             Or use index term:
     """
     render_subject_selector(queued_record, study, 'species')
     """
-            <input type='submit' name='find' value='find' />
+            <input type='submit' name='find_add' value='add' />
             </p>
         </form>
     </fieldset>
