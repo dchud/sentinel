@@ -1,0 +1,245 @@
+_q_exports = [
+    ]
+
+from quixote import form2
+from quixote import get_publisher
+
+from canary.concept import Concept, find_concepts
+from canary.qx_defs import MyForm
+from canary.ui.admin.admin_ui import title_bar
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found, add_message, has_messages, render_messages
+
+
+def _q_index [html] (request):
+    header('Concept:')
+    """
+    <h2>Concept</h2>
+    """
+    footer()
+
+
+class ConceptActions:
+
+    _q_exports = [
+        '_q_index',
+        ]
+
+    def __init__ (self, concept_id):
+        print 'CA.__init__'
+        try:
+            self.concept_id = int(concept_id)
+        except:
+            return not_found('concept')
+
+    def _q_index [html] (self, request):
+        header('Concept')
+        """
+        <h2>Concept</h2>
+        """
+        footer()
+
+    def _q_lookup [html] (self, request, action):
+        print 'CA._q_lookup'
+        try:
+            if action == 'edit':
+                return edit(self.concept_id)
+            elif action == 'synonym':
+                return synonym(self.concept_id)
+            else:
+                raise TraversalError
+        except:
+            return not_found('concept')
+
+
+def find [html] (request):
+    
+    form = MyForm()
+    form.add(form2.StringWidget, 'search_term', 
+        title='Concept (term or UMLS id)',
+        required=True)
+    form.add_submit('find', 'find')
+    
+    def render [html] ():
+        header('Find concept')
+        title_bar('Find concept')
+        render_messages()
+        form.render()
+        footer()
+        
+    if not form.is_submitted():
+        return render()
+        
+    search_term = form['search_term']
+    
+    # If user enters an int, find_concepts will search for the UMLS concept id
+    # instead of a text search.
+    try:
+        search_term = int(search_term)
+    except:
+        pass
+        
+    cursor = get_publisher().get_cursor()
+    concepts = find_concepts(cursor, search_term)
+    cursor.close()
+    
+    if len(concepts) == 0:
+        add_message('No matching concepts found.')
+        
+    if form.has_errors() \
+        or has_messages():
+        return render()
+        
+    header('Find concept')
+    title_bar('Find concept')
+    render_messages()
+    form.render()
+    render_found_concepts(concepts)
+    footer()
+
+
+def edit [html] (concept_id=None):
+    cursor = get_publisher().get_cursor()
+    concept = Concept(uid=concept_id)
+    concept.load(cursor, load_synonyms=True)
+    synonym_options = [(syn, syn, syn) for syn in concept.synonyms]
+    
+    form = MyForm()
+    form.add(form2.SingleSelectWidget, 'synonym', 
+        title='Choose Preferred Term', 
+        value=concept.term,
+        options=synonym_options,
+        required=True)
+    form.add_submit('edit', 'edit')
+    form.add_submit('cancel', 'cancel')
+    
+    def render [html] ():
+        header('Edit concept')
+        title_bar('Edit concept')
+        """
+        <p>
+        Current preferred term is "<b>%s</b>".  Choose a new preferred term
+        below, or click 'cancel' to cancel.
+        </p>
+        """ % concept.term
+        render_messages()
+        form.render()
+        footer()
+
+    if not form.is_submitted()\
+        or form.has_errors():
+        return render()
+        
+    new_synonym = form['synonym']
+    
+    if form.get_submit() == 'cancel':
+        print 'no'
+        add_message('Preferred term unchanged')
+    elif form.get_submit() == 'edit':
+        if new_synonym == concept.term:
+            print 'no'
+            add_message('Preferred term unchanged')
+        else:
+            print 'yes'
+            concept.term = new_synonym
+            concept.save(cursor)
+            form.logger.info(str('Changed term for concept %s' % concept_id))
+            add_message('Changed preferred term')
+        
+    return render()
+
+
+def synonym [html] (concept_id=None):
+    
+    cursor = get_publisher().get_cursor()
+    concept = Concept(uid=concept_id)
+    concept.load(cursor, load_synonyms=True)
+    
+    form = MyForm()
+    form.add(form2.StringWidget, 'new_synonym', 
+        title='Add new synonym', 
+        required=True)
+    form.add_submit('add', 'add')
+    form.add_submit('cancel', 'cancel')
+    
+    def render [html] ():
+        header('Add new synonym')
+        title_bar('Add new synonym')
+        render_messages()
+        """
+        <p>
+        Add a new synonym.  Current synonyms are:
+        </p>
+        
+        <ul>
+        """ 
+        for syn in concept.synonyms:
+            """
+            <li>%s</li>
+            """ % syn
+        """
+        </ul>
+        """
+        form.render()
+        footer()
+
+    new_synonym = form['new_synonym']
+    
+    if new_synonym in concept.synonyms:
+        form.set_error('new_synonym', 'Synonym already exists')
+
+    if not form.is_submitted()\
+        or form.has_errors():
+        return render()
+        
+    if form.get_submit() == 'cancel':
+        print 'no'
+        add_message('No synonym added')
+    elif form.get_submit() == 'add':
+        print 'yes'
+        concept.add_synonym(cursor, new_synonym)
+        form.logger.info(str('Added synonym %s for concept %s' % (new_synonym, concept_id)))
+        add_message('Added new synonym')
+        
+    return render()
+
+    
+def render_found_concepts [html] (concepts):
+    
+    if len(concepts) == 0:
+        return
+        
+    """
+    <h4>Concepts found:</h4>
+    
+    <table class='gentable' id='concepts'>
+        <tr>
+            <th>umls id</th>
+            <th>preferred term</th>
+            <th>matching synonyms</th>
+            <th>actions</th>
+        </tr>
+    """
+    
+    for concept in concepts:
+        """
+        <tr>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+        """ % (concept.uid, concept.term, '; '.join(concept.synonyms))
+        
+        """
+            <td>
+                [<a href='%s/edit'>edit</a>]
+                [<a href='%s/synonym'>add synonym</a>]
+            </td>
+        </tr>
+        """ % (concept.uid, concept.uid)
+        
+    """
+    </table>
+    """
+    
+
+    
