@@ -59,6 +59,7 @@ class DTable:
         except:
             new_uid = -1
         return new_uid
+        
 
 
 def do_query(cursor, query):

@@ -1,14 +1,15 @@
-_q_exports = ['queue',
-              'session',
-              'source',
-              'sources',
-              'term',
-              'user',
-              'users',
-              'dv_data',
-              'reload_sources',
-              'zodb_keys',
-             ]
+_q_exports = [
+    'queue',
+    'session',
+    'source',
+    'sources',
+    'term',
+    'user',
+    'users',
+    'dv_data',
+    'reload_sources',
+    'zodb_keys',
+    ]
 
 import string
 

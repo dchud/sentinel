@@ -23,9 +23,13 @@ from canary.loader import QueuedRecord
 from canary.qx_defs import MyForm
 from canary.study import Study
 from canary.ui.pageframe import header, footer
-from canary.ui.pages import not_found
+from canary.ui.pages import not_found, add_message, has_messages, render_messages
 #from canary.ui.edit.study.outcomes import outcomes
 #from canary.ui.edit.study.exposures import exposures
+from canary.ui.edit.study.utils import get_current_study, get_queued_record
+from canary.ui.edit.study.utils import is_same_user, render_queued_record
+from canary.ui.edit.study.utils import claimed_by_other_user, render_unclaim_block
+from canary.ui.record_ui import render_substudies
 
     
 def title_bar [html] (action=''):
@@ -48,16 +52,21 @@ def _q_index [html] (request):
     """
     footer()
 
-
+ 
 class StudyActions:
 
-    _q_exports = []
+    _q_exports = [
+        '_q_index',
+        'substudy',
+        ]
+
+    from canary.ui.edit.study import substudy
 
     def __init__ (self, queued_record_id):
         try:
             self.queued_record_id = int(queued_record_id)
+            get_request().queued_record_id = self.queued_record_id
         except:
-            print 'invalid queued_record_id (non-int)'
             return not_found('record')
 
     def _q_index [html] (self, request):
@@ -67,10 +76,18 @@ class StudyActions:
         try:
             if action == 'curate_one':
                 return curate_one(request, self.queued_record_id)
-            if action == 'curate_two':
+            elif action == 'curate_two':
                 return curate_two(request, self.queued_record_id)
-            if action == 'curate_three':
+            elif action == 'curate_three':
                 return curate_three(request, self.queued_record_id)
+            elif action == 'curate_four':
+                return curate_four(request, self.queued_record_id)
+            elif action == 'substudy':
+                print 'action == substudy'
+                print 'returning substudy from _q_lookup()'
+                return substudy
+            #elif action == 'curate_five':
+            #    return curate_five(request, self.queued_record_id)
             elif action == 'summary':
                 return summary(request, self.queued_record_id)
             elif action == 'unclaim':
@@ -87,48 +104,7 @@ class StudyActions:
                 raise TraversalError
         except:
             return not_found('study')
-            
 
-def get_queued_record (cursor, id):
-    
-    try:
-        queued_record = QueuedRecord()
-        queued_record.uid = int(id)
-        queued_record.load(cursor)
-        return queued_record
-    except:
-        # FIXME: proper error handling
-        print 'study_ui.get_queued_record(): queued_record unavailable'
-        return None
-
-def get_current_study (cursor, id):
-    
-    try:
-        current_study = Study(int(id))
-        current_study.load(cursor)
-        return current_study
-    except:
-        return None
-
-def render_queued_record [html] (queued_record):
-    """
-    <div class='queued_record'>
-    <p>
-    "%s", <em>%s</em>
-    </p>
-    </div>
-    """ % (queued_record.title, queued_record.source)
-    
-def is_same_user (queued_record):
-    
-    try:
-        if queued_record.user_id == get_request().session.user.get_id():
-            return True
-        else:
-            return False
-    except:
-        return False
-    
 
 def curate_one [html] (request, queued_record_id):
     
@@ -140,7 +116,8 @@ def curate_one [html] (request, queued_record_id):
         queued_record_id = int(queued_record_id)
     except:
         raise(TraversalError)
-        
+    
+    print 'loading record'
     queued_record = get_queued_record(cursor, queued_record_id)
     # if it's None, bail
     # FIXME: best way?  or is that right?
@@ -170,13 +147,15 @@ def curate_one [html] (request, queued_record_id):
         print 'updating record'
         queued_record.save(cursor)
 
-    a_type = 'neither'
+    print 'checking article type'
+    a_type = 'none'
+    
     if not study == None:
-        if study.get_article_type(text=True) == 'traditional':
-            a_type = 'is_traditional'
-        elif study.get_article_type(text=True) == 'review':
-            a_type = 'is_review'
-        
+        article_type = study.get_article_type(text=True)
+        if article_type in ['irrelevant', 'traditional', 'descriptive', 'review']:
+            a_type = 'is_%s' % article_type
+
+    print 'generating form'
     form = MyForm()
     form.add(RadiobuttonsWidget, 
         name='article_type',
@@ -184,28 +163,25 @@ def curate_one [html] (request, queued_record_id):
         value=str(a_type),
         #hint='Select a type',
         options=[
+            ('is_irrelevant', 'Irrelevant', 'is_irrelevant'),
             ('is_traditional', 'Traditional', 'is_traditional'),
+            ('is_descriptive', 'Descriptive', 'is_descriptive'),
             ('is_review', 'Review', 'is_review'),
-            ('neither', 'Neither (curate)', 'neither'),
+            ('none', 'None of these (To be curated)', 'none'),
             ],
         sort=False,
         required=True)
     form.add(SubmitWidget, 'continue', value='continue')
 
     def render [html] ():
+        print 'render()'
         header('Curate: step one')
         """
         <h3>Curate: step one</h3>
         """
         render_queued_record(queued_record)
         form.render()
-        """
-        <p>
-        You have claimed this record; if you want to unclaim this record,
-        so another curator can curate it, you can <a href='unclaim'>unclaim
-        it here</a>.
-        </p>
-        """
+        render_unclaim_block()
         footer()
     
     if not form.is_submitted():
@@ -214,31 +190,40 @@ def curate_one [html] (request, queued_record_id):
     if form.has_errors():
         return render()
     
+    # Initialize, if necessary
     if study == None:
         study = Study()
     
     print 'article_type ==', form['article_type']
     
     # check for all values; it might be updated to any
-    if form['article_type'] == 'is_traditional':
+    if form['article_type'] == 'is_irrelevant':
+        study.set_article_type('irrelevant')
+    elif form['article_type'] == 'is_traditional':
         study.set_article_type('traditional')
+    elif form['article_type'] == 'is_descriptive':
+        study.set_article_type('descriptive')
     elif form['article_type'] == 'is_review':
         study.set_article_type('review')
-    elif form['article_type'] == 'neither':
+    elif form['article_type'] == 'none':
         study.set_article_type('unknown')
     
+    print 'updating record and study'
     study.set_status('claimed')
     study.record_id = queued_record_id
     study.curator_user_id = session.user.get_id()
     study.save(cursor)
+    queued_record.curator_user_id = study.curator_user_id
     queued_record.study_id = study.uid
     queued_record.save(cursor)
     cursor.close()
     
-    form.logger.info(str('saved record %s as study %s step one' % \
-        (queued_record.uid, study.uid)))
+    #form.logger.info(str('saved record %s as study %s step one' % \
+    #    (queued_record.uid, study.uid)))
     
-    if study.get_article_type(text=True) == 'traditional':
+    article_type = study.get_article_type(text=True)
+    
+    if article_type in ['irrelevant', 'traditional']:
         request.redirect(str('summary'))
     else:
         request.redirect(str('curate_two'))
@@ -263,6 +248,7 @@ def curate_two [html] (request, queued_record_id):
     if article_type == 'traditional':
         request.redirect(str('summary'))
 
+    print 'setting up form'
     form = MyForm()
     form.add(CheckboxWidget, 
         'has_exposures',
@@ -301,19 +287,14 @@ def curate_two [html] (request, queued_record_id):
         <h3>Curate: step two</h3>
         """
         render_queued_record(queued_record)
+        render_messages()
         """
         <p>
         Indicate whether the study includes each of the following kinds of data.
         </p>
         """
         form.render()
-        """
-        <p>
-        You have claimed this record; if you want to unclaim this record,
-        so another curator can curate it, you can <a href='unclaim'>unclaim
-        it here</a>.
-        </p>
-        """
+        render_unclaim_block()
         footer()
     
     if not form.is_submitted():
@@ -330,13 +311,10 @@ def curate_two [html] (request, queued_record_id):
         'has_genomic',
         ]:
         if form[bool_item]:
-            print 'setting %s == True' % bool_item
             setattr(study, str(bool_item), True)
         else:
-            print 'setting %s == False' % bool_item
             setattr(study, str(bool_item), False)
     
-    print 'classifying'
     # studies noted as article_type['review'] must stay as 'review'
     if not article_type == 'review':
         
@@ -357,25 +335,22 @@ def curate_two [html] (request, queued_record_id):
     if form.has_errors():
         return render()
 
-    print 'saving study:', study
     study.save(cursor)
     cursor.close()
     
-    print 'getting new article type'
     # re-assign value here as it should have changed
     article_type = study.get_article_type(text=True)
 
     form.logger.info(str('saved study %s (%s) step two' % (study.uid, article_type)))
     
-    print 'redirecting'
-    if article_type in [str(s) for s in ['traditional', 'review', 'exposures only', 'outcomes only']]:
+    if article_type in ['traditional',]:
         request.redirect(str('summary'))
     else:
         request.redirect(str('curate_three'))
 
 
 def curate_three [html] (request, queued_record_id):
-    
+
     print 'curate_three()'
     session = request.session
     cursor = get_publisher().get_cursor()
@@ -388,93 +363,82 @@ def curate_three [html] (request, queued_record_id):
     study = get_current_study(cursor, queued_record.study_id)
     article_type = study.get_article_type(text=True)
     
-    if article_type == 'traditional' \
-        or article_type == 'review':
+    if article_type in ['traditional',]:
         request.redirect(str('summary'))
 
-    form = MyForm()
-        
-    form.add(CheckboxWidget, 
-        'has_experimental',
-        title='Manipulated exposures (experimental)?', 
-        value=study.has_type('experimental'))
-    form.add(CheckboxWidget, 
-        'has_descriptive',
-        title='A single sample group (descriptive)?', 
-        value=study.has_type('descriptive'))
-    form.add(CheckboxWidget,
-        'has_aggregate',
-        title='Exposures measured in aggregate (aggregate)?',
-        value=study.has_type('aggregate'))
-    form.add(CheckboxWidget, 
-        'has_cohort',
-        title='Forward directionality (cohort)?',
-        value=study.has_type('cohort'))
-    form.add(CheckboxWidget,
-        'has_case_control',
-        title='Backward directionality (case control)?',
-        value=study.has_type('case control'))
-    form.add(CheckboxWidget,
-        'has_cross_sectional',
-        title='Simultaneous directionality (cross sectional) ?',
-        value=study.has_type('cross sectional'))
-    form.add(SubmitWidget, 'continue', value='continue')
+    header('Curate: step three')
+    """
+    <h3>Curate: step three</h3>
+    """
+    render_queued_record(queued_record)
+    render_messages()
+    """
+    <p>
+    Add the following information as necessary.
+    </p>
+    """
     
-    def render [html] ():
-        header('Curate: step three')
+    if study.has_exposures:
         """
-        <h3>Curate: step three</h3>
-        """
-        render_queued_record(queued_record)
-        """
+        <h4>Exposures</h4>
         <p>
-        Indicate whether the study includes involves each of the following study 
-        types (type name in parenthesis).  Every paper must have at least one
-        study type, and every paper may have more than one study type. 
+        This is where you will add exposures.
         </p>
         """
-        form.render()
+        
+    if study.has_outcomes:
         """
+        <h4>Outcomes</h4>
         <p>
-        You have claimed this record; if you want to unclaim it, allowing
-        another curator to curate it, you can <a href='unclaim'>unclaim
-        it here</a>.
+        This is where you will add outcomes.
         </p>
         """
-        footer()
-
-    if not form.is_submitted():
-        return render()
-
-    study_types = []
-    for bool_item, bool_item_str in [
-        ('has_experimental', 'experimental'),
-        ('has_descriptive', 'descriptive'),
-        ('has_aggregate', 'aggregate'),
-        ('has_cohort', 'cohort'),
-        ('has_case_control', 'case control'),
-        ('has_cross_sectional', 'cross sectional'),
-        ]:
-        if form[bool_item]:
-            study_types.append(bool_item_str)
-    study.set_types(study_types)
-            
-    if len(study.get_types()) == 0:
-        form.set_error('has_experimental', 'Must choose at least one study type.')
         
-    if form.has_errors():
-        return render()
+    """    
+    <h4>Locations</h4>
+    <p>
+    This is where you will add locations.
+    </p>
     
-    study.save(cursor)
-    cursor.close()
+    <h4>Species</h4>
+    <p>
+    This is where you will add species.
+    </p>
+    """
     
-    form.logger.info(str('saved study %s step three' % study.uid))
+    if article_type == 'curated':
+        """
+        <h4>Substudies</h4>
+        <p>
+        """
+        render_substudies(study, show_actions=True)
+        if len(study.substudies) == 0:
+            """
+            You must <a href='substudy/create'>add a substudy</a>.
+            """
+        else:
+            """
+            You can <a href='substudy/create'>add a substudy</a>.
+            """
+        """
+        </p>
+        """
     
-    request.redirect(str('summary'))
+    """
+    <h4>Continue</h4>
+    <p>
+    You can <a href='summary'>continue to the next step</a>.
+    </p>
+    """
+    
+    render_unclaim_block()
+    footer()
+    
 
 
 def summary [html] (request, queued_record_id):
     
+    print 'summary()'
     session = request.session
     cursor = get_publisher().get_cursor()
     queued_record = get_queued_record(cursor, queued_record_id)
@@ -486,18 +450,42 @@ def summary [html] (request, queued_record_id):
     study = get_current_study(cursor, queued_record.study_id)
     article_type = study.get_article_type(text=True)
     
-    form = study.create_summary_form()
+    print 'checking for required minimums'
+    if study.has_exposures \
+        and len(study.exposures) == 0:
+        #add_message('You must add at least one exposure.')
+        pass
+    print 'check1'
+    if study.has_outcomes \
+        and len(study.outcomes) == 0:
+        #add_message('You must add at least one outcome.')
+        pass
+    print 'check2'
+    if article_type == 'curated' \
+        and len(study.species) == 0:
+        # FIXME
+        #add_message('You must add at least one species')
+        pass
+    print 'check3'
+    if has_messages():
+        request.redirect(str('curate_three'))
+
+    print 'creating form'
+    form = MyForm()
+    form.add_submit('finish', 'finish')
     
     def render [html] ():
+        print 'render()'
         header('Curate: Study summary')
         """
         <h3>Curate: Study summary</h3>
         """
         render_queued_record(queued_record)
+        render_messages()
         """
         <p>
-        Please set the remaining values, or edit the exposures,
-        outcomes, species, and locations, as needed.
+        Please review all of the information you have provided
+        and make changes as needed.
         </p>
         """
         
@@ -506,18 +494,10 @@ def summary [html] (request, queued_record_id):
         """ % article_type
 
         if article_type == 'curated':
-            """
-            <h4>Study types: %s</h4>
-            """ % (', '.join(study.get_types(text=True)))
+            render_substudies(study)
         
         form.render()
-        """
-        <p>
-        You have claimed this record; if you want to unclaim it, allowing
-        another curator to curate it, you can <a href='unclaim'>unclaim
-        it here</a>.
-        </p>
-        """
+        render_unclaim_block()
         footer()
         
     if not form.is_submitted():
@@ -530,13 +510,6 @@ def summary [html] (request, queued_record_id):
     if form.has_errors():
         return render()
     
-    print 'processing'
-    study.process_summary_form(form)
-    
-    print 'updating study'
-    study.set_status('curated')
-    study.save(cursor)
-
     if form.get_submit() == str('update'):
         cursor.close()
         form.logger.info(str('Updated study %s' % study.uid))
@@ -622,26 +595,6 @@ def unclaim [html] (request, queued_record_id):
     
     
     
-def claimed_by_other_user [html] ():
-    header('Curate:  Record claimed by other user')
-    """
-    <h3>Curate:  Record claimed by other user</h3>
-    
-    <p>
-    Sorry, that record has already been claimed by another user.
-    </p>
-    
-    <p>
-    You can return to the <a href='/edit'>editing queue</a>.
-    </p>
-    
-    <p>
-    You can <a href='/user'>go to your page</a>.
-    </p>
-    """
-    footer()
-    
-    
 def not_claimed [html] ():
     header('Curate:  Record not claimed')
     """
@@ -661,4 +614,5 @@ def not_claimed [html] ():
     """
     footer()
     
-    
+
+

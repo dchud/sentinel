@@ -29,8 +29,8 @@ def _q_index [html] (request):
     header('Edit')
     title_bar('Edit')
     """
-    <table border='0' cellspacing='5' cellpadding='5' bgcolor='#f3f3f3'>
-    <tr bgcolor='#ffffff'>
+    <table cellspacing='5' class='gentable'>
+    <tr>
         <th>Queue id</th>
         <th>Source</th>
         <th># Recs</th>
@@ -46,12 +46,12 @@ def _q_index [html] (request):
         source_uid = batch['source_uid']
         source = source_catalog.get_source(source_uid)
         """
-        <tr bgcolor='#ffffff'>
-            <td align='center'>%s</td>
-            <td align='center'>%s</td>
-            <td align='right'>%s</td>
-            <td align='center'>%s</td>
-            <td align='center'><a href='/edit/batch/%s/view'>view</a></td>
+        <tr>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>[<a href='/edit/batch/%s/view'>view</a>]</td>
         </tr>
         """ % (batch['uid'], source.name, batch['num_records'],
                str(batch['date_added'])[0:10], batch['uid'])

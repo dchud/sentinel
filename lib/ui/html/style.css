@@ -104,6 +104,67 @@ a.name:hover {
     color: #000000;
 }
 
+.gentable {
+	width: 70%;
+}
+
+.gentable th {
+	padding: 5px;
+	color: #333;
+	background: #eee;
+	border: 1px solid #ccc;
+	font-size: medium;
+}
+
+.gentable td {
+	text-align: left;
+	background: #fff;
+	border: 1px solid #e5e5e5;
+	padding: 5px;
+}
+
+.studytable {
+	width: 70%;
+}
+
+.studytable th {
+	padding: 5px;
+	color: #333;
+	background: #eee;
+	border: 1px solid #ccc;
+	font-size: medium;
+}
+
+.studytable td {
+	text-align: center;
+	background: #fff;
+	border-bottom: 1px solid #e5e5e5;
+	padding: 5px;
+    font-size: small;
+}
+
+#unclaim {
+    border: 1px solid #aaa;
+    padding: 5px;
+}
+
+#exposure-left {
+    float: left;
+    width: 20%;
+    padding: 5px;
+    border-right: 1px dotted #bbb;
+}
+
+#exposure-right {
+    margin-left: 25%;
+    padding: 5px;
+}
+
+#exposure-buttons {
+    padding-top: .5em;
+    text-align: left;
+}
+
 .mission {
     width: 70%;
     text-align: justify;
@@ -111,7 +172,6 @@ a.name:hover {
     background-color: #f9f7d1;
     border: 1px solid #003366;
 }
-
 
 .chosen {
     color: #000000;

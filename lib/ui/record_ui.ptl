@@ -44,6 +44,56 @@ def render_indexing_row [html] (anchor_name, field, value):
     """ % ('25%', anchor_name, field, field, value)
 
 
+def render_substudies [html] (study, show_actions=False):
+    """
+    <table cellspacing='3' id='substudies' class='studytable'>
+    
+        <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>N</th>
+            <th>Route</th>
+            <th>Sampling</th>
+            <th>Controls</th>
+            <th>Timing</th>
+    """
+    if show_actions:
+        """
+            <th>Actions</th>
+        """
+    """
+        </tr>
+    """
+    
+    for ss in study.substudies:
+        """
+        <tr>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+        """ % (ss.uid, ss.get_study_type(True),
+            ss.sample_size, ss.get_route(True),
+            ss.get_sampling(True), ss.get_controls(True),
+            ss.get_timing(True))
+        if show_actions:
+            """
+            <td>
+                [<a href='/edit/study/%s/substudy/%s/edit'>edit</a>]
+                [<a href='/edit/study/%s/substudy/%s/delete'>delete</a>]
+            </td>
+            """ % (study.record_id, ss.uid, study.record_id, ss.uid)
+        """
+        </tr>
+        """
+    """
+    </table>
+    """
+
+
 class RecordUI:
 
     _q_exports = ['similar',

@@ -12,7 +12,6 @@ _q_index = study_ui._q_index
 
 
 def _q_lookup (request, queued_record_id):
-    #print 'edit.study.__init__._q_lookup(%s)' % record_id
     try:
         if not queued_record_id == None:
             return StudyActions(queued_record_id)

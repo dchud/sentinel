@@ -26,33 +26,33 @@ def _q_index [html] (request):
     header('Admin')
     title_bar()
     """
-    <table border='0' cellspacing='5' cellpadding='5' bgcolor='#f3f3f3'>
-    <tr bgcolor='#ffffff'>
-        <td>Queue</td>
+    <table cellspacing='5' class='gentable'>
+    <tr>
+        <th>Queue</th>
         <td><a href='/admin/queue/add'>Add batch</a></td>
         <td> - </td>
         <td> - </td>
     </tr>
-    <tr bgcolor='#ffffff'>
-        <td>Users</td>
+    <tr>
+        <th>Users</th>
         <td><a href='/admin/users'>List</a></td>
         <td><a href='/admin/user/create'>Create</a></td>
         <td> - </td>
     </tr>
-    <tr bgcolor='#ffffff'>
-        <td>Sources</td>
+    <tr>
+        <th>Sources</th>
         <td><a href='/admin/sources'>List</a></td>
         <td><a href='/admin/source/create'>Create</a></td>
         <td><a href='/admin/reload_sources'>Reload</a></td>
     </tr>
-    <tr bgcolor='#ffffff'>
-        <td>DV Data</td>
+    <tr>
+        <th>DV Data</th>
         <td><a href='/admin/dv_data'>List</a></td>
         <td><a href='/admin/dv_data/group/create'>Create Group</a></td>
         <td>Edit (pulldown + js)</td>
     </tr>
-    <tr bgcolor='#ffffff'>
-        <td>ZODB</td>
+    <tr>
+        <th>ZODB</th>
         <td><a href='/admin/zodb_keys'>List keys</a></td>
         <td> - </td>
         <td> - </td>
@@ -70,7 +70,7 @@ def users [html] (request):
     sorted_users = [(user.email, user.get_id()) for user in users]
     sorted_users.sort()
     """
-    <table border='0' cellspacing='5' cellpadding='5' bgcolor='#f3f3f3'>
+    <table cellspacing='5' class='gentable'>
     <tr>
         <th>id</th>
         <th>email</th>
@@ -81,7 +81,7 @@ def users [html] (request):
     for email, id in sorted_users:
         user = user_db.get_user(id)
         """
-    <tr bgcolor='#ffffff'>
+    <tr>
         <td>%s</td>
         <td>%s</td>
         <td>%s</td>
@@ -118,30 +118,26 @@ def sources [html] (request):
     else:
         sources = [(source.name, source.uid) for id, source in source_catalog.sources.items()]
         sources.sort()
-        bgcolor = '#ffffff'
         """
-        <table border='0' cellspacing='5' cellpadding='5' bgcolor='#e4e4e4'>
+        <table cellspacing='5' class='gentable'>
         <tr>
-            <th align='left'>Source name</th>
-            <th align='left'>edit sources</th>
-            <th align='left'>show terms</th>
-            <th align='left'>remove source</th>
+            <th>Source name</th>
+            <th>edit sources</th>
+            <th>show terms</th>
+            <th>remove source</th>
         </tr>
         """
         for (name, source_id) in sources:
             source = source_catalog.get_source(source_id)
             """
-            <tr bgcolor='%s'>
-                <td align='left'>%s</td>
-                <td align='middle'><a href='/admin/source/%s/edit'>edit</a></td>
-                <td align='middle'><a href='/admin/source/%s/terms'>terms</a></td>
-                <td align='middle'><a href='/admin/source/%s/delete'>delete</a></td>
+            <tr>
+                <td>%s</td>
+                <td>[<a href='/admin/source/%s/edit'>edit</a>]</td>
+                <td>[<a href='/admin/source/%s/terms'>terms</a>]</td>
+                <td>[<a href='/admin/source/%s/delete'>delete</a>]</td>
             </tr>
-            """ % (bgcolor, source.name, source.uid, source.uid, source.uid)
-            if bgcolor == '#ffffff':
-                bgcolor = '#f3f3f3'
-            else:
-                bgcolor = '#ffffff'
+            """ % (source.name, source.uid, source.uid, source.uid)
+            
         """
         </table>
         """

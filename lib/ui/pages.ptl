@@ -284,6 +284,53 @@ def logout [html] (request):
     footer()
 
 
+def add_message (msg):
+    """
+    Add arbitrary text messages (typically warnings) to the session,
+    to be rendered on next page view.  Initialize request.session.messages
+    if necessary.
+    """
+    request = get_publisher().get_request()
+    try:
+        if request.session.messages:
+            pass
+    except:
+        request.session.messages = []
+    request.session.messages.append(str(msg))
+
+def has_messages ():
+    request = get_publisher().get_request()
+    try:
+        if len(request.session.messages) > 0:
+            return True
+        else:
+            return False
+    except:
+        return False
+        
+def render_messages [html] ():
+    # Show any messages added to the session, then remove upon rendering.
+    request = get_publisher().get_request()
+    try:
+        messages = request.session.messages
+        if len(messages) > 0:
+            """
+            <p>
+            <ul>
+            """
+            for message in messages:
+                """
+                <li><span style='color:red;'>%s</style></li>
+                """ % message
+            """
+            </ul>
+            </p>
+            """
+        request.session.messages = []
+    except:
+        pass
+
+
 # FIXME: hide this somehow or at least discourage abuse better?
 # NOTE: run this regularly from a cronjob with wget or equiv
 def reaper [plain] (request):

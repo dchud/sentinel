@@ -86,14 +86,14 @@ def view [html] (request, batch_id=None, start=0, size=25):
         if len(batch.queued_records) > 0:
             pager(batch, start, size)
             """
-            <table border='0' cellspacing='5' cellpadding='5' bgcolor='#f3f3f3'>
+            <table cellspacing='5' class='gentable'>
             <tr>
-                <th valign='top'>id</th>
-                <th valign='top'>Status</th>
-                <th valign='top'>User</th>
-                <th valign='top'>Title</th>
-                <th valign='top'>Source</th>
-                <th valign='top'>Actions</th>
+                <th>id</th>
+                <th>Status</th>
+                <th>User</th>
+                <th>Title</th>
+                <th>Source</th>
+                <th>Actions</th>
             </tr>
             """
             
@@ -101,33 +101,33 @@ def view [html] (request, batch_id=None, start=0, size=25):
                 record = batch.queued_records[record_id]
                 status = record.get_status()
                 """
-                <tr bgcolor='#ffffff'>
-                    <td valign='top' align='center'>%s</td>
-                    <td valign='top'>%s</td>
-                    <td valign='top'>%s</td>
-                    <td valign='top'>%s</td>
-                    <td valign='top'>%s</td>
+                <tr>
+                    <td>%s</td>
+                    <td>%s</td>
+                    <td>%s</td>
+                    <td>%s</td>
+                    <td>%s</td>
                 """ % (record_id, record.get_status(text=True),
                        record.user_id, record.title, record.source)
                 if status == record.STATUS_UNCLAIMED:
                     """
-                    <td valign='top'><a href='/edit/study/%s/curate_one'>curate</a></td>
+                    <td>[<a href='/edit/study/%s/curate_one'>curate</a>]</td>
                     """ % record_id
                 elif status == record.STATUS_CLAIMED:
                     if record.user_id == request.session.user.get_id():
                         """
-                        <td valign='top'>
-                            <a href='/edit/study/%s/curate_one'>curate</a> -
-                            <a href='/edit/study/%s/unclaim'>unclaim</a>
+                        <td>
+                            [<a href='/edit/study/%s/curate_one'>curate</a>]
+                            [<a href='/edit/study/%s/unclaim'>unclaim</a>]
                         </td>
                         """ % (record_id, record_id)
                     else:
                         """
-                        <td valign='top'>claimed</td>
+                        <td>claimed</td>
                         """
                 elif status == record.STATUS_CURATED:
                     """
-                    <td valign='top'>curated</td>
+                    <td>curated</td>
                     """
                 """
                 </tr>

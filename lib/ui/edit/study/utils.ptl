@@ -1,0 +1,79 @@
+from quixote import get_publisher, get_request
+
+from canary.loader import QueuedRecord
+from canary.study import Study
+from canary.ui.pageframe import header, footer
+
+
+def get_queued_record (cursor, id):
+    
+    try:
+        queued_record = QueuedRecord()
+        queued_record.uid = int(id)
+        queued_record.load(cursor)
+        return queued_record
+    except:
+        # FIXME: proper error handling
+        print 'study_ui.get_queued_record(): queued_record unavailable'
+        return None
+
+def get_current_study (cursor, id):
+    
+    try:
+        current_study = Study(int(id))
+        current_study.load(cursor)
+        return current_study
+    except:
+        return None
+
+def render_queued_record [html] (queued_record):
+    """
+    <div class='queued_record'>
+    <p>
+    "%s", <em>%s</em>
+    </p>
+    </div>
+    """ % (queued_record.title, queued_record.source)
+    
+def is_same_user (queued_record):
+    
+    try:
+        if queued_record.user_id == get_request().session.user.get_id():
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def claimed_by_other_user [html] ():
+    header('Curate:  Record claimed by other user')
+    """
+    <h3>Curate:  Record claimed by other user</h3>
+    
+    <p>
+    Sorry, that record has already been claimed by another user.
+    </p>
+    
+    <p>
+    You can return to the <a href='/edit'>editing queue</a>.
+    </p>
+    
+    <p>
+    You can <a href='/user'>go to your page</a>.
+    </p>
+    """
+    footer()
+
+
+def render_unclaim_block [html] ():
+    queued_record_id = get_request().queued_record_id
+    """
+    <div id='unclaim'>
+        <p>
+    You have claimed this record; if you want to unclaim it, allowing
+    another curator to curate it, you can <a href='/edit/study/%s/unclaim'>unclaim
+    it here</a>.
+        </p>
+    </div>
+    """ % queued_record_id
+ 

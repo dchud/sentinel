@@ -1,0 +1,341 @@
+_q_exports = [
+    '_q_index',
+    'create',
+    'detail',
+    'delete',
+    'edit',
+    ]
+
+
+from quixote import get_publisher, get_request
+from quixote.errors import TraversalError
+from quixote.form2 import StringWidget, RadiobuttonsWidget, CheckboxWidget, SubmitWidget
+
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found, add_message, has_messages, render_messages
+from canary.ui.edit.study.utils import get_current_study, get_queued_record
+from canary.ui.edit.study.utils import is_same_user, render_queued_record
+from canary.ui.edit.study.utils import render_unclaim_block, claimed_by_other_user
+from canary.qx_defs import MyDulcineaUser, MyForm
+from canary.study import SubStudy
+from canary.utils import is_valid_email, is_valid_password
+
+
+
+def _q_index [html] (request):
+    header('Stubstudy:')
+    """
+    <h2>Substudy</h2>
+    """
+    footer()
+
+
+class SubstudyActions:
+
+    _q_exports = [
+        '_q_index',
+        ]
+
+    def __init__ (self, substudy_id):
+        self.substudy_id = substudy_id
+
+    def _q_index [html] (self, request):
+        header('blah')
+        """
+        blah
+        """
+        footer()
+
+    def _q_lookup [html] (self, request, action):
+        try:
+            self.substudy_id = int(self.substudy_id)
+            if action == 'edit':
+                return edit(self.substudy_id)
+            elif action == 'detail':
+                return detail(self.substudy_id)
+            elif action == 'delete':
+                return delete(self.substudy_id)
+            else:
+                raise TraversalError
+        except:
+            return not_found('substudy')
+
+
+
+class SubstudyTypeForm (MyForm):
+    
+    def __init__ (self):
+        MyForm.__init__(self)
+        self.add(RadiobuttonsWidget, 'study_type', 
+            value=None,
+            title='Study type:',
+            hint='Select a study type',
+            options=[
+                ('experimental', 'Manipulated exposures (experimental)?', 'experimental'),
+                ('descriptive', 'A single sample group (descriptive)?', 'descriptive'),
+                ('aggregate', 'Exposures measured in aggregate (aggregate)?', 'aggregate'),
+                ('cohort', 'Forward directionality (cohort)?', 'cohort'),
+                ('case control', 'Backward directionality (case control)?', 'case control'),
+                ('cross sectional', 'Simultaneous directionality (cross sectional)?', 'cross sectional'),
+                ],
+            sort=False,
+            required=True)
+        self.add(SubmitWidget, 'continue', value='continue')
+
+
+def create [html] (request):
+
+    request = get_request()
+    cursor = get_publisher().get_cursor()
+    try:
+        queued_record = get_queued_record(cursor, request.queued_record_id)
+    except:
+        print 'no request.queued_record_id'
+    
+    if queued_record.status == queued_record.STATUS_CLAIMED:
+        if not is_same_user(queued_record):
+            return claimed_by_other_user()
+    
+    study = get_current_study(cursor, queued_record.study_id)
+    form = SubstudyTypeForm()
+
+    def render [html] ():
+        header('Create substudy')
+        """
+        <h3>Create substudy</h3>
+        """
+        render_queued_record(queued_record)
+        render_messages()
+        """
+        <form action='create' method='post'>
+        """
+        # Got to be sure to render the form_token
+        form.get_widget('_form_id').render()
+        
+        """
+        <h3>Manipulated exposures?</h3>
+        <input type='radio' name='study_type'
+            id='experimental' value='experimental' />
+        <label for='experimental'>Experimental</label>
+
+        <h3>No group comparisons?</h3>
+        <input type='radio' name='study_type'
+            id='descriptive' value='descriptive' />
+        <label for='descriptive'>Descriptive</label>
+    
+        <h3>How was exposure measured?</h3>
+        
+        <div id='exposure-left'>
+            <h4>Aggregate</h4>
+            <input type='radio' name='study_type'
+                id='aggregate' value='aggregate' />
+            <label for='aggregate'>Aggregate</label>
+        </div>
+        
+        <div id='exposure-right'>
+            <h4>Individual -- Directionality?</h4>
+            <input type='radio' name='study_type'
+                id='cohort' value='cohort' />
+            <label for='cohort'>Forward (cohort)</label>
+    
+            <input type='radio' name='study_type'
+                id='case_control' value='case control' />
+            <label for='case_control'>Backward (case control)</label>
+    
+            <input type='radio' name='study_type'
+                id='cross_sectional' value='cross sectional' />
+            <label for='cross_sectional'>Simultaneous (cross sectional)</label>
+        </div>
+        
+        <div id='exposure-buttons' style='clear: both'>
+            <input type='submit' name='continue' value='continue' />
+        </div>
+        
+        </form>
+        """
+        
+        render_unclaim_block()
+        footer()
+
+    #if not form.is_submitted():
+    #    return render()
+        
+    if not form['study_type']:
+        add_message('Please choose a study type')
+
+    if form.has_errors() \
+        or has_messages():
+        return render()
+
+    substudy = SubStudy()
+    substudy.study_id = study.uid
+    substudy.set_study_type(form['study_type'])
+        
+    try:
+        substudy.save(cursor)
+        form.logger.info(str('Created substudy %s' % substudy.uid))
+        request.redirect(str('%s/detail' % substudy.uid))
+    except:
+        import sys
+        form.logger.info(str(sys.exc_info()))
+        add_message('An error occurred')
+        return render()
+
+
+def detail [html] (substudy_id):
+
+    request = get_request()
+    cursor = get_publisher().get_cursor()
+    try:
+        queued_record = get_queued_record(cursor, request.queued_record_id)
+    except:
+        print 'no request.queued_record_id'
+        return not_found('substudy')
+    
+    if queued_record.status == queued_record.STATUS_CLAIMED:
+        if not is_same_user(queued_record):
+            return claimed_by_other_user()
+    
+    study = get_current_study(cursor, queued_record.study_id)
+    substudy = study.get_substudy(substudy_id)
+    
+    form = substudy.create_form()
+    
+    def render [html] ():
+        header('Describe substudy')
+        """
+        <h3>Describe substudy (%s)</h3>
+        """ % substudy.get_study_type(text=True)
+        render_queued_record(queued_record)
+        render_messages()
+        form.render()
+        render_unclaim_block()
+        footer()
+
+    if not form.is_submitted():
+        return render()
+        
+    substudy.process_form(form)
+    
+    if form.has_errors():
+        return render()
+        
+    try:
+        substudy.save(cursor)
+        form.logger.info(str('Updated substudy %s' % substudy.uid))
+        if form.get_submit() == 'update':
+            return render()
+        elif form.get_submit() == 'finish':
+            request.redirect(str('/edit/study/%s/curate_three' % request.queued_record_id))
+    except:
+        import sys
+        form.logger.info(str(sys.exc_info()))
+        add_message('An error occurred')
+        return render()
+        
+    
+def edit [html] (substudy_id):
+
+    request = get_request()
+    cursor = get_publisher().get_cursor()
+    try:
+        queued_record = get_queued_record(cursor, request.queued_record_id)
+    except:
+        print 'no request.queued_record_id'
+        return not_found('substudy')
+    
+    if queued_record.status == queued_record.STATUS_CLAIMED:
+        if not is_same_user(queued_record):
+            return claimed_by_other_user()
+    
+    study = get_current_study(cursor, queued_record.study_id)
+    substudy = study.get_substudy(substudy_id)
+    
+    form = substudy.create_form()
+    
+    def render [html] ():
+        header('Edit substudy')
+        """
+        <h3>Edit substudy (%s)</h3>
+        """ % substudy.get_study_type(text=True)
+        render_queued_record(queued_record)
+        render_messages()
+        form.render()
+        render_unclaim_block()
+        footer()
+
+    if not form.is_submitted():
+        return render()
+        
+    substudy.process_form(form)
+    
+    if form.has_errors():
+        return render()
+        
+    try:
+        substudy.save(cursor)
+        form.logger.info(str('Updated substudy %s' % substudy.uid))
+        if form.get_submit() == 'update':
+            return render()
+        elif form.get_submit() == 'finish':
+            request.redirect(str('/edit/study/%s/curate_three' % request.queued_record_id))
+    except:
+        import sys
+        form.logger.info(str(sys.exc_info()))
+        add_message('An error occurred')
+        return render()
+
+
+
+def delete [html] (substudy_id):
+    print 'delete()'
+    request = get_request()
+    cursor = get_publisher().get_cursor()
+    try:
+        queued_record = get_queued_record(cursor, request.queued_record_id)
+    except:
+        print 'no request.queued_record_id'
+        return not_found('substudy')
+    
+    if queued_record.status == queued_record.STATUS_CLAIMED:
+        if not is_same_user(queued_record):
+            return claimed_by_other_user()
+    
+    study = get_current_study(cursor, queued_record.study_id)
+    substudy = study.get_substudy(substudy_id)
+
+    print 'setting up form'
+    form = MyForm()
+    form.add(CheckboxWidget, 'are_you_sure',
+        title='Are you sure you want to delete this substudy?',
+        value=False)
+    form.add_submit('delete', 'delete')
+
+    def render [html] ():
+        print 'rendering'
+        header('Delete substudy')
+        render_queued_record(queued_record)
+        render_messages()
+        form.render()
+        render_unclaim_block()
+        footer()
+
+    if not form.is_submitted():
+        return render()
+
+    if form.has_errors():
+        return render()
+    
+    print 'processing'
+    if form['are_you_sure']:
+        try:
+            substudy.delete(cursor)
+            add_message('Substudy deleted')
+            form.logger.info(str('Deleted substudy %s' % substudy_id))
+        except:
+            add_message('Unable to delete substudy')
+            form.logger.error(str('Unable to delete user %s' % substudy_id))
+    else:
+        add_message('Substudy not deleted')
+
+    request.redirect(str('/edit/study/%s/curate_three' % request.queued_record_id))
