@@ -7,7 +7,7 @@ import urllib
 
 from quixote import get_publisher, get_request
 from quixote.errors import TraversalError
-from quixote.form2 import StringWidget, IntWidget, CheckboxWidget, SubmitWidget
+from quixote import form2
 
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found, add_message, has_messages, render_messages
@@ -73,7 +73,7 @@ def find [html] (request):
     study = get_current_study(cursor, queued_record.study_id)
     
     form = MyForm()
-    form.add(StringWidget, 'search_term',
+    form.add(form2.StringWidget, 'search_term',
         title='Specify the outcome to add:',
         size='30',
         required=True)
@@ -136,9 +136,9 @@ def add [html] (request):
     
     form = MyForm()
     form.action_url = 'add'
-    form.add(IntWidget, name='concept_source_id', value=None, required=True)
-    form.add(IntWidget, name='concept_id', value=None, required=True)
-    form.add(StringWidget, name='term', value=None, required=True)
+    form.add(form2.IntWidget, name='concept_source_id', value=None, required=True)
+    form.add(form2.IntWidget, name='concept_id', value=None, required=True)
+    form.add(form2.StringWidget, name='term', value=None, required=True)
     form.add_submit('add', 'add')
     
     def render [html] ():
@@ -207,7 +207,7 @@ def delete [html] (outcome_id):
     outcome = study.get_outcome(outcome_id)
 
     form = MyForm()
-    form.add(CheckboxWidget, 'are_you_sure',
+    form.add(form2.CheckboxWidget, 'are_you_sure',
         title='Are you sure you want to delete this outcome?',
         value=False)
     form.add_submit('delete', 'delete')

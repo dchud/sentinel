@@ -2,8 +2,7 @@ from time import time
 
 from quixote import get_publisher, get_session_manager
 from quixote.errors import AccessError, SessionError
-from quixote.form2 import PasswordWidget, StringWidget, SubmitWidget
-
+from quixote import form2
 
 from dulcinea.database import get_transaction
 from dulcinea.persistent_session import DulcineaSession
@@ -184,12 +183,12 @@ class LoginForm (MyForm):
 
     def __init__ (self):
         MyForm.__init__(self)
-        self.add(StringWidget, 'user_id', title='Your user id',
+        self.add(form2.StringWidget, 'user_id', title='Your user id',
                  size=10, required=1)
-        self.add(PasswordWidget, 'user_pass', title='Password',
+        self.add(form2.PasswordWidget, 'user_pass', title='Password',
                  size=10, required=1)
         self.add_hidden('go', None)
-        self.add(SubmitWidget, 'login', 'login')
+        self.add_submit('login', 'login')
 
 
 def login [html] (request):

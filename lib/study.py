@@ -4,9 +4,7 @@ import dtuple
 import time
 import types
 
-from quixote.form2 import StringWidget, TextWidget, IntWidget
-from quixote.form2 import SingleSelectWidget, MultipleSelectWidget
-from quixote.form2 import CheckboxWidget, SubmitWidget
+from quixote import form2
 from quixote.html import htmltext
 
 from canary.qx_defs import MyForm
@@ -452,7 +450,7 @@ class Methodology (DTable):
         
         # all methodology types get a sample size
         #print 'sample size'
-        form.add(IntWidget, 'sample_size',
+        form.add(form2.IntWidget, 'sample_size',
             title='Sample size (study n)',
             size=10, value=int(self.sample_size),
             required=True)
@@ -463,7 +461,7 @@ class Methodology (DTable):
         # FIXME: what else to do about leaving out the default/empty?
         route_options.remove((-1, '-', -1))
         select_size = len(route_options)
-        form.add(MultipleSelectWidget, 'exposure_routes',
+        form.add(form2.MultipleSelectWidget, 'exposure_routes',
             title='Routes of exposure (ctrl-click to select or change multiple)',
             value=[r.route for r in self.get_routes()],
             options=route_options,
@@ -474,7 +472,7 @@ class Methodology (DTable):
         # experimental can be is_mesocosm=True
         #print 'mesocosm'
         if self.get_study_type() == self.TYPES['experimental']:
-            form.add(CheckboxWidget, 'is_mesocosm',
+            form.add(form2.CheckboxWidget, 'is_mesocosm',
                 title='Is mesocosm?',
                 value=self.is_mesocosm)
             
@@ -484,7 +482,7 @@ class Methodology (DTable):
             self.TYPES['experimental'],
             self.TYPES['descriptive']
             ]:
-            form.add(SingleSelectWidget, 'timing',
+            form.add(form2.SingleSelectWidget, 'timing',
                 title='Timing',
                 value=self.get_timing(),
                 options=[(val, name, val) for name, val in self.TIMING.items()],
@@ -498,7 +496,7 @@ class Methodology (DTable):
             self.TYPES['cohort'], 
             self.TYPES['case control']
             ]:
-            form.add(SingleSelectWidget, 'controls',
+            form.add(form2.SingleSelectWidget, 'controls',
                 title='Controls from same population?',
                 value=self.get_controls(),
                 options=[(val, name, val) for name, val in self.CONTROLS.items()],
@@ -508,7 +506,7 @@ class Methodology (DTable):
         # cohort can be is_enclosure=True
         #print 'enclosure'
         if self.get_study_type() == self.TYPES['cohort']:
-            form.add(CheckboxWidget, 'is_enclosure',
+            form.add(form2.CheckboxWidget, 'is_enclosure',
                 title='Is enclosure?',
                 value=self.is_enclosure)
                 
@@ -516,7 +514,7 @@ class Methodology (DTable):
         # only cross sectional methodologies get sampling
         #print 'sampling'
         if self.get_study_type() == self.TYPES['cross sectional']:
-            form.add(SingleSelectWidget, 'sampling',
+            form.add(form2.SingleSelectWidget, 'sampling',
                 title='Sampling',
                 value=self.get_sampling(),
                 options=[(val, name, val) for name, val in self.SAMPLING.items()],
@@ -525,7 +523,7 @@ class Methodology (DTable):
                     
         # every methodology type has comments
         #print 'comments'
-        form.add(TextWidget, 'comments', 
+        form.add(form2.TextWidget, 'comments', 
             title='Comments',
             rows='4', cols='60',
             wrap='virtual',

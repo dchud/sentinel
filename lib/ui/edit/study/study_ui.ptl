@@ -12,7 +12,7 @@ from log4py import Logger
 
 from quixote import get_publisher, get_request
 from quixote.errors import AccessError, PublishError, TraversalError
-from quixote.form2 import CheckboxWidget, RadiobuttonsWidget, SubmitWidget
+from quixote import form2
 
 from dulcinea.database import get_transaction
 
@@ -154,7 +154,7 @@ def curate_one [html] (request, queued_record_id):
             a_type = 'is_%s' % article_type
 
     form = MyForm()
-    form.add(RadiobuttonsWidget, 
+    form.add(form2.RadiobuttonsWidget, 
         name='article_type',
         title='Choose an article type:',
         value=str(a_type),
@@ -242,36 +242,36 @@ def curate_two [html] (request, queued_record_id):
         request.redirect(str('summary'))
 
     form = MyForm()
-    form.add(CheckboxWidget, 
+    form.add(form2.CheckboxWidget, 
         'has_exposures',
         title='Animal environmental exposures', 
         value=study.has_exposures)
-    form.add(CheckboxWidget, 
+    form.add(form2.CheckboxWidget, 
         'has_outcomes',
         title='Animal health outcomes', 
         value=study.has_outcomes)
-    form.add(CheckboxWidget,
+    form.add(form2.CheckboxWidget,
         'has_relationships',
         title='Animal exposure/outcome relationships',
         value=study.has_relationships)
-    form.add(CheckboxWidget, 
+    form.add(form2.CheckboxWidget, 
         'has_interspecies',
         title='Differing susceptibilities among species',
         value=study.has_interspecies)
-    form.add(CheckboxWidget,
+    form.add(form2.CheckboxWidget,
         'has_exposure_linkage',
         title='Shared animal and human exposures',
         value=study.has_exposure_linkage)
-    form.add(CheckboxWidget,
+    form.add(form2.CheckboxWidget,
         'has_outcome_linkage',
         title='Linkage between animal exposure/outcome and human health outcomes',
         value=study.has_outcome_linkage)
-    form.add(CheckboxWidget,
+    form.add(form2.CheckboxWidget,
         'has_genomic',
         title='Linkage to genomic data',
         value=study.has_genomic)
     
-    form.add(SubmitWidget, 'continue', value='continue')
+    form.add_submit('continue', 'continue')
     
     def render [html] ():
         header('Curate: specify included data', show_javascript=True)
@@ -608,9 +608,9 @@ def unclaim [html] (request, queued_record_id):
         return not_claimed()
 
     form = MyForm()
-    form.add(CheckboxWidget, 'are_you_sure', 
+    form.add(form2.CheckboxWidget, 'are_you_sure', 
         title='Are you sure?', value=False)
-    form.add(SubmitWidget, 'unclaim', value='unclaim')
+    form.add_submit('unclaim', 'unclaim')
 
     def render [html] ():
         header('Curate: Unclaim study', show_javascript=True)

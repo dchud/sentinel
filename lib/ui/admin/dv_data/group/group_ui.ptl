@@ -10,8 +10,7 @@ import re
 
 from quixote import get_publisher
 from quixote.errors import AccessError, TraversalError
-from quixote.form2 import StringWidget, IntWidget, TextWidget
-from quixote.form2 import CheckboxWidget, SubmitWidget
+from quixote import form2
 
 from dulcinea.database import get_transaction
 
@@ -63,11 +62,11 @@ class GroupForm (MyForm):
     
     def __init__ (self):
         MyForm.__init__(self)
-        self.add(StringWidget, 'group_name', title='Value group name', 
+        self.add(form2.StringWidget, 'group_name', title='Value group name', 
             size='30', required=True)
-        self.add(TextWidget, 'group_description', title='Description',
+        self.add(form2.TextWidget, 'group_description', title='Description',
             rows='2', cols='40', required=False)
-        self.add(SubmitWidget, 'submit', 'submit')
+        self.add_submit('submit', 'submit')
 
 
 def create [html] (request):
@@ -130,10 +129,10 @@ def delete [html] (group_id):
         return not_found('value group')
         
     form = MyForm()
-    form.add(CheckboxWidget, 'are_you_sure',
+    form.add(form2.CheckboxWidget, 'are_you_sure',
              title='Are you sure you want to delete this value group?',
              value=False)
-    form.add(SubmitWidget, 'delete', 'delete')
+    form.add_submit('delete', 'delete')
 
     def render [html] ():
         header('Delete value group')

@@ -1,13 +1,12 @@
-_q_exports = ['_q_index',
-              'delete',
-              'edit',
-             ]
-
-
+_q_exports = [
+    '_q_index',
+    'delete',
+    'edit',
+    ]
 
 from quixote import get_publisher
 from quixote.errors import TraversalError
-from quixote.form2 import StringWidget, CheckboxWidget, PasswordWidget, SubmitWidget
+from quixote import form2
 
 from dulcinea.database import get_transaction
 
@@ -58,17 +57,17 @@ class UserForm (MyForm):
 
     def __init__ (self):
         MyForm.__init__(self)
-        self.add(StringWidget, 'user_id', title='User id',
+        self.add(form2.StringWidget, 'user_id', title='User id',
                  size=10, required=True)
-        self.add(StringWidget, 'user_email', title='User email',
+        self.add(form2.StringWidget, 'user_email', title='User email',
                  size=30, required=True)
-        self.add(StringWidget, 'user_name', title='User name', size=30)
-        self.add(CheckboxWidget, 'is_editor', title='Editor', value=False)
-        self.add(CheckboxWidget, 'is_admin', title='Administrator', value=False)
-        self.add(CheckboxWidget, 'is_active', title='Active', value=True)
-        self.add(PasswordWidget, 'user_pass',
+        self.add(form2.StringWidget, 'user_name', title='User name', size=30)
+        self.add(form2.CheckboxWidget, 'is_editor', title='Editor', value=False)
+        self.add(form2.CheckboxWidget, 'is_admin', title='Administrator', value=False)
+        self.add(form2.CheckboxWidget, 'is_active', title='Active', value=True)
+        self.add(form2.PasswordWidget, 'user_pass',
                  title='Set user password', required=False)
-        self.add(SubmitWidget, 'submit', value='submit')
+        self.add_submit('submit', 'submit')
 
 
 def create [html] (request):
@@ -204,12 +203,12 @@ class DeleteUserForm (MyForm):
 
     def __init__ (self):
         MyForm.__init__(self)
-        self.add(StringWidget, 'user_id',
+        self.add(form2.StringWidget, 'user_id',
                  title='User id', required=True)
-        self.add(CheckboxWidget, 'are_you_sure',
+        self.add(form2.CheckboxWidget, 'are_you_sure',
                  title='Are you sure you want to delete this user?',
                  value=False)
-        self.add(SubmitWidget, 'delete', 'delete')
+        self.add_submit('delete', 'delete')
 
 
 def delete [html] (user_id=None):

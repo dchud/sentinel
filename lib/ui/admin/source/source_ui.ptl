@@ -9,8 +9,7 @@ import re
 
 from quixote import get_publisher
 from quixote.errors import AccessError, TraversalError
-from quixote.form2 import StringWidget, IntWidget, TextWidget
-from quixote.form2 import CheckboxWidget, SubmitWidget
+from quixote import form2
 
 from dulcinea.database import get_transaction
 
@@ -65,22 +64,22 @@ class SourceForm (MyForm):
 
     def __init__ (self):
         MyForm.__init__(self)
-        self.add(IntWidget, 'source_uid', title='Source uid',
+        self.add(form2.IntWidget, 'source_uid', title='Source uid',
             size=3, required=False)
-        self.add(StringWidget, 'source_name', title='Name',
+        self.add(form2.StringWidget, 'source_name', title='Name',
             size=30, required=True)
-        self.add(TextWidget, 'source_desc', title='Description',
+        self.add(form2.TextWidget, 'source_desc', title='Description',
             rows=4, cols=64, required=False)
-        self.add(StringWidget, 're_result_sep',
+        self.add(form2.StringWidget, 're_result_sep',
             title='Result separator regexp',
             size='40', required=False)
-        self.add(StringWidget, 're_term_token',
+        self.add(form2.StringWidget, 're_term_token',
             title='Term token regexp',
             size='40', required=False)
-        self.add(StringWidget, 'sfx_pattern',
+        self.add(form2.StringWidget, 'sfx_pattern',
             title='SFX pattern',
             size='60', required=False)
-        self.add(SubmitWidget, 'submit', value='submit')
+        self.add_submit('submit', 'submit')
 
 
 def create [html] (request):
@@ -238,11 +237,11 @@ class DeleteSourceForm (MyForm):
 
     def __init__ (self):
         MyForm.__init__(self)
-        self.add(IntWidget, 'source_uid', title='Source id', required=True)
-        self.add(CheckboxWidget, 'are_you_sure',
+        self.add(form2.IntWidget, 'source_uid', title='Source id', required=True)
+        self.add(form2.CheckboxWidget, 'are_you_sure',
                  title='Are you sure you want to delete this source?',
                  value=False)
-        self.add(SubmitWidget, 'delete', 'delete')
+        self.add_submit('delete', 'delete')
 
 
 def delete [html] (source_id=None):

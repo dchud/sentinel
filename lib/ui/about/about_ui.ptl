@@ -4,7 +4,7 @@ _q_exports = [
 
 from quixote import get_publisher
 from quixote.errors import AccessError, PublishError, TraversalError
-from quixote.form2 import StringWidget, SubmitWidget, TextWidget
+from quixote import form2
 
 from canary.ui.pageframe import header, footer
 from canary.qx_defs import MyForm
@@ -15,13 +15,13 @@ from canary.utils import is_valid_email, send_email
 def contact_us [html] (request):
 
     form = MyForm()
-    form.add(StringWidget, 'user_name', title='Your name',
+    form.add(form2.StringWidget, 'user_name', title='Your name',
              size=30, required=False)
-    form.add(StringWidget, 'user_email', title='Your email address',
+    form.add(form2.StringWidget, 'user_email', title='Your email address',
              size=30, required=True)
-    form.add(TextWidget, 'user_text', title='Your message',
+    form.add(form2.TextWidget, 'user_text', title='Your message',
              rows=8, cols='60', wrap='virtual', required=True)
-    form.add(SubmitWidget, 'send', value='send')
+    form.add_submit('send', 'send')
 
     def render [html] ():
         header('Contact Us')

@@ -10,8 +10,7 @@ import traceback
 
 from quixote import get_publisher
 from quixote.errors import AccessError, PublishError, TraversalError
-from quixote.form2 import StringWidget, IntWidget
-from quixote.form2 import SingleSelectWidget, SubmitWidget
+from quixote import form2
 from quixote.html import html_quote
 
 from dulcinea.database import get_transaction

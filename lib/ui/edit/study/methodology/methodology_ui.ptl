@@ -9,7 +9,7 @@ _q_exports = [
 
 from quixote import get_publisher, get_request
 from quixote.errors import TraversalError
-from quixote.form2 import StringWidget, RadiobuttonsWidget, CheckboxWidget, SubmitWidget
+from quixote import form2
 
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found, add_message, has_messages, render_messages
@@ -67,7 +67,7 @@ class MethodologyTypeForm (MyForm):
     
     def __init__ (self):
         MyForm.__init__(self)
-        self.add(RadiobuttonsWidget, 'study_type', 
+        self.add(form2.RadiobuttonsWidget, 'study_type', 
             value=None,
             title='Study type:',
             hint='Select a study type',
@@ -322,7 +322,7 @@ def delete [html] (methodology_id):
     methodology = study.get_methodology(methodology_id)
 
     form = MyForm()
-    form.add(CheckboxWidget, 'are_you_sure',
+    form.add(form2.CheckboxWidget, 'are_you_sure',
         title='Are you sure you want to delete this methodology?',
         value=False)
     form.add_submit('delete', 'delete')

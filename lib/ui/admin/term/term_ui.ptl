@@ -6,9 +6,7 @@ _q_exports = ['_q_index',
 
 from quixote import get_publisher
 from quixote.errors import AccessError, PublishError, TraversalError
-#from quixote.form2 import Form
-from quixote.form2 import StringWidget, IntWidget, TextWidget
-from quixote.form2 import CheckboxWidget, SubmitWidget
+from quixote import form2
 
 from dulcinea.database import get_transaction
 
@@ -61,25 +59,25 @@ class TermForm (MyForm):
 
     def __init__ (self):
         MyForm.__init__(self)
-        self.add(IntWidget, 'term_uid', title='Term id',
+        self.add(form2.IntWidget, 'term_uid', title='Term id',
                  size=3, required=False)
-        self.add(IntWidget, 'term_source_id', title='Source id',
+        self.add(form2.IntWidget, 'term_source_id', title='Source id',
                  size=3, required=True)
-        self.add(StringWidget, 'term_name', title='Name',
+        self.add(form2.StringWidget, 'term_name', title='Name',
                  size=30, required=False)
-        self.add(TextWidget, 'term_desc', title='Description',
+        self.add(form2.TextWidget, 'term_desc', title='Description',
                  rows=4, cols=64, wrap='virtual', required=False)
-        self.add(StringWidget, 'term_token', title='Token',
+        self.add(form2.StringWidget, 'term_token', title='Token',
                  size=8, required=True)
-        self.add(IntWidget, 'vocabulary_uid', title='Vocabulary id',
+        self.add(form2.IntWidget, 'vocabulary_uid', title='Vocabulary id',
                  size=3, required=False)
-        self.add(CheckboxWidget, 'is_multivalue', title='Multivalue',
+        self.add(form2.CheckboxWidget, 'is_multivalue', title='Multivalue',
                  value=False)
-        self.add(StringWidget, 're_multivalue_sep', title='Multivalue separator',
+        self.add(form2.StringWidget, 're_multivalue_sep', title='Multivalue separator',
                  size=30, required=False)
-        self.add(IntWidget, 'mapped_term_id', title='Maps to term id',
+        self.add(form2.IntWidget, 'mapped_term_id', title='Maps to term id',
                  size=3, required=False)
-        self.add(SubmitWidget, 'submit', 'submit')
+        self.add_submit('submit', 'submit')
 
 
 def create [html] (request):
@@ -235,11 +233,11 @@ class DeleteTermForm (MyForm):
 
     def __init__ (self):
         MyForm.__init__(self)
-        self.add(IntWidget, 'term_uid', title='Term id', required=True)
-        self.add(CheckboxWidget, 'are_you_sure',
+        self.add(form2.IntWidget, 'term_uid', title='Term id', required=True)
+        self.add(form2.CheckboxWidget, 'are_you_sure',
                  title='Are you sure you want to delete this term?',
                  value=False)
-        self.add(SubmitWidget, 'delete', 'delete')
+        self.add_submit('delete', 'delete')
 
 
 def delete [html] (request, term_id=None):
