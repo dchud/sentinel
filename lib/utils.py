@@ -79,8 +79,12 @@ def get_title_from_path (path):
     Take a path, probably for a MyStaticFile, in the form of
     'sample_path_name', and return "Sample Path Name", suitable
     for passing to header as the page title.
+    
+    Remove the leading "about/" as needed.
     """
     underscore_to_space = re.compile('_')
+    if path.startswith('about/'):
+        path = path[len('about/'):]
     new_path = underscore_to_space.sub(' ', path)
     from string import capwords
     return capwords(new_path)
