@@ -18,7 +18,7 @@ save_popen() taken from a python cookbook recipe comment at
 """
 
 
-import os, tempfile
+import os, signal, tempfile
 
 def save_popen (command):
     """This is a deadlock save version of popen2 (no stdin), that returns
@@ -47,4 +47,4 @@ for line in pid_lines:
         print 'Finding children for pid', pid
     elif ppid == my_pid:
         print 'Killing child pid', pid
-        os.system('kill %s' % pid)
+        os.kill(int(pid), signal.SIGHUP)
