@@ -81,6 +81,8 @@ class CanaryConfig (quixote.config.Config):
             'use_cache',
             'cache_server_list',
             'search_index_dir',
+            'site_status',
+            'site_status_note',
             ]
 
         for var in my_vars:
@@ -132,6 +134,7 @@ class Context:
                     host=self.config.db_host, user=self.config.db_user,
                     passwd=self.config.db_passwd)
             if not self.__dict__.has_key('_cursor'):
+                print 'getting cursor'
                 self._cursor = self._connection.cursor()
 
         if not self.__dict__.has_key('_dbmodel'):

@@ -53,3 +53,7 @@ CACHE_SERVER_LIST = ['127.0.0.1:11234']
 
 # Search index directory
 SEARCH_INDEX_DIR = "/home/user/sites/canary_project/search-index"
+
+# Displays in the top head
+SITE_STATUS = ""
+SITE_STATUS_NOTE = ""

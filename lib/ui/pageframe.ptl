@@ -58,6 +58,9 @@ def header [html] (title, show_pageframe=True, show_javascript=False):
 
 
 def pageframe [html] ():
+    
+    config = get_publisher().config
+    
     """
     <!-- ###  PAGE HEADER  ############################################################## -->
 
@@ -75,11 +78,12 @@ def pageframe [html] ():
                 <!--
                 Standard links on all pages
                 -->
-                <h1 class='graphicHeader'>PRIVATE BETA</h1>
-                <h2 class='graphicHeader'>NOT REAL DATA; OPEN FOR BETA TESTING ONLY.</h2>
+                <h1 class='graphicHeader'>%s</h1>
+                <h2 class='graphicHeader'>%s</h2>
             </td>
         </tr>
-        
+    """ % (config.site_status, config.site_status_note)
+    """
         <tr valign="top">
             <form action='/search' method='post'>
                 <td bgcolor="#EEEDC0" colspan="2" width="725" height="32" align="left">
@@ -94,7 +98,8 @@ def pageframe [html] ():
                 </td>
             </form>
         </tr>
-        
+    """
+    """
         <tr>
             <td width="725" height="1" colspan="3" bgcolor="#000000">
                 <img src="/images/pixel.gif" alt="" width="1" height="1"></td>
