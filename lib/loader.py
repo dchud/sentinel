@@ -121,20 +121,20 @@ class QueuedRecord (DTable):
             if isinstance(terms, types.ListType):
                 for term in terms:
                     md = self.get_metadata(term.source_id, term)
-                    if not md == '' \
-                        or md == []:
+                    if md:
                         mapped_metadata[mapped_name] = md
+                    else:
+                        if not mapped_metadata.has_key(mapped_name):
+                            mapped_metadata[mapped_name] = md
             else:
                 # terms is really a single item
                 term = terms
                 md = self.get_metadata(term.source_id, term)
-                if not md == '' \
-                    or md == []:
+                if md:
                     mapped_metadata[mapped_name] = md
-            # Note: only if a mapped-term value hasn't been set at all
-            # FIXME: this feels hackish...
-            if not mapped_metadata.has_key(mapped_name):
-                mapped_metadata[mapped_name] = ''
+                else:
+                    if not mapped_metadata.has_key(mapped_name):
+                        mapped_metadata[mapped_name] = ''
         return mapped_metadata
     
     

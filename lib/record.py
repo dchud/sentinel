@@ -30,7 +30,8 @@ class SubjectHeading:
         'Growth Substances*'
         'Growth Substances/genetics'
         'Growth Substances/genetics*'
-        'Growth Substances/*genetics' 
+        'Growth Substances/*genetics'
+        'Growth Substances/ge [Genetics]'  (From Ovid Medline)
         
         ...into its component parts.
         """
@@ -50,6 +51,9 @@ class SubjectHeading:
         if slash_index > 0:
             self.term = text[0:slash_index]
             self.qualifier = text[(slash_index + 1):]
+            if self.qualifier[-1] == ']':
+                self.qualifier = self.qualifier[(self.qualifier.index('[') + 1) :
+                    (self.qualifier.index(']'))].lower()
         else:
             self.term = text
             self.qualifier = ''
