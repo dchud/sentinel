@@ -53,7 +53,11 @@ class QueueActions:
         try:
             if action == 'edit':
                 return edit(request, self.batch_id)
-            if action == 'delete':
+            elif action == 'add':
+                return add(request, batch_id=self.batch_id)
+            elif action == 'receive':
+                return receive(request, batch_id=self.batch_id)
+            elif action == 'delete':
                 return delete(request, self.batch_id)
             else:
                 raise TraversalError
@@ -127,20 +131,27 @@ class QueueActions:
 
 
 
-def add [html] (request):
-
+def add [html] (request, batch_id=None):
+    
     source_catalog = get_publisher().get_source_catalog()
 
     # Sort terms by their token
     sources = [(id, source.name) for id, source in source_catalog.sources.items()]
     sources.sort()
 
+    batch_name = ''
+    if batch_id:
+        cursor = get_publisher().get_cursor()
+        batch = Batch(uid=batch_id)
+        batch.load(cursor, load_metadata=False)
+        batch_name = batch.name
+    
     header('Upload records')
     title_bar('Upload records')
 
     if has_messages():
         render_messages()
-
+    
     """
     <form enctype='multipart/form-data'
         method='POST'
@@ -170,9 +181,10 @@ def add [html] (request):
     
     <p>
     Batch name: <br/>
-        <input type='text' name='batch_name' size='30' />
+        <input type='text' name='batch_name' value='%s' size='30' />
     </p>
-    
+    """ % batch_name
+    """
     <p>
         <input type='submit' value='Upload' />
     </p>
@@ -236,9 +248,13 @@ def list [html] (request):
             str('%'))
         """
             <td>%s</td>
-            <td>[<a href='/admin/queue/%s/edit'>edit</a>]</td>
+            <td>
+                [<a href='/admin/queue/%s/edit'>edit</a>]
+                [<a href='/admin/queue/%s/add'>add</a>]
+            </td>
         </tr>
-        """ % (str(batch.date_added)[0:10], batch.uid)
+        """ % (str(batch.date_added)[0:10], batch.uid, 
+            batch.uid)
     """
     </table>
     """
@@ -247,24 +263,24 @@ def list [html] (request):
     footer()
     
 
-def receive [html] (request):
+def receive [html] (request, batch_id=None):
 
     result = []
     form = request.form
-    request.session.message = None
-
+    cursor = get_publisher().get_cursor()
+        
     try:
         source_id = int(form.get('source_id'))
         source_catalog = get_publisher().get_source_catalog()
         source = source_catalog.get_source(source_id)
     except:
-        request.session.message = str('Please choose a source.')
+        add_message('Please choose a source.')
         return add(request)
 
     try:
         num_records = int(form.get('num_records'))
     except:
-        request.session.message = str('Please enter the number of expected records.')
+        add_message('Please enter the number of expected records.')
         return add(request)
 
     # FIXME: Think through this better.  Should clean up empty files at least.
@@ -272,18 +288,30 @@ def receive [html] (request):
         upload = request.form.get('upload')
         size = os.stat(upload.tmp_filename)[stat.ST_SIZE]
         if not upload.base_filename or size == 0:
-            request.session.message = str('Nothing uploaded.')
+            add_message('Nothing uploaded.')
     except:
-        request.session.message = str('Upload failed.')
+        add_message('Upload failed.')
         return add(request)
 
     try:
-        cursor = get_publisher().get_cursor()
-        batch = Batch(file_name=upload.tmp_filename, source_id=source_id)
-        batch.name = form.get('batch_name') or ''
-        batch.save(cursor)
-        source_catalog = get_publisher().get_source_catalog()
-        source = source_catalog.get_source(source_id)
+        if batch_id:
+            batch = Batch(batch_id)
+            batch.load(cursor, load_metadata=False)
+        else:
+            batch_name = form.get('batch_name', '')
+            if batch_name:
+                queue = Queue()
+                queue.load(cursor)
+                batch = queue.get_batch_by_name(batch_name)
+                if batch:
+                    batch.load(cursor, load_metadata=False)
+                    print 'Adding to batch', batch.name
+                else:
+                    batch = Batch(file_name=upload.tmp_filename, source_id=source_id)
+                    batch.name = form.get('batch_name') or ''
+                    print 'Creating new batch', batch.name
+                    batch.save(cursor)
+            
         mapped_terms = source_catalog.get_mapped_terms(source_id)
         parser = Parser(source)
         records = parser.parse(upload.tmp_filename, mapped_terms=mapped_terms)
@@ -292,16 +320,16 @@ def receive [html] (request):
             batch.save(cursor)
         else:
             print 'count mismatch'
-            request.session.message = str('Batch not saved: Record count mismatch, %s specified, %s found') % (num_records, len(records))
+            add_message('Batch not saved: Record count mismatch, %s specified, %s found' % (num_records, len(records)))
 
         cursor.close()
     except:
         print traceback.print_exc()
-        request.session.message = str('Unable to load batch.')
+        add_message('Unable to load batch.')
 
-    if request.session.message:
+    if has_messages():
         # FIXME:  do cleanup here?
-        return add(request)
+        return add(request, batch_id=batch_id)
 
     header('Uploaded records')
     """
