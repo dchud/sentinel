@@ -508,17 +508,23 @@ def summary [html] (request, queued_record_id):
         
         if len(study.exposures) == 0:
             add_message('You must add at least one exposure.')
+            request.redirect(str('curate_three'))
         
         if len(study.outcomes) == 0:
             add_message('You must add at least one outcome.')
+            request.redirect(str('curate_three'))
         
         if len(study.species) == 0:
             add_message('You must add at least one species')
-        
-    if has_messages():
-        request.redirect(str('curate_three'))
+            request.redirect(str('curate_three'))
+
 
     form = MyForm()
+    form.add(form2.TextWidget, 'comments', title='General comments',
+        value=study.comments,
+        rows='4', cols='60', wrap='virtual', 
+        required=False) 
+    form.add_submit('update', 'update')
     form.add_submit('finish', 'finish')
     
     def render [html] ():
@@ -576,7 +582,14 @@ def summary [html] (request, queued_record_id):
     if form.has_errors():
         return render()
     
+    if form['comments']:
+        comments = form['comments']
+        if not comments.strip() == study.comments:
+            study.comments = comments.strip()
+            add_message('Updated comments')
+
     if form.get_submit() == str('update'):
+        study.save(cursor)
         cursor.close()
         form.logger.info(str('Updated study %s' % study.uid))
         request.redirect(str('summary'))
