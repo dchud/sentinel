@@ -96,7 +96,7 @@ Automatic redirections for a url are listed as {redirect:[new_path]}.
     	    /	project_mission
     	    /	project_team
     	    /	related_work
-    	    /	study_types
+    	    /	study_methodologies
 
 /   admin   /
     {role: administrator}
