@@ -7,12 +7,20 @@ import canary.context
 from canary.utils import DTable
 
 
-class Concept (DTable):
+class Concept (canary.context.Cacheable, DTable):
     # FIXME: Resolve conflict between Exp/Out/Spec as "concepts" and this
     # 'Concept'; namely that Concept.uid == Exp/Out/Spec.concept_id.
     # Can wait until refactoring.
     
-    def __init__ (self, uid=-1):
+    CACHE_KEY = 'concept'
+
+    def __init__ (self, uid=-1, load_synonyms=False):
+        try:
+            if self.term:
+                return
+        except AttributeError:
+            pass
+
         self.uid = uid
         self.study_id = -1
         self.concept_source_id = -1
@@ -22,11 +30,22 @@ class Concept (DTable):
         self.synonyms = []
         
     
-    def load (self, load_synonyms=False):
+    def load (self, load_synonyms=True):
         if self.uid == -1:
             return
         
         context = canary.context.Context()
+        # Is it already loaded?  Convenience check for client calls
+        # don't need to verify loads from the cache.
+        if context.config.use_cache:
+            try:
+                if self.term:
+                    # Already loaded
+                    return
+            except AttributeError:
+                # Note already loaded, so continue
+                pass
+
         cursor = context.get_cursor()
         cursor.execute("""
             SELECT umls_concepts.preferred_name, 
@@ -62,6 +81,9 @@ class Concept (DTable):
                 synonym = row['term']
                 if not synonym in self.synonyms:
                     self.synonyms.append(synonym)
+
+        if context.config.use_cache:
+            context.cache_set('%s:%s' % (self.CACHE_KEY, self.uid), self)
         context.close_cursor(cursor)
         
     
@@ -78,6 +100,9 @@ class Concept (DTable):
             SET preferred_name = %s
             WHERE umls_concept_id = %s
             """, (self.term, self.uid))
+
+        if context.config.use_cache:
+            context.cache_set('%s:%s' % (self.CACHE_KEY, self.uid), self)
         context.close_cursor(cursor)
            
     

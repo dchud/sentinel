@@ -743,7 +743,7 @@ def render_record [html] (record, study):
 
 
 
-def render_record_row [html] (record):
+def render_record_row [html] (record, score=None):
     
     context = canary.context.Context()
     source_catalog = context.get_source_catalog()
@@ -755,6 +755,7 @@ def render_record_row [html] (record):
     """
                 <tr>
                     <td align='left' valign='top'>
+                    
                         <b><a href='/record/%s'>%s</a></b> 
                         <br />
                         %s

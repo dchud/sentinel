@@ -14,12 +14,12 @@ def run (searcher, analyzer):
             return
 
         print
-        print "Searching for:", command
         query = QueryParser.parse(unicode(command), 'all', analyzer)
+        print " [Query: %s]" % query
         hits = searcher.search(query)
         print "%s total matching documents." % hits.length()
         for i, doc in hits:
-            print doc
+            print doc.get('uid'), hits.score(i)
 
 if __name__ == '__main__':
     context = canary.context.Context()

@@ -8,8 +8,9 @@ from quixote import get_publisher
 from quixote import form2
 
 import canary.context
+from canary.loader import QueuedRecord
 from canary.qx_defs import MyForm
-from canary.search import Search
+from canary.search import Search, SearchIndex
 from canary.ui.record_ui import render_record_row
 from canary.ui.pageframe import header, footer
 
@@ -17,8 +18,8 @@ from canary.ui.pageframe import header, footer
 class SearchForm (MyForm):
 
     def __init__ (self):
-        MyForm.__init__(self)
-        self.add(form2.StringWidget, 'query',
+        MyForm.__init__(self, method='get')
+        self.add(form2.StringWidget, 'q',
             title='Enter one or more keywords',
             size=30,
             required=True)
@@ -41,41 +42,46 @@ def search [html] (request):
         form.render()
         footer()
 
-    if form['query'] == None \
-        or form['query'] == '':
-        form.set_error('query', 'Please enter search terms')
-
     if not form.is_submitted() \
         or form.has_errors():
         return render()
     
-    search = Search(token=form['query'])
-    results = search.search(complete_term_mapping).get_results()
+    try:
+        search_index = SearchIndex()
+        hits, searcher = search_index.search(form['q'])
+        
+        header("Search results")
+        """
+        <h3>Search results</h3>
+        """
     
-    header("Search results")
-    """
-    <h3>Search results</h3>
-    """
-
-    count = len(results)
-    """
-    <p>
-    Your search: "%s" (%s), records found: %s
-    </p>
-    """ % (form['query'], 'keyword', count)
-    
-    if count > 0:
+        count = hits.length()
         """
-        <div id="search-result">
-            <table width="100%" border="0" cellspacing="0" cellpadding="0">
-        """
-        for record in results:
-            render_record_row(record)
-        """
-            </table>
-        </div>
-        """
-    else:
-        '<p>Nothing found.</p>'
+        <p>
+        Your search: "%s", records found: %s
+        </p>
+        """ % (form['q'], count)
+        
+        if count > 0:
+            """
+            <div id="search-result">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            """
+            relevance_map = {}
+            for i, doc in hits:
+                uid = doc.get(str('uid'))
+                record = QueuedRecord(uid)
+                score = hits.score(i)
+                render_record_row(record, score)
+            searcher.close()
+            """
+                </table>
+            </div>
+            """
+        else:
+            '<p>Nothing found.</p>'
+    except:
+        import traceback
+        print traceback.print_exc()
 
     footer()

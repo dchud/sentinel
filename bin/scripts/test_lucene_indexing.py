@@ -46,6 +46,7 @@ if __name__ == '__main__':
                 break
             uid = int(row[0])
             record = QueuedRecord(uid)
+            print 'Index record %s' % uid
             si.index_record(record, writer)
             record_count += 1
     except:

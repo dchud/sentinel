@@ -4,6 +4,7 @@ import PyLucene
 from PyLucene import Field, Term, Document
 from PyLucene import QueryParser, IndexSearcher, StandardAnalyzer, FSDirectory
 
+from canary.concept import Concept
 import canary.context
 from canary.gazeteer import Feature
 from canary.loader import QueuedRecord
@@ -226,7 +227,6 @@ class SearchIndex:
             doc.add(PyLucene.Field('all', str(record.uid),
                 True, True, False))
             
-            print 'added uid'
             source_catalog = self.context.get_source_catalog()
             complete_term_map = source_catalog.get_complete_mapping()
             mapped_metadata = record.get_mapped_metadata(complete_term_map)
@@ -237,21 +237,23 @@ class SearchIndex:
                 'unique_identifier', 'volume'):
                 val = mapped_metadata.get(field, None)
                 if val:
-                    doc.add(Field(field, val,
+                    doc.add(PyLucene.Field(field, val,
                         False, True, True))
-                    doc.add(Field('all', val,
+                    doc.add(PyLucene.Field('all', val,
                         False, True, True))
-            print 'added singles'
             
             # Next, index all the possibly-multiple metadata fields
+            # Give these (especially for author and subject) a little
+            # boost, less than for canary UMLS concepts
             for field in ('author', 'keyword', 'registrynum', 'subject'):
                 vals = mapped_metadata.get(field, None)
                 for val in vals:
-                    doc.add(Field(field, val,
+                    doc.add(PyLucene.Field(field, val,
                         False, True, True))
-                    doc.add(Field('all', val,
-                        False, True, True))
-            print 'added multiples'
+                    f = PyLucene.Field('all', val,
+                        False, True, True)
+                    f.setBoost(1.1)
+                    doc.add(f)
             
             # All the booleans
             for bool in ('has_outcomes', 'has_exposures', 
@@ -261,19 +263,24 @@ class SearchIndex:
                 val = getattr(study, bool)
                 # NOTE: I think lucene dislikes '_' in field names ??
                 boolstr = bool.replace('_', '-')
-                doc.add(Field(boolstr, str(int(val)),
+                doc.add(PyLucene.Field(boolstr, str(int(val)),
                     False, True, False))
                 # NOTE: no need to add this to 'all'.  I think.
             
-            # Now, all the UMLS concepts
-            # NOTE: Revisit for synonym "injection".
-            for concept in ('exposures', 'outcomes', 'risk_factors',
+            # Now, all the UMLS concepts.  Simpler approach to
+            # lucene "synonym injection", but it works!  Give it
+            # slightly bigger boost than keywords/subjects
+            for ctype in ('exposures', 'outcomes', 'risk_factors',
                 'species'):
-                for val in getattr(study, concept):
-                    doc.add(Field(concept, val.term,
-                        True, True, True))
-                    doc.add(Field('all', val.term,
-                        True, True, True))
+                for val in getattr(study, ctype):
+                    concept = Concept(val.concept_id)
+                    for syn in concept.synonyms:
+                        doc.add(PyLucene.Field(ctype, syn,
+                            False, True, True))
+                        f = PyLucene.Field('all', syn,
+                            False, True, True)
+                        f.setBoost(1.2)
+                        doc.add(f)
 
             # And, the locations
             gazeteer = self.context.get_gazeteer()
@@ -289,9 +296,9 @@ class SearchIndex:
                     gazeteer.feature_codes[feature.feature_type],
                     render_capitalized(region_name), 
                     render_capitalized(gazeteer.country_codes[feature.country_code]))
-                doc.add(Field('location', full_name,
+                doc.add(PyLucene.Field('location', full_name,
                     False, True, True))
-                doc.add(Field('all', full_name,
+                doc.add(PyLucene.Field('all', full_name,
                     False, True, True))
                 
             writer.addDocument(doc)
@@ -322,12 +329,13 @@ class SearchIndex:
                 self.context.config.search_index_dir, False))
             analyzer = StandardAnalyzer()
             query = QueryParser.parse(query_string, 'all', analyzer)
+            print 'Query:', query
             hits = searcher.search(query)
             return hits, searcher
         except:
             import traceback
             print traceback.print_exc()
-            return hits
+            return hits, searcher
 
         
     

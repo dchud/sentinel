@@ -1,0 +1,24 @@
+General notes on working with pylucene and search strategy.
+
+2005-03-11: canary concept term boosting, umls synonyms
+
+    - term boosting: simple, just call setBoost() on each term
+    - synonym "injection": just cycle in synonyms at index-time,
+      no need for complex analyzers yet.  maybe later, if we
+      do concept indexing of titles and abstracts
+
+2005-03-09: general search working.  general notes/issues:
+
+    - key canary concepts need to be boosted:
+        - exposures, outcomes, species, risk_factors,
+          though maybe _not_ locations
+        - quick test via ui indicates a boost of at least 1.2
+          should be sufficient
+    - synonym injection necessary for all umls concepts
+    - add in canary record status info; calling client can
+      grow out user query for "is-curated:1" and "is-irrelevant:0"
+      etc. depending on UI component
+    - MeSH, Taxonomy hierarchy searching necessary
+    - UI will be a thorny one :)
+
+2005-03-07: PyLucene installed successfully

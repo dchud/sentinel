@@ -86,8 +86,8 @@ def pageframe [html] ():
                     <p>
                         &nbsp; &nbsp; &nbsp; &nbsp;
                         <span class='search'>
-                            Enter a keyword 
-                            <input type="text" name="query" size="15" tabindex="13">
+                            Search:
+                            <input type="text" name="q" size="20" tabindex="13">
                             <input type="submit" name="go" value="go">
                         </span>
                     </p>
