@@ -102,16 +102,18 @@ def pageframe [html] ():
 
     """
     request = get_publisher().get_request()
-    if not request == None \
-        and not request.session.user == None:
+    try:
+        user = request.session.user
         """
         <span class='login_detail'>
         Logged in as <b>%s</b>:  go to
             <a href='/user/'>my page</a> or
-            <a href='/user/logout'>log out</a>
+            <a href='/logout'>log out</a>
         </span>
         <br />
-        """ % (request.session.user.id)
+        """ % (user.get_id())
+    except:
+        pass
 
 
 def sidebar [html] ():
