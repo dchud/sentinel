@@ -10,7 +10,7 @@ from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found
 from canary.qx_defs import MyForm
 from canary.loader import QueuedRecord
-from canary.report import Report, Study
+from canary.study import Study
 
 
 def exposures [html] (request, queued_record_id):
@@ -25,13 +25,13 @@ def exposures [html] (request, queued_record_id):
     queued_record.load(cursor)
     print 'done'
    
-    print 'creating report'
-    # create a Report
-    report = Report()
-    report.record_id = queued_record.uid
-    report.curator_user_id = session.user.get_id()
-    report.is_exposures_only = True
-    report.type = report.TYPE_EXPOSURES_ONLY
+    print 'creating study'
+    # create a Study
+    study = Study()
+    study.record_id = queued_record.uid
+    study.curator_user_id = session.user.get_id()
+    study.is_exposures_only = True
+    study.type = study.TYPE_EXPOSURES_ONLY
     
     print 'setting up form'
     form = MyForm()
@@ -65,25 +65,25 @@ def exposures [html] (request, queued_record_id):
     # set queued record state = finished
     comments = form['comments']
     if comments != None and comments != '':
-        report.comments = comments
+        study.comments = comments
 
     # true by default / by definition
-    report.meta['has_exposures'] = True
-    report.meta['has_outcomes'] = False
-    report.meta['has_outcome_linkage'] = False
+    study.meta['has_exposures'] = True
+    study.meta['has_outcomes'] = False
+    study.meta['has_outcome_linkage'] = False
     
     has_outcome_linkage = form['has_exposure_linkage']
     if has_exposure_linkage:
-        report.meta['has_exposure_linkage'] = True
+        study.meta['has_exposure_linkage'] = True
     
     has_interspecies = form['has_interspecies']
     if has_interspecies:
-        report.meta['has_interspecies'] = True
+        study.meta['has_interspecies'] = True
         
-    # save/update report
-    report.status = report.STATUS_CURATED
-    print 'saving/inserting report'
-    report.save(cursor)
+    # save/update study
+    study.status = study.STATUS_CURATED
+    print 'saving/inserting study'
+    study.save(cursor)
     
     # save/update queued_record
     print 'updating queued record status'
