@@ -1,29 +1,20 @@
-_q_exports = ['_q_index',
-              'login',
-              'logout',
-              ]
+_q_exports = [
+    '_q_index',
+    ]
 
 from quixote.errors import TraversalError
 
+from canary.qx_defs import NotLoggedInError
 from canary.ui.pages import not_found
 from canary.ui.user import user_ui
 
 _q_index = user_ui._q_index
-login = user_ui.login
-logout = user_ui.logout
 
 
-def _q_lookup (request, action):
+
+def _q_access (request):
     try:
-        if action == 'login':
-            if request.session.user == None:
-                return login(request)
-            else:
-                request.redirect('/user')
-        elif action == 'logout':
-            return logout(request)
-        else:
-            raise TraversalError
-
+        if request.session == None or request.session.user == None:
+            raise NotLoggedInError('You must first log in.')
     except:
-        return not_found('user')
+        raise NotLoggedInError('You must first log in.')
