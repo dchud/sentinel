@@ -1,5 +1,6 @@
 from quixote import get_publisher, get_request
 
+from canary.gazeteer import Feature
 from canary.loader import QueuedRecord
 from canary.record import SubjectHeading
 from canary.study import Study
@@ -217,6 +218,45 @@ def render_species [html] (study):
         </tr>
         """ % (spec.term, spec.UMLS_SOURCES[spec.concept_source_id], 
             spec.uid)
+    """
+    </table>
+    """
+
+
+def render_locations [html] (cursor, study):
+    gazeteer = get_publisher().get_gazeteer()
+    """
+    <table class='gentable' id='locations'>
+        <tr>
+            <th>name</th>
+            <th>type</th>
+            <th>region</th>
+            <th>country</th>
+            <th>lat/long</th>
+            <th>actions</th>
+        </tr>
+    """
+    for location in study.locations:
+        feature = Feature(uid=location.feature_id)
+        feature.load(cursor)
+        if gazeteer.fips_codes.has_key((feature.country_code, feature.adm1)):
+            region_name = gazeteer.fips_codes[(feature.country_code, feature.adm1)]
+        else:
+            region_name = ''
+
+        """
+        <tr>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>[<a href='location/%s/delete'>delete</a>]</td>
+        </tr>
+        """ % (feature.name, gazeteer.feature_codes[feature.feature_type],
+            region_name, gazeteer.country_codes[feature.country_code],
+            '%.2f / %.2f' % (feature.latitude, feature.longitude),
+            location.uid)
     """
     </table>
     """

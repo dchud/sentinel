@@ -6,6 +6,7 @@ from quixote.errors import TraversalError
 
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found
+from canary.gazeteer import Feature
 from canary.loader import QueuedRecord
 from canary.pubmed import Pubmed
 from canary.study import Study
@@ -172,7 +173,43 @@ def render_methodologies [html] (study, show_actions=False):
     </table>
     """
 
-
+def render_capitalized [plain] (term):
+    stop_words = ['of', 'the']
+    old_terms = str(term).split(' ')
+    new_terms = []
+    for t in term.split(' '):
+        if t in stop_words:
+            new_terms.append(t)
+        else:
+            new_terms.append(t.lower().capitalize())
+    return ' '.join(new_terms)
+    
+def render_locations [html] (cursor, study):
+    gazeteer = get_publisher().get_gazeteer()
+    locs = []
+    for location in study.locations:
+        feature = Feature(uid=location.feature_id)
+        feature.load(cursor)
+        if gazeteer.fips_codes.has_key((feature.country_code, feature.adm1)):
+            region_name = gazeteer.fips_codes[(feature.country_code, feature.adm1)]
+        else:
+            region_name = ''
+        locs.append('%s (%s, %s, %s)' % (feature.name, 
+            gazeteer.feature_codes[feature.feature_type],
+            render_capitalized(region_name), 
+            render_capitalized(gazeteer.country_codes[feature.country_code])))
+        # lat/long = '%.2f / %.2f' % (feature.latitude, feature.longitude),
+    
+    """
+    <tr>
+        <th>Locations</th>
+        <td>
+    """
+    '; '.join([str(loc) for loc in locs])
+    """
+        </td>
+    </tr>
+    """
 
 def render_metadata_header [html] (mapped_metadata, show_abstract=False):
     
@@ -220,14 +257,12 @@ def render_metadata_header [html] (mapped_metadata, show_abstract=False):
 
 
 def render_abstract [html] (mapped_metadata):
-    print 'render_abstract()'
     """
     <table border='0' cellspacing='5' cellpadding='5'>
 
         <tr>
     """
     
-    print 'checking for abs'
     if not mapped_metadata['abstract'] == '':
         abstract = mapped_metadata['abstract']
     else:
@@ -243,7 +278,6 @@ def render_abstract [html] (mapped_metadata):
             </td>
     """ % ('55%', abstract)
 
-    print 'doing subjects'
     """
             <td align='left' valign='top'>
                 <b>Subject Headings</b>
@@ -268,8 +302,7 @@ def render_abstract [html] (mapped_metadata):
         </tr>
     </table>
     """
-    print 'done'
-
+    
 
 def similar [html] (self, request):
 
@@ -405,7 +438,7 @@ def render_summary_concept_row [html] (concepts, concept_name):
         <th>%s</th>
         <td>
     """ % concept_name.capitalize()
-    '; '.join([con.term for con in concepts])
+    '; '.join([str(con.term) for con in concepts])
     """
         </td>
     </tr>
@@ -422,16 +455,11 @@ def render_record [html] (record):
         study.load(cursor)
         article_type = study.get_article_type(text=True)
     except:
-        import traceback
-        print 'error on record load'
-        print traceback.print_exc()
         return not_found('record')
     
     header('Record %s' % record.uid)
-    print 'getting md'
     mapped_metadata = record.get_mapped_metadata(complete_term_map)
     render_metadata_header(mapped_metadata, show_abstract=False)
-    print 'rendered md header'
     """
     <h4>Article type: %s</h4>
     """ % article_type
@@ -440,7 +468,6 @@ def render_record [html] (record):
         
         render_data_points(study)
         
-        print 'checking for concepts'
         """
         <table class='gentable' id='summary'>
         """
@@ -456,18 +483,17 @@ def render_record [html] (record):
         if len(study.species) > 0:
             render_summary_concept_row(study.species, 'species')
             
+        if len(study.locations) > 0:
+            render_locations(cursor, study)
+            
         """
         </table>
         """
 
     if not article_type in ['irrelevant'] \
         and len(study.methodologies) > 0:
-        print 'rendering meths'
         render_methodologies(study)
     
-    print 'rendering abstract'
     render_abstract(mapped_metadata)
     
-    print 'done'
     footer()
-    

@@ -24,10 +24,12 @@ from canary.ui.pages import not_found, add_message, has_messages, render_message
 from canary.ui.edit.study.utils import get_current_study, get_queued_record
 from canary.ui.edit.study.utils import is_same_user, render_queued_record
 from canary.ui.edit.study.utils import claimed_by_other_user, render_unclaim_block
-from canary.ui.edit.study.utils import render_exposures, render_outcomes, render_species
+from canary.ui.edit.study.utils import render_exposures, render_outcomes
+from canary.ui.edit.study.utils import render_species, render_locations
 from canary.ui.edit.study.utils import render_subject_selector
 from canary.ui.edit.study.utils import render_pipeline
-from canary.ui.record_ui import render_methodologies, render_data_points
+from canary.ui import record_ui
+from canary.ui.record_ui import render_data_points, render_methodologies
 
     
 def title_bar [html] (action=''):
@@ -59,13 +61,14 @@ class StudyActions:
         'exposure',
         'outcome',
         'species',
-        #'location',
+        'location',
         ]
 
     from canary.ui.edit.study import methodology
     from canary.ui.edit.study import exposure
     from canary.ui.edit.study import outcome
     from canary.ui.edit.study import species
+    from canary.ui.edit.study import location
     
 
     def __init__ (self, queued_record_id):
@@ -100,8 +103,8 @@ class StudyActions:
                 return outcome
             elif action == 'species':
                 return species
-            #elif action == 'location':
-            #    return location(request, self.queued_record_id)
+            elif action == 'location':
+                return location
             else:
                 raise TraversalError
         except:
@@ -429,9 +432,16 @@ def curate_three [html] (request, queued_record_id):
     """
     <fieldset>
         <legend>Locations</legend>
-        <p>
-        This is where you will add locations.
-        </p>
+    """
+    render_locations(cursor, study)
+    """
+        <form method='POST' action='location/find'>
+            <p>
+            Add any location:
+            <input type='text' name='search_term' size='30' />
+            <input type='submit' name='find' value='find' />
+            </p>
+        </form>
     </fieldset>
     """
 
@@ -577,7 +587,9 @@ def summary [html] (request, queued_record_id):
                 
             if len(study.species) > 0:
                 render_summary_concept_row(study.species, 'species')
-                
+            
+            if len(study.locations) > 0:
+                record_ui.render_locations(cursor, study)
             """
             </table>
             """

@@ -976,8 +976,65 @@ class Species (DTable):
 class Location (DTable):
     
     def __init__ (self):
-        pass
+        self.uid = -1
+        self.study_id = -1
+        self.feature_id = -1
+        self.name = ''
+        self.country = ''
+        self.designation = ''
         
+    def __str__ (self):
+        out = []
+        out.append('<Location uid=%s study_id=%s' % (self.uid, self.study_id))
+        out.append('\tname=%s' % self.name)
+        out.append('/>')
+        return '\n'.join(out)
+    
+    def delete (self, cursor):
+        """
+        Delete this location from the database.
+        """
+        if not self.uid == -1:
+            try:
+                cursor.execute("""
+                    DELETE FROM locations
+                    WHERE uid = %s
+                    """, self.uid)
+            except:
+                import sys
+                print 'MySQL exception:'
+                for info in sys.exc_info():
+                    print 'exception:', info
+                    
+
+    def save (self, cursor):
+        if self.uid == -1:
+            #print 'inserting new location'
+            cursor.execute("""
+                INSERT INTO locations
+                (uid, study_id, feature_id) 
+                VALUES 
+                (NULL, %s, %s)
+                """, (self.study_id, self.feature_id))
+            #print 'inserted new location'
+            self.uid = self.get_new_uid(cursor)
+            #print 'set new location uid to %s' % self.uid
+        else:
+            #print 'updating location %s' % self.uid
+            try:
+                cursor.execute("""
+                    UPDATE locations
+                    SET study_id = %s, feature_id = %s
+                    WHERE uid = %s
+                    """, (self.study_id, self.feature_id,
+                    self.uid)
+                    )
+            except:
+                import sys
+                print 'MySQL exception:'
+                for info in sys.exc_info():
+                    print 'exception:', info
+            #print 'updated location %s' % self.uid
 
 
 class Study (DTable):
@@ -1215,6 +1272,52 @@ class Study (DTable):
         for spec in self.species:
             if spec.concept_id == species.concept_id:
                 return spec
+        return None
+
+
+    def has_location (self, location):
+        """
+        Returns True if this location has already been added to this Study.
+        
+        Note that has_location may be used before location is added,
+        hence it does not check location.uid.
+        """
+        for loc in self.locations:
+            if loc.feature_id == location.feature_id:
+                return True
+        return False
+
+    def has_feature (self, feature):
+        """
+        Returns True if this feature has already been added to this Study.
+        """
+        for loc in self.locations:
+            if loc.feature_id == feature.uid:
+                return True
+        return False
+
+    def add_location (self, location):
+        if not self.has_location(location):
+            location.study_id = self.uid
+            self.locations.append(location)
+        
+    def get_location (self, id):
+        """
+        Return the matching location, if added.
+        
+        Note that get_location is for use in matching or deleting locations,
+        i.e., only after an location has been added to the Study, so uid
+        matching is required.
+        """
+        for loc in self.locations:
+            if loc.uid == id:
+                return loc
+        return None
+    
+    def get_location_from_feature (self, feature):
+        for loc in self.locations:
+            if loc.feature_id == feature.uid:
+                return loc
         return None
 
 

@@ -28,6 +28,7 @@ kw = {'name': "canary",
         'canary.ui.edit.study.exposure',
         'canary.ui.edit.study.outcome',
         'canary.ui.edit.study.species',
+        'canary.ui.edit.study.location',
         'canary.ui.edit.study.methodology',
         'canary.ui.html',
         'canary.ui.user',
@@ -37,10 +38,10 @@ kw = {'name': "canary",
             'lib/ui/images/brynn_canaries_alpha_left.png', 
             'lib/ui/images/yusm_logo.png',
             'lib/ui/images/algorithm.png',
-	    'lib/ui/images/pixel.gif',
+        'lib/ui/images/pixel.gif',
             ]
-	),
-	],
+    ),
+    ],
     'cmdclass': {'build_py': qx_build_py}}
 
 core.setup(**kw)

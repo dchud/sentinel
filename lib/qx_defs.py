@@ -20,6 +20,7 @@ from dulcinea.persistent_session import DulcineaSession, DulcineaSessionManager
 from dulcinea.user import DulcineaUser
 from dulcinea.user_database import DulcineaUserDatabase
 
+from canary.gazeteer import Gazeteer
 from canary.source_catalog import SourceCatalog
 from canary.utils import MyLogger
 
@@ -95,6 +96,10 @@ class MySessionPublisher(SessionPublisher):
         self._source_catalog = SourceCatalog()
         self._source_catalog.load_sources(init_cursor, load_terms=True)
         
+        print 'd: loading gazeteer codes'
+        self._gazeteer = Gazeteer()
+        self._gazeteer.load(init_cursor)
+        
         init_cursor.close()
 
         # Set up log4py Logger
@@ -144,6 +149,9 @@ class MySessionPublisher(SessionPublisher):
 
     def set_source_catalog (self, catalog):
         self._source_catalog = catalog
+        
+    def get_gazeteer (self):
+        return self._gazeteer
 
 
 class NotLoggedInError (AccessError):
