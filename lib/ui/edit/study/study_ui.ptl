@@ -27,7 +27,7 @@ from canary.ui.pages import not_found
 #from canary.ui.edit.study.outcomes import outcomes
 #from canary.ui.edit.study.exposures import exposures
 
-
+    
 def title_bar [html] (action=''):
     """
     <h2>
@@ -327,6 +327,9 @@ def curate_two [html] (request, queued_record_id):
         if form[bool_item]:
             print 'setting %s == True' % bool_item
             setattr(study, str(bool_item), True)
+        else:
+            print 'setting %s == False' % bool_item
+            setattr(study, str(bool_item), False)
     
     print 'classifying'
     # studies noted as article_type['review'] must stay as 'review'
@@ -438,6 +441,7 @@ def curate_three [html] (request, queued_record_id):
     if not form.is_submitted():
         return render()
 
+    study_types = []
     for bool_item, bool_item_str in [
         ('has_experimental', 'experimental'),
         ('has_descriptive', 'descriptive'),
@@ -447,7 +451,8 @@ def curate_three [html] (request, queued_record_id):
         ('has_cross_sectional', 'cross sectional'),
         ]:
         if form[bool_item]:
-            study.set_type(bool_item_str)
+            study_types.append(bool_item_str)
+    study.set_types(study_types)
             
     if len(study.get_types()) == 0:
         form.set_error('has_experimental', 'Must choose at least one study type.')

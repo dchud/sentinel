@@ -14,6 +14,9 @@ SECURE_ERRORS = 0
 
 FIX_TRAILING_SLASH = 1
 
+# Generate unique form tokens on POSTed forms
+FORM_TOKENS = True
+
 MAIL_FROM = "foo@example.com"     # eg. "webmaster@example.com"
 MAIL_SERVER = "localhost"
 MAIL_DEBUG_ADDR = "foo@example.com"   # eg. "developers@example.com"

@@ -38,7 +38,7 @@ def save_popen (command):
 scgi_pid = open('scgi.pid').read().strip()
 
 # 'grep python' because the first grep might show up in the list
-pid_set = save_popen("""ps -f | grep scgi_handler | grep python | awk '{print $2, $3}'""")
+pid_set = save_popen("""ps -ef | grep scgi_handler | grep python | awk '{print $2, $3}'""")
 pid_lines = pid_set.split('\n')
 
 for line in pid_lines:

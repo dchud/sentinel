@@ -457,7 +457,8 @@ class Study (DTable):
             # all types get a sample size
             form.add(IntWidget, 'sample_size',
                 title='Sample size (study n)',
-                size=10, value=int(self.sample_size))
+                size=10, value=int(self.sample_size),
+                required=True)
                 
             # all types get a route
             form.add(SingleSelectWidget, 'route',
@@ -465,8 +466,7 @@ class Study (DTable):
                 value=self.get_route(),
                 options=[(val, name, val) for name, val in self.ROUTE.items()],
                 sort=True,
-                required=True,
-                )
+                required=True)
 
             # study types except experimental and descriptive get timing
             if not self.has_type('experimental') \
@@ -476,8 +476,7 @@ class Study (DTable):
                     value=self.get_timing(),
                     options=[(val, name, val) for name, val in self.TIMING.items()],
                     sort=True,
-                    required=True,
-                    )
+                    required=True)
         
             # all the 'c*' study types get controls
             if self.has_type('cross sectional') \
@@ -488,8 +487,7 @@ class Study (DTable):
                     value=self.get_controls(),
                     options=[(val, name, val) for name, val in self.CONTROLS.items()],
                     sort=True,
-                    required=True,
-                    )
+                    required=True)
                 
             # only cross sectional gets sampling
             if self.has_type('cross sectional'):
@@ -498,8 +496,7 @@ class Study (DTable):
                     value=self.get_sampling(),
                     options=[(val, name, val) for name, val in self.SAMPLING.items()],
                     sort=True,
-                    required=True,
-                    )
+                    required=True)
                     
         # every article and study type has comments
         form.add(TextWidget, 'comments', 
