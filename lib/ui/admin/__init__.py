@@ -15,7 +15,6 @@ _q_exports = [
 import string
 
 from quixote.errors import AccessError, PublishError, TraversalError
-
 from dulcinea.database import get_transaction
 
 from canary.ui.admin import admin_ui
