@@ -70,6 +70,11 @@ def _q_index [html] (request):
                 <input type='text' size='30' name='search_term' />
                 <input type='submit' name='find' value='find' />
             </form>
+            <hr />
+            Categories:
+                [<a href='/admin/category/'>List</a>]
+                [<a href='/admin/category/create'>Create</a>]
+            
         </td>
     </tr>
     <tr>

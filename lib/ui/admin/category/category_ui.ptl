@@ -1,0 +1,629 @@
+_q_exports = [
+    '_q_index',
+    'create',
+    'concepts',
+    'edit',
+    'find',
+    'list',
+    'add',
+    'edit_concept',
+    'remove',
+    ]
+
+from quixote import get_publisher
+from quixote import form2
+from quixote.errors import AccessError, PublishError, TraversalError
+from quixote.html import html_quote
+
+from canary.ui.admin.admin_ui import title_bar
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found, add_message, has_messages, render_messages
+from canary.qx_defs import MyForm
+from canary.concept import Category, CategoryConcept, load_categories
+from canary.concept import Concept, find_concepts
+
+
+def _q_index [html] (request):
+    request.redirect(str('/admin/category/list'))
+
+class CategoryActions:
+
+    _q_exports = [
+        '_q_index',
+        ]
+
+    def __init__ (self, category_id):
+        self.category_id = category_id
+        
+    def _q_index [html] (self, request):
+        return concepts(request, self.category_id)
+
+    def _q_lookup [html] (self, request, action):
+        try:
+            if action == 'concepts':
+                return concepts(request, self.category_id)
+            elif action == 'edit':
+                return edit(request, self.category_id)
+            elif action == 'edit_concept':
+                return edit_concept(request, self.category_id)
+            elif action == 'find':
+                return find(request, self.category_id)
+            elif action == 'add':
+                return add(request, self.category_id)
+            elif action == 'remove':
+                return remove(request, self.category_id)
+            else:
+                raise TraversalError
+        except:
+            import traceback
+            print traceback.print_exc()
+            return not_found('category')
+            
+            
+def concepts [html] (request, category_id):
+
+    cursor = get_publisher().get_cursor()
+    category = Category(uid=category_id)
+    category.load(cursor, load_concepts=True)
+    
+    title = 'List concepts for category "%s"'  % category.name 
+    header(title)
+    title_bar(title + ' (<a href="/admin/category/%s/edit">edit</a>)' % category_id)
+    if has_messages():
+        render_messages()
+
+    """
+    <table cellspacing='5' class='gentable'>
+    <tr>
+        <th>id</th>
+        <th>concept id</th>
+        <th>Term</th>
+        <th>Groups</th>
+        <th>Broad?</th>
+        <th>Default?</th>
+        <th>Actions</th>
+    </tr>
+    """
+    for cat_concept in category.get_concepts():
+        """
+    <tr>
+        <td>%s</td>
+        <td>%s</td>
+        <td>%s</td>
+        """ % (cat_concept.uid, cat_concept.concept_id, cat_concept.concept.term)
+        """
+        <td>-</td>
+        """ 
+        for bool in ['is_broad', 'is_default']:
+            if getattr(cat_concept, str(bool)):
+                """
+        <td>Yes</td>
+                """
+            else:
+                """
+        <td>-</td>
+                """
+        """
+        <td>
+            [<a href='/admin/category/%s/edit_concept?concept_uid=%s'>edit</a>]
+            [<a href='/admin/category/%s/remove?concept_uid=%s'>remove</a>]
+        </td>
+        """ % (category_id, cat_concept.uid,
+            category_id, cat_concept.uid)
+        
+        """
+    </tr>
+        """
+    
+    """
+    <tr>
+        <form action='/admin/category/%s/find'>
+        <td colspan='2'>Find:</td>
+        <td colspan='3'><input type='text' width='30' name='search_term' /></td>
+        <td><input type='submit' name='find' value='find' /></td>
+        </form>
+    </tr>
+    """ % category_id
+    
+    """
+    </table>
+    """
+    footer()
+    
+    
+def edit [html] (request, category_id):
+    
+    cursor = get_publisher().get_cursor()
+    category = Category(uid=category_id)
+    category.load(cursor)
+    
+    form = MyForm()
+    
+    concept_types = category.concept_types
+    category_types = category.get_types()
+
+    form.add(form2.StringWidget, 'category_name',
+        title='Category name',
+        width='40',
+        required='True'
+        )
+    for concept_type in concept_types:
+        form.add(form2.CheckboxWidget, 'concept_%s' % concept_type,
+            title='Type %s:' % concept_type.capitalize(),
+            value=False)
+    form.add(form2.TextWidget, 'category_groups',
+        title='Subgroup names',
+        hint='Separate by ","',
+        rows=4,
+        cols=40,
+        wrap='virtual',
+        required=False)
+    form.add_submit('edit', 'edit')
+    
+    def render [html] ():
+        header('Edit category %s (%s)' % (category_id, category.name))
+        title_bar('Edit category %s (%s)' % (category_id, category.name))
+        if has_messages():
+            render_messages()
+        form.render()
+        footer()
+    
+    if not form.is_submitted():
+        form.get_widget('category_name').set_value(category.name)
+        for concept_type in concept_types:
+            if concept_type in category_types:
+                form.get_widget('concept_%s' % concept_type).set_value(True)
+            else:
+                form.get_widget('concept_%s' % concept_type).set_value(False)
+        form.get_widget('category_groups').set_value(','.join([g.name for g in category.groups]))
+        return render()
+
+    category.clear_types()
+    for concept_type in concept_types:
+        if form['concept_%s' % concept_type]:
+            category.add_type(concept_type)
+
+    if form.has_errors():
+        return render()
+        
+    category.name = form['category_name']
+    
+    try:
+        category.save(cursor)
+        add_message('Edited category %s' % category_id)
+        form.logger.info(str('Edited category %s' % category_id))
+    except:
+        add_message('Could not edit category')
+        form.logger.info(str('Could not edit category'))
+    
+    cursor.close()
+    request.redirect(str('/admin/category/list'))
+
+
+
+
+def list [html] (request):
+
+    cursor = get_publisher().get_cursor()
+
+    header('List categories')
+    title_bar('List categories')
+    if has_messages():
+        render_messages()
+
+    """
+    <table cellspacing='5' class='gentable'>
+    <tr>
+        <th>id</th>
+        <th>Name</th>
+        <th>Groups</th>
+        <th>Exposure</th>
+        <th>Outcome</th>
+        <th>Species</th>
+        <th>Location</th>
+        <th>Actions</th>
+    </tr>
+    """
+    categories = load_categories(cursor)
+    for category in categories:
+        """
+        <tr>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+        """ % (category.uid, category.name,
+            str(', ').join([g.name for g in category.get_groups()]))
+        types = category.get_types()
+        for type in Category().concept_types:
+            if type in types:
+                """
+                <td>Yes</td>
+                """
+            else:
+                """
+                <td>-</td>
+                """
+        """
+            <td>
+                [<a href='/admin/category/%s/edit'>edit</a>]
+                [<a href='/admin/category/%s/concepts'>concepts</a>]
+            </td>
+        """ % (category.uid, category.uid)
+    
+    cursor.close()
+    footer()
+    
+
+
+def create [html] (request):
+
+    concept_types = Category().concept_types
+        
+    form = MyForm()
+    form.add(form2.StringWidget, 'category_name', 
+        title='Category name',
+        size=40, 
+        required=True)
+    for concept_type in concept_types:
+        form.add(form2.CheckboxWidget, 'concept_%s' % concept_type,
+            title='Type %s:' % concept_type.capitalize(),
+            value=False)
+    form.add(form2.TextWidget, 'category_groups',
+        title='Subgroup names',
+        hint='Separate by ","',
+        rows=4,
+        cols=40,
+        wrap='virtual',
+        required=False)
+    form.add_submit('create', 'create')
+    
+    def render [html] ():
+        header('Create category')
+        title_bar('Create category')
+        if has_messages():
+            render_messages()
+        form.render()
+        footer()
+
+    if not form.is_submitted():
+        return render()
+
+    # Have they chosen at least one type?  Need to.
+    has_type = False
+    for concept_type in concept_types:
+        form_type = form['concept_%s' % concept_type]
+        if form_type:
+            has_type = True
+    if not has_type:
+        form.set_error('concept_%s' % concept_types[0], 
+            'Please choose at least one type.')
+
+    if form.has_errors():
+        return render()
+    
+    category = Category(name=form['category_name'])
+    for concept_type in concept_types:
+        form_type = form['concept_%s' % concept_type]
+        if form_type:
+            category.add_type(concept_type)
+
+    groups = form['category_groups']
+    if groups:
+        groups = str(groups)
+        groups = [group.strip() for group in groups.split(str(','))]
+        for group in groups:
+            if not group in [g.name for g in category.groups]:
+                category.add_group(group)
+
+    cursor = get_publisher().get_cursor()
+    try:
+        category.save(cursor)
+        cursor.close()
+        add_message('Created category %s' % category.uid)
+        form.logger.info(str('Created category %s' % category.uid))
+    except:
+        add_message('Could not create category')
+        form.logger.info(str('Could not create category'))
+    
+    request.redirect(str('/admin/'))
+
+
+def find [html] (request, category_id):
+    
+    form = MyForm()
+    form.add(form2.StringWidget, 'search_term', 
+        title='Concept (term or UMLS id)',
+        required=True)
+    form.add_submit('find', 'find')
+    
+    def render [html] ():
+        header('Find concept')
+        title_bar('Find concept')
+        render_messages()
+        form.render()
+        footer()
+        
+    if not form.is_submitted():
+        return render()
+        
+    search_term = form['search_term']
+    
+    # If user enters an int, find_concepts will search for the UMLS concept id
+    # instead of a text search.
+    try:
+        search_term = int(search_term)
+    except:
+        pass
+        
+    cursor = get_publisher().get_cursor()
+    concepts = find_concepts(cursor, search_term)
+    cursor.close()
+    
+    if len(concepts) == 0:
+        add_message('No matching concepts found.')
+        
+    if form.has_errors() \
+        or has_messages():
+        return render()
+        
+    cursor = get_publisher().get_cursor()
+    category = Category(uid=category_id)
+    category.load(cursor, load_concepts=True)
+    
+    header('Find concept')
+    title_bar('Find concept')
+    render_messages()
+    form.render()
+    render_found_concepts(category, concepts)
+    footer()
+
+
+def add [html] (request, category_id):
+    
+    try:
+        cid = int(request.get_form_var('concept_id', ''))
+    except:
+        return not_found('concept')
+        
+    cursor = get_publisher().get_cursor()
+    category = Category(uid=category_id)
+    category.load(cursor)
+    
+    concept = Concept(uid=cid)
+    concept.load(cursor)
+    
+    form = MyForm()
+    form.add_hidden('concept_id',
+        value=cid)
+    form.add(form2.CheckboxWidget, 'is_broad',
+        title='Is broad?')
+    form.add(form2.CheckboxWidget, 'is_default',
+        title='Is default?')
+    form.add_submit('add', 'add')
+    
+    def render [html] ():
+        header('Add concept "%s"' % concept.term)
+        title_bar('Add concept "%s"' % concept.term)
+        form.render()
+        footer()
+    
+    if not form.is_submitted():
+        return render()
+    
+    if not form.get_submit() == 'add':
+        return render()
+
+    try:
+        cat_concept = CategoryConcept(category_id=category_id, concept_id=cid)
+        if form['is_broad']:
+            cat_concept.is_broad = True
+        if form['is_default']:
+            cat_concept.is_default = True
+        print 'saving concept'
+        cat_concept.save(cursor)
+        print 'saved'
+        add_message('Added concept')
+        form.logger.info(str('Added concept %s to category %s' % (concept.uid, cid)))
+    except:
+        add_message('Unable to add concept')
+        form.logger.info(str('Unable to add concept %s to category %s' % (concept.uid,
+            cid)))
+            
+    request.redirect(str('/admin/category/%s' % category_id))
+    
+
+def edit_concept [html] (request, category_id):
+    """
+    NOTE/FIXME:  "concept_uid" refers to uid of CategoryConcept;
+    "concept_id" refers to umls_concept_id.  Allowing either simplifies
+    passing of concept id to edit/remove functions from either search
+    (which won't know the concept_uid) or category pages (which will).
+    These are *poorly* named and should be cleaned up.
+    """
+    
+    try:
+        cid = int(request.get_form_var('concept_id', 0))
+        cuid = int(request.get_form_var('concept_uid', 0))
+    except:
+        return not_found('concept')
+
+    cursor = get_publisher().get_cursor()
+    
+    category = Category(uid=category_id)
+    category.load(cursor)
+    
+    if cid:
+        concept = CategoryConcept(concept_id=cid, category_id=category_id)
+    elif cuid:
+        concept = CategoryConcept(uid=cuid, category_id=category_id)
+    else:
+        return not_found('concept')
+    
+    concept.load(cursor)
+    if concept.uid == -1:
+        return not_found('concept')
+
+    form = MyForm()
+    form.add_hidden('concept_uid', 
+        value=concept.uid)
+    form.add(form2.CheckboxWidget, 'is_broad',
+        title='Is broad?')
+    form.add(form2.CheckboxWidget, 'is_default',
+        title='Is default?')
+    form.add_submit('edit', 'edit')
+    
+    def render [html] ():
+        header('Edit concept "%s" (category "%s")' % (concept.concept.term, 
+            category.name))
+        title_bar('Edit concept "%s" (category "%s")' % (concept.concept.term,
+            category.name))
+        if has_messages():
+            render_messages()
+        form.render()
+        footer()
+    
+    if not form.get_submit() == 'edit' \
+        or not form.is_submitted() :
+        form.get_widget('is_broad').set_value(concept.is_broad)
+        form.get_widget('is_default').set_value(concept.is_default)
+        return render()
+
+    print 'setting bools'
+    for bool in ['is_broad', 'is_default']:
+        if form[bool]:
+            setattr(concept, str(bool), True)
+        else:
+            setattr(concept, str(bool), False)
+            
+    if form.has_errors():
+        return render()
+        
+    try:
+        print 'going to save concept'
+        concept.save(cursor)
+        print 'saved concept'
+        add_message('Edited concept %s' % concept.uid)
+        form.logger.info(str('Edited concept %s' % concept.uid))
+    except:
+        add_message('Could not edit concept')
+        form.logger.info(str('Could not edit concept'))
+    
+    cursor.close()
+    request.redirect(str('/admin/category/%s' % category_id))
+
+
+def remove [html] (request, category_id):
+    """
+    See comment on "concept_uid" vs. "concept_id" under edit_concept().
+    """
+    
+    try:
+        cid = int(request.get_form_var('concept_id', 0))
+        cuid = int(request.get_form_var('concept_uid', 0))
+    except:
+        return not_found('concept')
+
+    cursor = get_publisher().get_cursor()
+    
+    category = Category(uid=category_id)
+    category.load(cursor)
+    
+    if cid:
+        concept = CategoryConcept(concept_id=cid, category_id=category_id)
+    elif cuid:
+        concept = CategoryConcept(uid=cuid, category_id=category_id)
+    else:
+        return not_found('concept')
+    
+    concept.load(cursor)
+    if concept.uid == -1:
+        return not_found('concept')
+
+    form = MyForm()
+    form.add_hidden('concept_uid', 
+        value=concept.uid)
+    form.add(form2.CheckboxWidget, 'are_you_sure',
+        title='Are you sure?')
+    form.add_submit('delete', 'delete')
+    
+    def render [html] ():
+        title = 'Delete concept "%s" from category "%s"' % (concept.concept.term,
+            category.name)
+        header(title)
+        title_bar(title)
+        form.render()
+        footer()
+
+    if not form.is_submitted() \
+        or not form.get_submit() == 'delete' \
+        or form.has_errors():
+        return render()
+
+    are_you_sure = form['are_you_sure']
+    if are_you_sure:
+        try:
+            category.remove_concept(cursor, concept)
+            add_message('Removed concept %s from category %s' % (concept.uid,
+                category_id))
+            form.logger.info(str('Removed concept %s from category %s' % (concept.uid,
+                category_id)))
+        except:
+            print 'problem with remove_concept'
+            add_message('Did not remove concept')
+            form.logger.error(str('Did not remove concept %s from category %s' % (concept.uid,
+                category_id)))
+    else:
+        print 'not sure.'
+        add_message('Did not remove concept')
+        form.logger.error(str('Did not remove concept %s from category %s' % (concept.uid,
+            category_id)))
+    
+    request.redirect(str('/admin/category/%s' % category_id))
+    
+
+def render_found_concepts [html] (category, concepts):
+    
+    if len(concepts) == 0:
+        return
+        
+    """
+    <h4>Concepts found:</h4>
+    
+    <table class='gentable' id='concepts'>
+        <tr>
+            <th>umls id</th>
+            <th>preferred term</th>
+            <th>matching synonyms</th>
+            <th>actions</th>
+        </tr>
+    """
+    
+    for concept in concepts:
+        """
+        <tr>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+        """ % (concept.uid, concept.term, '; '.join(concept.synonyms))
+        
+        """
+            <td>
+        """
+        if concept.uid in [c.concept_id for c in category.concepts]:
+            """
+                [<a href='/admin/category/%s/edit_concept?concept_id=%s'>edit</a>]
+                [<a href='/admin/category/%s/remove?concept_id=%s'>remove</a>]
+            """ % (category.uid, concept.uid,
+                category.uid, concept.uid)
+        else:
+            """
+                [<a href='/admin/category/%s/add?concept_id=%s'>add</a>]
+            """ % (category.uid, concept.uid)
+        """
+            </td>
+        </tr>
+        """
+        
+    """
+    </table>
+    """

@@ -9,6 +9,7 @@ _q_exports = [
     'user',
     'users',
     'concept',
+    'category',
     'dv_data',
     'reload_sources',
     'zodb_keys',
@@ -27,6 +28,7 @@ from canary.ui.admin import source
 from canary.ui.admin import term
 from canary.ui.admin import user
 from canary.ui.admin import concept
+from canary.ui.admin import category
 from canary.ui.admin import dv_data
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found
