@@ -162,8 +162,7 @@ def receive [html] (request):
         mapped_terms = source_catalog.get_mapped_terms(source_id)
         parser = Parser(source)
         records = parser.parse(upload.tmp_filename, mapped_terms=mapped_terms)
-        batch.num_records = len(records)
-        if batch.num_records == num_records:
+        if num_records == len(records):
             batch.add_records(records)
             batch.save(cursor)
         else:
