@@ -197,7 +197,7 @@ class QueuedRecord (DTable):
                     self.add_metadata(source_id, term, row['value'], extra=row['extra'])
         except ValueError:
             print traceback.print_exc()
-            return ValueError('Record not found')
+            raise ValueError('Record not found')
 
     def save (self, cursor):
         

@@ -23,17 +23,21 @@ def _q_index [html] (request):
 
 def _q_lookup (request, record_id):
     try:
-        if (record_id):
-            id = int(record_id)
-            cursor = get_publisher().get_cursor()
-            dbmodel = get_publisher().get_dbmodel()
-            record = QueuedRecord(record_id)
-            record.load(cursor)
-            cursor.close()
-            return render_record(record)
-        else:
-            raise TraversalError
+        id = int(record_id)
+        cursor = get_publisher().get_cursor()
+        record = QueuedRecord(id)
+        record.load(cursor)
+        study = Study(record.study_id)
+        study.load(cursor)
+        if not study.get_status(text=True) == 'curated':
+            raise ValueError('Record not curated')
+        if study.get_article_type(text=True) == 'irrelevant':
+            raise ValueError('Irrelevant record')
+        cursor.close()
+        return render_record(record)
     except:
+        import traceback
+        print traceback.print_exc()
         return not_found('record')
 
 
