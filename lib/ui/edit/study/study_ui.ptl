@@ -142,17 +142,20 @@ def curate_one [html] (request, queued_record_id):
         queued_record.user_id = session.user.get_id()
         record_updated = True
 
+    print 'updating queued_record'
     if record_updated:
         queued_record.save(cursor)
 
     a_type = 'none'
-    article_type = 'unknown'
+    article_type = 'none'
     
+    print 'setting article_type'
     if not study == None:
         article_type = study.get_article_type(text=True)
         if article_type in ['irrelevant', 'traditional', 'descriptive', 'review']:
             a_type = 'is_%s' % article_type
 
+    print 'setting up form'
     form = MyForm()
     form.add(RadiobuttonsWidget, 
         name='article_type',
@@ -217,7 +220,7 @@ def curate_one [html] (request, queued_record_id):
     
     article_type = study.get_article_type(text=True)
     
-    if article_type in ['irrelevant', 'traditional']:
+    if article_type in ['irrelevant']:
         request.redirect(str('summary'))
     else:
         request.redirect(str('curate_two'))
@@ -237,8 +240,8 @@ def curate_two [html] (request, queued_record_id):
     study = get_current_study(cursor, queued_record.study_id)
     article_type = study.get_article_type(text=True)
     
-    # 'traditional' studies don't get this layer of classification
-    if article_type == 'traditional':
+    # 'irrelevant' studies don't get this layer of classification
+    if article_type in ['irrelevant']:
         request.redirect(str('summary'))
 
     form = MyForm()
@@ -308,37 +311,30 @@ def curate_two [html] (request, queued_record_id):
             setattr(study, str(bool_item), False)
     
     # studies noted as article_type['review'] must stay as 'review'
-    if not article_type == 'review':
+    if not article_type in ['traditional', 'descriptive', 'review']:
         
         if study.has_exposures:
+            
             if study.has_outcomes:
                 study.set_article_type('curated')
             else:
                 study.set_article_type('exposures only')
         
         elif study.has_outcomes:
-            # study.has_exposures must == False
+            
             study.set_article_type('outcomes only')
             
-        else:
-            # FIXME: is this correct?
-            study.set_article_type('traditional')
             
     if form.has_errors():
         return render()
 
+    print 'updating study'
     study.save(cursor)
     cursor.close()
     
-    # re-assign value here as it should have changed
-    article_type = study.get_article_type(text=True)
-
-    form.logger.info(str('saved study %s (%s) step two' % (study.uid, article_type)))
+    form.logger.info(str('saved study %s step two' % study.uid))
     
-    if article_type in ['traditional',]:
-        request.redirect(str('summary'))
-    else:
-        request.redirect(str('curate_three'))
+    request.redirect(str('curate_three'))
 
 
 def curate_three [html] (request, queued_record_id):
@@ -354,7 +350,7 @@ def curate_three [html] (request, queued_record_id):
     study = get_current_study(cursor, queued_record.study_id)
     article_type = study.get_article_type(text=True)
     
-    if article_type in ['traditional',]:
+    if article_type in ['irrelevant']:
         request.redirect(str('summary'))
 
     header('Curate: exposures, outcomes, species, locations', show_javascript=True)
@@ -420,16 +416,7 @@ def curate_three [html] (request, queued_record_id):
     """
     <h4>Continue</h4>
     <p>
-    """
-    if article_type == 'curated':
-        """
-        Next step: <a href='curate_four'>add methodologies</a>.
-        """
-    else:
-        """
-        Next step: <a href='summary'>summary</a>.
-        """
-    """
+    Next step: <a href='curate_four'>add methodologies</a>.
     </p>
     """
     
@@ -450,7 +437,7 @@ def curate_four [html] (request, queued_record_id):
     study = get_current_study(cursor, queued_record.study_id)
     article_type = study.get_article_type(text=True)
     
-    if not article_type == 'curated':
+    if article_type in ['irrelevant']:
         request.redirect(str('summary'))
 
     header('Curate: specify methodology', show_javascript=True)
@@ -466,7 +453,8 @@ def curate_four [html] (request, queued_record_id):
     <p>
     """
     render_methodologies(study, show_actions=True)
-    if len(study.methodologies) == 0:
+    if article_type in ['curated'] \
+        and len(study.methodologies) == 0:
         """
         You must <a href='methodology/create'>add a methodology</a>.
         """
@@ -499,19 +487,17 @@ def summary [html] (request, queued_record_id):
     study = get_current_study(cursor, queued_record.study_id)
     article_type = study.get_article_type(text=True)
     
-    if study.has_exposures \
-        and len(study.exposures) == 0:
-        #add_message('You must add at least one exposure.')
-        pass
-    if study.has_outcomes \
-        and len(study.outcomes) == 0:
-        #add_message('You must add at least one outcome.')
-        pass
-    if article_type == 'curated' \
-        and len(study.species) == 0:
-        # FIXME
-        #add_message('You must add at least one species')
-        pass
+    if article_type == 'curated':
+        
+        if len(study.exposures) == 0:
+            add_message('You must add at least one exposure.')
+        
+        if len(study.outcomes) == 0:
+            add_message('You must add at least one outcome.')
+        
+        if len(study.species) == 0:
+            add_message('You must add at least one species')
+        
     if has_messages():
         request.redirect(str('curate_three'))
 
@@ -537,7 +523,7 @@ def summary [html] (request, queued_record_id):
         <h4>Article type: %s</h4>
         """ % article_type
 
-        if not article_type in ['irrelevant', 'traditional']:
+        if not article_type in ['irrelevant']:
             """
             <table class='gentable' id='summary'>
             """
@@ -557,7 +543,7 @@ def summary [html] (request, queued_record_id):
             </table>
             """
 
-        if article_type == 'curated':
+        if not article_type in ['irrelevant']:
             render_methodologies(study)
         
         form.render()
@@ -567,10 +553,6 @@ def summary [html] (request, queued_record_id):
     if not form.is_submitted():
         return render()
         
-    # FIXME: when are type errors (e.g. IntWidget) thrown?  when has_errors()
-    # is called after study.process_summary_form() non-int data gets in.  
-    # Reverse for now.  Still, bad data shows with errors, why not refreshed 
-    # from db?
     if form.has_errors():
         return render()
     

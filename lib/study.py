@@ -166,6 +166,8 @@ class Methodology (DTable):
         self.timing = -1
         self.sampling = -1
         self.controls = -1
+        self.is_mesocosm = False
+        self.is_enclosure = False
         self.exposure_routes = []
         self.comments = ''
         self.date_modified = None
@@ -179,6 +181,7 @@ class Methodology (DTable):
         out.append('\tsample_size=%s' % self.sample_size)
         for item in ['timing', 'sampling', 'controls', 'exposure_routes']:
             out.append('\t%s=%s' % (item, getattr(self, 'get_' + item)(text=True)))
+        out.append('\tis_mesocosm=%s, is_enclosure=%s' % (self.is_mesocosm, self.is_enclosure))
         out.append('\tcomments=%s' % self.comments or '')
         out.append('/>')
         return '\n'.join(out)
@@ -271,8 +274,6 @@ class Methodology (DTable):
             route.methodology_id = self.uid
             route.study_id = self.study_id
             self.exposure_routes.append(route)
-        else:
-            print 'found matching route already for route', route.get_route()
             
     
     def get_routes (self, text=False):
@@ -390,15 +391,18 @@ class Methodology (DTable):
                 (uid, study_id, study_type_id, 
                 sample_size, timing, 
                 sampling, controls, comments,
+                is_mesocosm, is_enclosure,
                 date_modified, date_entered)
                 VALUES 
                 (NULL, %s, %s, 
                 %s, %s,
                 %s, %s, %s,
+                %s, %s,
                 NOW(), NOW())
                 """, (self.study_id, self.study_type_id,
                 self.sample_size, self.timing,
-                self.sampling, self.controls, self.comments)
+                self.sampling, self.controls, self.comments,
+                self.is_mesocosm, self.is_enclosure)
                 )
             #print 'inserted new methodology'
             self.uid = self.get_new_uid(cursor)
@@ -411,11 +415,13 @@ class Methodology (DTable):
                     SET study_id = %s, study_type_id = %s,
                     sample_size = %s, timing = %s,
                     sampling = %s, controls = %s, comments = %s,
+                    is_mesocosm = %s, is_enclosure = %s,
                     date_modified = NOW()
                     WHERE uid = %s
                     """, (self.study_id, self.study_type_id,
                     self.sample_size, self.timing, 
                     self.sampling, self.controls, self.comments,
+                    self.is_mesocosm, self.is_enclosure,
                     self.uid)
                     )
             except:
@@ -434,7 +440,7 @@ class Methodology (DTable):
             """, self.uid)
             
         for route in self.exposure_routes:
-            print 'saving route', route
+            #print 'saving route', route
             route.save(cursor)
 
 
@@ -460,6 +466,12 @@ class Methodology (DTable):
             sort=False,
             required=True)
         
+        # experimental can be is_mesocosm=True
+        if self.get_study_type() == self.TYPES['experimental']:
+            form.add(CheckboxWidget, 'is_mesocosm',
+                title='Is mesocosm?',
+                value=self.is_mesocosm)
+            
         # methodology types except experimental and descriptive get timing
         if not self.get_study_type() in [
             self.TYPES['experimental'],
@@ -484,6 +496,13 @@ class Methodology (DTable):
                 options=[(val, name, val) for name, val in self.CONTROLS.items()],
                 sort=True,
                 required=True)
+        
+        # cohort can be is_enclosure=True
+        if self.get_study_type() == self.TYPES['cohort']:
+            form.add(CheckboxWidget, 'is_enclosure',
+                title='Is enclosure?',
+                value=self.is_enclosure)
+                
             
         # only cross sectional methodologies get sampling
         if self.get_study_type() == self.TYPES['cross sectional']:
@@ -516,7 +535,7 @@ class Methodology (DTable):
             #print 'setting sample size to %s' % form['sample_size']
             self.sample_size = form['sample_size']
             
-        # all methodology types get a route
+        # all methodology types get one or more routes
         if form['exposure_routes']:
             routes = []
             for r in form['exposure_routes']:
@@ -526,7 +545,14 @@ class Methodology (DTable):
             self.set_routes(routes)
         else:
             form.set_error('exposure_routes', 'You must choose at least one route of exposure.')
-        
+
+        # experimental can be is_mesocosm=True
+        if self.get_study_type() == self.TYPES['experimental']:
+            if form['is_mesocosm']:
+                self.is_mesocosm = True
+            else:
+                self.is_mesocosm = False
+
         # all methodology types but experimental and descriptive get timing
         if not self.get_study_type() in [
             self.TYPES['experimental'],
@@ -549,6 +575,13 @@ class Methodology (DTable):
             else:
                 print 'setting controls to %s' % form['controls']
                 self.set_controls(form['controls'])
+            
+        # cohort can be is_enclosure=True
+        if self.get_study_type() == self.TYPES['cohort']:
+            if form['is_enclosure']:
+                self.is_enclosure = True
+            else:
+                self.is_enclosure = False
             
         # only cross sectional gets sampling
         if self.get_study_type() == self.TYPES['cross sectional']:
@@ -1229,7 +1262,7 @@ class Study (DTable):
     def save (self, cursor):
         
         if self.uid == -1:
-            print 'inserting new study'
+            #print 'inserting new study'
             try:
                 cursor.execute("""
                     INSERT INTO studies
@@ -1293,7 +1326,7 @@ class Study (DTable):
         for table_name in self.TABLES.keys():
             #print 'attempting to update table items for', table_name
             for item in getattr(self, table_name):
-                print 'saving item:', item
+                #print 'saving', table_name, 'item:', item
                 item.save(cursor)
         
 

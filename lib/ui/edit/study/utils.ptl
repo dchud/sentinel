@@ -191,27 +191,28 @@ def render_pipeline [html] (article_type, step=1, url_prefix='.'):
     else:
         render_pipeline_item(steps[1], url_prefix=url_prefix, is_link=True)
     
-    if article_type in ['irrelevant', 'traditional']:
+    if article_type in ['irrelevant']:
         render_pipeline_item(steps[2], url_prefix=url_prefix)
         render_pipeline_item(steps[3], url_prefix=url_prefix)
         render_pipeline_item(steps[4], url_prefix=url_prefix)
         
-    elif article_type in ['unknown', 'descriptive', 'review', 
-        'exposures only', 'outcomes only']:
-        if step == 2:
-            render_pipeline_item(steps[2], url_prefix=url_prefix, is_link=True, is_active=True)
-            render_pipeline_item(steps[3], url_prefix=url_prefix, is_link=True)
-            render_pipeline_item(steps[4], url_prefix=url_prefix)
-        elif step == 3:
-            render_pipeline_item(steps[2], url_prefix=url_prefix, is_link=True)
-            render_pipeline_item(steps[3], url_prefix=url_prefix, is_link=True, is_active=True)
-            render_pipeline_item(steps[4], url_prefix=url_prefix)
-        else:
-            render_pipeline_item(steps[2], url_prefix=url_prefix, is_link=True)
-            render_pipeline_item(steps[3], url_prefix=url_prefix, is_link=True)
-            render_pipeline_item(steps[4], url_prefix=url_prefix)
+    #elif article_type in ['unknown', 'traditional', 'descriptive', 
+    #    'review', 'exposures only', 'outcomes only']:
+    #    if step == 2:
+    #        render_pipeline_item(steps[2], url_prefix=url_prefix, is_link=True, is_active=True)
+    #        render_pipeline_item(steps[3], url_prefix=url_prefix, is_link=True)
+    #        render_pipeline_item(steps[4], url_prefix=url_prefix)
+    #    elif step == 3:
+    #        render_pipeline_item(steps[2], url_prefix=url_prefix, is_link=True)
+    #        render_pipeline_item(steps[3], url_prefix=url_prefix, is_link=True, is_active=True)
+    #        render_pipeline_item(steps[4], url_prefix=url_prefix)
+    #    else:
+    #        render_pipeline_item(steps[2], url_prefix=url_prefix, is_link=True)
+    #        render_pipeline_item(steps[3], url_prefix=url_prefix, is_link=True)
+    #        render_pipeline_item(steps[4], url_prefix=url_prefix)
 
-    elif article_type == 'curated':
+    #elif article_type == 'curated':
+    else:
         if step == 2:
             render_pipeline_item(steps[2], url_prefix=url_prefix, is_link=True, is_active=True)
             render_pipeline_item(steps[3], url_prefix=url_prefix, is_link=True)
