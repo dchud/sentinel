@@ -33,6 +33,8 @@ class Search:
             else:
                 search_token = self.token + '%'
                 if self.field in self.FIELDS.keys():
+                    if self.field == 'title':
+                        search_token = '%' + search_token
                     source_id, term_id = self.FIELDS[self.field]
                     cursor.execute("""
                         SELECT queued_record_id
