@@ -16,6 +16,7 @@ from canary.ui.edit.study.utils import is_same_user, render_queued_record
 from canary.ui.edit.study.utils import render_unclaim_block, claimed_by_other_user
 from canary.ui.edit.study.utils import render_exposures, render_pipeline
 from canary.qx_defs import MyForm
+from canary.record import SubjectHeading
 from canary.study import find_exposures, Exposure
 
 
@@ -71,11 +72,36 @@ def find [html] (request):
             return claimed_by_other_user()
     
     study = get_current_study(cursor, queued_record.study_id)
+    study_concepts = getattr(study, str('exposures'))
+    source_catalog = get_publisher().get_source_catalog()
+    complete_term_map = source_catalog.get_complete_mapping()
+    mapped_metadata = queued_record.get_mapped_metadata(term_map=complete_term_map)
+    
+    # It's possible (w/qualifiers) that subjects can repeat, so thin out multiples
+    subject_list = mapped_metadata['subject'] or []
+    subjects = []
+    for subject in subject_list:
+        heading = SubjectHeading(subject)
+        if not heading.term in subjects:
+            subjects.append(heading.term)
+    
+    subjects.sort()
+    select_options = [('-', '-', '-')]
+    if len(subjects) > 0:
+        concept_terms = [c.term for c in study_concepts]
+        for subject in subjects:
+            if not subject in concept_terms:
+                select_options.append((subject, subject, subject))
     
     form = MyForm()
     form.add(form2.StringWidget, 'search_term',
-        title='Specify the exposure/hazard to add:',
+        title='Add any exposure:',
         size='30',
+        required=False)
+    form.add(form2.SingleSelectWidget, 'record_subject',
+        title='Or use index term:',
+        size=1,
+        options=select_options,
         required=True)
     form.add_submit('find', 'find')
     
@@ -95,7 +121,12 @@ def find [html] (request):
     if not form.is_submitted():
         return render()
     
-    exposures = find_exposures(cursor, form.get_widget('search_term').get_value())
+    if not form['record_subject'] == '-':
+        search_term = form['record_subject']
+    else:
+        search_term = form['search_term']
+        
+    exposures = find_exposures(cursor, search_term)
     if len(exposures) == 0:
         form.set_error('search_term', 'No exposures found.')
         
@@ -112,7 +143,7 @@ def find [html] (request):
     render_queued_record(queued_record)
     render_messages()
     form.render()
-    render_found_exposures(study, exposures, form['search_term'])
+    render_found_exposures(study, exposures, search_term)
     render_unclaim_block()
     footer()
 

@@ -8,45 +8,49 @@ class SubjectHeading:
 
     def __repr__ (self):
         return """<SubjectHeading term=%s, is_focus=%s, qualifier=%s>""" % (self.term,
-                                                                            self.is_focus,
-                                                                            self.qualifier)
+            self.is_focus, self.qualifier)
 
-    def __init__ (self, string=''):
-        if not string == '':
-            self.parse_string(string)
+    def __init__ (self, text=''):
+        if not text == '':
+            self.parse_text(text)
         else:
-            self.string = string
+            self.text = text
             self.term = ''
             self.qualifier = ''
             self.is_focus = False
 
 
-    def parse_string (self, string):
+    def parse_text (self, text):
         """
-        Parse an incoming MeSH string in one of the forms
+        Parse an incoming MeSH string in one of the forms:
+
         'Growth Substances'
         'Growth Substances*'
         'Growth Substances/genetics'
-        'Growth Substances/genetics*' into its component parts
+        'Growth Substances/genetics*'
+        'Growth Substances/*genetics' 
+        
+        ...into its component parts.
         """
 
-        string = string.strip()
-        self.string = string
+        text = text.strip()
+        self.text = text
 
-        # '*' indicates it's a focus heading[/qualifier]; '*' always at end
-        if '*' in string:
+        # '*' indicates it's a focus heading[/qualifier]
+        if '*' in text:
             self.is_focus = 1
-            string = string[0:-1]
+            text = text.replace('*', '')
         else:
             self.is_focus = 0
 
         # '/' indicates there's an qualifier attached to the term
-        slash_index = string.find('/')
+        slash_index = text.find('/')
         if slash_index > 0:
-            self.term = string[0:slash_index]
-            self.qualifier = string[(slash_index + 1):]
+            self.term = text[0:slash_index]
+            self.qualifier = text[(slash_index + 1):]
         else:
-            self.term = string
+            self.term = text
+            self.qualifier = ''
 
 
 

@@ -1,6 +1,7 @@
 from quixote import get_publisher, get_request
 
 from canary.loader import QueuedRecord
+from canary.record import SubjectHeading
 from canary.study import Study
 from canary.ui.pageframe import header, footer
 
@@ -142,6 +143,40 @@ def render_exposures [html] (study):
     </table>
     """
 
+def render_subject_selector [html] (record, study, concept_type):
+    
+    if not concept_type in ['exposures', 'outcomes', 'species']:
+        return
+
+    study_concepts = getattr(study, str(concept_type))
+    source_catalog = get_publisher().get_source_catalog()
+    complete_term_map = source_catalog.get_complete_mapping()
+    mapped_metadata = record.get_mapped_metadata(term_map=complete_term_map)
+    
+    # It's possible (w/qualifiers) that subjects can repeat, so thin out multiples
+    subject_list = mapped_metadata['subject'] or []
+    subjects = []
+    for subject in subject_list:
+        heading = SubjectHeading(subject)
+        if not heading.term in subjects:
+            subjects.append(heading.term)
+    
+    subjects.sort()
+    if len(subjects) > 0:
+        """
+        <select name='record_subject' size='1'>
+            <option value='-'>-</option>
+        """
+        concept_terms = [concept.term for concept in study_concepts]
+        for subject in subjects:
+            if not subject in concept_terms:
+                """
+            <option value='%s'>%s</option>
+                """ % (subject, subject)
+        """
+        </select>
+        """
+    
 def render_outcomes [html] (study):
     """
     <table class='gentable' id='outcomes'>

@@ -25,6 +25,7 @@ from canary.ui.edit.study.utils import get_current_study, get_queued_record
 from canary.ui.edit.study.utils import is_same_user, render_queued_record
 from canary.ui.edit.study.utils import claimed_by_other_user, render_unclaim_block
 from canary.ui.edit.study.utils import render_exposures, render_outcomes, render_species
+from canary.ui.edit.study.utils import render_subject_selector
 from canary.ui.edit.study.utils import render_pipeline
 from canary.ui.record_ui import render_methodologies, render_data_points
 
@@ -372,8 +373,12 @@ def curate_three [html] (request, queued_record_id):
         """
         <form method='POST' action='exposure/find'>
             <p>
-            Add an exposure:
-            <input type='text' name='search_term' size='30' />
+            Add any exposure:
+            <input type='text' name='search_term' size='30' /> <br />
+            Or use index term:
+        """
+        render_subject_selector(queued_record, study, 'exposures')
+        """
             <input type='submit' name='find' value='find' />
             </p>
         </form>
@@ -389,8 +394,12 @@ def curate_three [html] (request, queued_record_id):
         """
         <form method='POST' action='outcome/find'>
             <p>
-            Add an outcome:
-            <input type='text' name='search_term' size='30' />
+            Add any outcome:
+            <input type='text' name='search_term' size='30' /> <br />
+            Or use index term:
+        """
+        render_subject_selector(queued_record, study, 'outcomes')
+        """
             <input type='submit' name='find' value='find' />
             </p>
         </form>
@@ -405,8 +414,12 @@ def curate_three [html] (request, queued_record_id):
     """
         <form method='POST' action='species/find'>
             <p>
-            Add a species:
-            <input type='text' name='search_term' size='30' />
+            Add any species:
+            <input type='text' name='search_term' size='30' /> <br />
+            Or use index term:
+    """
+    render_subject_selector(queued_record, study, 'species')
+    """
             <input type='submit' name='find' value='find' />
             </p>
         </form>
