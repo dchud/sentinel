@@ -176,6 +176,9 @@ def add [html] (request):
     try:
         study.add_location(location)
         location.save(cursor)
+        study.add_history(curator_user_id=request.session.user.get_id(),
+            message='Added location %s' % location.feature_id)
+        study.save(cursor)
         form.logger.info(str('Added location %s' % location.feature_id))
         add_message('Added location')
         request.redirect(str('../curate_three'))
@@ -239,7 +242,10 @@ def delete [html] (location_id):
     
     if form['are_you_sure']:
         try:
-            location.delete(cursor)
+            location.delete(cursor)            
+            study.add_history(curator_user_id=request.session.user.get_id(),
+                message='Deleted location %s' % location.feature_id)
+            study.save(cursor)
             add_message('Location deleted')
             form.logger.info(str('Deleted location %s' % location_id))
         except:

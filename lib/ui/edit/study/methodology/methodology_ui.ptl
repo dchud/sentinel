@@ -182,6 +182,9 @@ def create [html] (request):
         
     try:
         methodology.save(cursor)
+        study.add_history(curator_user_id=request.session.user.get_id(),
+            message='Added study type %s' % methodology.get_study_type(text=True))
+        study.save(cursor)
         form.logger.info(str('Created methodology %s' % methodology.uid))
         request.redirect(str('%s/detail' % methodology.uid))
     except:
@@ -208,6 +211,8 @@ def detail [html] (methodology_id):
     study = get_current_study(cursor, queued_record.study_id)
     article_type = study.get_article_type(text=True)
     methodology = study.get_methodology(methodology_id)
+    # Get a copy for history comparisons
+    methodology_orig = study.get_methodology(methodology_id)
     
     form = methodology.create_form()
     
@@ -285,7 +290,7 @@ def edit [html] (methodology_id):
     
     if form.has_errors():
         return render()
-        
+
     try:
         if form.get_submit() in ['update', 'finish']:
             methodology.save(cursor)
@@ -348,11 +353,16 @@ def delete [html] (methodology_id):
     if form['are_you_sure']:
         try:
             methodology.delete(cursor)
+            study.add_history(curator_user_id=request.session.user.get_id(),
+                message='Deleted study type %s' % methodology.get_study_type(text=True))
+            study.save(cursor)
             add_message('Methodology deleted')
             form.logger.info(str('Deleted methodology %s' % methodology_id))
         except:
+            import traceback
+            print traceback.print_exc() 
             add_message('Unable to delete methodology')
-            form.logger.error(str('Unable to delete user %s' % methodology_id))
+            form.logger.error(str('Unable to delete methodology %s' % methodology_id))
     else:
         add_message('Methodology not deleted')
 

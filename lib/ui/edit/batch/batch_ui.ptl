@@ -142,6 +142,10 @@ def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
                             [<a href='%s'>sfx links</a>]
                     """ % get_sfx_link(batch.source_id, record.unique_identifier)
                     
+                    """
+                            [<a href='/edit/study/%s/history'>history</a>]
+                    """ % record_id
+                    
                     if status == record.STATUS_UNCLAIMED:
                         """
                             [<a href='/edit/study/%s/curate_one'>curate</a>]

@@ -210,6 +210,9 @@ def add [html] (request):
     try:
         study.add_exposure(exposure)
         exposure.save(cursor)
+        study.add_history(curator_user_id=request.session.user.get_id(),
+            message='Added exposure "%s"' % exposure.term)
+        study.save(cursor)
         form.logger.info(str('Added exposure %s' % exposure.uid))
         add_message('Added exposure')
         request.redirect(str('../curate_three'))
@@ -271,6 +274,9 @@ def delete [html] (exposure_id):
     if form['are_you_sure']:
         try:
             exposure.delete(cursor)
+            study.add_history(curator_user_id=request.session.user.get_id(),
+                message='Deleted exposure "%s"' % exposure.term)
+            study.save(cursor)
             add_message('Exposure deleted')
             form.logger.info(str('Deleted exposure %s' % exposure_id))
         except:

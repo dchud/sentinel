@@ -1,5 +1,6 @@
 _q_exports = [
     '_q_index',
+    'history',
     'curate_one',
     'curate_two',
     'curate_three',
@@ -93,6 +94,8 @@ class StudyActions:
                 return curate_four(request, self.queued_record_id)
             elif action == 'summary':
                 return summary(request, self.queued_record_id)
+            elif action == 'history':
+                return history(request, self.queued_record_id)
             elif action == 'unclaim':
                 return unclaim(request, self.queued_record_id)
             elif action == 'methodology':
@@ -109,6 +112,56 @@ class StudyActions:
                 raise TraversalError
         except:
             return not_found('study')
+
+
+def history [html] (request, queued_record_id):
+    
+    cursor = get_publisher().get_cursor()
+    try:
+        queued_record_id = int(queued_record_id)
+    except:
+        raise(TraversalError)
+    
+    queued_record = get_queued_record(cursor, queued_record_id)
+    if not queued_record:
+        return not_found('study')
+       
+    study = Study(queued_record.study_id)
+    study.load(cursor, get_history=True)
+    
+    header('Edit: View study history')
+    title_bar('View study history')
+    
+    """
+    <table cellspacing='5' id='study_history' class='gentable'>
+        <tr>
+            <th>id</th>
+            <th>Curator</th>
+            <th>Message</th>
+            <th>Modified</th>
+        </tr>
+    """
+    
+    # sort by id (should give reverse chronological order)
+    study_history_items = [(id, item) for id, item in study.history.items()]
+    study_history_items.sort()
+    study_history_items.reverse()
+    
+    for id, item in study_history_items:
+        """
+        <tr>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+        </tr>
+        """ % (id, item['curator_user_id'], item['message'], item['modified'])
+    
+    """
+    </table>
+    """
+    
+    footer()
 
 
 def curate_one [html] (request, queued_record_id):
@@ -137,14 +190,18 @@ def curate_one [html] (request, queued_record_id):
 
     # if it's not already, set its status to CLAIMED and its curator 
     record_updated = False
+    history_messages = []
 
     if queued_record.status == queued_record.STATUS_UNCLAIMED:
         queued_record.status = queued_record.STATUS_CLAIMED
         record_updated = True
+        history_messages.append('Set record status to claimed')
     
+    # If a record already has a user_id, don't clobber it.
     if queued_record.user_id == '':
         queued_record.user_id = session.user.get_id()
         record_updated = True
+        history_messages.append('Set record user id to %s' % session.user.get_id())
 
     if record_updated:
         queued_record.save(cursor)
@@ -207,11 +264,20 @@ def curate_one [html] (request, queued_record_id):
     elif form['article_type'] == 'none':
         study.set_article_type('unknown')
     
+    # Check to see if it's changed
+    if not article_type == study.get_article_type():
+        history_messages.append('Set article type to %s' % \
+            study.get_article_type(text=True))
+    
     study.set_status('claimed')
     study.record_id = queued_record_id
-    study.curator_user_id = session.user.get_id()
+    if not study.curator_user_id == queued_record.user_id:
+        study.curator_user_id = queued_record.user_id
+        history_messages.append('Set study user id to %s' % study.curator_user_id)
+    
+    study.add_history(curator_user_id=session.user.get_id(),
+        message='; '.join(history_messages))
     study.save(cursor)
-    queued_record.curator_user_id = study.curator_user_id
     queued_record.study_id = study.uid
     queued_record.save(cursor)
     cursor.close()
@@ -239,6 +305,8 @@ def curate_two [html] (request, queued_record_id):
             return claimed_by_other_user()
     
     study = get_current_study(cursor, queued_record.study_id)
+    # Get a copy for comparison
+    study_orig = get_current_study(cursor, queued_record.study_id)
     article_type = study.get_article_type(text=True)
     
     # 'irrelevant' studies don't get this layer of classification
@@ -297,7 +365,8 @@ def curate_two [html] (request, queued_record_id):
     if not form.is_submitted():
         return render()
 
-    for bool_item in [
+    history_messages = []
+    bool_items = [
         'has_exposures',
         'has_outcomes',
         'has_relationships',
@@ -305,11 +374,16 @@ def curate_two [html] (request, queued_record_id):
         'has_exposure_linkage',
         'has_outcome_linkage',
         'has_genomic',
-        ]:
+        ]
+    for bool_item in bool_items:
         if form[bool_item]:
             setattr(study, str(bool_item), True)
         else:
             setattr(study, str(bool_item), False)
+            
+        if not getattr(study, str(bool_item)) == getattr(study_orig, str(bool_item)):
+            history_messages.append('Set %s to %s' % (bool_item, 
+                getattr(study, str(bool_item))))
     
     # studies noted as article_type['review'] must stay as 'review'
     if not article_type in ['traditional', 'descriptive', 'review']:
@@ -329,12 +403,18 @@ def curate_two [html] (request, queued_record_id):
             
             # NOTE: perhaps this should be 'traditional'?
             study.set_article_type('descriptive')
-            
+        
+        if not study.get_article_type() == study_orig.get_article_type():
+            history_messages.append('Set article type to %s' % \
+                study.get_article_type(text=True))
+                
             
     if form.has_errors():
         return render()
 
-    print 'updating study'
+    if history_messages:
+        study.add_history(curator_user_id=session.user.get_id(),
+            message='; '.join(history_messages))
     study.save(cursor)
     cursor.close()
     
@@ -525,8 +605,10 @@ def summary [html] (request, queued_record_id):
     article_type = study.get_article_type(text=True)
     
     if article_type == 'unknown':
-        add_message('Study type set to "descriptive".')
+        add_message('Article type set to "descriptive".')
         study.set_article_type('descriptive')
+        study.add_history(curator_user_id=session.user.get_id(),
+            message='Set article type to descriptive')
         study.save(cursor)
         cursor.close()
         request.redirect(str('summary'))
@@ -611,13 +693,19 @@ def summary [html] (request, queued_record_id):
     if form.has_errors():
         return render()
     
+    history_messages = []
+    
     if form['comments']:
         comments = form['comments']
         if not comments.strip() == study.comments:
             study.comments = comments.strip()
             add_message('Updated comments')
+            history_messages.append('Updated comments to "%s"' % study.comments)
 
     if form.get_submit() == str('update'):
+        if history_messages:
+            study.add_history(curator_user_id=session.user.get_id(),
+                message='; '.join(history_messages))
         study.save(cursor)
         cursor.close()
         form.logger.info(str('Updated study %s' % study.uid))
@@ -626,6 +714,9 @@ def summary [html] (request, queued_record_id):
         queued_record.status = queued_record.STATUS_CURATED
         queued_record.save(cursor)
         study.set_status(str('curated'))
+        history_messages.append('Set record status to curated')
+        study.add_history(curator_user_id=session.user.get_id(),
+            message='; '.join(history_messages))
         study.save(cursor)
         cursor.close()
         form.logger.info(str('Finished curating study %s' % study.uid))

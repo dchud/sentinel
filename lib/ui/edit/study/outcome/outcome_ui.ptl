@@ -211,6 +211,10 @@ def add [html] (request):
     try:
         study.add_outcome(outcome)
         outcome.save(cursor)
+        study.add_history(curator_user_id=request.session.user.get_id(),
+            message='Added outcome "%s"' % outcome.term)
+        study.save(cursor)
+
         form.logger.info(str('Added outcome %s' % outcome.uid))
         add_message('Added outcome')
         request.redirect(str('../curate_three'))
@@ -272,6 +276,9 @@ def delete [html] (outcome_id):
     if form['are_you_sure']:
         try:
             outcome.delete(cursor)
+            study.add_history(curator_user_id=request.session.user.get_id(),
+                message='Deleted outcome "%s"' % outcome.term)
+            study.save(cursor)
             add_message('Outcome deleted')
             form.logger.info(str('Deleted outcome %s' % outcome_id))
         except:

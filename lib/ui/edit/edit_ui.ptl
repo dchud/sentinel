@@ -418,7 +418,8 @@ def render_results [html] (results):
             
         """
             <td>
-        """
+                [<a href='/edit/study/%s/history'>history</a>]
+        """ % record.uid
         
         if status == record.STATUS_UNCLAIMED:
             """

@@ -1085,6 +1085,7 @@ class Study (DTable):
         self.locations = []
         self.date_modified = None
         self.date_entered = None
+        self.history = {}
         
     
     def __str__ (self):
@@ -1314,8 +1315,25 @@ class Study (DTable):
                 return loc
         return None
 
-
-    def load (self, cursor):
+    def add_history (self, uid=-1, curator_user_id='', message='', modified=''):
+        """
+        Add a history record; only one history record can be added to a
+        study_history at a time (because the key is set to -1).  Maybe
+        that's bad design. :\
+        """
+        # Convert w/str() in case htmltext is passed by mistake
+        curator_user_id = str(curator_user_id)
+        message = str(message)
+        new_history = {
+            'uid': uid, 
+            'study_id': self.uid,
+            'curator_user_id': curator_user_id, 
+            'message': message,
+            'modified': modified
+            }
+        self.history[new_history['uid']] = new_history
+        
+    def load (self, cursor, get_history=False):
         
         if self.uid == -1:
             return
@@ -1351,6 +1369,26 @@ class Study (DTable):
         
         for meth in self.methodologies:
             meth.load_routes(cursor)
+            
+        if get_history:
+            cursor.execute("""
+                SELECT *
+                FROM study_history
+                WHERE study_id = %s
+                """, self.uid)
+            fields = [d[0] for d in cursor.description]
+            desc = dtuple.TupleDescriptor([[f] for f in fields])
+            rows = cursor.fetchall()
+            for row in rows:
+                row = dtuple.DatabaseTuple(desc, row)
+                history_record = {}
+                for field in fields:
+                    history_record[field] = row[field]
+                self.add_history(uid=history_record['uid'], 
+                    curator_user_id=history_record['curator_user_id'],
+                    message=history_record['message'],
+                    modified=history_record['modified'])
+            
         
 
     def save (self, cursor):
@@ -1422,4 +1460,24 @@ class Study (DTable):
             for item in getattr(self, table_name):
                 #print 'saving', table_name, 'item:', item
                 item.save(cursor)
-
+        
+        # Save new history records; assume only one can be added at a time,
+        # new record will necessarily have uid == -1
+        if self.history:
+            new_history_record = self.history.get(-1, None)
+            if new_history_record:
+                try:
+                    cursor.execute("""
+                        INSERT INTO study_history
+                        (uid, study_id, curator_user_id, 
+                        message, modified)
+                        VALUES
+                        (NULL, %s, %s, 
+                        %s, NOW())
+                        """, (self.uid, new_history_record['curator_user_id'], 
+                        new_history_record['message']))
+                except:
+                    import traceback
+                    print 'MySQL exception on study.update / study_history.insert'
+                    print 'exception:', traceback.print_exc()
+                    
