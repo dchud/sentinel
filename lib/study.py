@@ -206,17 +206,20 @@ class Methodology (DTable):
             
             if value in self.TYPES.keys():
                 self.study_type_id = self.TYPES[value]
+                self.update_values()
                     
         elif type(value) == type(htmltext('a')):
             
             str_value = str(value)
             if str_value in self.TYPES.keys():
                 self.study_type_id = self.TYPES[str_value]
+                self.update_values()
 
         elif type(value) is types.IntType:
             
             if value in self.TYPES.values():
                 self.study_type_id = value
+                self.update_values()
 
 
     def get_study_type (self, text=False):
@@ -228,6 +231,30 @@ class Methodology (DTable):
         else:
             return self.study_type_id
 
+
+    def update_values (self):
+        """
+        To keep values consistent with methodology type, "blank out"
+        inapplicable ones; called by set_study_type() on update.
+        """
+        if self.get_study_type() in [
+            self.TYPES['experimental'],
+            self.TYPES['descriptive']
+            ]:
+            self.set_timing('-')
+        
+        if not self.get_study_type() in [
+            self.TYPES['cross sectional'],
+            self.TYPES['cohort'], 
+            self.TYPES['case control']
+            ]:
+            self.set_controls('-')
+            
+        if not self.get_study_type() in [
+            self.TYPES['cross sectional']
+            ]:
+            self.set_sampling('-')
+        
 
     def delete (self, cursor):
         """
@@ -368,16 +395,22 @@ class Methodology (DTable):
             self.sample_size = form['sample_size']
             
         # all methodology types get a route
-        print 'setting route to %s' % form['route']
-        self.set_route(form['route'])
+        if form['route'] == self.ROUTE['-']:
+            form.set_error('route', 'You must specify the route of exposure.')
+        else:
+            print 'setting route to %s' % form['route']
+            self.set_route(form['route'])
         
         # all methodology types but experimental and descriptive get timing
         if not self.get_study_type() in [
             self.TYPES['experimental'],
             self.TYPES['descriptive']
             ]:
-            print 'setting timing to %s' % form['timing']
-            self.set_timing(form['timing'])
+            if form['timing'] == self.TIMING['-']:
+                form.set_error('timing', 'You must specifiy the timing.')
+            else:
+                print 'setting timing to %s' % form['timing']
+                self.set_timing(form['timing'])
         
         # all 'c*' methodology types get controls
         if self.get_study_type() in [
@@ -385,13 +418,19 @@ class Methodology (DTable):
             self.TYPES['cohort'],
             self.TYPES['case control']
             ]:
-            print 'setting controls to %s' % form['controls']
-            self.set_controls(form['controls'])
+            if form['controls'] == self.CONTROLS['-']:
+                form.set_error('controls', 'You must specify the controls.')
+            else:
+                print 'setting controls to %s' % form['controls']
+                self.set_controls(form['controls'])
             
         # only cross sectional gets sampling
         if self.get_study_type() == self.TYPES['cross sectional']:
-            print 'setting sampling to %s' % form['sampling']
-            self.set_sampling(form['sampling'])
+            if form['sampling'] == self.SAMPLING['-']:
+                form.set_error('sampling', 'You must specify the sampling.')
+            else:
+                print 'setting sampling to %s' % form['sampling']
+                self.set_sampling(form['sampling'])
 
         # every methodology type can have comments
         if form['comments']:

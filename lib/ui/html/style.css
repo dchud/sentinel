@@ -146,6 +146,7 @@ a.name:hover {
 #unclaim {
     border: 1px solid #aaa;
     padding: 5px;
+    margin-top: 2em;
 }
 
 #exposure-left {

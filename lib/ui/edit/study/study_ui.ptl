@@ -467,6 +467,8 @@ def curate_four [html] (request, queued_record_id):
     """
     </p>
     """
+    render_unclaim_block()
+    footer()
 
 
 def summary [html] (request, queued_record_id):
