@@ -163,20 +163,20 @@ def render_subject_selector [html] (record, study, concept_type):
             subjects.append(heading.term)
     
     subjects.sort()
+    """
+    <select name='record_subject' size='1'>
+        <option value='-'>-</option>
+    """
     if len(subjects) > 0:
-        """
-        <select name='record_subject' size='1'>
-            <option value='-'>-</option>
-        """
         concept_terms = [concept.term for concept in study_concepts]
         for subject in subjects:
             if not subject in concept_terms:
                 """
             <option value='%s'>%s</option>
                 """ % (subject, subject)
-        """
-        </select>
-        """
+    """
+    </select>
+    """
     
 def render_outcomes [html] (study):
     """
