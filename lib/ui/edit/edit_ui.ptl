@@ -80,6 +80,7 @@ def _q_index [html] (request):
     """
         <div id='curator-panel-right'>
             <h4>Load a record from Pubmed/MEDLINE</h4>
+            <p>Search either by PMID or keywords.</p>
     """
     form = LoadPubmedForm()
     form.render()
@@ -196,9 +197,14 @@ class LoadPubmedForm (MyForm):
             title='PMID:',
             size=8,
             hint='Enter the PMID to load',
-            required=True)
+            required=False)
+        self.add(form2.StringWidget, 'keywords',
+            title='Keywords:',
+            size=30,
+            hint='Enter keywords to find',
+            required=False)
         self.add_hidden('queue', value='')
-        self.add_submit('load', 'load')
+        self.add_submit('find', 'find')
 
 
 def pubmed [html] (request):
@@ -214,12 +220,21 @@ def pubmed [html] (request):
     if not form.is_submitted():
         return render()
     
+    if not form['pmid'] \
+        and not form['keywords']:
+        form.set_error('pmid', 'Please enter a PMID, or keywords.')
+        
     if form.has_errors():
         return render()
 
     pmsearch = PubmedSearch()
-    pmid = form['pmid']
-    data = pmsearch.fetch(pmid)
+    if form['pmid']:
+        pmid = form['pmid']
+        data = pmsearch.fetch(pmid)
+    else:
+        keywords = form['keywords']
+        data = pmsearch.search(keywords)
+        
     source_catalog = get_publisher().get_source_catalog()
     pm_source = source_catalog.get_source_by_name('pubmed-medline')
     mapped_terms = source_catalog.get_mapped_terms(pm_source.uid)
@@ -227,7 +242,10 @@ def pubmed [html] (request):
     recs = parser.parse(mapped_terms=mapped_terms, is_email=False, data=data)
     
     header('Edit: Load from Pubmed')
-    title_bar('Load from Pubmed, PMID %s' % pmid)
+    if form['pmid']:
+        title_bar('Load from Pubmed, PMID %s' % pmid)
+    else:
+        title_bar('Load from Pubmed, keywords "%s"' % keywords)
     
     if form['queue'] \
         and form['queue'] == 'add':

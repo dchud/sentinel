@@ -82,7 +82,9 @@ class PubmedSearch:
     """
 
     def __init__ (self):
-        self.efetch_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=[[UI]]&mode=text&report=medline'
+        self.efetch_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=[[UI]]&mode=text&report=medline&tool=canarydb&email=sentinelstudies@yale.edu'
+        self.esearch_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=[[TERMS]]&tool=canarydb&email=sentinelstudies@yale.edu'
+    
 
     def fetch (self, ui):
         """
@@ -104,3 +106,45 @@ class PubmedSearch:
             return data.read().split('\n')
         except:
             return []
+
+    def _get_text (self, p): 
+        return ''.join([n.data for n in p.childNodes if n.nodeType==n.TEXT_NODE])
+
+    def search (self, terms):
+        """
+        Search for a set of terms, returns a list of IDs to parse, which
+        is then fed to self.fetch for data retrieval.
+        """
+        
+        import types, urllib
+        from xml.dom import pulldom
+        
+        id_list = []
+        
+        try:
+            if isinstance(terms, types.ListType):
+                url = self.esearch_url.replace('[[TERMS]]',
+                    urllib.quote_plus((' '.join([str[term] for term in terms]))))
+            else:
+                url = self.esearch_url.replace('[[TERMS]]', 
+                    urllib.quote_plus(str(terms)))
+            print 'url:', url
+            xmls = urllib.urlopen(url).read()
+            events = pulldom.parseString(xmls)
+            for event, node in events:
+                if event == 'START_ELEMENT' \
+                    and node.tagName == 'Id':
+                    print 'found Id'
+                    events.expandNode(node)
+                    id = self._get_text(node)
+                    print 'adding id:', id
+                    id_list.append(id)
+        except:
+            return []
+            
+        if len(id_list) > 0:
+            return self.fetch(id_list)
+        else:
+            return []
+
+            
