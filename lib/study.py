@@ -5,12 +5,117 @@ import time
 import types
 
 from quixote.form2 import StringWidget, TextWidget, IntWidget
-from quixote.form2 import SingleSelectWidget, CheckboxWidget, SubmitWidget
+from quixote.form2 import SingleSelectWidget, MultipleSelectWidget
+from quixote.form2 import CheckboxWidget, SubmitWidget
 from quixote.html import htmltext
 
 from canary.qx_defs import MyForm
 from canary.utils import DTable
 
+
+class ExposureRoute (DTable):
+
+    # A Methodology can have one to many ROUTEs
+    ROUTE = {
+        '-': -1,
+        'ingestion' : 1,
+        'inhalation' : 2,
+        'mucocutaneous' : 3,
+        'vector' : 4,
+        'other' : 5,
+        }
+        
+    def __init__ (self):
+        self.uid = -1
+        self.study_id = -1
+        self.methodology_id = -1
+        self.route = self.ROUTE['-']
+
+    def __str__ (self):
+        out = []
+        out.append('<Route uid=%s study_id=%s' % (self.uid, self.study_id))
+        out.append('\troute=%s' % self.get_text_value(self.ROUTE, self.route))
+        out.append('\tmethodology_id=%s' % self.methodology_id)
+        out.append('/>')
+        return '\n'.join(out)
+        
+        
+    def get_text_value (self, lookup_table, value):
+        for k, v in lookup_table.iteritems():
+            if v == value:
+                return k
+        return ''
+
+
+    def set_route (self, route):
+        
+        if type(route) is types.StringType:
+            
+            if route in self.ROUTE.keys():
+                self.route = self.ROUTE[route]
+                
+        elif type(route) is types.IntType:
+            
+            if route in self.ROUTE.values():
+                self.route = route
+    
+    def get_route (self, text=False):
+        if text:
+            return self.get_text_value(self.ROUTE, self.route)
+        else:
+            return self.route
+
+
+    def delete (self, cursor):
+        """
+        Delete this route from the database.
+        """
+        if not self.uid == -1:
+            try:
+                cursor.execute("""
+                    DELETE FROM exposure_routes
+                    WHERE uid = %s
+                    """, self.uid)
+            except:
+                import sys
+                print 'MySQL exception:'
+                for info in sys.exc_info():
+                    print 'exception:', info
+    
+    def save (self, cursor):
+        
+        if self.uid == -1:
+            #print 'inserting new exposure_route'
+            cursor.execute("""
+                INSERT INTO exposure_routes
+                (uid, study_id, methodology_id, route)
+                VALUES 
+                (NULL, %s, %s, %s)
+                """, (self.study_id, self.methodology_id, self.route)
+                )
+            #print 'inserted new exposure_route'
+            self.uid = self.get_new_uid(cursor)
+            #print 'set new exposure_route uid to %s' % self.uid
+        else:
+            # Assume all calls to save() are after all routes have been removed
+            # already by "DELETE FROM exposure_routes" in methodology.save()
+            #print 'updating exposure_route %s' % self.uid
+            try:
+                cursor.execute("""
+                    INSERT INTO exposure_routes
+                    (uid, study_id, methodology_id, route)
+                    VALUES 
+                    (%s, %s, %s, %s)
+                    """, (self.uid, self.study_id, self.methodology_id, self.route)
+                )
+            except:
+                import sys
+                print 'MySQL exception:'
+                for info in sys.exc_info():
+                    print 'exception:', info
+            #print 'updated route %s' % self.uid
+        # FIXME: should this be set from the SQL?
+        self.date_modified = time.strftime(str('%Y-%m-%d'))
 
 
 class Methodology (DTable):
@@ -51,16 +156,6 @@ class Methodology (DTable):
         'yes' : 1,
         'both' : 2,
         }
-        
-    # A Methodology can have at most one ROUTE
-    ROUTE = {
-        '-': -1,
-        'ingestion' : 0,
-        'inhalation' : 1,
-        'mucocutaneous' : 2,
-        'vector' : 3,
-        'other' : 4,
-        }
 
 
     def __init__ (self, uid=-1):
@@ -71,7 +166,7 @@ class Methodology (DTable):
         self.timing = -1
         self.sampling = -1
         self.controls = -1
-        self.route = -1
+        self.exposure_routes = []
         self.comments = ''
         self.date_modified = None
         self.date_entered = None
@@ -82,7 +177,7 @@ class Methodology (DTable):
         out.append('<Methodology uid=%s study_id=%s' % (self.uid, self.study_id))
         out.append('\tstudy_type=%s' % self.get_text_value(self.TYPES, self.study_type_id))
         out.append('\tsample_size=%s' % self.sample_size)
-        for item in ['timing', 'sampling', 'controls', 'route']:
+        for item in ['timing', 'sampling', 'controls', 'exposure_routes']:
             out.append('\t%s=%s' % (item, getattr(self, 'get_' + item)(text=True)))
         out.append('\tcomments=%s' % self.comments or '')
         out.append('/>')
@@ -159,23 +254,33 @@ class Methodology (DTable):
         else:
             return self.controls
     
-    def set_route (self, route):
-        
-        if type(route) is types.StringType:
-            
-            if route in self.ROUTE.keys():
-                self.route = self.ROUTE[route]
-                
-        elif type(route) is types.IntType:
-            
-            if route in self.ROUTE.values():
-                self.route = route
     
-    def get_route (self, text=False):
-        if text:
-            return self.get_text_value(self.ROUTE, self.route)
+    def set_routes (self, routes):
+        
+        for route in routes:
+            self.add_route(route)
+            
+        # Remove routes no longer specified
+        for route in self.exposure_routes:
+            if not route.get_route() in [r.get_route() for r in routes]:
+                self.exposure_routes.remove(route)
+    
+    def add_route (self, route):
+        
+        if not route.get_route() in [r.get_route() for r in self.exposure_routes]:
+            route.methodology_id = self.uid
+            route.study_id = self.study_id
+            self.exposure_routes.append(route)
         else:
-            return self.route
+            print 'found matching route already for route', route.get_route()
+            
+    
+    def get_routes (self, text=False):
+        
+        if text:
+            return [r.get_text_value(r.ROUTE, r.route) for r in self.exposure_routes]
+        else:
+            return self.exposure_routes
 
 
     def set_study_type (self, value):
@@ -238,7 +343,7 @@ class Methodology (DTable):
 
     def delete (self, cursor):
         """
-        Delete this methodology from the database.
+        Delete this methodology, and its exposure_routes, from the database.
         """
         if not self.uid == -1:
             try:
@@ -246,12 +351,36 @@ class Methodology (DTable):
                     DELETE FROM methodologies
                     WHERE uid = %s
                     """, self.uid)
+                
+                cursor.execute("""
+                    DELETE FROM exposure_routes
+                    where methodology_id = %s
+                    """, self.uid)
             except:
                 import sys
                 print 'MySQL exception:'
                 for info in sys.exc_info():
                     print 'exception:', info
+                    
     
+    
+    def load_routes (self, cursor):
+        
+        cursor.execute("""
+            SELECT * FROM exposure_routes
+            WHERE methodology_id = %s
+            """, (self.uid))
+        fields = [d[0] for d in cursor.description]
+        desc = dtuple.TupleDescriptor([[f] for f in fields])
+        rows = cursor.fetchall()
+        for row in rows:
+            row = dtuple.DatabaseTuple(desc, row)
+            exp_route = ExposureRoute()
+            for field in fields:
+                exp_route.set(field, row[field])
+            self.add_route(exp_route)
+
+        
     def save (self, cursor):
         
         if self.uid == -1:
@@ -260,16 +389,16 @@ class Methodology (DTable):
                 INSERT INTO methodologies
                 (uid, study_id, study_type_id, 
                 sample_size, timing, 
-                sampling, controls, route, comments,
+                sampling, controls, comments,
                 date_modified, date_entered)
                 VALUES 
                 (NULL, %s, %s, 
                 %s, %s,
-                %s, %s, %s, %s,
+                %s, %s, %s,
                 NOW(), NOW())
                 """, (self.study_id, self.study_type_id,
                 self.sample_size, self.timing,
-                self.sampling, self.controls, self.route, self.comments)
+                self.sampling, self.controls, self.comments)
                 )
             #print 'inserted new methodology'
             self.uid = self.get_new_uid(cursor)
@@ -281,12 +410,12 @@ class Methodology (DTable):
                     UPDATE methodologies
                     SET study_id = %s, study_type_id = %s,
                     sample_size = %s, timing = %s,
-                    sampling = %s, controls = %s, route = %s, comments = %s,
+                    sampling = %s, controls = %s, comments = %s,
                     date_modified = NOW()
                     WHERE uid = %s
                     """, (self.study_id, self.study_type_id,
                     self.sample_size, self.timing, 
-                    self.sampling, self.controls, self.route, self.comments,
+                    self.sampling, self.controls, self.comments,
                     self.uid)
                     )
             except:
@@ -297,6 +426,16 @@ class Methodology (DTable):
             #print 'updated methodology %s' % self.uid
         # FIXME: should this be set from the SQL?
         self.date_modified = time.strftime(str('%Y-%m-%d'))
+        
+        # Refill these values every time
+        cursor.execute("""
+            DELETE FROM exposure_routes
+            WHERE methodology_id = %s
+            """, self.uid)
+            
+        for route in self.exposure_routes:
+            print 'saving route', route
+            route.save(cursor)
 
 
 
@@ -310,12 +449,15 @@ class Methodology (DTable):
             size=10, value=int(self.sample_size),
             required=True)
             
-        # all methodology types get a route
-        form.add(SingleSelectWidget, 'route',
-            title='Route of exposure',
-            value=self.get_route(),
-            options=[(val, name, val) for name, val in self.ROUTE.items()],
-            sort=True,
+        # all methodology types get one or more routes
+        route_options = [(route, text, route) for text, route in ExposureRoute.ROUTE.items()]
+        # FIXME: what else to do about leaving out the default/empty?
+        route_options.remove((-1, '-', -1))
+        form.add(MultipleSelectWidget, 'exposure_routes',
+            title='Routes of exposure (ctrl-click to select or change multiple)',
+            value=[r.route for r in self.get_routes()],
+            options=route_options,
+            sort=False,
             required=True)
         
         # methodology types except experimental and descriptive get timing
@@ -371,15 +513,19 @@ class Methodology (DTable):
         if form['sample_size'] <= 0:
             form.set_error('sample_size', 'Sample size must be greater than zero')
         else:
-            print 'setting sample size to %s' % form['sample_size']
+            #print 'setting sample size to %s' % form['sample_size']
             self.sample_size = form['sample_size']
             
         # all methodology types get a route
-        if form['route'] == self.ROUTE['-']:
-            form.set_error('route', 'You must specify the route of exposure.')
+        if form['exposure_routes']:
+            routes = []
+            for r in form['exposure_routes']:
+                route = ExposureRoute()
+                route.set_route(r)
+                routes.append(route)
+            self.set_routes(routes)
         else:
-            print 'setting route to %s' % form['route']
-            self.set_route(form['route'])
+            form.set_error('exposure_routes', 'You must choose at least one route of exposure.')
         
         # all methodology types but experimental and descriptive get timing
         if not self.get_study_type() in [
@@ -1076,11 +1222,14 @@ class Study (DTable):
                     table_class_instance.set(field, row[field])
                 getattr(self, table_name).append(table_class_instance)
         
+        for meth in self.methodologies:
+            meth.load_routes(cursor)
+        
 
     def save (self, cursor):
         
         if self.uid == -1:
-            #print 'inserting new study'
+            print 'inserting new study'
             try:
                 cursor.execute("""
                     INSERT INTO studies

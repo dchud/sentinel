@@ -203,7 +203,9 @@ def detail [html] (methodology_id):
     article_type = study.get_article_type(text=True)
     methodology = study.get_methodology(methodology_id)
     
+    print 'calling create_form()'
     form = methodology.create_form()
+    print 'got form'
     
     def render [html] ():
         header('Describe methodology', show_javascript=True)
@@ -226,7 +228,9 @@ def detail [html] (methodology_id):
         return render()
         
     try:
+        print 'calling methodology.save()'
         methodology.save(cursor)
+        print 'done'
         form.logger.info(str('Updated methodology %s' % methodology.uid))
         if form.get_submit() == 'update':
             return render()
@@ -281,11 +285,14 @@ def edit [html] (methodology_id):
         return render()
         
     try:
-        methodology.save(cursor)
-        form.logger.info(str('Updated methodology %s' % methodology.uid))
-        if form.get_submit() == 'update':
-            return render()
-        elif form.get_submit() in ['cancel', 'finish']:
+        if form.get_submit() in ['update', 'finish']:
+            methodology.save(cursor)
+            form.logger.info(str('Updated methodology %s' % methodology.uid))
+            if form.get_submit() == 'update':
+                return render()
+            elif form.get_submit() == 'finish':
+                request.redirect(str('/edit/study/%s/curate_four' % request.queued_record_id))
+        elif form.get_submit() == 'cancel':
             request.redirect(str('/edit/study/%s/curate_four' % request.queued_record_id))
     except:
         import sys

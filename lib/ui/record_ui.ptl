@@ -52,7 +52,7 @@ def render_methodologies [html] (study, show_actions=False):
             <th>ID</th>
             <th>Type</th>
             <th>N</th>
-            <th>Route</th>
+            <th>Routes</th>
             <th>Sampling</th>
             <th>Controls</th>
             <th>Timing</th>
@@ -76,7 +76,7 @@ def render_methodologies [html] (study, show_actions=False):
             <td>%s</td>
             <td>%s</td>
         """ % (meth.uid, meth.get_study_type(True),
-            meth.sample_size, meth.get_route(True),
+            meth.sample_size, ', '.join(meth.get_routes(True)),
             meth.get_sampling(True), meth.get_controls(True),
             meth.get_timing(True))
         if show_actions:
