@@ -248,7 +248,7 @@ def values [html] (group_id):
     """ % (group.group_name, group_id, group_id)
 
     """
-    <table border='0' cellpadding='5' cellspacing='5' bgcolor='#e4e4e4'>
+    <table cellspacing='0' class='gentable'>
         <tr>
             <th>number</th>
             <th>description</th>
@@ -257,10 +257,9 @@ def values [html] (group_id):
     """
 
     values = group.get_values()
-    bgcolor = '#ffffff'
     for (serial_number, value) in values:
         """
-        <tr bgcolor='%s'>
+        <tr>
             <td valign='top'>%s</td>
             <td valign='top'>%s</td>
             <td valign='top'>
@@ -268,12 +267,8 @@ def values [html] (group_id):
                 <a href='/admin/dv_data/value/%s/delete'><font size='-1'>delete</font></a>
             </td>
         </tr>
-        """ % (bgcolor, value.serial_number, value.description, 
+        """ % (value.serial_number, value.description, 
             value.value_id, value.value_id)
-        if bgcolor == '#ffffff':
-            bgcolor = '#f3f3f3'
-        else:
-            bgcolor = '#ffffff'
         
     """
         <tr>
@@ -284,7 +279,7 @@ def values [html] (group_id):
     """
 
     """
-        <tr bgcolor='%s'>
+        <tr>
             <form action='/admin/dv_data/value/create' method='post'>
             <input type='hidden' name='value_group_id' value='%s'>
             <td><input type='text' name='value_serial_number' size='5'></td>
@@ -292,7 +287,7 @@ def values [html] (group_id):
             <td><input type='submit' value='create'></td>
             </form>
         </tr>
-    """ % (bgcolor, group.value_group_id)
+    """ % (group.value_group_id)
 
     """
     </table>
