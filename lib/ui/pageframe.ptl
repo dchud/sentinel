@@ -31,7 +31,7 @@ def header [html] (title, show_pageframe=True, show_javascript=False):
             @import url(/wdd_styles.css);
         </style>
         
-        <link rel="stylesheet" type="text/css" media="print" href="wdd_print.css">
+        <link rel="stylesheet" type="text/css" media="print" href="/wdd_print.css">
         
     </head>
     
