@@ -1339,41 +1339,4 @@ class Study (DTable):
             for item in getattr(self, table_name):
                 #print 'saving', table_name, 'item:', item
                 item.save(cursor)
-        
 
-
-
-if __name__ == '__main__':
-    import MySQLdb
-    conn = MySQLdb.connect(db='canary-dev',user='dlc33',passwd='floogy')
-    cursor = conn.cursor()
-    s1 = Study()
-    s1.curator_user_id = 'dchud'
-    s1.set_status('unclaimed')
-    s1.set_article_type('review')
-    s1.has_exposure_linkage = True
-    s1.save(cursor)
-    print 'created study, creating methodology'
-    
-    meth1 = Methodology()
-    meth1.study_id = s1.uid
-    meth1.set_controls('both')
-    meth1.set_timing('concurrent')
-    meth1.set_sampling('exposure')
-    meth1.set_study_type('cross sectional')
-    s1.methodologies.append(ss1)
-    s1.save(cursor)
-    print 'saved study with methodology'
-    
-    
-    print 'setting meth1 route to ingestion'
-    meth1.set_route('ingestion')
-    s1.save(cursor)
-    
-    meth2 = Methodology()
-    meth2.study_id = s1.uid
-    meth2.set_study_type('cohort')
-    meth2.set_timing('mixed')
-    s1.methodologies.append(ss2)
-    s1.save(cursor)
-    print 'saved study with methodology2'
