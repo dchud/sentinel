@@ -1,16 +1,20 @@
-_q_exports = ['_q_index',
-              'view',
-             ]
+_q_exports = [
+    '_q_index',
+    'find',
+    'view',
+    ]
 
 from log4py import Logger
 
-from quixote import get_publisher
+from quixote import get_publisher, get_request
 from quixote.errors import AccessError, PublishError, TraversalError
+from quixote import form2
 
 from canary.loader import Queue
+from canary.qx_defs import MyForm
+from canary.search import Search
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found
-from canary.source_catalog import SourceCatalog
 
 
 def title_bar [html] (action=''):
@@ -24,16 +28,54 @@ def title_bar [html] (action=''):
     </h2>
     """
 
+class FindRecordForm (MyForm):
+    
+    def __init__ (self):
+        MyForm.__init__(self)
+        self.action_url = '/edit/find'
+        self.add(form2.SingleSelectWidget, 'field',
+            value='author',
+            title='Find by:',
+            hint='Choose a field to search',
+            options=[
+                ('author', 'author name', 'author'),
+                ('title', 'title (partial ok)', 'title'),
+                ('record id', 'canary record id', 'record id'),
+                ('unique id', 'external unique id', 'unique id'),
+                ],
+            sort=False,
+            required=True)
+        self.add(form2.StringWidget, 'token',
+            title='Search for',
+            required=True)
+        self.add(form2.CheckboxWidget, 'allow_curated',
+            value=False,
+            title='Show already curated records too?')
+        self.add_submit('find', 'find')
+
 
 def _q_index [html] (request):
-    header('Edit')
-    title_bar('Edit')
+    header('Edit: Curator control panel')
+    title_bar('Curator control panel')
     """
+    <fieldset>
+        <legend>Find a record</legend>
+    """
+    form = FindRecordForm()
+    form.render()
+    """
+    </fieldset>
+    """
+    
+    """
+    <h3>Current editing queue</h3>
+    
     <table cellspacing='5' class='gentable'>
     <tr>
-        <th>Queue id</th>
+        <th>Batch</th>
+        <th>Name</th>
         <th>Source</th>
-        <th># Recs</th>
+        <th>Status (unclaimed/claimed/curated/total (% done))</th>
         <th>Load date</th>
         <th>Actions</th>
     </tr>
@@ -43,19 +85,142 @@ def _q_index [html] (request):
     queue = Queue()
     queue.load(cursor)
     for batch in queue.batches:
-        source_id = batch['source_id']
+        batch_stats = batch.get_statistics(cursor)
+
+        # Don't show finished batches
+        if batch_stats['curated'] == batch.num_records:
+            continue
+        # Else, carry on!
+        source_id = batch.source_id
         source = source_catalog.get_source(source_id)
         """
         <tr>
             <td>%s</td>
             <td>%s</td>
             <td>%s</td>
+        """ % (batch.uid, batch.name, source.name)
+        
+        """
+            <td>%s / %s / %s / %s (%s%s done)</td>
+        """ % (batch_stats['unclaimed'],
+            batch_stats['claimed'],
+            batch_stats['curated'],
+            batch.num_records,
+            str('%2.1f' % (float(batch_stats['curated']) / batch.num_records * 100.0)),
+            str('%'))
+        """
             <td>%s</td>
             <td>[<a href='/edit/batch/%s/view'>view</a>]</td>
         </tr>
-        """ % (batch['uid'], source.name, batch['num_records'],
-               str(batch['date_added'])[0:10], batch['uid'])
+        """ % (str(batch.date_added)[0:10], batch.uid)
     """
     </table>
     """
     footer()
+    
+    
+    
+def find [html] (request):
+    
+    form = FindRecordForm()
+    
+    def render [html] ():
+        header('Edit: Find record')
+        title_bar('Find record')
+        form.render()
+        footer()
+        
+    if not form.is_submitted():
+        return render()
+        
+    field = form['field']
+    token = form['token']
+    allow_curated = False
+    if form['allow_curated']:
+        allow_curated = True
+    
+    if not field in ['record id', 'unique id']:
+        if len(form['token']) <= 2:
+            form.set_error('token', 'Please search for at least three characters')
+            
+    if form.has_errors():
+        return render()
+    
+    search = Search(field=field, token=token, allow_curated=allow_curated)
+    
+    try:
+        cursor = get_publisher().get_cursor()
+        results = search.search(cursor)
+    except:
+        form.info(str('Unable to perform search'))
+        form.set_error('token', 'Unable to perform search')
+        return render()
+        
+    header('Edit: Find record')
+    res = results.get_results()
+    title_bar('Find record: "%s" (%s): %s result(s)' % (token, field, len(res)))
+    render_results(res)
+    footer()
+    
+    
+
+
+def render_results [html] (results):
+    
+    request = get_request()
+    
+    """
+    <table cellspacing='5' id='batch_view' class='gentable'>
+        <tr>
+            <th>id</th>
+            <th>Status</th>
+            <th>User</th>
+            <th>Title</th>
+            <th>Source</th>
+            <th>Actions</th>
+        </tr>
+    """
+    
+    for record in results:
+        status = record.get_status()
+        """
+        <tr>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+        """ % (record.uid, record.get_status(text=True),
+            record.user_id, record.title, record.source)
+            
+        """
+            <td>
+        """
+        
+        if status == record.STATUS_UNCLAIMED:
+            """
+                [<a href='/edit/study/%s/curate_one'>curate</a>]
+            """ % record.uid
+        elif status == record.STATUS_CLAIMED:
+            if record.user_id == request.session.user.get_id():
+                """
+                [<a href='/edit/study/%s/curate_one'>curate</a>]
+                [<a href='/edit/study/%s/unclaim'>unclaim</a>]
+                """ % (record.uid, record.uid)
+            else:
+                """
+                [claimed]
+                """
+        elif status == record.STATUS_CURATED:
+            """
+                [<a href='/edit/study/%s/summary'>edit</a>]
+            """ % record.uid
+            
+        """
+            </td>
+        </tr>
+        """  
+        
+    """
+    </table>
+    """

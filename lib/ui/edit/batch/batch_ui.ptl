@@ -88,6 +88,15 @@ def view [html] (request, batch_id=None, start=0, size=25):
         # We avoid loading all metadata here because batches might be big
         # (i.e. too much metadata to load every time).
         batch.load(cursor, load_metadata=False)
+        if not batch.name == '':
+            """
+            <h4>Batch: '%s'</h4>
+            """ % batch.name
+        else:
+            """
+            <h4>Batch: (unnamed)</h4>
+            """
+            
         if len(batch.queued_records) > 0:
             pager(batch, start, size)
             """
@@ -104,39 +113,36 @@ def view [html] (request, batch_id=None, start=0, size=25):
             
             for record_id, record in batch.queued_records.items()[start:start+size]:
                 status = record.get_status()
-                """
-                <tr>
-                    <td>%s</td>
-                    <td>%s</td>
-                    <td>%s</td>
-                    <td>%s</td>
-                    <td>%s</td>
-                """ % (record_id, record.get_status(text=True),
-                    record.user_id, record.title, record.source)
+                if not status == record.STATUS_CURATED:
+                    """
+                    <tr>
+                        <td>%s</td>
+                        <td>%s</td>
+                        <td>%s</td>
+                        <td>%s</td>
+                        <td>%s</td>
+                    """ % (record_id, record.get_status(text=True),
+                        record.user_id, record.title, record.source)
+                        
+                    """
+                        <td>
+                            [<a href='%s'>sfx links</a>]
+                    """ % get_sfx_link(batch.source_id, record.unique_identifier)
                     
-                """
-                    <td>
-                        [<a href='%s'>sfx links</a>]
-                """ % get_sfx_link(batch.source_id, record.unique_identifier)
-                
-                if status == record.STATUS_UNCLAIMED:
-                    """
-                        [<a href='/edit/study/%s/curate_one'>curate</a>]</td>
-                    """ % record_id
-                elif status == record.STATUS_CLAIMED:
-                    if record.user_id == request.session.user.get_id():
+                    if status == record.STATUS_UNCLAIMED:
                         """
-                        [<a href='/edit/study/%s/curate_one'>curate</a>]
-                        [<a href='/edit/study/%s/unclaim'>unclaim</a>]
-                        """ % (record_id, record_id)
-                    else:
-                        """
-                        [claimed]
-                        """
-                elif status == record.STATUS_CURATED:
-                    """
-                        [curated]
-                    """
+                            [<a href='/edit/study/%s/curate_one'>curate</a>]
+                        """ % record_id
+                    elif status == record.STATUS_CLAIMED:
+                        if record.user_id == request.session.user.get_id():
+                            """
+                            [<a href='/edit/study/%s/curate_one'>curate</a>]
+                            [<a href='/edit/study/%s/unclaim'>unclaim</a>]
+                            """ % (record_id, record_id)
+                        else:
+                            """
+                            [claimed]
+                            """
                 """
                     </td>
                 </tr>
@@ -167,7 +173,7 @@ def pager [html] (batch, start, size):
         Browse: 
         '''
         for i in range(0, num_pages):
-            start = str(i * size)
+            start = str((i * size) + 1)
             end = str((i + 1) * size)
             text = start + '-' + end
             if i != cur_page:

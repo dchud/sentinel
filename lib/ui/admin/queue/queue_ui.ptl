@@ -101,16 +101,21 @@ def add [html] (request):
 
     <p>
     File to upload: <br/>
-        <input type='file' name='upload'>
+        <input type='file' name='upload' />
     </p>
 
     <p>
     Expected #records: <br/>
-        <input type='text' name='num_records' size='4'>
+        <input type='text' name='num_records' size='4' />
     </p>
-
+    
     <p>
-        <input type='submit' value='Upload'>
+    Batch name: <br/>
+        <input type='text' name='batch_name' size='30' />
+    </p>
+    
+    <p>
+        <input type='submit' value='Upload' />
     </p>
     </form>
     """
@@ -150,6 +155,7 @@ def receive [html] (request):
     try:
         cursor = get_publisher().get_cursor()
         batch = Batch(file_name=upload.tmp_filename, source_id=source_id)
+        batch.name = form.get('batch_name') or ''
         batch.save(cursor)
         source_catalog = get_publisher().get_source_catalog()
         source = source_catalog.get_source(source_id)

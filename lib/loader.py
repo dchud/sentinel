@@ -28,11 +28,9 @@ class Queue:
         rows = cursor.fetchall()
         for row in rows:
             row = dtuple.DatabaseTuple(desc, row)
-            # FIXME: reconcile this with class Batch()
-            batch = {}
+            batch = Batch()
             for field in fields:
-                #print 'setting batch["%s"] to %s' % (field, row[field])
-                batch[field] = row[field]
+                batch.set(field, row[field])
             self.batches.append(batch)
 
 
@@ -237,8 +235,37 @@ class Batch (DTable):
         self.file_name = file_name
         self.source_id = source_id
         self.num_records = -1
+        self.name = ''
+        self.date_added = ''
         self.queued_records = {}
         self.loaded_records = []
+
+
+    def add_records (self, records):
+        for record in records:
+            self.loaded_records.append(record)
+            
+    
+    def get_statistics (self, cursor):
+        """
+        Return the state of a Batch based on the number of unclaimed,
+        claimed, and finished QueuedRecords it contains.
+        """
+        stats = {}
+        for name, status in [
+            ('unclaimed', QueuedRecord.STATUS_UNCLAIMED),
+            ('claimed', QueuedRecord.STATUS_CLAIMED),
+            ('curated', QueuedRecord.STATUS_CURATED),
+            ]:
+            cursor.execute("""
+                SELECT count(*) as unclaimed_count
+                FROM queued_records
+                WHERE queued_batch_id = %s
+                AND status = %s
+                """, (self.uid, status)
+                )
+            stats[name] = cursor.fetchone()[0]
+        return stats
 
 
     def load (self, cursor, load_metadata=True):
@@ -288,27 +315,27 @@ class Batch (DTable):
             
         if self.uid == -1:
             cursor.execute("""
-                           INSERT INTO queued_batches
-                           (uid, file_name, source_id, num_records, date_added)
-                           VALUES
-                           (NULL, %s, %s, %s, CURDATE())
-                           """, (self.file_name, self.source_id, self.num_records)
-                           )
+                INSERT INTO queued_batches
+                (uid, file_name, source_id, num_records, date_added, name)
+                VALUES
+                (NULL, %s, %s, %s, %s, CURDATE())
+                """, (self.file_name, self.source_id, self.num_records, self.name)
+                )
             cursor.execute("""
-                           SELECT LAST_INSERT_ID() AS new_uid
-                           """)
+                SELECT LAST_INSERT_ID() AS new_uid
+                """)
             row = cursor.fetchone()
             self.uid = row[0]
             self.date_added = time.strftime(str('%Y-%m-%d'))
 
         else:
             cursor.execute("""
-                           UPDATE queued_batches
-                           SET file_name = %s,
-                           num_records = %s
-                           WHERE uid = %s
-                           """, (self.file_name, self.num_records, self.uid)
-                           )
+                UPDATE queued_batches
+                SET file_name = %s, num_records = %s, name = %s
+                WHERE uid = %s
+                """, (self.file_name, self.num_records, self.name,
+                self.uid)
+                )
         
         # save the records
         #for record_id in self.queued_records.keys():
@@ -317,12 +344,6 @@ class Batch (DTable):
         for record in self.loaded_records:
             record.queued_batch_id = self.uid
             record.save(cursor)
-
-
-    def add_records (self, records):
-        for record in records:
-            self.loaded_records.append(record)
-
 
 
 

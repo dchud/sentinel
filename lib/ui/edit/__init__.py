@@ -1,7 +1,8 @@
 _q_exports = ['_q_index',
-              'batch',
-              'study',
-              ]
+    'batch',
+    'find',
+    'study',
+    ]
 
 
 from quixote.errors import AccessError, PublishError, TraversalError
@@ -14,6 +15,7 @@ from canary.ui.pages import not_found
 from canary.ui.edit import batch, edit_ui, study
 
 _q_index = edit_ui._q_index
+find = edit_ui.find
 
 
 def _q_access (request):
