@@ -341,7 +341,7 @@ def render_medline [html] (mapped_metadata):
     """
                 <h4>Go to Pubmed:</h4>
                 <p>
-                [<a href='%s'>This record</a>]
+                [<a href='%s'>This Article</a>]
                 [<a href='%s'>Related Articles</a>]
                 </p>
     """ % (pubmed_record_url, pubmed_related_url)

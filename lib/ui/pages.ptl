@@ -21,42 +21,40 @@ def _q_index [html] (request):
     header('Index')
 
     """
-    <p class='mission'>
-    The <b>Canary Database</b> contains studies in the biomedical literature
-    that explore the use of wildlife, domestic, and companion animals as
-    "sentinels" for the effects of chemical, biological, and physical hazards
-    in the environment that may be a risk to human health.
-    </p>
+<table border='0' cellspacing='0' cellpadding='0'>
+    <tr valign='top'
+	<td width='400' valign='top' class='rightspace'>
 
+    <h1>The Canary Database Project</h1>
     <p>
-    The Canary Database allows you to locate sentinel studies according to:
+    The Canary Database contains studies in the biomedical literature
+    that explore the use of wildlife, domestic, and companion animals as
+    &quot;sentinels&quot; for the effects of chemical, biological, and 
+    physical hazards in the environment that may be a risk to human health.
     </p>
 
-    <!--
+    <h3>
+    The Canary Database allows you to locate sentinel studies according to:
+    </h3>
+
     <table width='70%' border='0' cellspacing='10' cellpadding='5'>
         <tr>
             <td align='left' valign='top' width='50%'>
-    -->
                 <ul type='circle'>
-                    <li>Hazards</li>
-                    <li>Species</li>
+                    <li>Exposures</li>
                     <li>Disease outcomes (animal)</li>
-                    <li>Study types</li>
-    <!--
+                    <li>Species</li>
                 </ul>
             </td>
             <td align='left' valign='top' width='50%'>
                 <ul type='circle'>
-    -->
+                    <li>Study methodologies</li>
                     <li>Authors</li>
-                    <li>Subjects</li>
                     <li>Journals</li>
                 </ul>
-    <!--
             </td>
         </tr>
     </table>
-    -->
 
     <p>
     You can browse the database by
@@ -65,11 +63,27 @@ def _q_index [html] (request):
         <a href='/browse/methodology'>methodology</a>.
     </p>
 
+	</td>
 
-    <p>
-    Learn about several <a href='/about/examples'>known animal sentinels</a>
-    and other <a href='/about/examples#possible'>possible sentinel events</a>.
-    </p>
+	<td>
+
+    <div class='news'>
+	<div class='news-head'>
+	    Take a tour
+	</div>
+	<p>
+	Take a quick tour of the Canary Database.
+
+	    <a href='/about/tour' title='Take a tour'>
+	    <img border='0' src='/images/tour-record-small.jpg' 
+		alt='small tour image'/>
+	    </a>
+	</p>
+    </div>
+
+	</td>
+    </tr>
+</table>
 
 
     <!--

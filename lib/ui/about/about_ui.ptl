@@ -132,6 +132,222 @@ def relevance [html] (request):
     footer()
 
 
+def tour [html] (request):
+
+    pages = (
+	('one', 'Canary Database Curation'),
+	('two', 'Animal-Human Health Linkages'),
+	('three', 'Other Features'),
+	)
+
+    try:
+	page = request.get_form_var('page', default='one')
+	if not page in [p for p, n in pages]:
+	    raise ValueError
+    except:
+	return not_found('tour page')
+
+    for p, name in pages:
+        if p == page:
+            title = 'Tour: Page %s: %s' % (p.capitalize(), name)
+
+    header(title)
+    """
+    <h2>%s</h2>
+    """ % title
+    tour_menu(page, pages)
+    
+    if page == 'one':
+        tour_one()
+    elif page == 'two':
+        tour_two()
+    elif page == 'three':
+        tour_three()
+
+    tour_menu(page, pages)
+
+    footer()
+
+
+def tour_menu [html] (page, pages):
+
+    """
+    <p>
+    Continue tour: 
+    """
+    for p, name in pages:
+        if p == page:
+            """
+        [%s: %s]
+            """ % (p.capitalize(), name)
+        else:
+            """
+        [<a href='?page=%s'>%s: %s</a>]
+            """ % (p, p.capitalize(), name)
+
+    """
+    </p>
+    """
+
+
+
+def tour_one [html] ():
+
+    """
+    <p>
+    Canary Database curators add value to existing indexing of
+    sentinel studies in other bibliographic database in several
+    ways.  Below is a sample record showing "Canary data",
+    the additional curated indexing provided by Canary Database
+    curators.
+    </p>
+
+    <img src='/images/tour-record.jpg' alt='sample record image'>
+    
+    <p>
+    <b>Animal-Human Health Linkages</b> are indicated for every
+    curated study, to give you a sense of the relevance to
+    human health of data presented in the study.
+    </p>
+
+    <p>
+    <b>Controlled Vocabularies</b> such as MeSH, the NCBI
+    Taxonomy, ITIS, and the GNS Gazeteer are used extensively
+    to index exposures, outcomes, species, and locations
+    studied within curated records.
+    </p>
+
+    <p>
+    <b>Study Methodologies</b> are indicated by curators for
+    curated records, using a consistent algorithm  for determining
+    methodologies.  You can <a 
+    href='/about/classification_protocol'>read more about our
+    classification protocol</a>.
+    </p>
+    """
+
+
+def tour_two [html] ():
+
+    """
+    <p>
+    Every curated record in the Canary Database will indicate
+    whether several key aspects linking animal and human health are
+    addressed by the study.  As the number of sentinel studies curated
+    increases, we will be able to provide a quick overview of the
+    extent to which existing research covers these various linkages.
+    </p>
+
+    <p>
+    For example, this chart indicates the frequency of studies
+    concerned with the exposure "Water Pollution, Chemical" where 
+    linkage data has been provided in each of the categories listed.
+    </p>
+   
+    <img src='/images/tour-water-pollutants-chemical-booleans.png'
+        alt='sample chart of linkage indicators'/>
+
+    <p>
+    <b>Exposures</b> and <b>Outcomes</b> indicate whether the study
+    covers animal exposures and animal health outcomes.
+    </p>
+
+    <p>
+    <b>Relationships</b> indicates whether the study associates
+    animal exposures and health outcomes.
+    </p>
+
+    <p>
+    <b>Interspecies</b> indicates whether the study discusses 
+    differing susceptibilities among animal species.
+    </p>
+
+    <p>
+    <b>Exposure linkage</b> and <b>Outcome linkage</b> indicate
+    the exposures and outcomes are shared between animals and
+    humans.
+    </p>
+
+    <p>
+    <b>Genomic</b> indicates whether the study includes data about
+    gene sequence information.
+    </p>
+
+    <p>
+    As the Canary Database grows to include thousands of curated
+    studies, charts such as the example above will be dynamically
+    generated for any combination of exposures, outcomes, species,
+    or locations.
+    </p>
+    """
+
+
+def tour_three [html] ():
+
+    """
+    <p>
+    Many database features are in development or planned for the future.
+    </p>
+
+    <p>
+    <b>Already available</b>
+    </p>
+
+    <ul>
+        <li>Ready display of all curated information</li>
+        <li>Access to original bibliographic information from 
+            source databases</li>
+        <li>Ability to find similar records within the Canary
+            Database based on bibliographic information</li>
+        <li>Keyword search of all curated records by author,
+            title, and abstract</li>
+        <li>Links to Pubmed records and related articles</li>
+        <li>Export records to your bibliographic reference 
+            manager</li>
+    </ul>
+
+    <p>
+    <b>Coming soon (Fall 2004-Winter 2005)</b>
+    </p>
+
+    <ul>
+        <li>Advanced search allowing users to find curated
+            articles about combinations of exposures, outcomes,
+            species, and locations</li>
+        <li>Better similar record searching, using advanced
+            search interface</li>
+        <li>Dynamic charts indicating simple patterns in curated
+            records</li>
+        <li>Per-institution reference linking (ask your friendly
+            librarian about this!)</li>
+    </ul>
+
+    <p>
+    <b>Future developments (Spring 2005-)</b>
+    </p>
+
+    <ul>
+        <li>Advanced related record searching</li>
+        <li>Map interface based on indexed locations</li>
+        <li>Dynamic data visualizations indicating complex
+            patterns in curated records</li>
+    </ul>
+
+
+    <h3>Thank you!</h3>
+    <p>
+    Thank you for visiting the Canary Database.  Please check back
+    frequently, as we are actively curating records and working to
+    implement the features listed above.  We are always interested
+    in your feedback on how we might improve the database, so <a 
+    href='/about/contact_us'>please contact us</a> if you have any
+    questions or comments.
+    </p>
+
+    """
+
+
+
 def study_methodologies [html] (request):
     
     try:
