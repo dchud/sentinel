@@ -123,6 +123,10 @@ a.name:hover {
 	padding: 5px;
 }
 
+#exposures td {
+    font-size: small;
+}
+
 .studytable {
 	width: 70%;
 }
@@ -147,7 +151,7 @@ a.name:hover {
 	border-bottom: 1px solid #aaa;
     background: #fff;
     margin-bottom: 1em;
-    width: 60%;
+    width: 70%;
 }
 
 #pipeline ul {
@@ -159,11 +163,11 @@ a.name:hover {
 
 #pipeline li {
 	display: inline;
-    padding: 0px;
+	padding: 0px;
 	border-left: 1px solid #ccc;
 	border-right: 1px solid #ccc;
 	border-top: 1px solid #ccc;
-    background-color: #eee;
+	background-color: #eee;
 }
 
 #pipeline ul li a {

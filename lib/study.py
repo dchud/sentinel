@@ -719,7 +719,12 @@ class Study (DTable):
             if exp.uid == id:
                 return exp
         return None
-        
+    
+    def get_exposure_from_exposure (self, exposure):
+        for exp in self.exposures:
+            if exp.concept_id == exposure.concept_id:
+                return exp
+        return None
 
     def load (self, cursor):
         

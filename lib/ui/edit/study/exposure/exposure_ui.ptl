@@ -87,7 +87,7 @@ def find [html] (request):
         """
         <h3>Find exposure</h3>
         """
-        render_pipeline(study.get_article_type(text=True), step=3)
+        render_pipeline(study.get_article_type(text=True), url_prefix=str('..'), step=3)
         render_queued_record(queued_record)
         render_messages()
         form.render()
@@ -149,7 +149,7 @@ def add [html] (request):
         """
         <h3>Find exposure</h3>
         """
-        render_pipeline(study.get_article_type(text=True), step=3)
+        render_pipeline(study.get_article_type(text=True), url_prefix=str('..'), step=3)
         render_queued_record(queued_record)
         render_messages()
         render_exposures(study)
@@ -219,6 +219,11 @@ def delete [html] (exposure_id):
 
     def render [html] ():
         header('Delete exposure')
+        """
+        <h3>Delete exposure</h3>
+        """
+        render_pipeline(study.get_article_type(text=True), 
+            url_prefix=str('../..'), step=3)
         render_queued_record(queued_record)
         render_messages()
         """
@@ -287,13 +292,20 @@ def render_found_exposures [html] (study, exposures, search_term):
             </td>
             """ % (exp.concept_source_id, exp.concept_id, urllib.quote_plus(exp.term))
         else:
-            """
-            <td>
-                <form action='exposure/%s/delete' method='post'>
-                    <input type='submit' name='delete' value='delete' />
-                </form>
-            </td>
-            """ % exp.uid
+            this_exposure = study.get_exposure_from_exposure(exp)
+            if not this_exposure == None:
+                """
+                <td>
+                    [<a href='%s/delete'>delete</a>]
+                </td>
+                """ % this_exposure.uid
+            else:
+                print 'Error: unable to find exposure:', exposure
+                """
+                <td>
+                    [error]
+                </td>
+                """
         
         """
         </tr>
