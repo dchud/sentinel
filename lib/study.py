@@ -12,26 +12,6 @@ from canary.qx_defs import MyForm
 from canary.utils import DTable
 
 
-class TableValue:
-    
-    def __init__ (self, uid=-1, value=None):
-        self.uid = uid
-        self.value = value
-    
-    def get_uid (self):
-        return self.uid
-    
-    def set_uid (self, uid):
-        self.uid = uid
-        
-    def get_value (self):
-        return self.value
-        
-    def set_value (self, value):
-        self.value = value
-
-
-
 
 class Methodology (DTable):
 
@@ -438,12 +418,130 @@ class Methodology (DTable):
             self.comments = form['comments']
 
 
+def find_exposures (cursor, search_term):
+    
+    exposures = {}
+    if search_term \
+        and len(search_term) > 0:
+        query_term = search_term.strip().replace(' ', '% ') + '%'
+        cursor.execute("""
+            SELECT umls_terms.umls_concept_id, term, preferred_name, umls_source_id 
+            FROM umls_terms, umls_concepts, umls_concepts_sources 
+            WHERE term LIKE %s
+            AND umls_concepts.umls_concept_id = umls_terms.umls_concept_id 
+            AND umls_concepts_sources.umls_concept_id = umls_concepts.umls_concept_id
+            ORDER BY term, preferred_name
+            """, query_term)
+        
+        fields = [d[0] for d in cursor.description]
+        desc = dtuple.TupleDescriptor([[f] for f in fields])
+        rows = cursor.fetchall()
+        for row in rows:
+            row = dtuple.DatabaseTuple(desc, row)
+            if not exposures.has_key((row['umls_concept_id'], row['umls_source_id'])):
+                exp = Exposure()
+                exp.concept_source_id = row['umls_source_id']
+                exp.concept_id = row['umls_concept_id']
+                exp.term = row['preferred_name']
+                exp.synonyms.append(row['term'])
+                exposures[(exp.concept_id, exp.concept_source_id)] = exp
+            else:
+                exp = exposures[(row['umls_concept_id'], row['umls_source_id'])]
+                if not row['term'] in exp.synonyms:
+                    exp.synonyms.append(row['term'])
+                exposures[(exp.concept_id, exp.concept_source_id)] = exp
+        
+        # Try to bump up coarse "relevance" of exact matches
+        exposures_ranked = exposures.values()
+        for exp in exposures_ranked:
+            if exp.term.lower() == search_term.lower()\
+                or search_term.lower() in [syn.lower() for syn in exp.synonyms]:
+                exposures_ranked.remove(exp)
+                exposures_ranked.insert(0, exp)
+        return exposures_ranked
+    
+    else:
+        return exposures.values()
+
+
 
 class Exposure (DTable):
     
+    UMLS_SOURCES = {
+        75: 'MeSH',
+        85: 'NCBI Taxonomy',
+        }
+    
     def __init__ (self):
-        pass
-        
+        self.uid = -1
+        self.study_id = -1
+        self.concept_id = -1
+        self.concept_source_id = -1
+        self.term = ''
+        self.synonyms = []
+    
+    def __str__ (self):
+        out = []
+        out.append('<Exposure uid=%s study_id=%s' % (self.uid, self.study_id))
+        out.append('\tconcept_id=%s (%s)' % (self.concept_id, self.concept_source_id))
+        out.append('\tterm=%s' % self.term)
+        out.append('/>')
+        return '\n'.join(out)
+    
+    def delete (self, cursor):
+        """
+        Delete this exposure from the database.
+        """
+        if not self.uid == -1:
+            try:
+                cursor.execute("""
+                    DELETE FROM exposures
+                    WHERE uid = %s
+                    """, self.uid)
+            except:
+                import sys
+                print 'MySQL exception:'
+                for info in sys.exc_info():
+                    print 'exception:', info
+                    
+
+    def save (self, cursor):
+        if self.uid == -1:
+            #print 'inserting new exposure'
+            cursor.execute("""
+                INSERT INTO exposures
+                (uid, study_id, concept_id, 
+                concept_source_id, term)
+                VALUES 
+                (NULL, %s, %s, 
+                %s, %s)
+                """, (self.study_id, self.concept_id, 
+                self.concept_source_id, self.term)
+                )
+            #print 'inserted new exposure'
+            self.uid = self.get_new_uid(cursor)
+            #print 'set new exposure uid to %s' % self.uid
+        else:
+            #print 'updating exposure %s' % self.uid
+            try:
+                cursor.execute("""
+                    UPDATE exposures
+                    SET study_id = %s, concept_id = %s, 
+                    concept_source_id = %s, term = %s
+                    WHERE uid = %s
+                    """, (self.study_id, self.concept_id, 
+                    self.concept_source_id, self.term,
+                    self.uid)
+                    )
+            except:
+                import sys
+                print 'MySQL exception:'
+                for info in sys.exc_info():
+                    print 'exception:', info
+            #print 'updated exposure %s' % self.uid
+        # FIXME: should this be set from the SQL?
+        self.date_modified = time.strftime(str('%Y-%m-%d'))
+
 
 class Outcome (DTable):
     
@@ -591,6 +689,37 @@ class Study (DTable):
             if methodology.uid == id:
                 return methodology
         return None
+        
+    def has_exposure (self, exposure):
+        """
+        Returns True if this exposure has already been added to this Study.
+        
+        Note that has_exposure may be used before exposure is added,
+        hence it does not check exposure.uid.
+        """
+        for exp in self.exposures:
+            if exp.concept_id == exposure.concept_id:
+                return True
+        return False
+
+    def add_exposure (self, exposure):
+        if not self.has_exposure(exposure):
+            exposure.study_id = self.uid
+            self.exposures.append(exposure)
+        
+    def get_exposure (self, id):
+        """
+        Return the matching exposure, if added.
+        
+        Note that get_exposure is for use in matching or deleting exposures,
+        i.e., only after an exposure has been added to the Study, so uid
+        matching is required.
+        """
+        for exp in self.exposures:
+            if exp.uid == id:
+                return exp
+        return None
+        
 
     def load (self, cursor):
         

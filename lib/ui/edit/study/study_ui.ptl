@@ -24,6 +24,7 @@ from canary.ui.pages import not_found, add_message, has_messages, render_message
 from canary.ui.edit.study.utils import get_current_study, get_queued_record
 from canary.ui.edit.study.utils import is_same_user, render_queued_record
 from canary.ui.edit.study.utils import claimed_by_other_user, render_unclaim_block
+from canary.ui.edit.study.utils import render_exposures, render_pipeline
 from canary.ui.record_ui import render_methodologies
 
     
@@ -377,18 +378,20 @@ def curate_three [html] (request, queued_record_id):
     render_pipeline(article_type, step=3)
     render_queued_record(queued_record)
     render_messages()
-    """
-    <p>
-    Add the following information as necessary.
-    </p>
-    """
     
     if study.has_exposures:
         """
         <h4>Exposures</h4>
-        <p>
-        This is where you will add exposures.
-        </p>
+        """
+        render_exposures(study)
+        """
+        <form method='POST' action='exposure/find'>
+            <p>
+            Add an exposure:
+            <input type='text' name='search_term' size='30' />
+            <input type='submit' name='find' value='find' />
+            </p>
+        </form>
         """
         
     if study.has_outcomes:
@@ -660,92 +663,3 @@ def not_claimed [html] ():
     """
     footer()
     
-
-
-def render_pipeline [html] (article_type, step=1):
-    # Note that placeholder at steps[0] allows step number == steps[N]
-    steps = [
-        ('PLACEHOLDER', 'MAKES STEP INDEX LINE UP'),
-        ('curate_one', 'Type'),
-        ('curate_two', 'Data?'),
-        ('curate_three', 'Exp/Out/Spec/Loc'),
-        ('curate_four', 'Methodology'),
-        ('summary', 'Summary'),
-        ]
-        
-    print 'render_pipeline(article_type=%s, step=%s)' % (article_type, step)
-    """
-    <div id='pipeline'>
-        
-        <ul>
-    """
-    if step == 1:
-        render_pipeline_item(steps[1], is_link=True, is_active=True)
-    else:
-        render_pipeline_item(steps[1], is_link=True)
-    
-    if article_type in ['irrelevant', 'traditional']:
-        render_pipeline_item(steps[2])
-        render_pipeline_item(steps[3])
-        render_pipeline_item(steps[4])
-        
-    elif article_type in ['unknown', 'descriptive', 'review', 
-        'exposures only', 'outcomes only']:
-        if step == 2:
-            render_pipeline_item(steps[2], is_link=True, is_active=True)
-            render_pipeline_item(steps[3], is_link=True)
-            render_pipeline_item(steps[4])
-        elif step == 3:
-            render_pipeline_item(steps[2], is_link=True)
-            render_pipeline_item(steps[3], is_link=True, is_active=True)
-            render_pipeline_item(steps[4])
-        else:
-            render_pipeline_item(steps[2], is_link=True)
-            render_pipeline_item(steps[3], is_link=True)
-            render_pipeline_item(steps[4])
-
-    elif article_type == 'curated':
-        if step == 2:
-            render_pipeline_item(steps[2], is_link=True, is_active=True)
-            render_pipeline_item(steps[3], is_link=True)
-            render_pipeline_item(steps[4], is_link=True)
-        elif step == 3:
-            render_pipeline_item(steps[2], is_link=True)
-            render_pipeline_item(steps[3], is_link=True, is_active=True)
-            render_pipeline_item(steps[4], is_link=True)
-        elif step == 4:
-            render_pipeline_item(steps[2], is_link=True)
-            render_pipeline_item(steps[3], is_link=True)
-            render_pipeline_item(steps[4], is_link=True, is_active=True)
-        else:
-            render_pipeline_item(steps[2], is_link=True)
-            render_pipeline_item(steps[3], is_link=True)
-            render_pipeline_item(steps[4], is_link=True)
-        
-    if step == 5:
-        render_pipeline_item(steps[5], is_link=True, is_active=True)
-    else:
-        render_pipeline_item(steps[5], is_link=True)
-    
-    """    
-        </ul>
-        
-    </div>
-    """
-
-def render_pipeline_item [html] (step, is_link=False, is_active=False):
-    
-    url, name = step
-    if is_active:
-        """
-            <li id='active'><a href='%s'>%s</a></li>
-        """ % (url, name)
-    else:
-        if is_link:
-            """
-            <li><a href='%s'>%s</a></li>
-            """ % (url, name)
-        else:
-            """
-            <li>%s</li>
-            """ % name

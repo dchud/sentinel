@@ -172,7 +172,7 @@ class MyForm (Form):
     """
     Automatically creates a logger instance on any arbitrary Form.
     """
-    def __init__ (self):
-        Form.__init__(self)
+    def __init__ (self, *args, **kwargs):
+        Form.__init__(self, *args, **kwargs)
         self.logger = log4py.Logger().get_instance(self)
         get_publisher().configure_logger(self.logger)

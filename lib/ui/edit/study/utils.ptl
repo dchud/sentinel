@@ -76,4 +76,116 @@ def render_unclaim_block [html] ():
         </p>
     </div>
     """ % queued_record_id
+    
+    
+def render_exposures [html] (study):
+    """
+    <table class='gentable' id='exposures'>
+        <tr>
+            <th>source</th>
+            <th>term</th>
+            <th>actions</th>
+        </tr>
+    """
+    for exp in study.exposures:
+        """
+        <tr>
+            <td>%s</td>
+            <td>%s</td>
+            <td>[<a href='exposure/%s/delete'>delete</a>]</td>
+        </tr>
+        """ % (exp.UMLS_SOURCES[exp.concept_source_id], exp.term, exp.uid)
+    """
+    </table>
+    """
+
+
+def render_pipeline [html] (article_type, step=1, url_prefix='.'):
+    # Note that placeholder at steps[0] allows step number == steps[N]
+    steps = [
+        ('PLACEHOLDER', 'MAKES STEP INDEX LINE UP'),
+        ('curate_one', 'Type'),
+        ('curate_two', 'Data?'),
+        ('curate_three', 'Exp/Out/Spec/Loc'),
+        ('curate_four', 'Methodology'),
+        ('summary', 'Summary'),
+        ]
+        
+    #print 'render_pipeline(article_type=%s, step=%s)' % (article_type, step)
+    """
+    <div id='pipeline'>
+        
+        <ul>
+    """
+    if step == 1:
+        render_pipeline_item(steps[1], url_prefix=url_prefix, is_link=True, is_active=True)
+    else:
+        render_pipeline_item(steps[1], url_prefix=url_prefix, is_link=True)
+    
+    if article_type in ['irrelevant', 'traditional']:
+        render_pipeline_item(steps[2], url_prefix=url_prefix)
+        render_pipeline_item(steps[3], url_prefix=url_prefix)
+        render_pipeline_item(steps[4], url_prefix=url_prefix)
+        
+    elif article_type in ['unknown', 'descriptive', 'review', 
+        'exposures only', 'outcomes only']:
+        if step == 2:
+            render_pipeline_item(steps[2], url_prefix=url_prefix, is_link=True, is_active=True)
+            render_pipeline_item(steps[3], url_prefix=url_prefix, is_link=True)
+            render_pipeline_item(steps[4], url_prefix=url_prefix)
+        elif step == 3:
+            render_pipeline_item(steps[2], url_prefix=url_prefix, is_link=True)
+            render_pipeline_item(steps[3], url_prefix=url_prefix, is_link=True, is_active=True)
+            render_pipeline_item(steps[4], url_prefix=url_prefix)
+        else:
+            render_pipeline_item(steps[2], url_prefix=url_prefix, is_link=True)
+            render_pipeline_item(steps[3], url_prefix=url_prefix, is_link=True)
+            render_pipeline_item(steps[4], url_prefix=url_prefix)
+
+    elif article_type == 'curated':
+        if step == 2:
+            render_pipeline_item(steps[2], url_prefix=url_prefix, is_link=True, is_active=True)
+            render_pipeline_item(steps[3], url_prefix=url_prefix, is_link=True)
+            render_pipeline_item(steps[4], url_prefix=url_prefix, is_link=True)
+        elif step == 3:
+            render_pipeline_item(steps[2], url_prefix=url_prefix, is_link=True)
+            render_pipeline_item(steps[3], url_prefix=url_prefix, is_link=True, is_active=True)
+            render_pipeline_item(steps[4], url_prefix=url_prefix, is_link=True)
+        elif step == 4:
+            render_pipeline_item(steps[2], url_prefix=url_prefix, is_link=True)
+            render_pipeline_item(steps[3], url_prefix=url_prefix, is_link=True)
+            render_pipeline_item(steps[4], url_prefix=url_prefix, is_link=True, is_active=True)
+        else:
+            render_pipeline_item(steps[2], url_prefix=url_prefix, is_link=True)
+            render_pipeline_item(steps[3], url_prefix=url_prefix, is_link=True)
+            render_pipeline_item(steps[4], url_prefix=url_prefix, is_link=True)
+        
+    if step == 5:
+        render_pipeline_item(steps[5], url_prefix=url_prefix, is_link=True, is_active=True)
+    else:
+        render_pipeline_item(steps[5], url_prefix=url_prefix, is_link=True)
+    
+    """    
+        </ul>
+        
+    </div>
+    """
+
+def render_pipeline_item [html] (step, url_prefix='.', is_link=False, is_active=False):
+    
+    url, name = step
+    if is_active:
+        """
+            <li id='active'><a href='%s/%s'>%s</a></li>
+        """ % (url_prefix, url, name)
+    else:
+        if is_link:
+            """
+            <li><a href='%s/%s'>%s</a></li>
+            """ % (url_prefix, url, name)
+        else:
+            """
+            <li>%s</li>
+            """ % name
+
  
