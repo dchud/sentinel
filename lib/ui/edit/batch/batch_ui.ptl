@@ -162,6 +162,9 @@ def pager [html] (batch, start, size):
     
     # total number of pages, by size, in this list
     num_pages = len(batch.queued_records) / size
+    remainder = len(batch.queued_records) % size
+    if remainder:
+        num_pages += 1
 
     # currently viewed page, as determined by size, within this list
     cur_page = start / size
@@ -174,7 +177,11 @@ def pager [html] (batch, start, size):
         '''
         for i in range(0, num_pages):
             start = str((i * size) + 1)
-            end = str((i + 1) * size)
+            if remainder \
+                and (i+1) == num_pages:
+                end = str((i * size) + remainder)
+            else:
+                end = str((i + 1) * size)
             text = start + '-' + end
             if i != cur_page:
                 ' <a href="view?start=%s&size=%s">%s</a> ' % (i * size, size, text)
