@@ -185,17 +185,31 @@ def curate_one [html] (request, queued_record_id):
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
-            
-    if queued_record.study_id >= 0:
-        study = get_current_study(cursor, queued_record.study_id)
-    else:
-        study = None
-    
 
-    # if it's not already, set its status to CLAIMED and its curator 
     record_updated = False
     history_messages = []
 
+    if queued_record.study_id >= 0:
+        study = get_current_study(cursor, queued_record.study_id)
+    else:
+        # Assume we need a new one
+        study = Study()
+        history_messages.append('Created study')
+        study.record_id = queued_record_id
+        history_messages.append('Set study record id to %s' % study.record_id)
+        study.set_status('claimed')
+        history_messages.append('Set status to %s' % study.get_status(True))
+        study.curator_user_id = session.user.get_id()
+        history_messages.append('Set curator id to %s' % study.curator_user_id)
+        
+        study.add_history(curator_user_id=session.user.get_id(),
+            message='; '.join(history_messages))
+        study.save(cursor)
+        queued_record.study_id = study.uid
+        record_updated = True
+        history_messages = []
+
+    # if it's not already, set its status to CLAIMED and set its curator 
     if queued_record.status == queued_record.STATUS_UNCLAIMED:
         queued_record.status = queued_record.STATUS_CLAIMED
         record_updated = True
@@ -213,10 +227,9 @@ def curate_one [html] (request, queued_record_id):
     a_type = 'none'
     article_type = 'none'
     
-    if not study == None:
-        article_type = study.get_article_type(text=True)
-        if article_type in ['irrelevant', 'traditional', 'descriptive', 'review']:
-            a_type = 'is_%s' % article_type
+    article_type = study.get_article_type(text=True)
+    if article_type in ['irrelevant', 'traditional', 'descriptive', 'review']:
+        a_type = 'is_%s' % article_type
 
     form = MyForm()
     form.add(form2.RadiobuttonsWidget, 
@@ -252,10 +265,6 @@ def curate_one [html] (request, queued_record_id):
     if form.has_errors():
         return render()
     
-    # Initialize, if necessary
-    if study == None:
-        study = Study()
-    
     # check for all values; it might be updated to any
     if form['article_type'] == 'is_irrelevant':
         study.set_article_type('irrelevant')
@@ -273,21 +282,11 @@ def curate_one [html] (request, queued_record_id):
         history_messages.append('Set article type to %s' % \
             study.get_article_type(text=True))
     
-    study.set_status('claimed')
-    study.record_id = queued_record_id
-    if not study.curator_user_id == queued_record.user_id:
-        study.curator_user_id = queued_record.user_id
-        history_messages.append('Set study user id to %s' % study.curator_user_id)
     
     study.add_history(curator_user_id=session.user.get_id(),
         message='; '.join(history_messages))
     study.save(cursor)
-    queued_record.study_id = study.uid
-    queued_record.save(cursor)
     cursor.close()
-    
-    #form.logger.info(str('saved record %s as study %s step one' % \
-    #    (queued_record.uid, study.uid)))
     
     article_type = study.get_article_type(text=True)
     

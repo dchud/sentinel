@@ -1471,6 +1471,8 @@ class Study (DTable):
             except:
                 # FIXME: proper exceptions
                 print 'MySQL exception on study.save(new)'
+                import traceback
+                print traceback.print_exc()
                 
             self.uid = self.get_new_uid(cursor)
 
