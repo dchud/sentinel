@@ -165,6 +165,7 @@ class Category (DTable):
     
     concept_types = [
         'exposure', 
+        'risk_factor',
         'outcome', 
         'species', 
         'location',

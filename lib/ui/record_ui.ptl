@@ -351,8 +351,15 @@ def render_medline [html] (mapped_metadata):
     """
             <td align='left' valign='top'>
             
+                <h4>OpenURL:</h4>
+                <p>
+                <a name='id=pmid:%s' rel='alternate' title='OpenURL'> </a>
+                </p>
+
                 <h4>PMID: %s</h4>
-    """ % mapped_metadata['unique_identifier']
+    """ % (mapped_metadata['unique_identifier'],
+        mapped_metadata['unique_identifier'])
+
     """
                 <h4>Go to Pubmed:</h4>
                 <p>
@@ -697,6 +704,7 @@ def render_record [html] (record):
             render_data_points(study)
             
             if len(study.exposures) > 0 \
+                or len(study.risk_factors) > 0 \
                 or len(study.outcomes) > 0 \
                 or len(study.species) > 0 \
                 or len(study.locations) > 0:
@@ -708,6 +716,9 @@ def render_record [html] (record):
                 if study.has_exposures \
                     and len(study.exposures) > 0:
                     render_summary_concept_row(study.exposures, 'exposures')
+                    
+                if study.risk_factors:
+                    render_summary_concept_row(study.risk_factors, 'risk factors')
                     
                 if study.has_outcomes \
                     and len(study.outcomes) > 0:

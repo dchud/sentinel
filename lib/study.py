@@ -843,6 +843,133 @@ class Outcome (DTable):
         self.date_modified = time.strftime(str('%Y-%m-%d'))
 
 
+def find_risk_factors (cursor, search_term):
+    # Note: for now, limit to only MeSH (umls_source_id==75)
+    
+    risk_factors = {}
+    if search_term \
+        and len(search_term) > 0:
+        query_term = search_term.strip().replace(' ', '% ') + '%'
+        cursor.execute("""
+            SELECT umls_terms.umls_concept_id, term, preferred_name, umls_source_id 
+            FROM umls_terms, umls_concepts, umls_concepts_sources 
+            WHERE term LIKE %s
+            AND umls_source_id = %s
+            AND umls_concepts.umls_concept_id = umls_terms.umls_concept_id 
+            AND umls_concepts_sources.umls_concept_id = umls_concepts.umls_concept_id
+            ORDER BY term, preferred_name
+            """, (query_term, 75))
+        
+        fields = [d[0] for d in cursor.description]
+        desc = dtuple.TupleDescriptor([[f] for f in fields])
+        rows = cursor.fetchall()
+        for row in rows:
+            row = dtuple.DatabaseTuple(desc, row)
+            if not risk_factors.has_key((row['umls_concept_id'], row['umls_source_id'])):
+                risk_factor = RiskFactor()
+                risk_factor.concept_source_id = row['umls_source_id']
+                risk_factor.concept_id = row['umls_concept_id']
+                risk_factor.term = row['preferred_name']
+                risk_factor.synonyms.append(row['term'])
+                risk_factors[(risk_factor.concept_id, risk_factor.concept_source_id)] = risk_factor
+            else:
+                risk_factor = risk_factors[(row['umls_concept_id'], row['umls_source_id'])]
+                if not row['term'] in risk_factor.synonyms:
+                    risk_factor.synonyms.append(row['term'])
+                risk_factors[(risk_factor.concept_id, risk_factor.concept_source_id)] = risk_factor
+        
+        # Try to bump up coarse "relevance" of exact matches
+        risk_factors_ranked = risk_factors.values()
+        for risk_factor in risk_factors_ranked:
+            if risk_factor.term.lower() == search_term.lower()\
+                or search_term.lower() in [syn.lower() for syn in risk_factor.synonyms]:
+                risk_factors_ranked.remove(risk_factor)
+                risk_factors_ranked.insert(0, risk_factor)
+        return risk_factors_ranked
+    
+    else:
+        return risk_factors.values()
+
+
+class RiskFactor (DTable):
+    
+    UMLS_SOURCES = {
+        75: 'MeSH',
+        85: 'NCBI Taxonomy',
+        501: 'ITIS',
+        }
+    
+    def __init__ (self):
+        self.uid = -1
+        self.study_id = -1
+        self.concept_id = -1
+        self.concept_source_id = -1
+        self.term = ''
+        self.synonyms = []
+    
+    def __str__ (self):
+        out = []
+        out.append('<RiskFactor uid=%s study_id=%s' % (self.uid, self.study_id))
+        out.append('\tconcept_id=%s (%s)' % (self.concept_id, self.concept_source_id))
+        out.append('\tterm=%s' % self.term)
+        out.append('/>')
+        return '\n'.join(out)
+    
+    def delete (self, cursor):
+        """
+        Delete this risk_factor from the database.
+        """
+        if not self.uid == -1:
+            try:
+                cursor.execute("""
+                    DELETE FROM risk_factors
+                    WHERE uid = %s
+                    """, self.uid)
+            except:
+                import sys
+                print 'MySQL exception:'
+                for info in sys.exc_info():
+                    print 'exception:', info
+                    
+
+    def save (self, cursor):
+        if self.uid == -1:
+            #print 'inserting new risk factor'
+            cursor.execute("""
+                INSERT INTO risk_factors
+                (uid, study_id, concept_id, 
+                concept_source_id, term)
+                VALUES 
+                (NULL, %s, %s, 
+                %s, %s)
+                """, (self.study_id, self.concept_id, 
+                self.concept_source_id, self.term)
+                )
+            #print 'inserted new risk factor'
+            self.uid = self.get_new_uid(cursor)
+            #print 'set new risk factor uid to %s' % self.uid
+        else:
+            #print 'updating risk factor us' % self.uid
+            try:
+                cursor.execute("""
+                    UPDATE risk_factors
+                    SET study_id = %s, concept_id = %s, 
+                    concept_source_id = %s, term = %s
+                    WHERE uid = %s
+                    """, (self.study_id, self.concept_id, 
+                    self.concept_source_id, self.term,
+                    self.uid)
+                    )
+            except:
+                import sys
+                print 'MySQL exception:'
+                for info in sys.exc_info():
+                    print 'exception:', info
+            #print 'updated risk factor %s' % self.uid
+        # FIXME: should this be set from the SQL?
+        self.date_modified = time.strftime(str('%Y-%m-%d'))
+
+
 def find_species (cursor, search_term):
     
     species_map = {}
@@ -1108,8 +1235,9 @@ class Study (DTable):
     # For dynamic iteration over related tables
     TABLES = {
         'methodologies' : Methodology,
-        'outcomes': Outcome,
         'exposures': Exposure,
+        'risk_factors': RiskFactor,
+        'outcomes': Outcome,
         'species': Species,
         'locations': Location,
         }
@@ -1131,8 +1259,9 @@ class Study (DTable):
         self.has_genomic = False
         self.comments = ''
         self.methodologies = []
-        self.outcomes = []
         self.exposures = []
+        self.risk_factors = []
+        self.outcomes = []
         self.species = []
         self.locations = []
         self.date_modified = None
@@ -1247,6 +1376,41 @@ class Study (DTable):
                 return exp
         return None
 
+    def has_risk_factor (self, risk_factor):
+        """
+        Returns True if this risk_factor has already been added to this Study.
+        
+        Note that has_risk_factor may be used before risk_factor is added,
+        hence it does not check risk_factor.uid.
+        """
+        for rf in self.risk_factors:
+            if rf.concept_id == risk_factor.concept_id:
+                return True
+        return False
+
+    def add_risk_factor (self, risk_factor):
+        if not self.has_risk_factor(risk_factor):
+            risk_factor.study_id = self.uid
+            self.risk_factors.append(risk_factor)
+        
+    def get_risk_factor (self, id):
+        """
+        Return the matching risk_factor, if added.
+        
+        Note that get_risk_factor is for use in matching or deleting risk_factors,
+        i.e., only after an risk_factor has been added to the Study, so uid
+        matching is required.
+        """
+        for risk_factor in self.risk_factors:
+            if risk_factor.uid == id:
+                return risk_factor
+        return None
+    
+    def get_risk_factor_from_risk_factor (self, risk_factor):
+        for rf in self.risk_factors:
+            if rf.concept_id == risk_factor.concept_id:
+                return rf
+        return None
 
     def has_outcome (self, outcome):
         """

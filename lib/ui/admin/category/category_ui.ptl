@@ -222,6 +222,7 @@ def list [html] (request):
         <th>Name</th>
         <th>Groups</th>
         <th>Exposure</th>
+        <th>Risk factor</th>
         <th>Outcome</th>
         <th>Species</th>
         <th>Location</th>

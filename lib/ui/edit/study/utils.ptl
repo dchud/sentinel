@@ -144,11 +144,37 @@ def render_exposures [html] (study):
         """ % (exp.term, exp.UMLS_SOURCES[exp.concept_source_id], exp.uid)
     """
     </table>
+
     """
+
+
+def render_risk_factors [html] (study):
+    """
+    <table class='gentable' id='risk_factors'>
+        <tr>
+            <th>risk factor</th>
+            <th>source</th>
+            <th>actions</th>
+        </tr>
+    """
+    for rf in study.risk_factors:
+        """
+        <tr>
+            <td>%s</td>
+            <td>%s</td>
+            <td>
+                [<a href='risk_factor/%s/delete'>delete</a>]
+            </td>
+        </tr>
+        """ % (rf.term, rf.UMLS_SOURCES[rf.concept_source_id], rf.uid)
+    """
+    </table>
+    """
+
 
 def render_subject_selector [html] (record, study, concept_type):
     
-    if not concept_type in ['exposures', 'outcomes', 'species']:
+    if not concept_type in ['exposures', 'risk_factors', 'outcomes', 'species']:
         return
 
     study_concepts = getattr(study, str(concept_type))
