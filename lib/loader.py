@@ -70,7 +70,6 @@ class QueuedRecord (DTable):
     def save (self, cursor):
         
         if self.uid == -1:
-            print 'inserting new queued_record'
             cursor.execute("""
                            INSERT INTO queued_records
                            (uid, queued_batch_id, status, 
@@ -83,7 +82,6 @@ class QueuedRecord (DTable):
             self.uid = self.get_new_uid(cursor)
 
         else:
-            print 'updating queued_record'
             cursor.execute("""
                            UPDATE queued_records
                            SET queued_batch_id = %s, status = %s, 

@@ -1,4 +1,5 @@
-from canary.ui.tests import *
+
+_q_exports = []
 
 
 def header [html] (title, show_pageframe=True, request=None):
@@ -62,7 +63,7 @@ def pageframe [html] (request=None):
 
                         <td width='25%'>
 
-                            <img src='/images/brynn_canaries_alpha_left_png'
+                            <img src='/images/brynn_canaries_alpha_left.png'
                                 alt='Canary Database Project logo'>
 
                         </td>
@@ -178,7 +179,7 @@ def sidebar [html] ():
         <font size='-1' color='#ffffff'>
         Yale School of Medicine
         </font>
-        <img src='/images/yusm_logo_png' alt='YSM Logo'>
+        <img src='/images/yusm_logo.png' alt='YSM Logo'>
 
         <br>
 

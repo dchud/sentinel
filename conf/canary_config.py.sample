@@ -7,6 +7,8 @@ ACCESS_LOG = "/home/user/sites/canary_project/logs/access.log"
 DEBUG_LOG = "/home/user/sites/canary_project/logs/debug.log"
 ERROR_LOG = "/home/user/sites/canary_project/logs/error.log"
 
+ERROR_EMAIL = None
+
 DISPLAY_EXCEPTIONS = "html" # None
 SECURE_ERRORS = 0
 

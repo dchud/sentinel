@@ -90,13 +90,11 @@ class MySessionPublisher(SessionPublisher):
         print 'd: loading DBModel'
         self._dbmodel = DBModel()
         self._dbmodel.load_from_db(init_cursor)
-        print 'd: done'
-
+        
         print 'd: loading SourceCatalog'
         self._source_catalog = SourceCatalog()
         self._source_catalog.load_sources(init_cursor, load_terms=True)
-        print 'd: done'
-
+        
         init_cursor.close()
 
         # Set up log4py Logger

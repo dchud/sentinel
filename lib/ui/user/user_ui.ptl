@@ -127,7 +127,6 @@ def logout [html] (request):
 
     if request.session.user is None:
         header('Not logged in.')
-        print 'logout: not logged in.'
         """
         <h2>Not logged in</h2>
 

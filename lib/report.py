@@ -67,7 +67,6 @@ class Report (DTable):
     def save (self, cursor):
         
         if self.uid == -1:
-            print 'inserting new report'
             cursor.execute("""
                            INSERT INTO reports
                            (uid, record_id, status, curator_user_id,
@@ -86,9 +85,7 @@ class Report (DTable):
                            self.meta['has_exposure_linkage'], self.meta['has_outcome_linkage'],
                            self.comments)
                            )
-            print 'done, setting new report uid'
             self.uid = self.get_new_uid(cursor)
-            print 'done.'
         else:
             cursor.execute("""
                            UPDATE reports

@@ -1,7 +1,7 @@
-from quixote.form import Form
 from quixote import get_publisher
+from quixote.form import Form
 
-from canary.ui.browse import render_result_row
+from canary.ui.browse_ui import render_record_row
 from canary.ui.pageframe import header, footer
 
 
@@ -65,7 +65,7 @@ class Search (Form):
             <table width='100%' cellspacing='5' cellpadding='5'>
             """
             for record in results:
-                render_result_row(record[0], record[1], record[2], record[3])
+                render_record_row(record)
             """
             </table>
             """

@@ -1,0 +1,383 @@
+import urllib
+
+from quixote import get_publisher
+
+from canary.browse import records_by_year, records_by_year_index
+from canary.browse import records_by_heading, records_by_heading_index
+from canary.browse import records_by_journal, records_by_journal_index
+from canary.browse import records_by_study_type, records_by_study_type_index
+from canary.ui.pages import not_found
+from canary.ui.pageframe import header, footer
+
+
+class Browse:
+
+    _q_exports = [
+        '_q_index',
+        ]
+        
+    def __init__ (self, request):
+        pass
+
+    def _q_index [html] (self, request):
+        header('Browse')
+        """
+        <h2>Browse</h2>
+        
+        <p>
+        You can browse the database by <a href='/browse/year'>year</a>,
+        <a href='/browse/journal'>journal</a>,
+        <a href='/browse/study_type'>study type</a>,
+        or by <a href='/browse/heading'>subject heading</a>.
+        
+        """
+        footer()
+    
+    def _q_lookup (self, request, name):
+        try:
+            if name == 'year':
+                return YearBrowseIndex(request)
+            elif name == 'heading':
+                return HeadingBrowseIndex(request)
+            elif name == 'journal':
+                return JournalBrowseIndex(request)
+            elif name == 'study_type':
+                return StudyTypeBrowseIndex(request)
+        except:
+            return not_found('index')
+            
+
+def render_record_row [html] (record):
+    authors, title, source, pmid = record
+    link_width = '20%'
+    """
+    <tr>
+        <td align='left' valign='top'>
+            <a href='/record/%(pmid)s'>%(authors)s</a> <br />
+            %(title)s <br />
+            <font size='-1'>%(source)s</font>
+        </td>
+        <td align='center' valign='top' width='%(link_width)s'>
+            <!--
+            <a href='http://sfx.library.yale.edu/links?id=pmid:%(pmid)s'>
+                <img border='0' src='/yale_sfx2_gif'>
+            </a>
+            -->
+            <a href='http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=PubMed&cmd=Display&dopt=pubmed_pubmed&from_uid=%(pmid)s'>Pubmed related articles</a>
+        </td>
+    </tr>
+    """ % vars()
+
+
+
+class BrowseIndex:
+    
+    _q_exports = [
+        '_q_index',
+        ]
+    
+    def __init__ (self):
+        self.type = 'superclass'
+        
+    def _q_index [html] (self, request):
+        pass
+        
+    def render_records [html] (self, name, records):
+        header('Browse by %s: %s' % (self.type.capitalize(), name))
+
+        count = len(records)
+        if count > 0:
+    
+            if count == 1:
+                article_text = 'article'
+            else:
+                article_text = 'articles'
+    
+            """
+            <h2><a href='/browse/%s'>Browse by %s</a>: %s (%s %s)</h2>
+            """ % (self.type, self.type.capitalize(), name, count, article_text)
+    
+            """
+            <table width='100%' cellspacing='5' cellpadding='5'>
+            """
+            for record in records:
+                render_record_row(record)
+            """
+            </table>
+            """
+        else:
+            return not_found(self.type)
+            
+    
+        footer()
+
+
+
+class YearBrowseIndex (BrowseIndex):
+    
+    _q_exports = [
+        '_q_index',
+        ]
+        
+    def __init__ (self, request):
+        self.type = 'year'
+        
+    def _q_index [html] (self, request):
+        header('Browse by Year')
+        """
+        <h2>Browse by Year</h2>
+    
+        <p>
+    Below is a list of the number of articles in the Canary Database by their
+    year of publication.
+        </p>
+    
+        <table width='70%' cellspacing='3' cellpadding='3'>
+            <tr>
+                <th align='center' width='20%'># articles</th>
+                <th align='left'>Year</th>
+            </tr>
+        """
+        cursor = get_publisher().get_cursor()
+        records = records_by_year_index(cursor)
+        cursor.close()
+        for record in records:
+            year, year_count = record
+            if not year == 0:
+                """
+                <tr>
+                    <td align='center'>%(year_count)s</td>
+                    <td align='left'><a href='/browse/year/%(year)s'>%(year)s</a></td>
+                </tr>
+                """ % vars()
+        """
+        </table>
+        """
+        footer()
+        
+
+    def _q_lookup (self, request, year):
+        try:
+            if year:
+                year = int(year)
+                cursor = get_publisher().get_cursor()
+                records = records_by_year(year, cursor)
+                if len(records) == 0:
+                    raise Error
+                cursor.close()
+                return self.render_records(year, records)
+            else:
+                raise Error
+        except:
+            return not_found(self.type)
+            
+
+
+
+class HeadingBrowseIndex (BrowseIndex):
+
+    _q_exports = [
+        '_q_index',
+        ]
+        
+    def __init__ (self, request):
+        self.type = 'heading'
+        
+    def _q_index [html] (self, request):
+        header('Browse by Heading')
+        """
+        <h2>Browse by Heading</h2>
+    
+        <p>
+        Below is a list of the most well-used MeSH headings (indexed by
+        NLM) as found in our curated articles.  Please note that in many
+        cases, a single article might be indexed with the same heading multiple
+        times, when multiple qualifers are attached to the MeSH heading:
+        <ul>
+            <li>'<b># uses</b>' is the total number of times a heading
+        appears as an index term;</li>
+            <li>'<b># articles</b>' is the total number of articles in which
+        the same heading appears as an index term at least once.</li>
+        </ul>
+        </p>
+        """
+    
+        """
+        <table width='70%' cellspacing='3' cellpadding='3'>
+            <tr>
+                <th align='center' width='20%'># uses</th>
+                <th align='center' width='15%'># articles</th>
+                <th align='left'>Subject heading</th>
+            </tr>
+        """
+        
+        cursor = get_publisher().get_cursor()
+        headings = records_by_heading_index(cursor)
+        cursor.close()
+        for heading in headings:
+            term, term_count, id_count = heading
+            encoded_heading = urllib.quote_plus(term)
+            """
+            <tr>
+                <td align='center'>%(term_count)s</td>
+                <td align='center'>%(id_count)s</td>
+                <td align='left'><a href='/browse/heading/%(encoded_heading)s'>%(term)s</a></td>
+            </tr>
+            """ % vars()
+        """
+        </table>
+        """
+        footer()
+
+    
+    def _q_lookup (self, request, name):
+        try:
+            if name:
+                unencoded_name = urllib.unquote_plus(name)
+                cursor = get_publisher().get_cursor()
+                records = records_by_heading(unencoded_name, cursor)
+                cursor.close()
+                return self.render_records(unencoded_name, records)
+            else:
+                raise Error
+        except:
+            return not_found(self.type)
+            
+
+
+
+class JournalBrowseIndex (BrowseIndex):
+    
+    _q_exports = [
+        '_q_exports',
+        ]
+        
+    def __init__ (self, request):
+        self.type = 'journal'
+        
+    def _q_index [html] (self, request):
+
+        header('Browse by %s' % self.type.capitalize())
+        """
+        <h2>Browse by Journal</h2>
+    
+        <p>
+    Below is a list of the number of articles in the Canary Database by the
+    journal in which the articles appear.
+        </p>
+    
+        <table width='70%' cellspacing='3' cellpadding='3'>
+            <tr>
+                <th align='center' width='20%'># articles</th>
+                <th align='left'>Journal</th>
+            </tr>
+        """
+        
+        cursor = get_publisher().get_cursor()
+        journals = records_by_journal_index(cursor)
+        cursor.close()
+        for journal in journals:
+            source, nlm_journal_code, count = journal
+            if str('.') in source:
+                title = source[0:source.index(str('.'))]
+                """
+                <tr>
+                    <td align='center'>%(count)s</td>
+                    <td align='left'><a href='/browse/journal/%(nlm_journal_code)s'>%(title)s</a></td>
+                </tr>
+                """ % vars()
+            else:
+                continue
+    
+        """
+        </table>
+        """
+        footer()
+
+    def _q_lookup (self, request, name=0):
+        try:
+            if name:
+                cursor = get_publisher().get_cursor()
+                records = records_by_journal(name, cursor)
+                if len(records) == 0:
+                    raise Error
+                source = records[0][2]
+                if str('.') in source:
+                    title = source[0:source.index(str('.'))]
+                else:
+                    title = '-'
+                cursor.close()
+    
+                return self.render_records(title, records)
+        except:
+            return not_found(self.type)
+            
+
+
+class StudyTypeBrowseIndex (BrowseIndex):
+    
+    def __init__ (self, request):
+        self.type = 'study_type'
+        
+    def _q_index [html] (self, request):
+
+        header('Browse by Study Type')
+        """
+        <h2>Browse by Study Type</h2>
+    
+        <p>
+    The Canary database curators determine, for each included study, the type
+    of methodology employed by the researchers (using <a
+    href='/classification_protocol'>this classification protocol</a>).  For
+    detailed explanations of each, see our <a href='/study_types'>study type
+    overview</a>.
+        </p>
+    
+        <p>
+    Below is a list of the number of articles in the Canary Database by their
+    study type.
+        </p>
+    
+        <table width='70%' cellspacing='3' cellpadding='3'>
+            <tr>
+                <th align='center' width='20%'># articles</th>
+                <th align='left'>Study Type</th>
+            </tr>
+        """
+        dbmodel = get_publisher().get_dbmodel()
+        cursor = get_publisher().get_cursor()
+        types = records_by_study_type_index(cursor)
+        cursor.close()
+        for type in types:
+            s_type, count = type
+            s_name = dbmodel.get_value_description(int(1), int(s_type))
+            """
+            <tr>
+                <td align='center'>%(count)s</td>
+                <td align='left'><a href='/browse/study_type/%(s_type)s'>%(s_name)s</a></td>
+            </tr>
+            """ % vars()
+        """
+        </table>
+        """
+        footer()
+
+    def _q_lookup (self, request, name):
+        try:
+            if name:
+                s_type = int(name)
+                cursor = get_publisher().get_cursor()
+                records = records_by_study_type(s_type, cursor)
+                if len(records) == 0:
+                    raise Error
+                cursor.close()
+                dbmodel = get_publisher().get_dbmodel()
+                s_name = dbmodel.get_value_description(int(1), int(s_type))
+                return self.render_records(s_name, records)
+            else:
+                raise Error
+        except:
+            return not_found(self.type)
+            
+    
+

@@ -1,18 +1,13 @@
 
-from quixote import get_publisher, get_session_manager
 from quixote.errors import AccessError
-from quixote.form import Form
-from quixote.html import htmltext
 
 from dulcinea.database import get_transaction
 from dulcinea.persistent_session import DulcineaSession
 
-from canary.ui.pageframe import header, footer
 from canary.qx_defs import MyDulcineaUser, NotLoggedInError
-from canary.ui.search import Search
-from canary.ui.tour_blurb_ui import render_blurb_row
-from canary.utils import read_file
-
+# CAUSES cycle and ImportError
+#from canary.ui.search import Search
+from canary.ui.pageframe import header, footer
 
 
 def _q_index [html] (request):
@@ -29,15 +24,6 @@ def _q_index [html] (request):
     "sentinels" for the effects of chemical, biological, and physical hazards
     in the environment that may be a risk to human health.
     </p>
-
-    <!--
-    <p>
-    Search the database by keyword:
-    </p>
-    """
-    Search().render(request, 'search', show_header=0)
-    """
-    -->
 
     <p>
     The Canary Database allows you to locate sentinel studies according to:
@@ -79,8 +65,8 @@ def _q_index [html] (request):
 
 
     <p>
-    Learn about several <a href='/examples'>known animal sentinels</a>
-    and other <a href='/examples#possible'>possible sentinel events</a>.
+    Learn about several <a href='/about/examples'>known animal sentinels</a>
+    and other <a href='/about/examples#possible'>possible sentinel events</a>.
     </p>
 
 
@@ -107,8 +93,7 @@ def _q_exception_handler [html] (request, exc):
     import string
     print string.join((request.get_path(),
                        exc.title,
-                       exc.description,
-                       exc.format(request)), '::')
+                       exc.description,), '::')
     if isinstance(exc, NotLoggedInError):
         path = request.get_path()
         request.redirect(str('/user/login?go=%s' % (path)))
