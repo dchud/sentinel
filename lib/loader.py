@@ -171,11 +171,15 @@ class QueuedRecord (DTable):
             source_catalog = SourceCatalog()
             source_catalog.load_sources(cursor)
         if load_metadata:
+            # NOTE: the "ORDER BY sequence_position" might be a bad hack,
+            # but it should preserve author name order.  
+            # FIXME if not.  And TESTME!
             cursor.execute("""
                 SELECT *
                 FROM queued_record_metadata
                 WHERE queued_record_id = %s
                 AND source_id = %s
+                ORDER BY sequence_position
                 """, (self.uid, source_id))
             fields = [d[0] for d in cursor.description]
             desc = dtuple.TupleDescriptor([[f] for f in fields])
@@ -186,7 +190,7 @@ class QueuedRecord (DTable):
                     term = source.terms[row['term_id']]
                 else:
                     term = source_catalog.get_term(row['term_id'])
-                self.add_metadata(source_id, term, row['value'], row['extra'])
+                self.add_metadata(source_id, term, row['value'], extra=row['extra'])
     
 
 
@@ -229,21 +233,24 @@ class QueuedRecord (DTable):
             source_id, term_id = key
             if isinstance(val, types.ListType):
                 for value in val:
-                    self.save_metadata_value(cursor, source_id, term_id, value)
+                    # Automatically save the ordering of each value
+                    self.save_metadata_value(cursor, source_id, term_id, 
+                        value, sequence_position=val.index(value))
             else:
                 self.save_metadata_value(cursor, source_id, term_id, val)
  
  
-    def save_metadata_value (self, cursor, source_id, term_id, value, extra=None):
+    def save_metadata_value (self, cursor, source_id, term_id, value, 
+        sequence_position=0, extra=None):
         # FIXME: extra?
         cursor.execute("""
             INSERT INTO queued_record_metadata
             (uid, queued_record_id, source_id,
-            term_id, value, extra)
+            term_id, value, sequence_position, extra)
             VALUES (NULL, %s, %s,
-            %s, %s, NULL)
+            %s, %s, %s, NULL)
             """, (self.uid, source_id, 
-            term_id, value)
+            term_id, value, sequence_position)
             )
 
 
@@ -458,7 +465,8 @@ class Parser:
                             # blank line
                             pass
             except:
-                print 'failed on line: "%s"' % line
+                import traceback
+                print traceback.print_exc()
                 continue
             
         # Note: we don't catch the last record in the loop above,
