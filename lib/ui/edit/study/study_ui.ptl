@@ -700,7 +700,6 @@ def summary [html] (request, queued_record_id):
         <h3>Curate: summary</h3>
         """
         render_pipeline(article_type, step=5)
-        print 'render: calling render_queued_record on', queued_record
         render_queued_record(queued_record)
         if has_messages():
             render_messages()

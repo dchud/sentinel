@@ -1567,6 +1567,12 @@ class Study (canary.context.Cacheable, DTable):
             location.study_id = self.uid
             self.locations.append(location)
         
+    def delete_location (self, context, location):
+        for loc in self.locations:
+            if loc.uid == location.uid:
+                self.locations.remove(loc)
+                loc.delete(context)
+                
     def get_location (self, id):
         """
         Return the matching location, if added.
