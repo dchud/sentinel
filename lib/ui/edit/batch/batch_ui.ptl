@@ -107,7 +107,7 @@ def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
         if batch_stats['total'] > 0:
             """
             <p>
-            Show:
+            Status:
             """
             for type in ['unfinished', 'unclaimed', 'all']:
                 if type == show:
@@ -223,23 +223,27 @@ def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
                         sort_list.sort()
                         for dupe_rec_id, dupe_fields in sort_list:
                             dupe_rec = QueuedRecord(dupe_rec_id)
-                            dupe_rec.load(cursor, load_metadata=False)
-                            """
-                                <li>
-                                #%s (%s)
-                                [<a href='/record/%s' target='_blank'>public view</a>]
-                                [<a href='/edit/study/%s/history' target='_blank'>history</a>]
-                                [<a href='/edit/study/%s/curate_one'>curate</a>]
-                                <br />
-                                %s
-                                <br />
-                                %s
-                                </li> 
-                            """ % (dupe_rec_id, dupe_rec.get_status(True),
-                                dupe_rec_id, 
-                                dupe_rec_id, 
-                                dupe_rec_id, 
-                                dupe_rec.title, dupe_rec.source)
+                            try:
+                                dupe_rec.load(cursor, load_metadata=False)
+                                """
+                                    <li>
+                                    #%s (%s)
+                                    [<a href='/record/%s' target='_blank'>public view</a>]
+                                    [<a href='/edit/study/%s/history' target='_blank'>history</a>]
+                                    [<a href='/edit/study/%s/curate_one'>curate</a>]
+                                    <br />
+                                    %s
+                                    <br />
+                                    %s
+                                    </li> 
+                                """ % (dupe_rec_id, dupe_rec.get_status(True),
+                                    dupe_rec_id, 
+                                    dupe_rec_id, 
+                                    dupe_rec_id, 
+                                    dupe_rec.title, dupe_rec.source)
+                            except ValueError:
+                                print 'WARNING: duplicated record %s for record %s not found' % \
+                                    (dupe_rec_id, record_id)
                         """
                                 </ul>
                         """
@@ -268,7 +272,7 @@ def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
             </table>
             
             <p>
-            Show:
+            Status:
             """
             for type in ['unfinished', 'unclaimed', 'all']:
                 if type == show:
@@ -315,6 +319,28 @@ def pager [html] (batch, show, start, size, stats):
     # no need to show the pager if there's only one page
     if num_pages > 1:
         """
+        Show:
+        """    
+        sizes = [25]
+        for bigger_size in (50, 100, 250):
+            if batch_size > bigger_size:
+                sizes.append(bigger_size)
+        if batch_size > sizes[len(sizes)-1]:
+            sizes.append(batch_size)
+            
+        for s in sizes:
+            text = s
+            if s == batch_size:
+                text = 'all'
+                
+            if size == s:
+                ' [<b>%s</b>] ' % text
+            else:
+                ' [<a href="view?size=%s&show=%s">%s</a>] ' % \
+                    (s, show, text)
+        """
+        records per page
+        <br />
         Browse: 
         """
         for i in range(0, num_pages):
