@@ -67,11 +67,16 @@ def render_data_points [html] (study):
     data_points = [
         #('has_exposures', 'Exposures', 'Animal environmental exposures'),
         #('has_outcomes', 'Outcomes', 'Animal health outcomes'),
-        ('has_relationships', 'Relationships', 'Animal exposure/outcome relationships'),
-        ('has_interspecies', 'Interspecies', 'Differing susceptibilities among species'),
-        ('has_exposure_linkage', 'Shared exposures', 'Shared animal and human exposures'),
-        ('has_outcome_linkage', 'Shared outcomes', 'Linkage between animal exposure/outcome and human health outcomes'),
-        ('has_genomic', 'Genomic', 'Linkage to genomic data'),
+        ('has_relationships', 'Relationships', 
+            'Does the study include data on animal exposure/outcome relationships?'),
+        ('has_interspecies', 'Interspecies', 
+            'Does the study include data on differing susceptibilities among species?'),
+        ('has_exposure_linkage', 'Shared exposures', 
+            'Does the study include data on shared animal and human exposures?'),
+        ('has_outcome_linkage', 'Shared outcomes', 
+            'Does the study include data linking animal exposure/outcome and human health outcomes?'),
+        ('has_genomic', 'Genomic', 
+            'Does the study include linkages to genomic data?'),
         ]
         
     """
