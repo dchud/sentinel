@@ -467,12 +467,9 @@ class Methodology (DTable):
                 title='Is mesocosm?',
                 value=self.is_mesocosm)
             
-        # methodology types except experimental and descriptive get timing
+        # methodology types except experimental get timing
         #print 'timing'
-        if not self.get_study_type() in [
-            self.TYPES['experimental'],
-            self.TYPES['descriptive']
-            ]:
+        if not self.get_study_type() == self.TYPES['experimental']:
             form.add(form2.SingleSelectWidget, 'timing',
                 title='Timing',
                 value=self.get_timing(),
@@ -550,11 +547,8 @@ class Methodology (DTable):
             else:
                 self.is_mesocosm = False
 
-        # all methodology types but experimental and descriptive get timing
-        if not self.get_study_type() in [
-            self.TYPES['experimental'],
-            self.TYPES['descriptive']
-            ]:
+        # all methodology types but experimental get timing
+        if not self.get_study_type() == self.TYPES['experimental']:
             if form['timing'] == self.TIMING['-']:
                 form.set_error('timing', 'You must specifiy the timing.')
             else:
