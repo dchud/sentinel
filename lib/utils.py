@@ -132,7 +132,8 @@ def render_capitalized (term):
     return ' '.join(new_terms)
 
 
-# simple self-tests
-if __name__ == '__main__':
-    print 't: get_title_from_path("foo_bar_baz")'
-    print get_title_from_path("foo_bar_baz")
+def fix_double_quotes (s):
+    """Replace html entity "&quot;" with '"'."""
+    s = str(s)
+    s2 = s.replace('&quot;', '"')
+    return s2

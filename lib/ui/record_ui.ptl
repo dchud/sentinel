@@ -99,8 +99,8 @@ def render_data_points [html] (study):
             'Does the study include data on shared animal and human exposures?'),
         ('has_outcome_linkage', 'Shared outcomes with humans', 
             'Does the study include data linking animal exposure/outcome and human health outcomes?'),
-        ('has_genomic', 'Genomic data', 
-            'Does the study include linkages to genomic data?'),
+        ('has_genomic', 'Gene sequence data', 
+            'Does the study include linkages to gene sequence data?'),
         ]
         
     """
@@ -390,7 +390,10 @@ def render_medline [html] (mapped_metadata):
     """
     
 
-def render_related [html] (mapped_metadata):
+def render_related [html] (study, mapped_metadata):
+    
+    context = get_publisher().context
+    gazeteer = context.get_gazeteer()
     """
     <table border='0' cellspacing='5' cellpadding='5'>
         <tr>
@@ -412,7 +415,7 @@ def render_related [html] (mapped_metadata):
         for author in authors:
             quoted_author = urllib.quote_plus(author)
             """
-                    <a href='/search?q=%s'>%s</a> <br/>
+                    <a href='/search?q=author:"%s"'>%s</a> <br/>
             """ % (quoted_author, author)
         """
                 </p>
@@ -429,20 +432,47 @@ def render_related [html] (mapped_metadata):
             </td>
     """ % (mapped_metadata['issn'], mapped_metadata['journal'])
     
-    """
+    for concept in ('exposures', 'outcomes', 'species'):
+        items = getattr(study, str(concept))
+        if items:
+            """
             <td align='left' valign='top'>
-                &nbsp;
+                <h4>%s</h4>
+                <p>
+            """ % concept.capitalize()
+            for item in items:
+                """
+                    <a href='/search?q=%s:"%s"'>%s</a> <br />
+                """ % (concept, item.term, item.term)
+            """
+                </p>
             </td>
+            """
+    if study.locations:
+        """
+        <td align='left' valign='top'>
+            <h4>Locations</h4>
+            <p>
+        """
+        for loc in study.locations:
+            feature = Feature(uid=loc.feature_id)
+            feature.load(context)
+            if gazeteer.fips_codes.has_key((feature.country_code, feature.adm1)):
+                region_name = render_capitalized(gazeteer.fips_codes[(feature.country_code, feature.adm1)])
+            else:
+                region_name = ''
+            country_name = render_capitalized(gazeteer.country_codes[feature.country_code])
+            """
+                <a href='/search?q=location:"%s"+location:"%s"+location:"%s"'>%s (%s, %s)</a> <br />
+            """ % (feature.name, region_name, country_name,
+                feature.name, region_name, country_name)
+        """
+            </p>
+        </td>
+        """
+        
             
-            <td align='left' valign='top'>
-                <h4>Coming soon, also find by:</h4>
-                <ul>
-                    <li>Exposure</li>
-                    <li>Outcome</li>
-                    <li>Species</li>
-                    <li>Location</li>
-                </ul>
-            </td>
+    """
         </tr>
     </table>
     """
@@ -724,7 +754,7 @@ def render_record [html] (record, study):
             render_medline(mapped_metadata)
         
         elif view == 'related':
-            render_related(mapped_metadata)
+            render_related(study, mapped_metadata)
             
         elif view == 'export':
             render_export(mapped_metadata)
