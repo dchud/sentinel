@@ -358,24 +358,33 @@ padding: 0 0 0 5px; /* top, right, bottom, left */
 margin: 0px 0px 0px 5px;
 		}
 
-#table-list td, #table-list th
-{
-		font-size: 11px;
-		line-height: 15px;
-		color: black;
-		margin: 0px 0px 9px 0px;
-		text-align: center;
-		border-bottom: 1 solid #AAAAAA;
-		border-right: 1 solid #AAAAAA;
-		padding: 5px 5px 9px 0px; /* top, right, bottom, left */
-		}
+#table-list table {
+    border-left: 1 solid #AAAAAA;
+    border-top: 1 solid #AAAAAA;
+    margin-left:5px;
+}
 
-		#table-list table
-{
-		border-left: 1 solid #AAAAAA;
-		border-top: 1 solid #AAAAAA;
-		margin-left:5px;
-		}
+#table-list th {
+    font-size: 11px;
+    line-height: 15px;
+    color: black;
+    margin: 0px 0px 9px 0px;
+    text-align: center;
+    border-bottom: 1 solid #AAAAAA;
+    border-right: 1 solid #AAAAAA;
+    padding: 5px 5px 9px 0px; /* top, right, bottom, left */
+}
+
+#table-list td {
+    font-size: 11px;
+    line-height: 15px;
+    color: black;
+    margin: 0px 0px 9px 0px;
+    border-bottom: 1 solid #AAAAAA;
+    border-right: 1 solid #AAAAAA;
+    padding: 5px 5px 5px 0px; /* top, right, bottom, left */
+}
+
 
 .search-title
 {
