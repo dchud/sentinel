@@ -457,7 +457,7 @@ def render_related [html] (mapped_metadata):
     """
     
     
-def render_export [html] (record, mapped_metadata):
+def render_export [html] (mapped_metadata):
     """
     <table border='0' cellspacing='5' cellpadding='5'>
         <tr>
@@ -741,7 +741,7 @@ def render_record [html] (record, study):
             render_related(mapped_metadata)
             
         elif view == 'export':
-            render_export(record, mapped_metadata)
+            render_export(mapped_metadata)
 
     
     """

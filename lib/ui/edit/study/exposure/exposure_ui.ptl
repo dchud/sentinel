@@ -65,7 +65,6 @@ def find [html] (request):
 
     request = get_request()
     queued_record = QueuedRecord(request.queued_record_id)
-    queued_record.load()
     
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
@@ -157,7 +156,6 @@ def find [html] (request):
 def add [html] (request):
     
     queued_record = QueuedRecord(request.queued_record_id)
-    queued_record.load()
     
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
@@ -227,7 +225,6 @@ def delete [html] (exposure_id):
     
     request = get_request()
     queued_record = QueuedRecord(request.queued_record_id)
-    queued_record.load()
     
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):

@@ -6,7 +6,7 @@ from time import time
 from cPickle import load, dump
 
 import log4py
-from mx.DateTime import localtime
+from mx.DateTime import localtime, mktime
 
 from quixote import get_publisher
 from quixote.errors import AccessError
@@ -275,9 +275,15 @@ class SqlTableMap:
         #session.__remote_address = addr
         #session.__creation_time = create_time.ticks()
         #session.__access_time = access_time.ticks()
-        session._set_access_time(access_time.ticks())
-        session.__remote_address = addr
-        session.__creation_time = create_time.ticks()
+        try:
+            session.__access_time = mktime(access_time.timetuple()).ticks()
+            session.__creation_time = mktime(create_time.timetuple()).ticks()
+        except AttributeError:
+            session.__creation_time = create_time.ticks()
+            session.__access_time = access_time.ticks()
+        session.__remote_address = addr 
+        
+        
         session.messages = messages
         session._form_tokens = tokens.split('~~')
 

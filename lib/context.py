@@ -3,6 +3,7 @@
 import log4py
 import memcache
 import MySQLdb
+import pprint
 import traceback
 
 import quixote.config

@@ -461,19 +461,22 @@ class Batch (DTable):
         context = canary.context.Context()
         cursor = context.get_cursor()
         stats = {}
-        for name, status in [
-            ('unclaimed', QueuedRecord.STATUS_UNCLAIMED),
-            ('claimed', QueuedRecord.STATUS_CLAIMED),
-            ('curated', QueuedRecord.STATUS_CURATED),
-            ]:
-            cursor.execute("""
-                SELECT count(*) as the_count
-                FROM queued_records
-                WHERE queued_batch_id = %s
-                AND status = %s
-                """, (self.uid, status)
-                )
-            stats[name] = cursor.fetchone()[0]
+        stats['unclaimed'] = stats['claimed'] = stats['curated'] = 0
+        cursor.execute("""
+            SELECT DISTINCT(status), COUNT(*) AS the_count
+            FROM queued_records
+            WHERE queued_batch_id = %s
+            GROUP BY status
+            ORDER BY status
+            """, self.uid)
+        rows = cursor.fetchall()
+        for row in rows:
+            if row[0] == QueuedRecord.STATUS_UNCLAIMED:
+                stats['unclaimed'] = row[1]
+            elif row[0] == QueuedRecord.STATUS_CLAIMED:
+                stats['claimed'] = row[1]
+            elif row[0] == QueuedRecord.STATUS_CURATED:
+                stats['curated'] = row[1]
         stats['total'] = stats['unclaimed'] + stats['claimed'] + stats['curated']
         stats['all'] = stats['total']
         stats['unfinished'] = stats['unclaimed'] + stats['claimed']
