@@ -72,6 +72,7 @@ class MethodologyTypeForm (MyForm):
             title='Study type:',
             hint='Select a study type',
             options=[
+                ('disease model', 'Is this a disease model study?', 'disease model'),
                 ('experimental', 'Manipulated exposures (experimental)?', 'experimental'),
                 ('descriptive', 'A single sample group (descriptive)?', 'descriptive'),
                 ('aggregate', 'Exposures measured in aggregate (aggregate)?', 'aggregate'),
@@ -117,6 +118,11 @@ def create [html] (request):
         form.get_widget('_form_id').render()
         
         """
+        <h3>Disease model?</h3>
+        <input type='radio' name='study_type'
+            id='disease model' value='disease model' />
+        <label for='disease model'>Disease model</label>
+        
         <h3>Manipulated exposures?</h3>
         <input type='radio' name='study_type'
             id='experimental' value='experimental' />
@@ -188,8 +194,8 @@ def create [html] (request):
         form.logger.info(str('Created methodology %s' % methodology.uid))
         request.redirect(str('%s/detail' % methodology.uid))
     except:
-        import sys
-        form.logger.info(str(sys.exc_info()))
+        import traceback
+        form.logger.info(str(traceback.print_exc()))
         add_message('An error occurred')
         return render()
 
@@ -210,7 +216,12 @@ def detail [html] (methodology_id):
     
     study = get_current_study(cursor, queued_record.study_id)
     article_type = study.get_article_type(text=True)
+    
     methodology = study.get_methodology(methodology_id)
+    if methodology.get_study_type(text=True) == 'disease model':
+        request.redirect(str('/edit/study/%s/curate_four' % request.queued_record_id))
+
+    
     # Get a copy for history comparisons
     methodology_orig = study.get_methodology(methodology_id)
     

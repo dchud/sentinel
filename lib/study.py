@@ -127,6 +127,7 @@ class Methodology (DTable):
         'cross sectional' : 4,
         'cohort' : 5,
         'case control' : 6,
+        'disease model' : 7,
         }
         
     # A Methodology can have at most one TIMING
@@ -282,20 +283,19 @@ class Methodology (DTable):
             
             if value in self.TYPES.keys():
                 self.study_type_id = self.TYPES[value]
-                self.update_values()
                     
         elif type(value) == type(htmltext('a')):
             
             str_value = str(value)
             if str_value in self.TYPES.keys():
                 self.study_type_id = self.TYPES[str_value]
-                self.update_values()
-
+        
         elif type(value) is types.IntType:
             
             if value in self.TYPES.values():
                 self.study_type_id = value
-                self.update_values()
+        
+        self.update_values()
 
 
     def get_study_type (self, text=False):
@@ -315,7 +315,8 @@ class Methodology (DTable):
         """
         if self.get_study_type() in [
             self.TYPES['experimental'],
-            self.TYPES['descriptive']
+            self.TYPES['descriptive'],
+            self.TYPES['disease model'],
             ]:
             self.set_timing('-')
         
