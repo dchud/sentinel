@@ -121,6 +121,28 @@ def render_outcomes [html] (study):
     </table>
     """
 
+def render_species [html] (study):
+    """
+    <table class='gentable' id='species'>
+        <tr>
+            <th>source</th>
+            <th>term</th>
+            <th>actions</th>
+        </tr>
+    """
+    for spec in study.species:
+        """
+        <tr>
+            <td>%s</td>
+            <td>%s</td>
+            <td>[<a href='species/%s/delete'>delete</a>]</td>
+        </tr>
+        """ % (spec.UMLS_SOURCES[spec.concept_source_id], 
+            spec.term, spec.uid)
+    """
+    </table>
+    """
+
 
 def render_pipeline [html] (article_type, step=1, url_prefix='.'):
     # Note that placeholder at steps[0] allows step number == steps[N]

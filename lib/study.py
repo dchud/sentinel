@@ -671,18 +671,137 @@ class Outcome (DTable):
         self.date_modified = time.strftime(str('%Y-%m-%d'))
 
 
+def find_species (cursor, search_term):
+    
+    species_map = {}
+    if search_term \
+        and len(search_term) > 0:
+        query_term = search_term.strip().replace(' ', '% ') + '%'
+        cursor.execute("""
+            SELECT umls_terms.umls_concept_id, term, preferred_name, umls_source_id 
+            FROM umls_terms, umls_concepts, umls_concepts_sources 
+            WHERE term LIKE %s
+            AND umls_concepts.umls_concept_id = umls_terms.umls_concept_id 
+            AND umls_concepts_sources.umls_concept_id = umls_concepts.umls_concept_id
+            ORDER BY term, preferred_name
+            """, query_term)
+        
+        fields = [d[0] for d in cursor.description]
+        desc = dtuple.TupleDescriptor([[f] for f in fields])
+        rows = cursor.fetchall()
+        for row in rows:
+            row = dtuple.DatabaseTuple(desc, row)
+            if not species_map.has_key((row['umls_concept_id'], row['umls_source_id'])):
+                spec = Species()
+                spec.concept_source_id = row['umls_source_id']
+                spec.concept_id = row['umls_concept_id']
+                spec.term = row['preferred_name']
+                spec.synonyms.append(row['term'])
+                species_map[(spec.concept_id, spec.concept_source_id)] = spec
+            else:
+                spec = species_map[(row['umls_concept_id'], row['umls_source_id'])]
+                if not row['term'] in spec.synonyms:
+                    spec.synonyms.append(row['term'])
+                species_map[(spec.concept_id, spec.concept_source_id)] = spec
+        
+        # Try to bump up coarse "relevance" of exact matches
+        species_ranked = species_map.values()
+        for spec in species_ranked:
+            if spec.term.lower() == search_term.lower()\
+                or search_term.lower() in [syn.lower() for syn in spec.synonyms]:
+                species_ranked.remove(spec)
+                species_ranked.insert(0, spec)
+        return species_ranked
+    
+    else:
+        return species_map.values()
+
+
+class Species (DTable):
+    
+    UMLS_SOURCES = {
+        75: 'MeSH',
+        85: 'NCBI Taxonomy',
+        501: 'ITIS',
+        }
+    
+    def __init__ (self):
+        self.uid = -1
+        self.study_id = -1
+        self.concept_id = -1
+        self.concept_source_id = -1
+        self.term = ''
+        self.synonyms = []
+    
+    def __str__ (self):
+        out = []
+        out.append('<Species uid=%s study_id=%s' % (self.uid, self.study_id))
+        out.append('\tconcept_id=%s (%s)' % (self.concept_id, self.concept_source_id))
+        out.append('\tterm=%s' % self.term)
+        out.append('\tsynonyms=%s' % '; '.join(self.synonyms))
+        out.append('/>')
+        return '\n'.join(out)
+    
+    def delete (self, cursor):
+        """
+        Delete this species from the database.
+        """
+        if not self.uid == -1:
+            try:
+                cursor.execute("""
+                    DELETE FROM species
+                    WHERE uid = %s
+                    """, self.uid)
+            except:
+                import sys
+                print 'MySQL exception:'
+                for info in sys.exc_info():
+                    print 'exception:', info
+                    
+
+    def save (self, cursor):
+        if self.uid == -1:
+            #print 'inserting new species'
+            cursor.execute("""
+                INSERT INTO species
+                (uid, study_id, concept_id, 
+                concept_source_id, term)
+                VALUES 
+                (NULL, %s, %s, 
+                %s, %s)
+                """, (self.study_id, self.concept_id, 
+                self.concept_source_id, self.term)
+                )
+            #print 'inserted new species'
+            self.uid = self.get_new_uid(cursor)
+            #print 'set new species uid to %s' % self.uid
+        else:
+            #print 'updating species %s' % self.uid
+            try:
+                cursor.execute("""
+                    UPDATE species
+                    SET study_id = %s, concept_id = %s, 
+                    concept_source_id = %s, term = %s
+                    WHERE uid = %s
+                    """, (self.study_id, self.concept_id, 
+                    self.concept_source_id, self.term,
+                    self.uid)
+                    )
+            except:
+                import sys
+                print 'MySQL exception:'
+                for info in sys.exc_info():
+                    print 'exception:', info
+            #print 'updated species %s' % self.uid
+        # FIXME: should this be set from the SQL?
+        self.date_modified = time.strftime(str('%Y-%m-%d'))
+
+
 class Location (DTable):
     
     def __init__ (self):
         pass
         
-
-class Species (DTable):
-    
-    def __init__ (self):
-        pass
-        
-
 
 
 class Study (DTable):
@@ -884,6 +1003,44 @@ class Study (DTable):
             if outc.concept_id == outcome.concept_id:
                 return outc
         return None
+
+
+    def has_species (self, species):
+        """
+        Returns True if this species has already been added to this Study.
+        
+        Note that has_species may be used before species is added,
+        hence it does not check species.uid.
+        """
+        for spec in self.species:
+            if spec.concept_id == species.concept_id:
+                return True
+        return False
+
+    def add_species (self, species):
+        if not self.has_species(species):
+            species.study_id = self.uid
+            self.species.append(species)
+        
+    def get_species (self, id):
+        """
+        Return the matching species, if added.
+        
+        Note that get_species is for use in matching or deleting species,
+        i.e., only after an species has been added to the Study, so uid
+        matching is required.
+        """
+        for species in self.species:
+            if species.uid == id:
+                return species
+        return None
+    
+    def get_species_from_species (self, species):
+        for spec in self.species:
+            if spec.concept_id == species.concept_id:
+                return spec
+        return None
+
 
     def load (self, cursor):
         

@@ -14,28 +14,28 @@ from canary.ui.pages import not_found, add_message, has_messages, render_message
 from canary.ui.edit.study.utils import get_current_study, get_queued_record
 from canary.ui.edit.study.utils import is_same_user, render_queued_record
 from canary.ui.edit.study.utils import render_unclaim_block, claimed_by_other_user
-from canary.ui.edit.study.utils import render_outcomes, render_pipeline
+from canary.ui.edit.study.utils import render_species, render_pipeline
 from canary.qx_defs import MyForm
-from canary.study import find_outcomes, Outcome
+from canary.study import find_species, Species
 
 
 
 def _q_index [html] (request):
-    header('Outcome:')
+    header('Species:')
     """
-    <h2>Outcome</h2>
+    <h2>Species</h2>
     """
     footer()
 
 
-class OutcomeActions:
+class SpeciesActions:
 
     _q_exports = [
         '_q_index',
         ]
 
-    def __init__ (self, outcome_id):
-        self.outcome_id = outcome_id
+    def __init__ (self, species_id):
+        self.species_id = species_id
 
     def _q_index [html] (self, request):
         header('blah')
@@ -46,13 +46,13 @@ class OutcomeActions:
 
     def _q_lookup [html] (self, request, action):
         try:
-            self.outcome_id = int(self.outcome_id)
+            self.species_id = int(self.species_id)
             if action == 'delete':
-                return delete(self.outcome_id)
+                return delete(self.species_id)
             else:
                 raise TraversalError
         except:
-            return not_found('outcome')
+            return not_found('species')
 
 
 
@@ -75,16 +75,16 @@ def find [html] (request):
     
     form = MyForm()
     form.add(StringWidget, 'search_term',
-        title='Specify the outcome to add:',
+        title='Specify the species to add:',
         size='30',
         required=True)
     form.add_submit('find', 'find')
     
         
     def render [html] ():
-        header('Find outcome')
+        header('Find species')
         """
-        <h3>Find outcome</h3>
+        <h3>Find species</h3>
         """
         render_pipeline(study.get_article_type(text=True), url_prefix=str('..'), step=3)
         render_queued_record(queued_record)
@@ -96,28 +96,26 @@ def find [html] (request):
     if not form.is_submitted():
         return render()
     
-    outcomes = find_outcomes(cursor, form.get_widget('search_term').get_value())
-    if len(outcomes) == 0:
-        form.set_error('search_term', 'No outcomes found.')
+    species_list = find_species(cursor, form.get_widget('search_term').get_value())
+    if len(species_list) == 0:
+        form.set_error('search_term', 'No species found.')
         
     if form.has_errors() \
         or has_messages():
         return render()
 
     
-    header('Find outcome')
+    header('Find species')
     """
-    <h3>Find outcome</h3>
+    <h3>Find species</h3>
     """
     render_pipeline(study.get_article_type(text=True), url_prefix=str('..'), step=3)
     render_queued_record(queued_record)
     render_messages()
     form.render()
-    render_found_outcomes(study, outcomes, form['search_term'])
+    render_found_species(study, species_list, form['search_term'])
     render_unclaim_block()
     footer()
-
-
 
 
 
@@ -144,14 +142,14 @@ def add [html] (request):
     form.add_submit('add', 'add')
     
     def render [html] ():
-        header('Find outcome')
+        header('Find species')
         """
-        <h3>Find outcome</h3>
+        <h3>Find species</h3>
         """
         render_pipeline(study.get_article_type(text=True), url_prefix=str('..'), step=3)
         render_queued_record(queued_record)
         render_messages()
-        render_outcomes(study)
+        render_species(study)
         form.render()
         render_unclaim_block()
         footer()
@@ -160,29 +158,32 @@ def add [html] (request):
         print 'add(): form not submitted'
         return render()
     
-    outcome = Outcome()
+    spec = Species()
     
     try:
-        outcome.concept_id = form['concept_id']
+        spec.concept_id = form['concept_id']
     except:
         form.set_error('concept_id', 'Invalid concept id.')
         
     try:
-        if outcome.UMLS_SOURCES.has_key(int(form['concept_source_id'])):
-            outcome.concept_source_id = form['concept_source_id']
+        if spec.UMLS_SOURCES.has_key(int(form['concept_source_id'])):
+            spec.concept_source_id = form['concept_source_id']
     except:
         form.set_error('concept_source_id', 'Must be valid concept source.')
     
-    outcome.term = form['term']
+    spec.term = form['term']
     
     if form.has_errors():
         return render()
     
     try:
-        study.add_outcome(outcome)
-        outcome.save(cursor)
-        form.logger.info(str('Added outcome %s' % outcome.uid))
-        add_message('Added outcome')
+        print 'adding spec to studies'
+        study.add_species(spec)
+        print 'saving spec'
+        spec.save(cursor)
+        print 'logging'
+        form.logger.info(str('Added species %s' % spec.uid))
+        add_message('Added species')
         request.redirect(str('../curate_three'))
     except:
         import sys
@@ -192,7 +193,7 @@ def add [html] (request):
 
 
 
-def delete [html] (outcome_id):
+def delete [html] (species_id):
     
     print 'delete()'
     request = get_request()
@@ -201,25 +202,25 @@ def delete [html] (outcome_id):
         queued_record = get_queued_record(cursor, request.queued_record_id)
     except:
         print 'no request.queued_record_id'
-        return not_found('outcome')
+        return not_found('species')
     
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
     
     study = get_current_study(cursor, queued_record.study_id)
-    outcome = study.get_outcome(outcome_id)
+    species = study.get_species(species_id)
 
     form = MyForm()
     form.add(CheckboxWidget, 'are_you_sure',
-        title='Are you sure you want to delete this outcome?',
+        title='Are you sure you want to delete this species?',
         value=False)
     form.add_submit('delete', 'delete')
 
     def render [html] ():
-        header('Delete outcome')
+        header('Delete species')
         """
-        <h3>Delete outcome</h3>
+        <h3>Delete species</h3>
         """
         render_pipeline(study.get_article_type(text=True), 
             url_prefix=str('../..'), step=3)
@@ -227,9 +228,9 @@ def delete [html] (outcome_id):
         render_messages()
         """
         <p>
-        Deleting outcome %s (%s).
+        Deleting species %s (%s).
         </p>
-        """ % (outcome.term, outcome.UMLS_SOURCES[outcome.concept_source_id])
+        """ % (species.term, species.UMLS_SOURCES[species.concept_source_id])
         form.render()
         render_unclaim_block()
         footer()
@@ -243,28 +244,28 @@ def delete [html] (outcome_id):
     print 'processing'
     if form['are_you_sure']:
         try:
-            outcome.delete(cursor)
-            add_message('Outcome deleted')
-            form.logger.info(str('Deleted outcome %s' % outcome_id))
+            species.delete(cursor)
+            add_message('Species deleted')
+            form.logger.info(str('Deleted species %s' % species_id))
         except:
-            add_message('Unable to delete outcome')
-            form.logger.error(str('Unable to delete outcome %s' % outcome_id))
+            add_message('Unable to delete species')
+            form.logger.error(str('Unable to delete species %s' % species_id))
     else:
-        add_message('Outcome not deleted')
+        add_message('Species not deleted')
 
     request.redirect(str('/edit/study/%s/curate_three' % request.queued_record_id))
     
     
     
-def render_found_outcomes [html] (study, outcomes, search_term):
+def render_found_species [html] (study, species, search_term):
     
-    if len(outcomes) == 0:
+    if len(species) == 0:
         return
         
     """
-    <h4>Outcomes found:</h4>
+    <h4>species found:</h4>
     
-    <table class='gentable' id='outcomes'>
+    <table class='gentable' id='species'>
         <tr>
             <th>umls id</th>
             <th>source</th>
@@ -274,32 +275,32 @@ def render_found_outcomes [html] (study, outcomes, search_term):
         </tr>
     """
     
-    for outcome in outcomes:
+    for spec in species:
         """
         <tr>
             <td>%s</td>
             <td>%s</td>
             <td>%s</td>
             <td>%s</td>
-        """ % (outcome.concept_id, outcome.UMLS_SOURCES[outcome.concept_source_id], 
-            outcome.term, '; '.join(outcome.synonyms))
+        """ % (spec.concept_id, spec.UMLS_SOURCES[spec.concept_source_id], 
+            spec.term, '; '.join(spec.synonyms))
         
-        if not study.has_outcome(outcome):
+        if not study.has_species(spec):
             """
             <td>
                 [<a href='add?concept_source_id=%s&amp;concept_id=%s&amp;term=%s'>add</a>]
             </td>
-            """ % (outcome.concept_source_id, outcome.concept_id, urllib.quote_plus(outcome.term))
+            """ % (spec.concept_source_id, spec.concept_id, urllib.quote_plus(spec.term))
         else:
-            this_outcome = study.get_outcome_from_outcome(outcome)
-            if not this_outcome == None:
+            this_spec = study.get_species_from_species(spec)
+            if not this_spec == None:
                 """
                 <td>
                     [<a href='%s/delete'>delete</a>]
                 </td>
-                """ % this_outcome.uid
+                """ % this_spec.uid
             else:
-                print 'Error: unable to find outcome:', outcome
+                print 'Error: unable to find species:', spec
                 """
                 <td>
                     [error]
