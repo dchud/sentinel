@@ -46,6 +46,11 @@ for file, path in css_files:
     _q_exports.append(file)
     setattr(this_module, file, StaticFile(path, cache_time=60))
 
+js_files = load_static_exports('/home/dlc33/projects/canary/lib/ui/html', '.js')
+for file, path in js_files:
+    _q_exports.append(file)
+    setattr(this_module, file, StaticFile(path, cache_time=60))
+
 
 record = record_ui
 

@@ -59,7 +59,6 @@ class ExposureActions:
 
 def find [html] (request):
 
-    print 'find()'
     request = get_request()
     cursor = get_publisher().get_cursor()
     try:
@@ -82,7 +81,7 @@ def find [html] (request):
     
         
     def render [html] ():
-        header('Find exposure')
+        header('Find exposure', show_javascript=True)
         """
         <h3>Find exposure</h3>
         """
@@ -123,7 +122,6 @@ def find [html] (request):
 
 def add [html] (request):
     
-    print 'add()'
     cursor = get_publisher().get_cursor()
     try:
         queued_record = get_queued_record(cursor, request.queued_record_id)
@@ -144,7 +142,7 @@ def add [html] (request):
     form.add_submit('add', 'add')
     
     def render [html] ():
-        header('Add exposure')
+        header('Add exposure', show_javascript=True)
         """
         <h3>Find exposure</h3>
         """
@@ -157,7 +155,6 @@ def add [html] (request):
         footer()
     
     if not form.is_submitted():
-        print 'add(): form not submitted'
         return render()
     
     exposure = Exposure()
@@ -194,7 +191,6 @@ def add [html] (request):
 
 def delete [html] (exposure_id):
     
-    print 'delete()'
     request = get_request()
     cursor = get_publisher().get_cursor()
     try:
@@ -217,7 +213,7 @@ def delete [html] (exposure_id):
     form.add_submit('delete', 'delete')
 
     def render [html] ():
-        header('Delete exposure')
+        header('Delete exposure', show_javascript=True)
         """
         <h3>Delete exposure</h3>
         """
@@ -240,7 +236,6 @@ def delete [html] (exposure_id):
     if form.has_errors():
         return render()
     
-    print 'processing'
     if form['are_you_sure']:
         try:
             exposure.delete(cursor)

@@ -92,16 +92,12 @@ class StudyActions:
             elif action == 'unclaim':
                 return unclaim(request, self.queued_record_id)
             elif action == 'methodology':
-                print 'action == methodology'
                 return methodology
             elif action == 'exposure':
-                print 'action == exposure'
                 return exposure
             elif action == 'outcome':
-                print 'action == outcome'
                 return outcome
             elif action == 'species':
-                print 'action == species'
                 return species
             #elif action == 'location':
             #    return location(request, self.queued_record_id)
@@ -113,7 +109,6 @@ class StudyActions:
 
 def curate_one [html] (request, queued_record_id):
     
-    print 'curate_one()'
     session = request.session
     cursor = get_publisher().get_cursor()
     
@@ -122,7 +117,6 @@ def curate_one [html] (request, queued_record_id):
     except:
         raise(TraversalError)
     
-    print 'loading record'
     queued_record = get_queued_record(cursor, queued_record_id)
     # if it's None, bail
     # FIXME: best way?  or is that right?
@@ -149,10 +143,8 @@ def curate_one [html] (request, queued_record_id):
         record_updated = True
 
     if record_updated:
-        print 'updating record'
         queued_record.save(cursor)
 
-    print 'checking article type'
     a_type = 'none'
     article_type = 'unknown'
     
@@ -161,7 +153,6 @@ def curate_one [html] (request, queued_record_id):
         if article_type in ['irrelevant', 'traditional', 'descriptive', 'review']:
             a_type = 'is_%s' % article_type
 
-    print 'generating form'
     form = MyForm()
     form.add(RadiobuttonsWidget, 
         name='article_type',
@@ -180,8 +171,7 @@ def curate_one [html] (request, queued_record_id):
     form.add(SubmitWidget, 'continue', value='continue')
 
     def render [html] ():
-        print 'render()'
-        header('Curate: select type')
+        header('Curate: select type', show_javascript=True)
         """
         <h3>Curate: select type</h3>
         """
@@ -201,8 +191,6 @@ def curate_one [html] (request, queued_record_id):
     if study == None:
         study = Study()
     
-    print 'article_type ==', form['article_type']
-    
     # check for all values; it might be updated to any
     if form['article_type'] == 'is_irrelevant':
         study.set_article_type('irrelevant')
@@ -215,7 +203,6 @@ def curate_one [html] (request, queued_record_id):
     elif form['article_type'] == 'none':
         study.set_article_type('unknown')
     
-    print 'updating record and study'
     study.set_status('claimed')
     study.record_id = queued_record_id
     study.curator_user_id = session.user.get_id()
@@ -239,7 +226,6 @@ def curate_one [html] (request, queued_record_id):
 
 def curate_two [html] (request, queued_record_id):
     
-    print 'curate_two()'
     session = request.session
     cursor = get_publisher().get_cursor()
     queued_record = get_queued_record(cursor, queued_record_id)
@@ -255,7 +241,6 @@ def curate_two [html] (request, queued_record_id):
     if article_type == 'traditional':
         request.redirect(str('summary'))
 
-    print 'setting up form'
     form = MyForm()
     form.add(CheckboxWidget, 
         'has_exposures',
@@ -289,7 +274,7 @@ def curate_two [html] (request, queued_record_id):
     form.add(SubmitWidget, 'continue', value='continue')
     
     def render [html] ():
-        header('Curate: specify included data')
+        header('Curate: specify included data', show_javascript=True)
         """
         <h3>Curate: specify included data</h3>
         """
@@ -308,7 +293,6 @@ def curate_two [html] (request, queued_record_id):
     if not form.is_submitted():
         return render()
 
-    print 'processing'
     for bool_item in [
         'has_exposures',
         'has_outcomes',
@@ -359,7 +343,6 @@ def curate_two [html] (request, queued_record_id):
 
 def curate_three [html] (request, queued_record_id):
 
-    print 'curate_three()'
     session = request.session
     cursor = get_publisher().get_cursor()
     queued_record = get_queued_record(cursor, queued_record_id)
@@ -374,7 +357,7 @@ def curate_three [html] (request, queued_record_id):
     if article_type in ['traditional',]:
         request.redirect(str('summary'))
 
-    header('Curate: exposures, outcomes, species, locations')
+    header('Curate: exposures, outcomes, species, locations', show_javascript=True)
     """
     <h3>Curate: exposures, outcomes, species, locations</h3>
     """
@@ -456,7 +439,6 @@ def curate_three [html] (request, queued_record_id):
 
 def curate_four [html] (request, queued_record_id):
     
-    print 'curate_four()'
     session = request.session
     cursor = get_publisher().get_cursor()
     queued_record = get_queued_record(cursor, queued_record_id)
@@ -471,7 +453,7 @@ def curate_four [html] (request, queued_record_id):
     if not article_type == 'curated':
         request.redirect(str('summary'))
 
-    header('Curate: specify methodology')
+    header('Curate: specify methodology', show_javascript=True)
     """
     <h3>Curate: specify methodology</h3>
     """
@@ -506,7 +488,6 @@ def curate_four [html] (request, queued_record_id):
 
 def summary [html] (request, queued_record_id):
     
-    print 'summary()'
     session = request.session
     cursor = get_publisher().get_cursor()
     queued_record = get_queued_record(cursor, queued_record_id)
@@ -518,33 +499,27 @@ def summary [html] (request, queued_record_id):
     study = get_current_study(cursor, queued_record.study_id)
     article_type = study.get_article_type(text=True)
     
-    print 'checking for required minimums'
     if study.has_exposures \
         and len(study.exposures) == 0:
         #add_message('You must add at least one exposure.')
         pass
-    print 'check1'
     if study.has_outcomes \
         and len(study.outcomes) == 0:
         #add_message('You must add at least one outcome.')
         pass
-    print 'check2'
     if article_type == 'curated' \
         and len(study.species) == 0:
         # FIXME
         #add_message('You must add at least one species')
         pass
-    print 'check3'
     if has_messages():
         request.redirect(str('curate_three'))
 
-    print 'creating form'
     form = MyForm()
     form.add_submit('finish', 'finish')
     
     def render [html] ():
-        print 'render()'
-        header('Curate: summary')
+        header('Curate: summary', show_javascript=True)
         """
         <h3>Curate: summary</h3>
         """
@@ -561,6 +536,26 @@ def summary [html] (request, queued_record_id):
         """
         <h4>Article type: %s</h4>
         """ % article_type
+
+        if not article_type in ['irrelevant', 'traditional']:
+            """
+            <table class='gentable' id='summary'>
+            """
+            
+            if study.has_exposures \
+                and len(study.exposures) > 0:
+                render_summary_concept_row(study.exposures, 'exposures')
+                
+            if study.has_outcomes \
+                and len(study.outcomes) > 0:
+                render_summary_concept_row(study.outcomes, 'outcomes')
+                
+            if len(study.species) > 0:
+                render_summary_concept_row(study.species, 'species')
+                
+            """
+            </table>
+            """
 
         if article_type == 'curated':
             render_methodologies(study)
@@ -584,14 +579,12 @@ def summary [html] (request, queued_record_id):
         form.logger.info(str('Updated study %s' % study.uid))
         request.redirect(str('summary'))
     elif form.get_submit() == str('finish'):
-        print 'updating queued record'
         queued_record.status = queued_record.STATUS_CURATED
         queued_record.save(cursor)
         cursor.close()
         form.logger.info(str('Finished curating study %s' % study.uid))
         request.redirect(str('/edit'))
     else:
-        print 'no submit button matched name %s' % form.get_submit()
         request.redirect(str('summary'))
 
 
@@ -606,7 +599,6 @@ def unclaim [html] (request, queued_record_id):
     
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if queued_record.user_id != session.user.get_id():
-            print 'user mismatch'
             return claimed_by_other_user()
     elif queued_record.status == queued_record.STATUS_UNCLAIMED:
         return not_claimed()
@@ -617,7 +609,7 @@ def unclaim [html] (request, queued_record_id):
     form.add(SubmitWidget, 'unclaim', value='unclaim')
 
     def render [html] ():
-        header('Curate: Unclaim study')
+        header('Curate: Unclaim study', show_javascript=True)
         """
         <h3>Curate: Unclaim study</h3>
         """
@@ -683,3 +675,15 @@ def not_claimed [html] ():
     """
     footer()
     
+
+def render_summary_concept_row [html] (concepts, concept_name):
+    """
+    <tr>
+        <th>%s</th>
+        <td>
+    """ % concept_name.capitalize()
+    '; '.join([con.term for con in concepts])
+    """
+        </td>
+    </tr>
+    """

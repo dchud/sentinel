@@ -1,7 +1,8 @@
-_q_exports = ['_q_index',
-              'add',
-              'receive',
-             ]
+_q_exports = [
+    '_q_index',
+    'add',
+    'receive',
+    ]
 
 import os
 import stat
@@ -146,17 +147,25 @@ def receive [html] (request):
 
     try:
         cursor = get_publisher().get_cursor()
+        print 'generating batch'
         batch = Batch(file_name=upload.tmp_filename, source_uid=source_uid)
         batch.save(cursor)
+        print 'saved batch'
         source_catalog = get_publisher().get_source_catalog()
         source = source_catalog.get_source(source_uid)
+        print 'generating parser'
         parser = Parser(source)
+        print 'parsing'
         records = parser.load(upload.tmp_filename)
         batch.num_records = len(records)
+        print 'batch.num_records =', batch.num_records
         if batch.num_records == num_records:
+            print 'adding records'
             batch.add_records(cursor, records)
+            print 'saving records'
             batch.save(cursor)
         else:
+            print 'count mismatch'
             request.session.message = str('Record count mismatch: %s specified, %s found') % (num_records, len(records))
 
         cursor.close()

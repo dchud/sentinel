@@ -20,7 +20,7 @@ class Queue:
         cursor.execute("""
                        SELECT *
                        FROM queued_batches
-                       ORDER BY date_added
+                       ORDER BY uid, date_added
                        """)
         fields = [d[0] for d in cursor.description]
         desc = dtuple.TupleDescriptor([[f] for f in fields])
@@ -49,14 +49,22 @@ class QueuedRecord (DTable):
         self.study_id = -1
         self.title = ''
         self.source = ''
+        self.abstract = ''
 
+    def __str__ (self):
+        out = []
+        out.append('<QueuedRecord uid=%s queued_batch_id=%s' % (self.uid, self.queued_batch_id))
+        out.append('\tstatus=%s study_id=%s' % (self.get_status(text=True), self.study_id))
+        out.append('\ttitle=%s' % self.title)
+        out.append('\tsource=%s' % self.source)
+        return '\n'.join(out)
 
     def load (self, cursor):
         """
         Load a batch's queued records.
         """
         cursor.execute("""
-            SELECT status, queued_batch_id, user_id, study_id, title, source
+            SELECT status, queued_batch_id, user_id, study_id, title, source, abstract
             FROM queued_records
             WHERE uid = %s
             """, int(self.uid))
@@ -71,26 +79,28 @@ class QueuedRecord (DTable):
     def save (self, cursor):
         
         if self.uid == -1:
+            print 'inserting new record:', self
             cursor.execute("""
                 INSERT INTO queued_records
-                (uid, queued_batch_id, status, 
-                user_id, study_id, title, source)
+                (uid, 
+                queued_batch_id, status, user_id, 
+                study_id, title, source, abstract)
                 VALUES (NULL, 
-                %s, %s, %s, 
+                %s, %s, %s,
                 %s, %s, %s, %s)
-                """, (self.queued_batch_id, self.status, 
-                self.user_id, self.study_id, self.title, self.source)
+                """, (self.queued_batch_id, self.status, self.user_id, 
+                self.study_id, self.title, self.source, self.abstract)
                 )
             self.uid = self.get_new_uid(cursor)
 
         else:
             cursor.execute("""
                 UPDATE queued_records
-                SET queued_batch_id = %s, status = %s, 
-                user_id = %s, study_id = %s, title = %s, source = %s
+                SET queued_batch_id = %s, status = %s, user_id = %s, 
+                study_id = %s, title = %s, source = %s, abstract = %s
                 WHERE uid = %s
-                """, (self.queued_batch_id, self.status, 
-                self.user_id, self.study_id, self.title, self.source,
+                """, (self.queued_batch_id, self.status, self.user_id, 
+                self.study_id, self.title, self.source, self.abstract,
                 self.uid)
                 )
         # FIXME: should this be set from the SQL?
@@ -125,6 +135,7 @@ class Batch:
         self.source_uid = source_uid
         self.num_records = -1
         self.queued_records = {}
+        self.loaded_records = []
 
 
     def load (self, cursor):
@@ -132,7 +143,7 @@ class Batch:
         Load a batch's queued records.
         """
         cursor.execute("""
-                       SELECT uid, status, user_id, study_id, title, source
+                       SELECT uid, status, user_id, study_id, title, source, abstract
                        FROM queued_records
                        WHERE queued_batch_id = %s
                        ORDER BY status
@@ -174,15 +185,20 @@ class Batch:
                            )
         
         # save the records
-        for record_id in self.queued_records.keys():
-            record = self.queued_records[record_id]
+        #for record_id in self.queued_records.keys():
+        #    record = self.queued_records[record_id]
+        #    record.save(cursor)
+        for record in self.loaded_records:
+            record.queued_batch_id = self.uid
             record.save(cursor)
 
 
     def add_records (self, cursor, records):
     
         for record in records:
-            self.queued_records[record.id] = record
+            print 'add_records record'
+            #self.queued_records[record.id] = record
+            self.loaded_records.append(record)
 
 
 
@@ -202,16 +218,22 @@ class Parser:
         records = []
         title = ''
         source = ''
+        abstract = ''
         value = ''
         current_token = ''
         lines = msg.get_payload().split('\n')
         for line in lines:
             if self.re_result_sep.match(line):
                 if not title == '' and not source == '':
-                    records.append((title, source))
+                    new_record = QueuedRecord()
+                    new_record.title = title
+                    new_record.source = source
+                    new_record.abstract = abstract
+                    records.append(new_record)
                     #print 'added %s: %s (%s)' % (len(records), title, source)
                     title = ''
                     source = ''
+                    abstract = ''
                 else:
                     # reading first record
                     pass
@@ -226,6 +248,8 @@ class Parser:
                         title = value
                     elif token == 'SO':
                         source = value
+                    elif token == 'AB':
+                        abstract = value
                     else:
                         pass
                     #term = source.get_term_from_token(field_token)
@@ -236,13 +260,19 @@ class Parser:
                             title = value
                         elif current_token == 'SO':
                             source = value
+                        elif current_token == 'AB':
+                            abstract = value
                     else:
                         # blank line
                         pass
         # Note: we don't catch the last record in the loop above,
         # so do it 'manually' here
         if not title == '' and not source == '':
-            records.append((title, source))
+            new_record = QueuedRecord()
+            new_record.title = title
+            new_record.source = source
+            new_record.abstract = abstract
+            records.append(new_record)
         return records
 
 

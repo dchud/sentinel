@@ -320,7 +320,7 @@ def render_messages [html] ():
             """
             for message in messages:
                 """
-                <li><span style='color:red;'>%s</style></li>
+                <li><span style='color:red;'>%s</span></li>
                 """ % message
             """
             </ul>

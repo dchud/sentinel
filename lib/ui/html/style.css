@@ -123,7 +123,7 @@ a.name:hover {
 	padding: 5px;
 }
 
-#exposures td, #outcomes td, #species td {
+#exposures td, #outcomes td, #species td, #summary td {
     font-size: small;
 }
 
@@ -238,4 +238,25 @@ a.name:hover {
 .queued_record {
     border: 1px solid #aaa;
     padding: 4px;
+}
+
+div.label {
+	styles
+    border: 1px solid #ddd;
+}
+
+div.abstract div.label {
+	overrule a few styles
+}
+
+#abstract-link {
+    border: 1px solid #ccc;
+    padding: 3px;
+    margin: 2px;
+    background-color: #eee;
+}
+
+#abstract-link:hover {
+    background-color: #f9f7d1;
+    text-decoration: underline;
 }

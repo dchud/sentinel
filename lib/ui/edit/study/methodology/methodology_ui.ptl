@@ -16,6 +16,7 @@ from canary.ui.pages import not_found, add_message, has_messages, render_message
 from canary.ui.edit.study.utils import get_current_study, get_queued_record
 from canary.ui.edit.study.utils import is_same_user, render_queued_record
 from canary.ui.edit.study.utils import render_unclaim_block, claimed_by_other_user
+from canary.ui.edit.study.utils import render_pipeline
 from canary.qx_defs import MyDulcineaUser, MyForm
 from canary.study import Methodology
 from canary.utils import is_valid_email, is_valid_password
@@ -97,13 +98,15 @@ def create [html] (request):
             return claimed_by_other_user()
     
     study = get_current_study(cursor, queued_record.study_id)
+    article_type = study.get_article_type(text=True)
     form = MethodologyTypeForm()
 
     def render [html] ():
-        header('Create methodology')
+        header('Create methodology', show_javascript=True)
         """
         <h3>Create methodology</h3>
         """
+        render_pipeline(article_type, step=4, url_prefix='..')
         render_queued_record(queued_record)
         render_messages()
         """
@@ -197,15 +200,17 @@ def detail [html] (methodology_id):
             return claimed_by_other_user()
     
     study = get_current_study(cursor, queued_record.study_id)
+    article_type = study.get_article_type(text=True)
     methodology = study.get_methodology(methodology_id)
     
     form = methodology.create_form()
     
     def render [html] ():
-        header('Describe methodology')
+        header('Describe methodology', show_javascript=True)
         """
         <h3>Describe methodology (%s)</h3>
         """ % methodology.get_study_type(text=True)
+        render_pipeline(article_type, step=4, url_prefix='../..')
         render_queued_record(queued_record)
         render_messages()
         form.render()
@@ -249,17 +254,19 @@ def edit [html] (methodology_id):
             return claimed_by_other_user()
     
     study = get_current_study(cursor, queued_record.study_id)
+    article_type = study.get_article_type(text=True)
     methodology = study.get_methodology(methodology_id)
     
     form = methodology.create_form()
     form.add_submit('cancel', 'cancel')
     
     def render [html] ():
-        header('Edit methodology')
+        header('Edit methodology', show_javascript=True)
         """
         <h3>Edit methodology (%s)</h3>
         """ % methodology.get_study_type(text=True)
-        render_queued_record(queued_record)
+        render_pipeline(article_type, step=4, url_prefix='../..')
+        render_queued_record(queued_record, )
         render_messages()
         form.render()
         render_unclaim_block()
@@ -289,7 +296,6 @@ def edit [html] (methodology_id):
 
 
 def delete [html] (methodology_id):
-    print 'delete()'
     request = get_request()
     cursor = get_publisher().get_cursor()
     try:
@@ -303,9 +309,9 @@ def delete [html] (methodology_id):
             return claimed_by_other_user()
     
     study = get_current_study(cursor, queued_record.study_id)
+    article_type = study.get_article_type(text=True)
     methodology = study.get_methodology(methodology_id)
 
-    print 'setting up form'
     form = MyForm()
     form.add(CheckboxWidget, 'are_you_sure',
         title='Are you sure you want to delete this methodology?',
@@ -313,8 +319,11 @@ def delete [html] (methodology_id):
     form.add_submit('delete', 'delete')
 
     def render [html] ():
-        print 'rendering'
-        header('Delete methodology')
+        header('Delete methodology', show_javascript=True)
+        """
+        <h3>Delete methodology (%s)</h3>
+        """ % methodology.get_study_type(text=True)
+        render_pipeline(article_type, step=4, url_prefix='../..')
         render_queued_record(queued_record)
         render_messages()
         form.render()
@@ -327,7 +336,6 @@ def delete [html] (methodology_id):
     if form.has_errors():
         return render()
     
-    print 'processing'
     if form['are_you_sure']:
         try:
             methodology.delete(cursor)

@@ -59,7 +59,6 @@ class OutcomeActions:
 
 def find [html] (request):
 
-    print 'find()'
     request = get_request()
     cursor = get_publisher().get_cursor()
     try:
@@ -82,7 +81,7 @@ def find [html] (request):
     
         
     def render [html] ():
-        header('Find outcome')
+        header('Find outcome', show_javascript=True)
         """
         <h3>Find outcome</h3>
         """
@@ -123,7 +122,6 @@ def find [html] (request):
 
 def add [html] (request):
     
-    print 'add()'
     cursor = get_publisher().get_cursor()
     try:
         queued_record = get_queued_record(cursor, request.queued_record_id)
@@ -144,7 +142,7 @@ def add [html] (request):
     form.add_submit('add', 'add')
     
     def render [html] ():
-        header('Find outcome')
+        header('Find outcome', show_javascript=True)
         """
         <h3>Find outcome</h3>
         """
@@ -157,7 +155,6 @@ def add [html] (request):
         footer()
     
     if not form.is_submitted():
-        print 'add(): form not submitted'
         return render()
     
     outcome = Outcome()
@@ -194,7 +191,6 @@ def add [html] (request):
 
 def delete [html] (outcome_id):
     
-    print 'delete()'
     request = get_request()
     cursor = get_publisher().get_cursor()
     try:
@@ -217,7 +213,7 @@ def delete [html] (outcome_id):
     form.add_submit('delete', 'delete')
 
     def render [html] ():
-        header('Delete outcome')
+        header('Delete outcome', show_javascript=True)
         """
         <h3>Delete outcome</h3>
         """
@@ -240,7 +236,6 @@ def delete [html] (outcome_id):
     if form.has_errors():
         return render()
     
-    print 'processing'
     if form['are_you_sure']:
         try:
             outcome.delete(cursor)

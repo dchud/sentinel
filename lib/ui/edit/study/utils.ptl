@@ -26,14 +26,38 @@ def get_current_study (cursor, id):
     except:
         return None
 
-def render_queued_record [html] (queued_record):
+def render_queued_record [html] (queued_record, abstract=True):
     """
     <div class='queued_record'>
-    <p>
-    "%s", <em>%s</em>
-    </p>
-    </div>
+        <p>
+            "%s", <em>%s</em>
+        </p>
     """ % (queued_record.title, queued_record.source)
+    
+    if abstract:
+        if not queued_record.abstract == '':
+            """
+            <div class='label'>
+                <span id='abstract-link'>Show/hide abstract</span>
+            </div>
+            <div class='abstract'>
+                <p>
+                    <b>Abstract:</b> <br />
+            """
+            queued_record.abstract
+            """
+                </p>
+            </div>
+            """
+        else:
+            """
+            <p>
+            No abstract available.
+            </p>
+            """
+    """
+    </div>
+    """
     
 def is_same_user (queued_record):
     
@@ -92,7 +116,9 @@ def render_exposures [html] (study):
         <tr>
             <td>%s</td>
             <td>%s</td>
-            <td>[<a href='exposure/%s/delete'>delete</a>]</td>
+            <td>
+                [<a href='exposure/%s/delete'>delete</a>]
+            </td>
         </tr>
         """ % (exp.UMLS_SOURCES[exp.concept_source_id], exp.term, exp.uid)
     """
@@ -155,7 +181,6 @@ def render_pipeline [html] (article_type, step=1, url_prefix='.'):
         ('summary', 'Summary'),
         ]
         
-    #print 'render_pipeline(article_type=%s, step=%s)' % (article_type, step)
     """
     <div id='pipeline'>
         
