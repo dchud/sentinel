@@ -7,8 +7,8 @@ _q_exports = [
     'about',
     'admin',
     'edit',
-    #'images',
     'user',
+    'reaper',
     ]
 
 import sys
@@ -23,7 +23,7 @@ from canary.ui import edit
 from canary.ui import user
 from canary.ui import species
 from canary.ui import record_ui
-from canary.ui.pages import _q_index, _q_exception_handler, not_found
+from canary.ui.pages import _q_index, _q_exception_handler, not_found, reaper
 from canary.ui.browse_ui import Browse
 from canary.qx_utils import MyStaticFile, load_static_exports
 from canary.ui.search import search

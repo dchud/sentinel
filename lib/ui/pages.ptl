@@ -1,4 +1,6 @@
+from time import time
 
+from quixote import get_publisher, get_session_manager
 from quixote.errors import AccessError
 
 from dulcinea.database import get_transaction
@@ -134,3 +136,29 @@ def not_found [html] (item_type='item'):
     </p>
     """ % (item_type.capitalize(), item_type)
     footer()
+
+
+
+# FIXME: hide this somehow or at least discourage abuse better?
+# NOTE: run this regularly from a cronjob with wget or equiv
+def reaper [plain] (request):
+
+    # FIXME: Cleaner way of handling realtime config data?
+    db_root = get_publisher().get_root()
+    # 3600 is one hour in seconds
+    if db_root.has_key('last_reaper_time') \
+        and time() - db_root['last_reaper_time'] < 3600:
+        return 'not ok: run too recently'
+
+    reap_counter = 0
+    session_mgr = get_session_manager()
+    for session_id in session_mgr.sorted_keys():
+        existing_session = session_mgr[session_id]
+        # 270000 is 75 hours in seconds, long enough to last a weekend
+        if existing_session.get_access_age() > 270000:
+            del(session_mgr[session_id])
+            reap_counter += 1
+
+    db_root['last_reaper_time'] = time()
+    get_transaction().commit()
+    return 'ok: %s session(s) reaped' % reap_counter
