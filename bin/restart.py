@@ -35,7 +35,7 @@ def save_popen (command):
     return out.strip()
 
 
-my_pid = open('scgi.pid').read().strip()
+scgi_pid = open('scgi.pid').read().strip()
 
 # 'grep python' because the first grep might show up in the list
 pid_set = save_popen("""ps -f | grep scgi_handler | grep python | awk '{print $2, $3}'""")
@@ -43,8 +43,8 @@ pid_lines = pid_set.split('\n')
 
 for line in pid_lines:
     pid, ppid = line.split(' ')
-    if pid == my_pid:
+    if pid == scgi_pid:
         print 'Finding children for pid', pid
-    elif ppid == my_pid:
+    elif ppid == scgi_pid:
         print 'Killing child pid', pid
         os.kill(int(pid), signal.SIGHUP)
