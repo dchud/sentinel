@@ -123,7 +123,7 @@ a.name:hover {
 	padding: 5px;
 }
 
-#exposures td {
+#exposures td, #outcomes td {
     font-size: small;
 }
 

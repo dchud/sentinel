@@ -14,28 +14,28 @@ from canary.ui.pages import not_found, add_message, has_messages, render_message
 from canary.ui.edit.study.utils import get_current_study, get_queued_record
 from canary.ui.edit.study.utils import is_same_user, render_queued_record
 from canary.ui.edit.study.utils import render_unclaim_block, claimed_by_other_user
-from canary.ui.edit.study.utils import render_exposures, render_pipeline
+from canary.ui.edit.study.utils import render_outcomes, render_pipeline
 from canary.qx_defs import MyForm
-from canary.study import find_exposures, Exposure
+from canary.study import find_outcomes, Outcome
 
 
 
 def _q_index [html] (request):
-    header('Exposure:')
+    header('Outcome:')
     """
-    <h2>Exposure</h2>
+    <h2>Outcome</h2>
     """
     footer()
 
 
-class ExposureActions:
+class OutcomeActions:
 
     _q_exports = [
         '_q_index',
         ]
 
-    def __init__ (self, exposure_id):
-        self.exposure_id = exposure_id
+    def __init__ (self, outcome_id):
+        self.outcome_id = outcome_id
 
     def _q_index [html] (self, request):
         header('blah')
@@ -46,13 +46,13 @@ class ExposureActions:
 
     def _q_lookup [html] (self, request, action):
         try:
-            self.exposure_id = int(self.exposure_id)
+            self.outcome_id = int(self.outcome_id)
             if action == 'delete':
-                return delete(self.exposure_id)
+                return delete(self.outcome_id)
             else:
                 raise TraversalError
         except:
-            return not_found('exposure')
+            return not_found('outcome')
 
 
 
@@ -75,16 +75,16 @@ def find [html] (request):
     
     form = MyForm()
     form.add(StringWidget, 'search_term',
-        title='Specify the exposure/hazard to add:',
+        title='Specify the outcome to add:',
         size='30',
         required=True)
     form.add_submit('find', 'find')
     
         
     def render [html] ():
-        header('Find exposure')
+        header('Find outcome')
         """
-        <h3>Find exposure</h3>
+        <h3>Find outcome</h3>
         """
         render_pipeline(study.get_article_type(text=True), url_prefix=str('..'), step=3)
         render_queued_record(queued_record)
@@ -96,24 +96,24 @@ def find [html] (request):
     if not form.is_submitted():
         return render()
     
-    exposures = find_exposures(cursor, form.get_widget('search_term').get_value())
-    if len(exposures) == 0:
-        form.set_error('search_term', 'No exposures found.')
+    outcomes = find_outcomes(cursor, form.get_widget('search_term').get_value())
+    if len(outcomes) == 0:
+        form.set_error('search_term', 'No outcomes found.')
         
     if form.has_errors() \
         or has_messages():
         return render()
 
     
-    header('Find exposure')
+    header('Find outcome')
     """
-    <h3>Find exposure</h3>
+    <h3>Find outcome</h3>
     """
     render_pipeline(study.get_article_type(text=True), url_prefix=str('..'), step=3)
     render_queued_record(queued_record)
     render_messages()
     form.render()
-    render_found_exposures(study, exposures, form['search_term'])
+    render_found_outcomes(study, outcomes, form['search_term'])
     render_unclaim_block()
     footer()
 
@@ -144,14 +144,14 @@ def add [html] (request):
     form.add_submit('add', 'add')
     
     def render [html] ():
-        header('Add exposure')
+        header('Find outcome')
         """
-        <h3>Find exposure</h3>
+        <h3>Find outcome</h3>
         """
         render_pipeline(study.get_article_type(text=True), url_prefix=str('..'), step=3)
         render_queued_record(queued_record)
         render_messages()
-        render_exposures(study)
+        render_outcomes(study)
         form.render()
         render_unclaim_block()
         footer()
@@ -160,29 +160,29 @@ def add [html] (request):
         print 'add(): form not submitted'
         return render()
     
-    exposure = Exposure()
+    outcome = Outcome()
     
     try:
-        exposure.concept_id = form['concept_id']
+        outcome.concept_id = form['concept_id']
     except:
         form.set_error('concept_id', 'Invalid concept id.')
         
     try:
-        if exposure.UMLS_SOURCES.has_key(int(form['concept_source_id'])):
-            exposure.concept_source_id = form['concept_source_id']
+        if outcome.UMLS_SOURCES.has_key(int(form['concept_source_id'])):
+            outcome.concept_source_id = form['concept_source_id']
     except:
         form.set_error('concept_source_id', 'Must be valid concept source.')
     
-    exposure.term = form['term']
+    outcome.term = form['term']
     
     if form.has_errors():
         return render()
     
     try:
-        study.add_exposure(exposure)
-        exposure.save(cursor)
-        form.logger.info(str('Added exposure %s' % exposure.uid))
-        add_message('Added exposure')
+        study.add_outcome(outcome)
+        outcome.save(cursor)
+        form.logger.info(str('Added outcome %s' % outcome.uid))
+        add_message('Added outcome')
         request.redirect(str('../curate_three'))
     except:
         import sys
@@ -192,7 +192,7 @@ def add [html] (request):
 
 
 
-def delete [html] (exposure_id):
+def delete [html] (outcome_id):
     
     print 'delete()'
     request = get_request()
@@ -201,25 +201,25 @@ def delete [html] (exposure_id):
         queued_record = get_queued_record(cursor, request.queued_record_id)
     except:
         print 'no request.queued_record_id'
-        return not_found('exposure')
+        return not_found('outcome')
     
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
     
     study = get_current_study(cursor, queued_record.study_id)
-    exposure = study.get_exposure(exposure_id)
+    outcome = study.get_outcome(outcome_id)
 
     form = MyForm()
     form.add(CheckboxWidget, 'are_you_sure',
-        title='Are you sure you want to delete this exposure?',
+        title='Are you sure you want to delete this outcome?',
         value=False)
     form.add_submit('delete', 'delete')
 
     def render [html] ():
-        header('Delete exposure')
+        header('Delete outcome')
         """
-        <h3>Delete exposure</h3>
+        <h3>Delete outcome</h3>
         """
         render_pipeline(study.get_article_type(text=True), 
             url_prefix=str('../..'), step=3)
@@ -227,9 +227,9 @@ def delete [html] (exposure_id):
         render_messages()
         """
         <p>
-        Deleting exposure %s (%s).
+        Deleting outcome %s (%s).
         </p>
-        """ % (exposure.term, exposure.UMLS_SOURCES[exposure.concept_source_id])
+        """ % (outcome.term, outcome.UMLS_SOURCES[outcome.concept_source_id])
         form.render()
         render_unclaim_block()
         footer()
@@ -243,28 +243,28 @@ def delete [html] (exposure_id):
     print 'processing'
     if form['are_you_sure']:
         try:
-            exposure.delete(cursor)
-            add_message('Exposure deleted')
-            form.logger.info(str('Deleted exposure %s' % exposure_id))
+            outcome.delete(cursor)
+            add_message('Outcome deleted')
+            form.logger.info(str('Deleted outcome %s' % outcome_id))
         except:
-            add_message('Unable to delete exposure')
-            form.logger.error(str('Unable to delete user %s' % exposure_id))
+            add_message('Unable to delete outcome')
+            form.logger.error(str('Unable to delete user %s' % outcome_id))
     else:
-        add_message('Exposure not deleted')
+        add_message('Outcome not deleted')
 
     request.redirect(str('/edit/study/%s/curate_three' % request.queued_record_id))
     
     
     
-def render_found_exposures [html] (study, exposures, search_term):
+def render_found_outcomes [html] (study, outcomes, search_term):
     
-    if len(exposures) == 0:
+    if len(outcomes) == 0:
         return
         
     """
-    <h4>Exposures found:</h4>
+    <h4>Outcomes found:</h4>
     
-    <table class='gentable' id='exposures'>
+    <table class='gentable' id='outcomes'>
         <tr>
             <th>umls id</th>
             <th>source</th>
@@ -274,32 +274,32 @@ def render_found_exposures [html] (study, exposures, search_term):
         </tr>
     """
     
-    for exp in exposures:
+    for outcome in outcomes:
         """
         <tr>
             <td>%s</td>
             <td>%s</td>
             <td>%s</td>
             <td>%s</td>
-        """ % (exp.concept_id, exp.UMLS_SOURCES[exp.concept_source_id], 
-            exp.term, '; '.join(exp.synonyms))
+        """ % (outcome.concept_id, outcome.UMLS_SOURCES[outcome.concept_source_id], 
+            outcome.term, '; '.join(outcome.synonyms))
         
-        if not study.has_exposure(exp):
+        if not study.has_outcome(outcome):
             """
             <td>
                 [<a href='add?concept_source_id=%s&amp;concept_id=%s&amp;term=%s'>add</a>]
             </td>
-            """ % (exp.concept_source_id, exp.concept_id, urllib.quote_plus(exp.term))
+            """ % (outcome.concept_source_id, outcome.concept_id, urllib.quote_plus(outcome.term))
         else:
-            this_exposure = study.get_exposure_from_exposure(exp)
-            if not this_exposure == None:
+            this_outcome = study.get_outcome_from_outcome(outcome)
+            if not this_outcome == None:
                 """
                 <td>
                     [<a href='%s/delete'>delete</a>]
                 </td>
-                """ % this_exposure.uid
+                """ % this_outcome.uid
             else:
-                print 'Error: unable to find exposure:', exposure
+                print 'Error: unable to find outcome:', outcome
                 """
                 <td>
                     [error]

@@ -99,6 +99,28 @@ def render_exposures [html] (study):
     </table>
     """
 
+def render_outcomes [html] (study):
+    """
+    <table class='gentable' id='outcomes'>
+        <tr>
+            <th>source</th>
+            <th>term</th>
+            <th>actions</th>
+        </tr>
+    """
+    for outcome in study.outcomes:
+        """
+        <tr>
+            <td>%s</td>
+            <td>%s</td>
+            <td>[<a href='outcome/%s/delete'>delete</a>]</td>
+        </tr>
+        """ % (outcome.UMLS_SOURCES[outcome.concept_source_id], 
+            outcome.term, outcome.uid)
+    """
+    </table>
+    """
+
 
 def render_pipeline [html] (article_type, step=1, url_prefix='.'):
     # Note that placeholder at steps[0] allows step number == steps[N]

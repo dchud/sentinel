@@ -470,6 +470,7 @@ class Exposure (DTable):
     UMLS_SOURCES = {
         75: 'MeSH',
         85: 'NCBI Taxonomy',
+        501: 'ITIS',
         }
     
     def __init__ (self):
@@ -543,11 +544,132 @@ class Exposure (DTable):
         self.date_modified = time.strftime(str('%Y-%m-%d'))
 
 
+def find_outcomes (cursor, search_term):
+    # Note: for now, limit to only MeSH (umls_source_id==75)
+    
+    outcomes = {}
+    if search_term \
+        and len(search_term) > 0:
+        query_term = search_term.strip().replace(' ', '% ') + '%'
+        cursor.execute("""
+            SELECT umls_terms.umls_concept_id, term, preferred_name, umls_source_id 
+            FROM umls_terms, umls_concepts, umls_concepts_sources 
+            WHERE term LIKE %s
+            AND umls_source_id = %s
+            AND umls_concepts.umls_concept_id = umls_terms.umls_concept_id 
+            AND umls_concepts_sources.umls_concept_id = umls_concepts.umls_concept_id
+            ORDER BY term, preferred_name
+            """, (query_term, 75))
+        
+        fields = [d[0] for d in cursor.description]
+        desc = dtuple.TupleDescriptor([[f] for f in fields])
+        rows = cursor.fetchall()
+        for row in rows:
+            row = dtuple.DatabaseTuple(desc, row)
+            if not outcomes.has_key((row['umls_concept_id'], row['umls_source_id'])):
+                outcome = Outcome()
+                outcome.concept_source_id = row['umls_source_id']
+                outcome.concept_id = row['umls_concept_id']
+                outcome.term = row['preferred_name']
+                outcome.synonyms.append(row['term'])
+                outcomes[(outcome.concept_id, outcome.concept_source_id)] = outcome
+            else:
+                outcome = outcomes[(row['umls_concept_id'], row['umls_source_id'])]
+                if not row['term'] in outcome.synonyms:
+                    outcome.synonyms.append(row['term'])
+                outcomes[(outcome.concept_id, outcome.concept_source_id)] = outcome
+        
+        # Try to bump up coarse "relevance" of exact matches
+        outcomes_ranked = outcomes.values()
+        for outcome in outcomes_ranked:
+            if outcome.term.lower() == search_term.lower()\
+                or search_term.lower() in [syn.lower() for syn in outcome.synonyms]:
+                outcomes_ranked.remove(outcome)
+                outcomes_ranked.insert(0, outcome)
+        return outcomes_ranked
+    
+    else:
+        return outcomes.values()
+
+
 class Outcome (DTable):
     
+    UMLS_SOURCES = {
+        75: 'MeSH',
+        85: 'NCBI Taxonomy',
+        501: 'ITIS',
+        }
+    
     def __init__ (self):
-        pass
-        
+        self.uid = -1
+        self.study_id = -1
+        self.concept_id = -1
+        self.concept_source_id = -1
+        self.term = ''
+        self.synonyms = []
+    
+    def __str__ (self):
+        out = []
+        out.append('<Outcome uid=%s study_id=%s' % (self.uid, self.study_id))
+        out.append('\tconcept_id=%s (%s)' % (self.concept_id, self.concept_source_id))
+        out.append('\tterm=%s' % self.term)
+        out.append('/>')
+        return '\n'.join(out)
+    
+    def delete (self, cursor):
+        """
+        Delete this outcome from the database.
+        """
+        if not self.uid == -1:
+            try:
+                cursor.execute("""
+                    DELETE FROM outcomes
+                    WHERE uid = %s
+                    """, self.uid)
+            except:
+                import sys
+                print 'MySQL exception:'
+                for info in sys.exc_info():
+                    print 'exception:', info
+                    
+
+    def save (self, cursor):
+        if self.uid == -1:
+            #print 'inserting new outcome'
+            cursor.execute("""
+                INSERT INTO outcomes
+                (uid, study_id, concept_id, 
+                concept_source_id, term)
+                VALUES 
+                (NULL, %s, %s, 
+                %s, %s)
+                """, (self.study_id, self.concept_id, 
+                self.concept_source_id, self.term)
+                )
+            #print 'inserted new outcome'
+            self.uid = self.get_new_uid(cursor)
+            #print 'set new outcome uid to %s' % self.uid
+        else:
+            #print 'updating outcome %s' % self.uid
+            try:
+                cursor.execute("""
+                    UPDATE outcomes
+                    SET study_id = %s, concept_id = %s, 
+                    concept_source_id = %s, term = %s
+                    WHERE uid = %s
+                    """, (self.study_id, self.concept_id, 
+                    self.concept_source_id, self.term,
+                    self.uid)
+                    )
+            except:
+                import sys
+                print 'MySQL exception:'
+                for info in sys.exc_info():
+                    print 'exception:', info
+            #print 'updated outcome %s' % self.uid
+        # FIXME: should this be set from the SQL?
+        self.date_modified = time.strftime(str('%Y-%m-%d'))
+
 
 class Location (DTable):
     
@@ -724,6 +846,43 @@ class Study (DTable):
         for exp in self.exposures:
             if exp.concept_id == exposure.concept_id:
                 return exp
+        return None
+
+
+    def has_outcome (self, outcome):
+        """
+        Returns True if this outcome has already been added to this Study.
+        
+        Note that has_outcome may be used before outcome is added,
+        hence it does not check outcome.uid.
+        """
+        for outc in self.outcomes:
+            if outc.concept_id == outcome.concept_id:
+                return True
+        return False
+
+    def add_outcome (self, outcome):
+        if not self.has_outcome(outcome):
+            outcome.study_id = self.uid
+            self.outcomes.append(outcome)
+        
+    def get_outcome (self, id):
+        """
+        Return the matching outcome, if added.
+        
+        Note that get_outcome is for use in matching or deleting outcomes,
+        i.e., only after an outcome has been added to the Study, so uid
+        matching is required.
+        """
+        for outcome in self.outcomes:
+            if outcome.uid == id:
+                return outcome
+        return None
+    
+    def get_outcome_from_outcome (self, outcome):
+        for outc in self.outcomes:
+            if outc.concept_id == outcome.concept_id:
+                return outc
         return None
 
     def load (self, cursor):
