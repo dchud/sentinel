@@ -5,21 +5,21 @@
 			text-decoration: none;
 			color: #000099
 			}
-			
+
 	a:visited {
 			text-decoration: none;
 			color: #660000
 			}
-			
+
 	a:active {
 			text-decoration: none;
 			color: #000099
 			}
-			
+
 	a:hover {
 			text-decoration: underline;
 			color: maroon}
-			
+
 /* ------------------------------------------------------------ */
 
 	body {
@@ -28,70 +28,63 @@
 		background-color: #ffffff;
 		font-family: Verdana, Geneva, Arial, sans-serif;
 		}
-			
+
 	h1 {
-		font-family: Verdana, Geneva, Arial, sans-serif;
 		font-size: 16px;
 		color: #000066;
 		margin-top: 0em;
 		margin-bottom: 0em;
 		font-weight:bold;
 		}
-		
+
 	.graphicHeader {
 		color: #000066;
-		font-family: Verdana, Geneva, Arial, sans-serif;
 		margin-left: 15px;
 		margin-bottom: 6px;
 		margin-top: 12px;
 		}
-		
+
 	h2 {
-		font-family: Verdana, Geneva, Arial, sans-serif;
 		font-size: 13px;
 		margin-top: 0px;
 		color: #000066;
 		margin-bottom: 0em;
 		}
-		
-		
-		
+
+
+
 	h3 {
-		font-family: Verdana, Geneva, Arial, sans-serif;
 		font-size: 14px;
 		color: #000066;
 		font-weight: bold;
 		margin-top: 0em;
 		margin-bottom: .3em;
-		
+
 		}
-		
-		
-		
+
+
+
 	h4 {
 		color: #000066;
-		font-family: Verdana, Geneva, Arial, sans-serif;
-		font-size: 12px;
+        font-size: 12px;
 		font-variant: normal;
 		font-weight: normal;
 		margin-bottom: .75em;
 		margin-top: .5em;
 		}
-		
-		
+
+
 	ol {
-		font-family: Verdana, Geneva, Arial, sans-serif;
-		font-size: 11px;
+        font-size: 11px;
 		line-height: 1.8em;
 		list-style: square;
 		margin-top: .3em;
 		margin-bottom: .8em
 		}
-		
-		
+
+
 	p  {
-		font-family: Verdana, Geneva, Arial, sans-serif;
-		font-size: 11px;
+        font-size: 11px;
 		line-height: 1.5em;
 		color: black;
 		margin-top: .3em;
@@ -99,26 +92,25 @@
 		text-align: left;
 		margin-bottom: .8em;
 		}
-		
-		.rightspace p 
+
+		.rightspace p
 		{
-		
-	margin-right: 10px;
-		}
-		
-		.rightspace h3 
-		{
-		
+
 	margin-right: 10px;
 		}
 
-		
+		.rightspace h3
+		{
+
+	margin-right: 10px;
+		}
+
+
 	#print_banner  {
 		display: none;
 		}
-		
+
 	ul {
-		font-family: Verdana, Geneva, Arial, sans-serif;
 		font-size: 11px;
 		line-height: 1.6em;
 		list-style: disc;
@@ -128,10 +120,9 @@
 		}
 
 /* ----------------------------------------------------------------------------- */
-		
+
 
 	#breadCrumb {
-		font-family: Verdana, Geneva, Arial, sans-serif;
 		font-size: 10px;
 		line-height: 1.1em;
 		color: #333333;
@@ -141,27 +132,24 @@
 
 
 	.footer {
-		font-family: Verdana, Geneva, Arial, sans-serif;
 		font-size: 10px;
 		line-height: 1.6em;
 		color: #000099;
 		margin-top: .3em;
 		}
-		
+
 	.footerLinks  {
-		font-family: Verdana, Geneva, Arial, sans-serif;
 		font-size: 11px;
 		line-height: 1.4em;
 		color: black;
 		margin-top: .3em;
 		text-align: left;
 		margin-bottom: .2em;
-		paddding-bottom: .1em;
+		padding-bottom: .1em;
 		}
-		
+
 	/* top, right, bottom, left */
 	#nav-buttons p {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	color: #324362;
 	text-decoration: none;
@@ -173,7 +161,7 @@
 	border-style: solid;
 	border-right-color: #FFC;
 		}
-		
+
 	#nav-buttons a {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
@@ -189,7 +177,7 @@
 		}
 
 	#nav-buttons a:hover {
-		color: #000099; 
+		color: #000099;
 		display: block;
 		text-decoration: underline;
 		background-color: #A6BFF2;
@@ -198,16 +186,15 @@
 		}
 
 	.scanColumnAddress  {
-		font-family: Verdana, Geneva, Arial, sans-serif;
 		font-size: 10px;
 		line-height: 1.4em;
 		color: 212B3D;
 		margin-top: .3em;
 		text-align: center;
 		margin-bottom: 1em;
-		paddding-bottom: .1em;
+		padding-bottom: .1em;
 		}
-		
+
 	#scan_column {
 	background: #FFC;
 	border-right-width: 1px;
@@ -215,10 +202,10 @@
 	border-right-color: #324362;
 	width: 147px;
 		}
-		
 
-	
-		
+
+
+
 .news
 {
 	margin-left: 0px;
@@ -228,9 +215,9 @@
 	background: #ffffff;
 	border: 1px solid #003366;
 	width: 300px;
-	
-}		
-		
+
+}
+
 .news-head
 {
 	font-size: 14px;
@@ -269,7 +256,7 @@
 	margin-bottom: 10px;
 	margin-right: 10px;
 	line-height: 14px;
-	
+
 }
 
 .news-photo
@@ -295,7 +282,7 @@
 	border-style: solid;
 	background-color: #FFC;
 	}
-	
+
 #top-menu-int td {
 	color: #FFC;
 	font-size: 10px;
@@ -314,7 +301,7 @@
 	vertical-align: middle;
 }
 #top-menu-int a {
-	color: #003366; 
+	color: #003366;
 	text-decoration: none;
 	display: block;
 	background-color: #FFC;
@@ -324,7 +311,7 @@
 
 #top-menu-int a:hover {
 text-decoration: underline;
-color: #003366; 
+color: #003366;
 background-color: #CBDCF2;
 padding: 4px 5px 5px 5px; /* top, right, bottom, left */
 
@@ -357,7 +344,6 @@ padding: 0 0 0 5px; /* top, right, bottom, left */
 
 #search-result td
 {
-		font-family: Verdana, Geneva, Arial, sans-serif;
 		font-size: 11px;
 		line-height: 15px;
 		color: black;
@@ -366,15 +352,14 @@ padding: 0 0 0 5px; /* top, right, bottom, left */
 		border-bottom: 1 solid #AAAAAA;
 		padding: 5px 15px 9px 0px; /* top, right, bottom, left */
 		}
-		
+
 #search-result table
 {
 margin: 0px 0px 0px 5px;
 		}
-		
-#table-list td, th
+
+#table-list td, #table-list th
 {
-		font-family: Verdana, Geneva, Arial, sans-serif;
 		font-size: 11px;
 		line-height: 15px;
 		color: black;
@@ -384,7 +369,7 @@ margin: 0px 0px 0px 5px;
 		border-right: 1 solid #AAAAAA;
 		padding: 5px 5px 9px 0px; /* top, right, bottom, left */
 		}
-		
+
 		#table-list table
 {
 		border-left: 1 solid #AAAAAA;
@@ -405,7 +390,7 @@ padding: 0px 0 0px 0px; /* top, right, bottom, left */
     font-size: x-large;
     text-align: center;
     padding-bottom: 6px;
-    
+
 }
 
 .acronym {
@@ -416,7 +401,7 @@ padding: 0px 0 0px 0px; /* top, right, bottom, left */
     text-align: left;
     */
     padding-top: 1px;
-    
+
     color: #003366;
     /* below is from .banner */
     border-bottom: 2px solid #94c6ef;
@@ -426,7 +411,46 @@ padding: 0px 0 0px 0px; /* top, right, bottom, left */
 }
 
 dl {
-    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 12px;
+    line-height: 1.5em;
+    color: black;
+}
+
+.gentable {
+	/*
+    width: 70%;
+    */
+    font-size: 12px;
+    line-height: 1.5em;
+    color: black;
+
+}
+
+.gentable th {
+	padding: 3px;
+	color: #333;
+	background: #eee;
+	border: 1px solid #ccc;
+    text-align: center;
+	/*
+    font-size: medium;
+    */
+}
+
+.gentable td {
+	text-align: left;
+	background: #fff;
+	border: 1px solid #e5e5e5;
+	padding: 5px;
+}
+
+#exposures td, #outcomes td, #species td, #summary td {
+    /*
+    font-size: small;
+    */
+}
+
+.glossary {
     font-size: 12px;
     line-height: 1.5em;
     color: black;
@@ -437,7 +461,6 @@ margin: 20px 10px 20px 10px;  /*top left bottom right */
 }
 
 .studytable table{
-    font-family: Verdana, Geneva, Arial, sans-serif;
     font-size: 11px;
     line-height: 1.5em;
     color: black;
@@ -448,6 +471,10 @@ margin: 20px 10px 20px 10px;  /*top left bottom right */
 	border-style: solid;
 }
 
+#batch_view {
+    width: 90%;
+}
+
 .studytable th {
 	color: #333;
 	background: #eee;
@@ -455,7 +482,7 @@ margin: 20px 10px 20px 10px;  /*top left bottom right */
 	border-color:#ccc;
 	border-style: solid;
 	padding: 3px 8px 3px 3px; /*top left bottom right */
-	margin: 0;  
+	margin: 0;
 }
 
 .studytable td {
@@ -475,3 +502,137 @@ margin: 20px 10px 20px 10px;  /*top left bottom right */
 	text-align: left;
 }
 
+
+
+#pipeline {
+	border-bottom: 1px solid #aaa;
+    background: #fff;
+    margin-bottom: 1em;
+    width: 70%;
+}
+
+#pipeline ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	padding: 5px 0;
+}
+
+#pipeline li {
+	display: inline;
+	padding: 0px;
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+	border-top: 1px solid #ccc;
+	background-color: #eee;
+}
+
+#pipeline ul li a {
+	text-decoration: none;
+	color: #000;
+	padding: 5px;
+}
+
+#pipeline ul li a:hover {
+	color: #000;
+    text-decoration: underline;
+	background-color: #f9f7d1;
+}
+
+#pipeline ul li#active a {
+	color: #000;
+	background-color: #94c6ef;
+}
+
+#unclaim {
+    border: 1px solid #aaa;
+    padding: 5px;
+    margin-top: 2em;
+}
+
+#exposure-left {
+    float: left;
+    width: 20%;
+    padding: 5px;
+    border-right: 1px dotted #bbb;
+}
+
+#exposure-right {
+    margin-left: 25%;
+    padding: 5px;
+}
+
+#exposure-buttons {
+    padding-top: .5em;
+    text-align: left;
+}
+
+
+div.label {
+	styles
+    border: 1px solid #ddd;
+}
+
+div.abstract div.label {
+	overrule a few styles
+}
+
+.mission {
+    width: 70%;
+    text-align: justify;
+    padding: 15px;
+    background-color: #f9f7d1;
+    border: 1px solid #003366;
+}
+
+.chosen {
+    color: #000000;
+    font-weight: bold;
+}
+
+.not_chosen {
+    color: #c4c4c4;
+}
+
+.login_detail {
+    border-top: 1px dotted #003366;
+    border-bottom: 1px dotted #003366;
+    padding: 2px;
+    margin: .5em;
+}
+
+.queued_record {
+    border: 1px solid #aaa;
+    padding: 4px;
+}
+
+#abstract-link {
+    border: 1px solid #ccc;
+    padding: 3px;
+    margin: 2px;
+    background-color: #eee;
+}
+
+#abstract-link:hover {
+    background-color: #f9f7d1;
+    text-decoration: underline;
+}
+
+fieldset {
+    border: 1px solid #d3d3d3;
+    margin-top: 5px;
+    padding: 6px;
+}
+
+#curator-panel-left {
+    padding: 1px;
+    float: left;
+    width: 45%;
+    border-right: 1px solid #ddd;
+}
+
+#curator-panel-right {
+    padding: 1px;
+    margin-left: 50%;
+    /*float: right;*/
+}
