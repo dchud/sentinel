@@ -30,6 +30,11 @@ class MyLogger (Logger):
 
 
 class DTable:
+    """
+    Convenience class for rdbms-persisted object types.  Allows simple
+    loading of data for single-valued fields using set() and for multi-valued
+    fields using append().
+    """
     
     def set (self, field, value):
         """
@@ -40,13 +45,17 @@ class DTable:
         else:
             setattr(self, str(field), value)
        
+#    def append (self, field, value):
+#        list_attr = getattr(self, str(field))
+#        if not value in list_attr:
+#            list_attr.append(value)
+            
        
     def get_new_uid (self, cursor):
-        
         try:
             cursor.execute('SELECT LAST_INSERT_ID() AS new_uid')
             row = cursor.fetchone()
-            new_uid = row[0]
+            new_uid = int(row[0])
         except:
             new_uid = -1
         return new_uid

@@ -40,7 +40,7 @@ def error (request):
 
 
 this_module = sys.modules[__name__]
-css_files = load_static_exports('/home/dlc33/projects/sentinel/sentineltestsite/html',
+css_files = load_static_exports('/home/dlc33/projects/canary/lib/ui/html',
                                 '.css')
 for file, path in css_files:
     _q_exports.append(file)

@@ -8,10 +8,12 @@ class ValueGroup:
     def __init__ (self,
                   group_name,
                   description,
-                  value_group_id=-1):
+                  value_group_id=-1,
+                  allow_multiple=0):
         self.value_group_id = value_group_id
         self.group_name = group_name
         self.description = description
+        self.allow_multiple = allow_multiple
         self.values = {}
 
     def __repr__ (self):
@@ -20,6 +22,7 @@ class ValueGroup:
         s.append("\tvalue_group_id=%d" % self.value_group_id)
         s.append("\tgroup_name=%s" % self.group_name)
         s.append("\tdescription=%s" % self.description)
+        s.append("\allow_multiple=%s" % self.allow_multiple)
         s.append("/>")
         return "\n".join(s)
 
@@ -51,22 +54,26 @@ class ValueGroup:
         
     def group_size (self):
         return len(self.values)
+        
+    def is_multiple (self):
+        return self.allow_multiple
 
     def save (self, cursor, update_values=True):
         try:
             if self.value_group_id == -1:
                 cursor.execute("""
                     INSERT INTO dv_group
-                    (dv_group_id, group_name, description)
-                    VALUES (NULL, %s, %s)
-                    """, (self.group_name, self.description))
+                    (dv_group_id, group_name, description, allow_multiple)
+                    VALUES (NULL, %s, %s, %s)
+                    """, (self.group_name, self.description, self.allow_multiple))
             else:
                 cursor.execute("""
                     UPDATE dv_group
                     SET group_name = %s,
-                    description = %s
+                    description = %s,
+                    allow_multiple = %s,
                     WHERE dv_group_id = %s
-                    """, (self.group_name, self.description, self.value_group_id))
+                    """, (self.group_name, self.description, self.value_group_id, self.allow_multiple))
             
             if update_values:
                 cursor.execute("""

@@ -1,6 +1,6 @@
 _q_exports = ['_q_index',
               'batch',
-              'report',
+              'study',
               ]
 
 
@@ -8,10 +8,10 @@ from quixote.errors import AccessError, PublishError, TraversalError
 
 from dulcinea.database import get_transaction
 
+from canary.qx_defs import NotLoggedInError
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found
-from canary.qx_defs import NotLoggedInError
-from canary.ui.edit import batch, edit_ui, report
+from canary.ui.edit import batch, edit_ui, study
 
 _q_index = edit_ui._q_index
 

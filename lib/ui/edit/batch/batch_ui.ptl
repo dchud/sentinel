@@ -77,7 +77,7 @@ def view [html] (request, batch_id=None, start=0, size=25):
 
     header('Edit: View queued records')
     title_bar('View queued records, batch %s' % batch_id)
-
+    
     try:
         cursor = get_publisher().get_cursor()
         batch = Batch()
@@ -96,8 +96,10 @@ def view [html] (request, batch_id=None, start=0, size=25):
                 <th valign='top'>Actions</th>
             </tr>
             """
+            
             for record_id in batch.queued_records.keys()[start:start+size]:
                 record = batch.queued_records[record_id]
+                status = record.get_status()
                 """
                 <tr bgcolor='#ffffff'>
                     <td valign='top' align='center'>%s</td>
@@ -105,25 +107,27 @@ def view [html] (request, batch_id=None, start=0, size=25):
                     <td valign='top'>%s</td>
                     <td valign='top'>%s</td>
                     <td valign='top'>%s</td>
-                """ % (record_id, get_status_text(record.status),
+                """ % (record_id, record.get_status(text=True),
                        record.user_id, record.title, record.source)
-                
-                if record.status == record.STATUS_UNCLAIMED:
+                if status == record.STATUS_UNCLAIMED:
                     """
-                    <td valign='top'><a href='/edit/report/%s/curate'>curate</a></td>
+                    <td valign='top'><a href='/edit/study/%s/curate_one'>curate</a></td>
                     """ % record_id
-                elif record.status == record.STATUS_CLAIMED:
+                elif status == record.STATUS_CLAIMED:
                     if record.user_id == request.session.user.get_id():
                         """
-                        <td valign='top'><a href='/edit/report/%s/curate'>curate</a></td>
-                        """ % record_id
+                        <td valign='top'>
+                            <a href='/edit/study/%s/curate_one'>curate</a> -
+                            <a href='/edit/study/%s/unclaim'>unclaim</a>
+                        </td>
+                        """ % (record_id, record_id)
                     else:
                         """
                         <td valign='top'>claimed</td>
                         """
-                elif record.status == record.STATUS_FINISHED:
+                elif status == record.STATUS_CURATED:
                     """
-                    <td valign='top'>finished</td>
+                    <td valign='top'>curated</td>
                     """
                 """
                 </tr>
@@ -164,16 +168,4 @@ def pager [html] (batch, start, size):
         '''
         </p>
         '''
-
-def get_status_text (status):
-    if status == 0:
-        return 'Unclaimed'
-    elif status == 1:
-        return 'Claimed'
-    elif status == 2:
-        return 'Curated'
-    else:
-        return ''
-
-
 

@@ -39,13 +39,14 @@ class QueuedRecord (DTable):
 
     STATUS_UNCLAIMED = 0
     STATUS_CLAIMED = 1
-    STATUS_FINISHED = 2
+    STATUS_CURATED = 2
 
-    def __init__ (self):
-        self.uid = -1
+    def __init__ (self, uid=-1):
+        self.uid = uid
         self.queued_batch_id = -1
         self.user_id = ''
         self.status = self.STATUS_UNCLAIMED
+        self.study_id = -1
         self.title = ''
         self.source = ''
 
@@ -55,10 +56,10 @@ class QueuedRecord (DTable):
         Load a batch's queued records.
         """
         cursor.execute("""
-                       SELECT status, queued_batch_id, user_id, title, source
-                       FROM queued_records
-                       WHERE uid = %s
-                       """, int(self.uid))
+            SELECT status, queued_batch_id, user_id, study_id, title, source
+            FROM queued_records
+            WHERE uid = %s
+            """, int(self.uid))
         fields = [d[0] for d in cursor.description]
         desc = dtuple.TupleDescriptor([[f] for f in fields])
         row = cursor.fetchone()
@@ -71,28 +72,48 @@ class QueuedRecord (DTable):
         
         if self.uid == -1:
             cursor.execute("""
-                           INSERT INTO queued_records
-                           (uid, queued_batch_id, status, 
-                           user_id, title, source)
-                           VALUES (NULL, %s, %s, 
-                           %s, %s, %s, %s)
-                           """, (self.queued_batch_id, self.status, 
-                           self.user_id, self.title, self.source)
-                           )
+                INSERT INTO queued_records
+                (uid, queued_batch_id, status, 
+                user_id, study_id, title, source)
+                VALUES (NULL, 
+                %s, %s, %s, 
+                %s, %s, %s, %s)
+                """, (self.queued_batch_id, self.status, 
+                self.user_id, self.study_id, self.title, self.source)
+                )
             self.uid = self.get_new_uid(cursor)
 
         else:
             cursor.execute("""
-                           UPDATE queued_records
-                           SET queued_batch_id = %s, status = %s, 
-                           user_id = %s, title = %s, source = %s
-                           WHERE uid = %s
-                           """, (self.queued_batch_id, self.status, 
-                           self.user_id, self.title, self.source,
-                           self.uid)
-                           )
+                UPDATE queued_records
+                SET queued_batch_id = %s, status = %s, 
+                user_id = %s, study_id = %s, title = %s, source = %s
+                WHERE uid = %s
+                """, (self.queued_batch_id, self.status, 
+                self.user_id, self.study_id, self.title, self.source,
+                self.uid)
+                )
         # FIXME: should this be set from the SQL?
         self.date_modified = time.strftime(str('%Y-%m-%d'))
+
+
+    def get_status (self, text=False):
+        try:
+            status = int(self.status)
+        except:
+            print 'error w/cast'
+        if not text:
+            return status
+        else:
+            if status == self.STATUS_UNCLAIMED:
+                return 'unclaimed'
+            elif status == self.STATUS_CLAIMED:
+                return 'claimed'
+            elif status == self.STATUS_CURATED:
+                return 'curated'
+            else:
+                return ''
+
 
 
 class Batch:
@@ -111,7 +132,7 @@ class Batch:
         Load a batch's queued records.
         """
         cursor.execute("""
-                       SELECT uid, status, user_id, title, source
+                       SELECT uid, status, user_id, study_id, title, source
                        FROM queued_records
                        WHERE queued_batch_id = %s
                        ORDER BY status

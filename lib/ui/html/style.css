@@ -129,3 +129,7 @@ a.name:hover {
     margin: 3px;
 }
 
+.queued_record {
+    border: 1px dotted #003366;
+    padding: 4px;
+}
