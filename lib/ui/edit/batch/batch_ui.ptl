@@ -215,12 +215,9 @@ def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
                     </tr>
                     """ 
                     if record.duplicate_score:
-                        mapped_terms = source_catalog.get_mapped_terms(batch.source_id)
-                        complete_mapping = source_catalog.get_complete_mapping()
-
-                        dupes = record.check_for_duplicates(mapped_terms, 
-                            complete_mapping=complete_mapping)
-                        mapped_metadata = record.get_mapped_metadata(term_map=mapped_terms)
+                        complete_term_map = source_catalog.get_complete_mapping()
+                        dupes = record.check_for_duplicates(complete_term_map)
+                        mapped_metadata = record.get_mapped_metadata(complete_term_map)
                         
                         """
                         <tr>

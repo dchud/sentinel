@@ -33,11 +33,12 @@ SESSION_COOKIE_DOMAIN = "your.hostname"
 SESSION_COOKIE_PATH = "/"
 
 
-DB_POOL_SIZE = 5
 DB_HOST = "localhost"
 DB_NAME = "dbname"
 DB_USER = "dbuser"
 DB_PASSWD = "dbpass"
+USE_DB_POOL = False
+DB_POOL_SIZE = 5
 
 LOG_DIR = "/home/user/sites/canary_project/logs"
 

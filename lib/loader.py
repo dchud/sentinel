@@ -174,7 +174,7 @@ class QueuedRecord (canary.context.Cacheable, DTable):
     
     
     
-    def check_for_duplicates (self, term_map={}, complete_mapping={}):
+    def check_for_duplicates (self, term_map={}):
         """
         Simple tests to determine if this record is likely to be a
         duplicate of an existing record.
@@ -187,13 +187,13 @@ class QueuedRecord (canary.context.Cacheable, DTable):
         
         for field in ('unique_identifier', 'title', 'source'):
             # First, check for this exact same field value
-            if complete_mapping:
+            if len(term_map[field]) > 1:
                 select_clause = """
                         SELECT DISTINCT queued_record_id
                         FROM queued_record_metadata
                         WHERE ("""
                 select_clause += ' OR '.join(['(term_id = %s) ' % \
-                    term.uid for term in complete_mapping[field]])
+                    term.uid for term in term_map[field]])
                 select_clause += ')'
             else:
                 select_clause = """
@@ -391,11 +391,10 @@ class QueuedRecord (canary.context.Cacheable, DTable):
 
         try:
             # First, remove the study (connected table records will
-            # also be deleted).
-            study = Study(self.study_id)
-            # If it's not loaded, its linked table records won't be deleted.
-            study.load()
-            study.delete()
+            # also be deleted).  But don't delete non-existent studies.
+            if self.study_id >= 0:
+                study = Study(self.study_id)
+                study.delete()
             
             # Then, remove the metadata
             cursor.execute("""
@@ -434,22 +433,20 @@ class Batch (DTable):
             self.loaded_records.append(record)
             self.num_records += 1
             
-    def find_duplicates (self, source_catalog=None, use_loaded=True):
+    def find_duplicates (self, use_loaded=True):
         context = canary.context.Context()
         cursor = context.get_cursor()
-        if source_catalog == None:
-            source_catalog = SourceCatalog()
-            source_catalog.load_sources()
-        term_map = source_catalog.get_mapped_terms(source_id=self.source_id)
+        source_catalog = context.get_source_catalog()
+        complete_term_map = source_catalog.get_complete_mapping()
         source = source_catalog.get_source(self.source_id)
         
         if use_loaded:
             for rec in self.loaded_records:
                 rec.load(source=source)
-                rec.check_for_duplicates(term_map=term_map)
+                rec.check_for_duplicates(complete_term_map)
         else:
             for id, rec in self.queued_records.items():
-                rec.check_for_duplicates(term_map=term_map)
+                rec.check_for_duplicates(complete_term_map)
         context.close_cursor(cursor)
        
         

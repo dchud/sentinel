@@ -338,7 +338,7 @@ def pubmed [html] (request):
         data = pmsearch.search(keywords)
         
     mapped_terms = source_catalog.get_mapped_terms(pm_source.uid)
-    complete_mapping = source_catalog.get_complete_mapping()
+    complete_term_map = source_catalog.get_complete_mapping()
     parser = Parser(pm_source)
     recs = parser.parse(mapped_terms=mapped_terms, is_email=False, data=data)
     
@@ -358,8 +358,7 @@ def pubmed [html] (request):
             batch.name = 'pubmed-load-' + strftime(str('%Y-%m'), localtime())
         for rec in recs:
             if not rec.metadata == {}:
-                dupes = rec.check_for_duplicates(mapped_terms, 
-                    complete_mapping=complete_mapping)
+                dupes = rec.check_for_duplicates(complete_term_map)
                 if dupes:
                     rec.duplicate_score = len(dupes)
         batch.add_records(recs)
@@ -381,8 +380,7 @@ def pubmed [html] (request):
             """
             for rec in recs:
                 if not rec.metadata == {}:
-                    dupes = rec.check_for_duplicates(mapped_terms, 
-                        complete_mapping=complete_mapping)
+                    dupes = rec.check_for_duplicates(complete_term_map)
                     mapped_metadata = rec.get_mapped_metadata(term_map=mapped_terms)
                     if dupes:
                         

@@ -324,7 +324,7 @@ def receive [html] (request, batch_id=None):
         batch.save()
         
         if form.get('find_duplicates', '') == 'yes':
-            batch.find_duplicates(source_catalog)
+            batch.find_duplicates()
                 
         if num_records != len(records):
             add_message('Batch saved: Record count mismatch, %s specified, %s found' % (num_records, len(records)))
@@ -451,8 +451,6 @@ def delete [html] (request, batch_id):
 
 
 def dedupe [html] (request, batch_id):
-    context = canary.context.Context()
-    source_catalog = context.get_source_catalog()
 
     try:
         batch = Batch(batch_id)
@@ -460,7 +458,7 @@ def dedupe [html] (request, batch_id):
     except:
         return not_found('batch')
         
-    batch.find_duplicates(source_catalog)
+    batch.find_duplicates()
     add_message('Ran dedupe on batch')
     request.redirect(str('/admin'))
     
