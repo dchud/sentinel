@@ -65,7 +65,7 @@ class ValueGroup:
                     INSERT INTO dv_group
                     (dv_group_id, group_name, description, allow_multiple)
                     VALUES (NULL, %s, %s, %s)
-                    """, (self.group_name, self.description, self.allow_multiple))
+                    """, (self.group_name, self.description, int(self.allow_multiple)))
             else:
                 cursor.execute("""
                     UPDATE dv_group
@@ -73,7 +73,7 @@ class ValueGroup:
                     description = %s,
                     allow_multiple = %s,
                     WHERE dv_group_id = %s
-                    """, (self.group_name, self.description, self.value_group_id, self.allow_multiple))
+                    """, (self.group_name, self.description, self.value_group_id, int(self.allow_multiple)))
             
             if update_values:
                 cursor.execute("""

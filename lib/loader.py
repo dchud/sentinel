@@ -144,7 +144,6 @@ class QueuedRecord (DTable):
         """
         score = 0
         potential_dupes = {}
-        mapped_metadata = self.get_mapped_metadata(term_map=term_map)
         
         for field in ('unique_identifier', 'title', 'source'):
             # First, check for this exact same field value
@@ -277,50 +276,51 @@ class QueuedRecord (DTable):
             raise ValueError('Record not found')
 
     def save (self, cursor):
-        
-        if self.uid == -1:
-            #print 'inserting new record:', self
-            cursor.execute("""
-                INSERT INTO queued_records
-                (uid, 
-                queued_batch_id, status, user_id, study_id,
-                title, source, unique_identifier, duplicate_score)
-                VALUES (NULL, 
-                %s, %s, %s, %s,
-                %s, %s, %s, %s)
-                """, (self.queued_batch_id, self.status, self.user_id, self.study_id,
-                self.title, self.source, self.unique_identifier, self.duplicate_score)
-                )
-            self.uid = self.get_new_uid(cursor)
-
-        else:
-            cursor.execute("""
-                UPDATE queued_records
-                SET queued_batch_id = %s, status = %s, user_id = %s, study_id = %s,
-                title = %s, source = %s, unique_identifier = %s, duplicate_score = %s
-                WHERE uid = %s
-                """, (self.queued_batch_id, self.status, self.user_id, self.study_id,
-                self.title, self.source, self.unique_identifier, self.duplicate_score,
-                self.uid)
-                )
-        # FIXME: should this be set from the SQL?
-        self.date_modified = time.strftime(str('%Y-%m-%d'))
-        
-        cursor.execute("""
-            DELETE FROM queued_record_metadata
-            WHERE queued_record_id = %s
-            """, self.uid)
-        for key, val in self.metadata.items():
-            # FIXME: extra?
-            source_id, term_id = key
-            if isinstance(val, types.ListType):
-                for value in val:
-                    # Automatically save the ordering of each value
-                    self.save_metadata_value(cursor, source_id, term_id, 
-                        value, sequence_position=val.index(value))
+        try:
+            if self.uid == -1:
+                #print 'inserting new record:', self
+                cursor.execute("""
+                    INSERT INTO queued_records
+                    (uid, 
+                    queued_batch_id, status, user_id, study_id,
+                    title, source, unique_identifier, duplicate_score)
+                    VALUES (NULL, 
+                    %s, %s, %s, %s,
+                    %s, %s, %s, %s)
+                    """, (self.queued_batch_id, self.status, self.user_id, self.study_id,
+                    self.title, self.source, self.unique_identifier, self.duplicate_score)
+                    )
+                self.uid = self.get_new_uid(cursor)
+    
             else:
-                self.save_metadata_value(cursor, source_id, term_id, val)
- 
+                cursor.execute("""
+                    UPDATE queued_records
+                    SET queued_batch_id = %s, status = %s, user_id = %s, study_id = %s,
+                    title = %s, source = %s, unique_identifier = %s, duplicate_score = %s
+                    WHERE uid = %s
+                    """, (self.queued_batch_id, self.status, self.user_id, self.study_id,
+                    self.title, self.source, self.unique_identifier, self.duplicate_score,
+                    self.uid)
+                    )
+            # FIXME: should this be set from the SQL?
+            self.date_modified = time.strftime(str('%Y-%m-%d'))
+            
+            cursor.execute("""
+                DELETE FROM queued_record_metadata
+                WHERE queued_record_id = %s
+                """, self.uid)
+            for key, val in self.metadata.items():
+                # FIXME: extra?
+                source_id, term_id = key
+                if isinstance(val, types.ListType):
+                    for value in val:
+                        # Automatically save the ordering of each value
+                        self.save_metadata_value(cursor, source_id, term_id, 
+                            value, sequence_position=val.index(value))
+                else:
+                    self.save_metadata_value(cursor, source_id, term_id, val)
+        except:
+            print traceback.print_exc()
  
     def save_metadata_value (self, cursor, source_id, term_id, value, 
         sequence_position=0, extra=None):

@@ -393,7 +393,7 @@ class Methodology (DTable):
                 """, (self.study_id, self.study_type_id,
                 self.sample_size, self.timing,
                 self.sampling, self.controls, self.comments,
-                self.is_mesocosm, self.is_enclosure)
+                int(self.is_mesocosm), int(self.is_enclosure))
                 )
             #print 'inserted new methodology'
             self.uid = self.get_new_uid(cursor)
@@ -412,7 +412,7 @@ class Methodology (DTable):
                     """, (self.study_id, self.study_type_id,
                     self.sample_size, self.timing, 
                     self.sampling, self.controls, self.comments,
-                    self.is_mesocosm, self.is_enclosure,
+                    int(self.is_mesocosm), int(self.is_enclosure),
                     self.uid)
                     )
             except:
@@ -1465,10 +1465,10 @@ class Study (DTable):
                     %s, %s,
                     NOW(), NOW())
                     """, (self.record_id, self.status, self.article_type, self.curator_user_id,
-                    self.has_outcomes, self.has_exposures, 
-                    self.has_relationships, self.has_interspecies, 
-                    self.has_exposure_linkage, self.has_outcome_linkage,
-                    self.has_genomic, self.comments)
+                    int(self.has_outcomes), int(self.has_exposures), 
+                    int(self.has_relationships), int(self.has_interspecies), 
+                    int(self.has_exposure_linkage), int(self.has_outcome_linkage),
+                    int(self.has_genomic), self.comments)
                     )
             except:
                 # FIXME: proper exceptions
@@ -1490,10 +1490,10 @@ class Study (DTable):
                     date_modified = NOW()
                     WHERE uid = %s
                     """, (self.record_id, self.status, self.article_type, self.curator_user_id,
-                    self.has_outcomes, self.has_exposures, 
-                    self.has_relationships, self.has_interspecies, 
-                    self.has_exposure_linkage, self.has_outcome_linkage,
-                    self.has_genomic, self.comments,
+                    int(self.has_outcomes), int(self.has_exposures), 
+                    int(self.has_relationships), int(self.has_interspecies), 
+                    int(self.has_exposure_linkage), int(self.has_outcome_linkage),
+                    int(self.has_genomic), self.comments,
                     self.uid)
                     )
             except:

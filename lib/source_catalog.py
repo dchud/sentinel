@@ -361,9 +361,7 @@ class Term (CatalogItem):
 
 
     def save (self, cursor):
-        #print 'term.save()'
         if self.uid == -1:
-            #print 'insert'
             cursor.execute("""
                 INSERT INTO terms
                 (uid, name, description, date_modified,
@@ -374,11 +372,10 @@ class Term (CatalogItem):
                 %s, %s, %s, %s,
                 %s, %s)
                 """, (self.name, self.description,
-                    self.token, self.vocabulary_uid, self.source_id, self.is_multivalue,
+                    self.token, self.vocabulary_uid, self.source_id, int(self.is_multivalue),
                     self.re_multivalue_sep, self.mapped_term_id)
                 )
         else:
-            #print 'update'
             cursor.execute("""
                 UPDATE terms
                 SET name=%s, description=%s, date_modified=CURDATE(),
@@ -388,10 +385,9 @@ class Term (CatalogItem):
                 WHERE uid=%s
                 """, (self.name, self.description,
                     self.token, self.vocabulary_uid, self.source_id,
-                    self.is_multivalue,
+                    int(self.is_multivalue),
                     self.re_multivalue_sep, self.mapped_term_id,
                     self.uid)
                 )
-        #print 'save() succeeded'
         self.date_modified = time.strftime(str('%Y-%m-%d'))
 

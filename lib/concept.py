@@ -435,7 +435,6 @@ class CategoryConcept (DTable):
         
     def save (self, cursor):
         if self.uid == -1:
-            print 'execute'
             cursor.execute("""
                 INSERT INTO category_concepts
                 (uid, category_id, concept_id, 
@@ -444,14 +443,11 @@ class CategoryConcept (DTable):
                 (NULL, %s, %s, 
                 %s, %s)
                 """, (self.category_id, self.concept_id, 
-                self.is_default, self.is_broad))
-            print 'get last insert id'
+                int(self.is_default), int(self.is_broad)))
             cursor.execute("""
                 SELECT LAST_INSERT_ID() AS new_uid
                 """)
-            print 'executed both'
             row = cursor.fetchone()
-            print 'setting uid'
             self.uid = row[0]
         else:
             print 'updating'
@@ -460,5 +456,5 @@ class CategoryConcept (DTable):
                 SET is_default = %s,
                 is_broad = %s
                 WHERE uid = %s
-                """, (self.is_default, self.is_broad, self.uid))
+                """, (int(self.is_default), int(self.is_broad), self.uid))
             print 'updated'
