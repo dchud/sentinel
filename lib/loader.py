@@ -136,28 +136,43 @@ class QueuedRecord (DTable):
         return mapped_metadata
     
     
-    def check_for_duplicates (self, cursor, term_map={}, save_changes=True):
+    def check_for_duplicates (self, cursor, term_map={}, 
+        complete_mapping={}, save_changes=True):
         """
         Simple tests to determine if this record is likely to be a
         duplicate of an existing record.
         """
         score = 0
-        potential_dupes = []
+        potential_dupes = {}
         mapped_metadata = self.get_mapped_metadata(term_map=term_map)
         
-        for field in ('unique_identifier', 'title'):
+        for field in ('unique_identifier', 'title', 'source'):
             # First, check for this exact same field value
-            cursor.execute("""
-                SELECT queued_record_id
-                FROM queued_record_metadata
-                WHERE term_id = %s
+            if complete_mapping:
+                select_clause = """
+                        SELECT DISTINCT queued_record_id
+                        FROM queued_record_metadata
+                        WHERE ("""
+                select_clause += ' OR '.join(['(term_id = %s) ' % \
+                    term.uid for term in complete_mapping[field]])
+                select_clause += ')'
+            else:
+                select_clause = """
+                        SELECT DISTINCT queued_record_id
+                        FROM queued_record_metadata
+                        WHERE term_id =""", term_map[field].uid
+                    
+            cursor.execute(select_clause + """
                 AND value = %s
                 AND queued_record_id != %s
-                """, (term_map[field].uid, getattr(self, field), self.uid))
+                """, (getattr(self, field), self.uid))
             rows = cursor.fetchall()
             for row in rows:
                 rec_id = row[0]
-                print 'found dupe %s for field %s' % (rec_id, field)
+                try:
+                    potential_dupes[rec_id].append(field)
+                except:
+                    potential_dupes[rec_id] = [field]
                 if save_changes:
                     try:
                         cursor.execute("""
@@ -169,9 +184,10 @@ class QueuedRecord (DTable):
                     except:
                         print traceback.print_exc()
                     
-                self.duplicate_score += 10
-                self.save(cursor)
+                    self.duplicate_score += 10
+                    self.save(cursor)
         
+        return potential_dupes
         
     def get_duplicates (self, cursor):
         """

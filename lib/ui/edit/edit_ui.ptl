@@ -12,7 +12,7 @@ from quixote import get_publisher, get_request
 from quixote.errors import AccessError, PublishError, TraversalError
 from quixote import form2
 
-from canary.loader import Batch, Queue, Parser
+from canary.loader import Batch, QueuedRecord, Queue, Parser
 from canary.qx_defs import MyForm
 from canary.search import PubmedSearch, Search
 from canary.ui.edit.study.utils import get_sfx_link
@@ -329,6 +329,7 @@ def pubmed [html] (request):
         data = pmsearch.search(keywords)
         
     mapped_terms = source_catalog.get_mapped_terms(pm_source.uid)
+    complete_mapping = source_catalog.get_complete_mapping()
     parser = Parser(pm_source)
     recs = parser.parse(mapped_terms=mapped_terms, is_email=False, data=data)
     
@@ -365,22 +366,79 @@ def pubmed [html] (request):
             """
             for rec in recs:
                 if not rec.metadata == {}:
+                    dupes = rec.check_for_duplicates(cursor, mapped_terms, 
+                        complete_mapping=complete_mapping, save_changes=False)
                     mapped_metadata = rec.get_mapped_metadata(term_map=mapped_terms)
-                    """
-                <tr>
-                    <td>%s</td>
-                    <td>%s</td>
-                    <td>%s</td>
-                    <td>%s</td>
-                    <td>[<a href='pubmed?pmid=%s&batch_id=%s&queue=add'>queue</a>]</td>
-                </tr>
-                    """ % (mapped_metadata['unique_identifier'],
-                        ', '.join(mapped_metadata['author']),
-                        mapped_metadata['title'],
-                        mapped_metadata['source'],
-                        mapped_metadata['unique_identifier'],
-                        form['batch_id']
-                        )
+                    if dupes:
+                        
+                        """
+                    <tr>
+                        <td class='highlight'>%s</td>
+                        <td class='highlight'>%s</td>
+                        <td class='highlight'>%s</td>
+                        <td class='highlight'>%s</td>
+                        <td class='highlight'>
+                            Duplicate detected
+                        </td>
+                    </tr>
+                        """ % (mapped_metadata['unique_identifier'],
+                            ', '.join(mapped_metadata['author']),
+                            mapped_metadata['title'],
+                            mapped_metadata['source']
+                            )
+                        """
+                    <tr>
+                        <td colspan='5' class='highlight'>
+                            Possible matches:
+                            <ul>
+                        """
+                        sort_list = [(k, v) for k, v in dupes.items()]
+                        sort_list.sort()
+                        for dupe_rec_id, dupe_fields in sort_list:
+                            dupe_rec = QueuedRecord(dupe_rec_id)
+                            dupe_rec.load(cursor, load_metadata=False)
+                            """
+                                <li>
+                                #%s (%s)
+                                [<a href='/record/%s' target='_blank'>public view</a>]
+                                [<a href='/edit/study/%s/history' target='_blank'>history</a>]
+                                [<a href='/edit/study/%s/curate_one'>curate</a>]
+                                <br />
+                                %s
+                                <br />
+                                %s
+                                </li> 
+                            """ % (dupe_rec_id, dupe_rec.get_status(True),
+                                dupe_rec_id, 
+                                dupe_rec_id, 
+                                dupe_rec_id, 
+                                dupe_rec.title, dupe_rec.source)
+                        """
+                            </ul>
+                            <br />
+                            If you're certain it's not a duplicate, you may
+                            still 
+                            [<a href='pubmed?pmid=%s&batch_id=%s&queue=add'>queue</a>]
+                            this record.
+                        </td>
+                    </tr>
+                        """ % (mapped_metadata['unique_identifier'], form['batch_id'])
+                    else:
+                        """
+                    <tr>
+                        <td>%s</td>
+                        <td>%s</td>
+                        <td>%s</td>
+                        <td>%s</td>
+                        <td>[<a href='pubmed?pmid=%s&batch_id=%s&queue=add'>queue</a>]</td>
+                    </tr>
+                        """ % (mapped_metadata['unique_identifier'],
+                            ', '.join(mapped_metadata['author']),
+                            mapped_metadata['title'],
+                            mapped_metadata['source'],
+                            mapped_metadata['unique_identifier'],
+                            form['batch_id']
+                            )
             """
             </table>
             """

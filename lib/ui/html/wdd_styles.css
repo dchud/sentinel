@@ -465,6 +465,13 @@ dl {
 	padding: 5px;
 }
 
+.gentable td.highlight {
+	text-align: left;
+        background: #ffc;
+	border: 2px solid #a5a5a5;
+	padding: 5px;
+}
+
 #exposures td, #outcomes td, #species td, #summary td {
     /*
     font-size: small;
