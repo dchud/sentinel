@@ -89,8 +89,10 @@ def pageframe [html] ():
                                 <b>&nbsp;Search</b>:&nbsp;
                                 <select name='field'>
                                     <option selected value='keyword'>keyword</option>
-                                    <option>author</option>
                                     <option>title</option>
+                                    <option>author</option>
+                                    <option>canary id</option>
+                                    <option>unique id</option>
                                 </select>
                                 <input type='text' size='30' name='query'>
                                 <input type='submit' name='go' value='go'>

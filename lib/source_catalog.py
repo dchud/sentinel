@@ -169,10 +169,6 @@ class SourceCatalog:
             source.load(cursor, load_terms=load_terms)
             self.sources[source.uid] = source
 
-        for source_id in self.sources.keys():
-            source = self.sources[source_id]
-            source.load(cursor, load_terms=load_terms)
-            self.sources[source_id] = source
             # index the terms by id if they were loaded
             if load_terms:
                 term_ids = source.terms.keys()

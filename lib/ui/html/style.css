@@ -127,6 +127,10 @@ a.name:hover {
     font-size: small;
 }
 
+.centered-td td {
+    text-align: center;
+}
+
 .studytable {
 	width: 70%;
 }

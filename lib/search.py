@@ -1,20 +1,23 @@
 
 from canary.loader import QueuedRecord
-
+from canary.study import Study
 
 class Search:
 
     FIELDS = [
         'author',
         'title',
-        'record id',
+        'canary id',
         'unique id',
+        'keyword',
         ]
     
-    def __init__ (self, field='', token='', allow_curated=False):
+    def __init__ (self, field='', token='', allow_curated=True, 
+        allow_uncurated=False):
         self.field = field
-        self.token = token
+        self.token = token.strip()
         self.allow_curated = allow_curated
+        self.allow_uncurated = allow_uncurated
         
         
     def search (self, cursor, term_mapping={}):
@@ -24,11 +27,41 @@ class Search:
             return results
 
         try:
-            if self.field == 'record id':
+            if self.field == 'canary id':
                 token = int(self.token)
                 record = QueuedRecord(token)
                 record.load(cursor)
                 results.add_result(record)
+            elif self.field == 'keyword':
+                select_clause = """
+                    SELECT DISTINCT queued_record_metadata.queued_record_id
+                    FROM queued_record_metadata, queued_records, studies
+                    WHERE queued_record_metadata.queued_record_id = queued_records.uid
+                    AND queued_records.study_id = studies.uid
+                    """
+                if self.allow_curated:
+                    if self.allow_uncurated:
+                        # Can be anything, no need to restrict
+                        pass
+                    else:
+                        # Should be curated articles only
+                        select_clause += ' AND queued_records.status = %s ' % QueuedRecord.STATUS_CURATED
+                        select_clause += ' AND studies.article_type > %s ' % Study.ARTICLE_TYPES['irrelevant']
+                else:
+                    # Should be uncurated articles only
+                    select_clause += ' AND queued_records.status != %s' % QueuedRecord.STATUS_CURATED
+
+                search_token = '%' + self.token.replace(' ', '% ') + '%'
+                cursor.execute(select_clause + """
+                    AND value LIKE %s
+                    """, search_token
+                    )
+                rows = cursor.fetchall()
+                for row in rows:
+                    record = QueuedRecord(row[0])
+                    record.load(cursor)
+                    results.add_result(record)
+
             else:
                 search_token = self.token + '%'
                 if self.field in self.FIELDS \
@@ -37,26 +70,37 @@ class Search:
                         search_token = '%' + search_token
                     
                     select_clause = """
-                        SELECT queued_record_id
-                        FROM queued_record_metadata
-                        WHERE ("""
-                    select_clause += ' OR '.join(['(source_id = %s AND term_id = %s) ' % \
-                        (term.source_id, term.uid) for term in term_mapping[self.field]])
+                        SELECT DISTINCT queued_record_metadata.queued_record_id
+                        FROM queued_record_metadata, queued_records, studies
+                        WHERE queued_record_metadata.queued_record_id = queued_records.uid
+                        AND queued_records.study_id = studies.uid
+                        AND ("""
+                    select_clause += ' OR '.join(['(term_id = %s) ' % \
+                        term.uid for term in term_mapping[self.field]])
+                    select_clause += ')'
+                        
+                    if self.allow_curated:
+                        if self.allow_uncurated:
+                            # Can be anything, no need to restrict
+                            pass
+                        else:
+                            # Should be curated articles only
+                            select_clause += ' AND queued_records.status = %s' % QueuedRecord.STATUS_CURATED
+                            select_clause += ' AND studies.article_type > %s ' % Study.ARTICLE_TYPES['irrelevant']
+                    else:
+                        # Should be uncurated articles only
+                        select_clause += ' AND queued_records.status != %s' % QueuedRecord.STATUS_CURATED
                     
-                    cursor.execute(select_clause + """)
-                        AND value LIKE %s
-                        """, (search_token)
-                        )
+                    cursor.execute(select_clause + ' AND value LIKE %s ', search_token)
                     rows = cursor.fetchall()
                     for row in rows:
                         record = QueuedRecord(row[0])
                         record.load(cursor)
-                        if self.allow_curated:
-                            results.add_result(record)
-                        elif not record.status == record.STATUS_CURATED:
-                            results.add_result(record)
+                        results.add_result(record)
         except:
             print 'Unable to perform search'
+            import traceback
+            print traceback.print_exc()
         
         return results
 
@@ -128,16 +172,13 @@ class PubmedSearch:
             else:
                 url = self.esearch_url.replace('[[TERMS]]', 
                     urllib.quote_plus(str(terms)))
-            print 'url:', url
             xmls = urllib.urlopen(url).read()
             events = pulldom.parseString(xmls)
             for event, node in events:
                 if event == 'START_ELEMENT' \
                     and node.tagName == 'Id':
-                    print 'found Id'
                     events.expandNode(node)
                     id = self._get_text(node)
-                    print 'adding id:', id
                     id_list.append(id)
         except:
             return []

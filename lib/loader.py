@@ -9,7 +9,7 @@ import dtuple
 from quixote import enable_ptl
 enable_ptl()
 
-from canary.source_catalog import Source, Term
+from canary.source_catalog import Source, Term, SourceCatalog
 from canary.utils import DTable
 
 
@@ -92,19 +92,42 @@ class QueuedRecord (DTable):
             return self.metadata[md_key]
         else:
             # FIXME: temporary fix, better API would be better
-            return ''
+            if not term.is_multivalue:
+                return ''
+            else:
+                return []
             
             
-    def get_mapped_metadata (self, source_id, term_map={}):
+    def get_mapped_metadata (self, term_map={}):
         """
         For every field in this record that is mapped from a specific source,
         return a map to its metadata values.
+        
+        If an md value comes back == '' or [], it probably doesn't exist for that 
+        record and term.  We don't want to clobber things like titles from 
+        one source when other source-titles aren't present, so don't overwrite
+        values unless value is blank.
         """
         mapped_metadata = {}
-        term_info_set = [(source_id, term, mapped_name) for mapped_name, term in term_map.items()]
-        for term_info in term_info_set:
-            source_id, term, mapped_name = term_info
-            mapped_metadata[mapped_name] = self.get_metadata(source_id, term)
+        term_info_set = [(mapped_name, term) for mapped_name, term in term_map.items()]
+        for mapped_name, terms in term_info_set:
+            if isinstance(terms, types.ListType):
+                for term in terms:
+                    md = self.get_metadata(term.source_id, term)
+                    if not md == '' \
+                        or md == []:
+                        mapped_metadata[mapped_name] = md
+            else:
+                # terms is really a single item
+                term = terms
+                md = self.get_metadata(term.source_id, term)
+                if not md == '' \
+                    or md == []:
+                    mapped_metadata[mapped_name] = md
+            # Note: only if a mapped-term value hasn't been set at all
+            # FIXME: this feels hackish...
+            if not mapped_metadata.has_key(mapped_name):
+                mapped_metadata[mapped_name] = ''
         return mapped_metadata
         
 
@@ -138,6 +161,9 @@ class QueuedRecord (DTable):
         for field in fields:
             self.set(field, row[field])
             
+        if not source:
+            source_catalog = SourceCatalog()
+            source_catalog.load_sources(cursor)
         if load_metadata:
             cursor.execute("""
                 SELECT *
@@ -153,8 +179,7 @@ class QueuedRecord (DTable):
                 if source:
                     term = source.terms[row['term_id']]
                 else:
-                    term = Term(uid=row['term_id'])
-                    term.load(cursor)
+                    term = source_catalog.get_term(row['term_id'])
                 self.add_metadata(source_id, term, row['value'], row['extra'])
     
 
@@ -382,42 +407,48 @@ class Parser:
         current_token = current_value = ''
         current_record = QueuedRecord()
         for line in lines:
-            if self.re_result_sep.match(line):
-                # Matches record separator, so is either first record or new record
-                if len(current_record.metadata) > 0:
-                    # Don't miss last token/value
-                    self._add_metadata(current_token, current_value, current_record)
-                    mapped_metadata = current_record.get_mapped_metadata(self.source.uid, mapped_terms)
-                    current_record.title = mapped_metadata['title']
-                    current_record.source = mapped_metadata['source']
-                    current_record.unique_identifier = mapped_metadata['unique_identifier']
-                    records.append(current_record)
-                current_token = current_value = ''
-                current_record = QueuedRecord()
-            else:
-                match = self.re_term_token.match(line)
-                if match:
-                    # Line contains token, i.e. is start of value
-                    # Note: match.group(0) == line  (damn that snake!)
-                    token = match.group(1)
-                    value = match.group(2)
-                    self._add_metadata(current_token, current_value, current_record)
-                    current_token = token
-                    current_value = value
+            try:
+                if self.re_result_sep.match(line):
+                    # Matches record separator, so is either first record or new record
+                    if len(current_record.metadata) > 0:
+                        # Must be new record, but don't miss last token/value for current_record
+                        self._add_metadata(current_token, current_value, current_record)
+                        mapped_metadata = current_record.get_mapped_metadata(mapped_terms)
+                        current_record.title = mapped_metadata['title']
+                        current_record.source = mapped_metadata['source']
+                        current_record.unique_identifier = mapped_metadata['unique_identifier']
+                        records.append(current_record)
+                        current_token = current_value = ''
+                        current_record = QueuedRecord()
                 else:
-                    # Line does not contain token, i.e. is value cont'd or blank
-                    if not line.strip() == '':
-                        # Line isn't blank, so it continues a value
-                        current_value = current_value + ' ' + line.strip()
+                    # More info for current_record
+                    match = self.re_term_token.match(line)
+                    if match:
+                        # Line contains token, i.e. is start of value
+                        # Note: match.group(0) == line  (damn that snake!)
+                        token = match.group(1)
+                        value = match.group(2)
+                        self._add_metadata(current_token, current_value, current_record)
+                        current_token = token
+                        current_value = value
                     else:
-                        # blank line
-                        pass
+                        # Line does not contain token, i.e. is value cont'd or blank
+                        if not line.strip() == '':
+                            # Line isn't blank, so it continues a value
+                            current_value = current_value + ' ' + line.strip()
+                        else:
+                            # blank line
+                            pass
+            except:
+                print 'failed on line: "%s"' % line
+                continue
+            
         # Note: we don't catch the last record in the loop above,
         # so do it 'manually' here
         if not current_record == None \
             and not current_record.metadata == {}:
             self._add_metadata(current_token, current_value, current_record)
-            mapped_metadata = current_record.get_mapped_metadata(self.source.uid, mapped_terms)
+            mapped_metadata = current_record.get_mapped_metadata(mapped_terms)
             current_record.title = mapped_metadata['title']
             current_record.source = mapped_metadata['source']
             current_record.unique_identifier = mapped_metadata['unique_identifier']
