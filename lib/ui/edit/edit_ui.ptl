@@ -15,6 +15,7 @@ from quixote import form2
 from canary.loader import Batch, Queue, Parser
 from canary.qx_defs import MyForm
 from canary.search import PubmedSearch, Search
+from canary.ui.edit.study.utils import get_sfx_link
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import add_message, has_messages, render_messages, not_found
 
@@ -135,6 +136,53 @@ def _q_index [html] (request):
             <td>[<a href='/edit/batch/%s/view'>view</a>]</td>
         </tr>
         """ % (str(batch.date_added)[0:10], batch.uid)
+    """
+    </table>
+    """
+    
+    """
+    <br />
+    <br />
+    <h3>My claimed records</h3>
+    
+    <table cellspacing='5' id='batch_view' class='gentable'>
+        <tr>
+            <th>id</th>
+            <th>Batch</th>
+            <th>Status</th>
+            <th>Title</th>
+            <th>Source</th>
+            <th>Actions</th>
+        </tr>
+    """
+    for batch in queue.batches:
+        batch.load(cursor)
+        for record_id, record in batch.queued_records.items():
+            if record.status == record.STATUS_CLAIMED \
+                and record.user_id == request.session.user.get_id():
+                """
+        <tr>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+                """ % (record_id, batch.name, record.get_status(text=True),
+                    record.title, record.source)
+                    
+                """
+            <td>
+                [<a href='%s'>sfx links</a>]
+                """ % get_sfx_link(batch.source_id, record.unique_identifier)
+            
+                """
+                [<a href='/edit/study/%s/curate_one'>curate</a>]
+                [<a href='/edit/study/%s/unclaim'>unclaim</a>]
+                """ % (record_id, record_id)
+                """
+            </td>
+        </tr>
+                """    
     """
     </table>
     """
