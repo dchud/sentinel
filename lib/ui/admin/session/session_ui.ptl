@@ -51,7 +51,7 @@ def delete [html] (session_id=None):
     form.add(CheckboxWidget, 'are_you_sure',
              title='Are you sure you want to delete this session?',
              value=False)
-    form.add(SubmitWidget, 'go', 'go')
+    form.add(SubmitWidget, 'delete', 'delete')
 
     session_manager = get_session_manager()
     session = session_manager[session_id]

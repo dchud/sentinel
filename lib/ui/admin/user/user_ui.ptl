@@ -68,7 +68,7 @@ class UserForm (MyForm):
         self.add(CheckboxWidget, 'is_active', title='Active', value=True)
         self.add(PasswordWidget, 'user_pass',
                  title='Set user password', required=False)
-        self.add(SubmitWidget, 'go', value='go')
+        self.add(SubmitWidget, 'submit', value='submit')
 
 
 def create [html] (request):
@@ -209,7 +209,7 @@ class DeleteUserForm (MyForm):
         self.add(CheckboxWidget, 'are_you_sure',
                  title='Are you sure you want to delete this user?',
                  value=False)
-        self.add(SubmitWidget, 'go', 'go')
+        self.add(SubmitWidget, 'delete', 'delete')
 
 
 def delete [html] (user_id=None):

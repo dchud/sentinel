@@ -484,7 +484,7 @@ class Study (DTable):
                 or self.has_type('cohort') \
                 or self.has_type('case control'):
                 form.add(SingleSelectWidget, 'controls',
-                    title='Controls',
+                    title='Controls from same population?',
                     value=self.get_controls(),
                     options=[(val, name, val) for name, val in self.CONTROLS.items()],
                     sort=True,

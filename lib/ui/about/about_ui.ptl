@@ -21,7 +21,7 @@ def contact_us [html] (request):
              size=30, required=True)
     form.add(TextWidget, 'user_text', title='Your message',
              rows=8, cols='60', wrap='virtual', required=True)
-    form.add(SubmitWidget, 'go', value='send')
+    form.add(SubmitWidget, 'send', value='send')
 
     def render [html] ():
         header('Contact Us')

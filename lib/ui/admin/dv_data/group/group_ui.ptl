@@ -67,7 +67,7 @@ class GroupForm (MyForm):
             size='30', required=True)
         self.add(TextWidget, 'group_description', title='Description',
             rows='2', cols='40', required=False)
-        self.add(SubmitWidget, 'go', 'go')
+        self.add(SubmitWidget, 'submit', 'submit')
 
 
 def create [html] (request):
@@ -133,7 +133,7 @@ def delete [html] (group_id):
     form.add(CheckboxWidget, 'are_you_sure',
              title='Are you sure you want to delete this value group?',
              value=False)
-    form.add(SubmitWidget, 'go', 'go')
+    form.add(SubmitWidget, 'delete', 'delete')
 
     def render [html] ():
         header('Delete value group')
@@ -290,7 +290,7 @@ def values [html] (group_id):
             <input type='hidden' name='value_group_id' value='%s'>
             <td><input type='text' name='value_serial_number' size='5'></td>
             <td><input type='text' name='value_description' size='30'></td>
-            <td><input type='submit' value='go'></td>
+            <td><input type='submit' value='create'></td>
             </form>
         </tr>
     """ % (bgcolor, group.value_group_id)

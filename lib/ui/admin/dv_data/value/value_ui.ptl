@@ -67,7 +67,7 @@ class ValueForm (MyForm):
             size=3, required=True)
         self.add(TextWidget, 'value_description', title='Description',
             rows=2, cols=40, wrap='virtual', required=False)
-        self.add(SubmitWidget, 'go', 'go')
+        self.add(SubmitWidget, 'submit', 'submit')
 
 
 def create [html] (request):
@@ -193,7 +193,7 @@ def delete [html] (request, value_id=None):
     form.add(CheckboxWidget, 'are_you_sure',
         title='Are you sure you want to delete this value?',
         value=False)
-    form.add(SubmitWidget, 'go', 'go')
+    form.add(SubmitWidget, 'delete', 'delete')
 
     try:
         value_id = int(value_id)

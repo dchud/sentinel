@@ -41,7 +41,7 @@ def outcomes [html] (request, queued_record_id):
         title='Has differing susceptabilities among species?', value=False)
     form.add(TextWidget, 'comments', title='Comments',
         rows=8, cols='60', wrap='virtual', required=False)
-    form.add(SubmitWidget, 'go', value='go')
+    form.add(SubmitWidget, 'submit', value='submit')
 
     def render [html] ():
         header('Curate review')

@@ -77,7 +77,7 @@ class SourceForm (MyForm):
         self.add(StringWidget, 're_term_token',
                  title='Term token regexp',
                  size='40', required=False)
-        self.add(SubmitWidget, 'go', value='go')
+        self.add(SubmitWidget, 'submit', value='submit')
 
 
 def create [html] (request):
@@ -233,7 +233,7 @@ class DeleteSourceForm (MyForm):
         self.add(CheckboxWidget, 'are_you_sure',
                  title='Are you sure you want to delete this source?',
                  value=False)
-        self.add(SubmitWidget, 'go', 'go')
+        self.add(SubmitWidget, 'delete', 'delete')
 
 
 def delete [html] (source_id=None):
@@ -366,7 +366,7 @@ def terms [html] (request, source_id=None):
             <td><input type='text' name='term_token' size='5'></td>
             <td><input type='text' name='term_source_uid' size='3' value='%s'></td>
             <td><input type='checkbox' name='term_is_multivalue'></td>
-            <td><input type='submit' value='go'></td>
+            <td><input type='submit' value='create'></td>
             </form>
         </tr>
     """ % (bgcolor, source_id)

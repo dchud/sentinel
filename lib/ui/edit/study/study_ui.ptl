@@ -270,11 +270,11 @@ def curate_two [html] (request, queued_record_id):
         value=study.has_exposures)
     form.add(CheckboxWidget, 
         'has_outcomes',
-        title='Animal health effects', 
+        title='Animal health outcomes', 
         value=study.has_outcomes)
     form.add(CheckboxWidget,
         'has_relationships',
-        title='Animal exposure/effect relationships',
+        title='Animal exposure/outcome relationships',
         value=study.has_relationships)
     form.add(CheckboxWidget, 
         'has_interspecies',
@@ -286,7 +286,7 @@ def curate_two [html] (request, queued_record_id):
         value=study.has_exposure_linkage)
     form.add(CheckboxWidget,
         'has_outcome_linkage',
-        title='Linkage between animal exposure/effect and human health outcomes',
+        title='Linkage between animal exposure/outcome and human health outcomes',
         value=study.has_outcome_linkage)
     
     form.add(SubmitWidget, 'continue', value='continue')
@@ -562,7 +562,7 @@ def unclaim [html] (request, queued_record_id):
     form = MyForm()
     form.add(CheckboxWidget, 'are_you_sure', 
         title='Are you sure?', value=False)
-    form.add(SubmitWidget, 'go', value='go')
+    form.add(SubmitWidget, 'unclaim', value='unclaim')
 
     def render [html] ():
         header('Curate: Unclaim study')
