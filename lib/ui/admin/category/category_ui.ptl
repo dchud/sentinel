@@ -65,6 +65,8 @@ class CategoryActions:
             
 def concepts [html] (request, category_id):
 
+    context = get_publisher().context
+
     category = Category(uid=category_id)
     category.load(context, load_concepts=True)
     
@@ -137,6 +139,8 @@ def concepts [html] (request, category_id):
     
 def edit [html] (request, category_id):
     
+    context = get_publisher().context
+
     category = Category(uid=category_id)
     category.load(context)
     
@@ -206,6 +210,8 @@ def edit [html] (request, category_id):
 
 def list [html] (request):
 
+    context = get_publisher().context
+
     header('List categories')
     title_bar('List categories')
     if has_messages():
@@ -225,8 +231,8 @@ def list [html] (request):
         <th>Actions</th>
     </tr>
     """
-    categories = load_categories()
-    categories = [(c.name, c) for c in categories]
+    categories = load_categories(context)
+    categories = [(c.name.lower(), c) for c in categories]
     categories.sort()
     for name, category in categories:
         """
@@ -331,6 +337,8 @@ def create [html] (request):
 
 def find [html] (request, category_id):
     
+    context = get_publisher().context
+
     form = MyForm(context)
     form.add(form2.StringWidget, 'search_term', 
         title='Concept (term or UMLS id)',
@@ -378,6 +386,8 @@ def find [html] (request, category_id):
 
 def add [html] (request, category_id):
     
+    context = get_publisher().context
+
     try:
         cid = int(request.get_form_var('concept_id', ''))
     except:
@@ -386,7 +396,7 @@ def add [html] (request, category_id):
     category = Category(uid=category_id)
     category.load(context)
     
-    concept = Concept(context, uid=cid)
+    concept = Concept(context, cid)
     
     form = MyForm(context)
     form.add_hidden('concept_id',
@@ -418,7 +428,7 @@ def add [html] (request, category_id):
         print 'saving concept'
         cat_concept.save(context)
         print 'saved'
-        add_message('Added concept')
+        add_message('Added concept "%s"' % contept.term))
         form.logger.info(str('Added concept %s to category %s' % (concept.uid, cid)))
     except:
         add_message('Unable to add concept')
@@ -428,15 +438,15 @@ def add [html] (request, category_id):
     request.redirect(str('/admin/category/%s' % category_id))
     
 
+# NOTE/FIXME:  "concept_uid" refers to uid of CategoryConcept;
+# "concept_id" refers to umls_concept_id.  Allowing either simplifies
+# passing of concept id to edit/remove functions from either search
+# (which won't know the concept_uid) or category pages (which will).
+# These are *poorly* named and should be cleaned up.
 def edit_concept [html] (request, category_id):
-    """
-    NOTE/FIXME:  "concept_uid" refers to uid of CategoryConcept;
-    "concept_id" refers to umls_concept_id.  Allowing either simplifies
-    passing of concept id to edit/remove functions from either search
-    (which won't know the concept_uid) or category pages (which will).
-    These are *poorly* named and should be cleaned up.
-    """
-    
+
+    context = get_publisher().context
+
     try:
         cid = int(request.get_form_var('concept_id', 0))
         cuid = int(request.get_form_var('concept_uid', 0))
@@ -502,11 +512,10 @@ def edit_concept [html] (request, category_id):
     request.redirect(str('/admin/category/%s' % category_id))
 
 
+# See comment on "concept_uid" vs. "concept_id" under edit_concept().
 def remove [html] (request, category_id):
-    """
-    See comment on "concept_uid" vs. "concept_id" under edit_concept().
-    """
     
+    context = get_publisher().context
     try:
         cid = int(request.get_form_var('concept_id', 0))
         cuid = int(request.get_form_var('concept_uid', 0))
@@ -571,6 +580,8 @@ def remove [html] (request, category_id):
 
 def render_found_concepts [html] (category, concepts):
     
+    context = get_publisher().context
+
     if len(concepts) == 0:
         return
         
