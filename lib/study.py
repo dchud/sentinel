@@ -160,7 +160,7 @@ class Methodology (DTable):
         self.uid = uid
         self.study_id = -1
         self.study_type_id = -1
-        self.sample_size = 0
+        self.sample_size = ''
         self.timing = -1
         self.sampling = -1
         self.controls = -1
@@ -191,15 +191,6 @@ class Methodology (DTable):
                 return k
         return ''
 
-
-    def set_sample_size (self, n):
-        
-        try:
-            if int(n):
-                self.sample_size = n
-        except:
-            pass
-        
         
     def set_timing (self, timing):
         
@@ -450,10 +441,10 @@ class Methodology (DTable):
         
         # all methodology types get a sample size
         #print 'sample size'
-        form.add(form2.IntWidget, 'sample_size',
+        form.add(form2.StringWidget, 'sample_size',
             title='Sample size (study n)',
-            size=10, value=int(self.sample_size),
-            required=True)
+            size=10, value=self.sample_size,
+            required=False)
             
         # all methodology types get one or more routes
         #print 'route'
@@ -538,10 +529,7 @@ class Methodology (DTable):
     def process_form (self, form):
         
         # all methodology types get a sample size
-        if form['sample_size'] <= 0:
-            form.set_error('sample_size', 'Sample size must be greater than zero')
-        else:
-            #print 'setting sample size to %s' % form['sample_size']
+        if form['sample_size']:
             self.sample_size = form['sample_size']
             
         # all methodology types get one or more routes
