@@ -1,4 +1,4 @@
-global-include *.py *.ptl *.css *.ico *.sh *.png *.gif *.js
+global-include *.py *.ptl *.css *.ico *.sh *.png *.gif *.jpg *.js
 include README LICENSE MANIFEST.in CHANGES
 include conf/canary_config.py.sample
 exclude conf/canary_config.py
