@@ -64,9 +64,11 @@ def records_by_journal (cursor, issn, term_map={}):
         
         select_clause = """
             SELECT queued_records.uid
-            FROM queued_records, queued_record_metadata
+            FROM queued_records, queued_record_metadata, studies
             WHERE queued_record_metadata.queued_record_id = queued_records.uid
+            AND queued_records.uid = studies.record_id
             AND queued_records.status = 2
+            AND studies.article_type >= 2
             AND (%s)
             """ % issn_clause
         #print 'sql:', select_clause
@@ -93,10 +95,12 @@ def records_by_journal_index (cursor, term_map={}):
     issn_clause = ' OR '.join(['term_id=%s' % term.uid for term in issn_terms])
     select_clause = """
         SELECT COUNT(*) AS the_count, value, journal_title, abbreviation
-        FROM queued_record_metadata, queued_records, medline_journals
+        FROM queued_record_metadata, queued_records, medline_journals, studies
         WHERE queued_record_metadata.queued_record_id = queued_records.uid
         AND queued_record_metadata.value = medline_journals.issn
+        AND queued_records.uid = studies.record_id
         AND queued_records.status = 2
+        AND studies.article_type >= 2
         AND (%s)
         GROUP BY value
         ORDER BY journal_title
@@ -121,6 +125,7 @@ def records_by_methodology (cursor, methodology_id):
             WHERE queued_records.uid = studies.record_id
             AND studies.uid = methodologies.study_id
             AND queued_records.status = 2
+            AND studies.article_type >= 2
             AND methodologies.study_type_id = %s        
             """, methodology_id
             )
@@ -145,6 +150,7 @@ def records_by_methodology_index (cursor):
         WHERE methodologies.study_id = studies.uid
         AND studies.record_id = queued_records.uid
         AND queued_records.status = 2
+        AND studies.article_type >= 2
         GROUP BY study_type_id
         """)
     results = []
@@ -165,9 +171,11 @@ def records_by_year (cursor, year, term_map={}):
     try:
         select_clause = """
             SELECT queued_records.uid
-            FROM queued_records, queued_record_metadata
+            FROM queued_records, queued_record_metadata, studies
             WHERE queued_records.uid = queued_record_metadata.queued_record_id
+            AND queued_records.uid = studies.record_id
             AND queued_records.status = 2
+            AND studies.article_type >= 2
             AND (%s)
             """ % year_clause
         print 'sql:', select_clause
@@ -196,9 +204,11 @@ def records_by_year_index (cursor, term_map={}):
     
     select_clause = """
         SELECT COUNT(*) AS the_count, SUBSTRING(value, 1, 4) AS the_year
-        FROM queued_record_metadata, queued_records
+        FROM queued_record_metadata, queued_records, studies
         WHERE queued_record_metadata.queued_record_id = queued_records.uid
+        AND queued_records.uid = studies.record_id
         AND queued_records.status = 2
+        AND studies.article_type >= 2
         AND (%s)
         GROUP BY SUBSTRING(value, 1, 4)
         ORDER BY value DESC
