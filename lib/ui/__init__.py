@@ -2,7 +2,6 @@ _q_exports = [
     'error',
     'search',
     'record',
-    'species',
     'canary_png',
     'about',
     'admin',
@@ -25,7 +24,6 @@ from canary.ui import about
 from canary.ui import admin
 from canary.ui import edit
 from canary.ui import user
-from canary.ui import species
 from canary.ui import record_ui
 from canary.ui.pages import _q_index, _q_exception_handler, not_found, reaper
 from canary.ui.pages import login, logout
