@@ -39,7 +39,7 @@ def header [html] (title, show_pageframe=True, show_javascript=False):
     
     if show_javascript:
         """
-        <script src='/script_js'> </script>
+        <script src='/script.js'> </script>
         """
     
     """

@@ -9,6 +9,8 @@ _q_exports = [
 
 import sys
 
+from quixote import get_publisher
+
 from canary.qx_defs import NotLoggedInError
 from canary.qx_utils import MyStaticFile, load_static_exports
 from canary.ui.pages import not_found
@@ -27,9 +29,9 @@ questionnaire = about_ui.questionnaire
 
 
 # FIXME
-#config = get_publisher().get_config()
-#html_files = load_static_exports(config.static_html_dir)
-html_files = load_static_exports('/home/dlc33/projects/canary/lib/ui/html')
+config = get_publisher().config
+#html_files = load_static_exports('/home/dlc33/projects/canary/lib/ui/html')
+html_files = load_static_exports(config.static_html_dir)
 for file, path in html_files:
     _q_exports.append(file)
     setattr(this_module, file, MyStaticFile(path, 
