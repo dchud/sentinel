@@ -175,7 +175,7 @@ def add [html] (request, batch_id=None):
 
     <p>
     File to upload: <br/>
-        <input type='file' name='upload' />
+        <input type='file' name='upload' size='50'/>
     </p>
 
     <p>
