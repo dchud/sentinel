@@ -192,8 +192,15 @@ class LoginForm (MyForm):
         self.add(SubmitWidget, 'login', 'login')
 
 
-def login (request):
+def login [html] (request):
 
+    # redirect if the user is already logged in
+    try:
+        if request.session.user != None:
+            request.redirect(str('/user'))
+    except:
+        pass
+        
     form = LoginForm()
 
     def render [html] ():
