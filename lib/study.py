@@ -1,4 +1,4 @@
-# study.py
+# $Id$
 
 import dtuple
 import time

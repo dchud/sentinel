@@ -1,3 +1,5 @@
+# $Id$
+
 import os
 import shelve
 from stat import ST_MTIME

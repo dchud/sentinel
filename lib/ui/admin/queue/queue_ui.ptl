@@ -59,6 +59,8 @@ class QueueActions:
                 return receive(request, batch_id=self.batch_id)
             elif action == 'delete':
                 return delete(request, self.batch_id)
+            elif action == 'dedupe':
+                return dedupe(request, batch_id=self.batch_id)
             else:
                 raise TraversalError
         except:
@@ -255,10 +257,11 @@ def list [html] (request):
             <td>
                 [<a href='/admin/queue/%s/edit'>edit</a>]
                 [<a href='/admin/queue/%s/add'>add</a>]
+                [<a href='/admin/queue/%s/dedupe'>dedupe</a>]
             </td>
         </tr>
-        """ % (str(batch.date_added)[0:10], batch.uid, 
-            batch.uid)
+        """ % (str(batch.date_added)[0:10], 
+            batch.uid, batch.uid, batch.uid)
     """
     </table>
     """
@@ -387,3 +390,20 @@ def create [html] (request):
         form.logger.info(str('Could not create batch'))
     
     request.redirect(str('/admin'))
+
+
+def dedupe [html] (request, batch_id):
+    
+    source_catalog = get_publisher().get_source_catalog()
+    cursor = get_publisher().get_cursor()
+    
+    try:
+        batch = Batch(batch_id)
+        batch.load(cursor)
+    except:
+        return not_found('batch')
+        
+    batch.find_duplicates(cursor, source_catalog)
+    add_message('Ran dedupe on batch')
+    request.redirect(str('/admin'))
+    

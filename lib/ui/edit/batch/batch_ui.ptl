@@ -129,20 +129,28 @@ def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
                         and not show == 'unclaimed') \
                     or (status == record.STATUS_CURATED \
                         and show == 'all'):
+                    
+                    class_text = ''
+                    if record.duplicate_score:
+                        class_text = 'class="highlight"'
                     """
                     <tr>
-                        <td>%s</td>
-                        <td>%s</td>
-                        <td>%s</td>
-                        <td>%s</td>
-                        <td>%s</td>
-                    """ % (record_id, record.get_status(text=True),
-                        record.user_id, record.title, record.source)
+                        <td %s>%s</td>
+                        <td %s>%s</td>
+                        <td %s>%s</td>
+                        <td %s>%s</td>
+                        <td %s>%s</td>
+                    """ % (class_text, record_id, 
+                        class_text, record.get_status(text=True),
+                        class_text, record.user_id, 
+                        class_text, record.title, 
+                        class_text, record.source)
                         
                     """
-                        <td>
+                        <td %s>
                             [<a href='%s'>sfx links</a>]
-                    """ % get_sfx_link(batch.source_id, record.unique_identifier)
+                    """ % (class_text, 
+                        get_sfx_link(batch.source_id, record.unique_identifier))
                     
                     """
                             [<a href='/edit/study/%s/history'>history</a>]

@@ -1,3 +1,4 @@
+# $Id$
 
 from canary.loader import QueuedRecord
 from canary.study import Study

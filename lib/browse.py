@@ -1,5 +1,4 @@
-# browse.py
-
+# $Id$
 
 from canary.loader import QueuedRecord
 

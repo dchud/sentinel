@@ -4,6 +4,7 @@ _q_exports = [
     'create',
     'list',
     'receive',
+    'dedupe',
     ]
 
 from quixote.errors import TraversalError
@@ -17,6 +18,7 @@ add = queue_ui.add
 create = queue_ui.create
 list = queue_ui.list
 receive = queue_ui.receive
+dedupe = queue_ui.dedupe
 
 
 def _q_lookup (request, batch_id):

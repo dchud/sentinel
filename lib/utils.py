@@ -1,4 +1,5 @@
 # misc useful utilities
+# $Id$
 
 from log4py import Logger
 import re

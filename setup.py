@@ -1,3 +1,5 @@
+# $Id$
+
 import os
 
 from distutils import core

@@ -1,3 +1,5 @@
+# $Id$
+
 import email
 import re
 import time

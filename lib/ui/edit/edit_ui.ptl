@@ -163,24 +163,31 @@ def _q_index [html] (request):
         for record_id, record in batch.queued_records.items():
             if record.status == record.STATUS_CLAIMED \
                 and record.user_id == request.session.user.get_id():
+                
+                class_text = ''
+                if record.duplicate_score:
+                    class_text = 'class="highlight"'
+
                 """
         <tr>
-            <td>%s</td>
-                """ % record_id
+            <td %s>%s</td>
+                """ % (class_text, record_id)
                 
                 """
-            <td><a href='/edit/batch/%s/view'>%s</a></td>
-                """ % (batch.uid, batch.name)
+            <td %s><a href='/edit/batch/%s/view'>%s</a></td>
+                """ % (class_text, batch.uid, batch.name)
                 
                 """
-            <td>%s</td>
-            <td>%s</td>
-                """ % (record.title, record.source)
+            <td %s>%s</td>
+            <td %s>%s</td>
+                """ % (class_text, record.title, 
+                    class_text, record.source)
                     
                 """
-            <td>
+            <td %s>
                 [<a href='%s'>sfx links</a>]
-                """ % get_sfx_link(batch.source_id, record.unique_identifier)
+                """ % (class_text, 
+                    get_sfx_link(batch.source_id, record.unique_identifier))
             
                 """
                 [<a href='/edit/study/%s/curate_one'>curate</a>]
@@ -347,6 +354,8 @@ def pubmed [html] (request):
         if not batch:
             batch = Batch(source_id=pm_source.uid)
             batch.name = 'pubmed-load-' + strftime(str('%Y-%m'), localtime())
+        for rec in recs:
+            rec.check_for_duplicates(cursor, complete_mapping=complete_mapping)
         batch.add_records(recs)
         batch.save(cursor)
         add_message('Added record to batch %s' % batch.name)
@@ -396,23 +405,27 @@ def pubmed [html] (request):
                         sort_list.sort()
                         for dupe_rec_id, dupe_fields in sort_list:
                             dupe_rec = QueuedRecord(dupe_rec_id)
-                            dupe_rec.load(cursor, load_metadata=False)
-                            """
-                                <li>
-                                #%s (%s)
-                                [<a href='/record/%s' target='_blank'>public view</a>]
-                                [<a href='/edit/study/%s/history' target='_blank'>history</a>]
-                                [<a href='/edit/study/%s/curate_one'>curate</a>]
-                                <br />
-                                %s
-                                <br />
-                                %s
-                                </li> 
-                            """ % (dupe_rec_id, dupe_rec.get_status(True),
-                                dupe_rec_id, 
-                                dupe_rec_id, 
-                                dupe_rec_id, 
-                                dupe_rec.title, dupe_rec.source)
+                            try:
+                                dupe_rec.load(cursor, load_metadata=False)
+                                """
+                                    <li>
+                                    #%s (%s)
+                                    [<a href='/record/%s' target='_blank'>public view</a>]
+                                    [<a href='/edit/study/%s/history' target='_blank'>history</a>]
+                                    [<a href='/edit/study/%s/curate_one'>curate</a>]
+                                    <br />
+                                    %s
+                                    <br />
+                                    %s
+                                    </li> 
+                                """ % (dupe_rec_id, dupe_rec.get_status(True),
+                                    dupe_rec_id, 
+                                    dupe_rec_id, 
+                                    dupe_rec_id, 
+                                    dupe_rec.title, dupe_rec.source)
+                            except:
+                                import traceback
+                                print traceback.print_exc()
                         """
                             </ul>
                             <br />

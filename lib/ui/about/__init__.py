@@ -28,9 +28,7 @@ disclaimer = about_ui.disclaimer
 questionnaire = about_ui.questionnaire
 
 
-# FIXME
 config = get_publisher().config
-#html_files = load_static_exports('/home/dlc33/projects/canary/lib/ui/html')
 html_files = load_static_exports(config.static_html_dir)
 for file, path in html_files:
     _q_exports.append(file)
@@ -41,18 +39,3 @@ for file, path in html_files:
 def _q_lookup (request, name=''):
     return not_found()
 
-
-#def _q_access (request):
-#    if request.get_path() in (
-#        '/about/contact_us',
-#        '/about/description',
-#        '/about/disclaimer',
-#        '/about/project_mission',
-#        '/about/tour',
-#        ):
-#        return
-#    try:
-#        if request.session == None or request.session.user == None:
-#            raise NotLoggedInError('You must first log in.')
-#    except:
-#        raise NotLoggedInError('You must first log in.')

@@ -1,5 +1,7 @@
 # Various utilities to help quixote along or otherwise simplify
 # quixote usage.
+#
+# $Id$
 
 import os
 import re
