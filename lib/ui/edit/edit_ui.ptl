@@ -108,7 +108,9 @@ def _q_index [html] (request):
     """
     queue = Queue()
     queue.load(cursor)
-    for batch in queue.batches:
+    sort_list = [(b.name.lower(), b) for b in queue.batches]
+    sort_list.sort()
+    for n, batch in sort_list:
         batch_stats = batch.get_statistics(cursor)
 
         source_id = batch.source_id
@@ -273,22 +275,19 @@ def get_pubmed_batch_list (cursor):
 
     queue = Queue()
     queue.load(cursor)
-    batch_list = []
-    for batch in queue.batches:
-        batch_stats = batch.get_statistics(cursor)
-
-        # Don't show non-pubmed batches
-        if batch.source_id != pm_source.uid:
-            continue
-        # Else, carry on!
-        batch_list.insert(0, (batch.uid, batch.name, batch.uid))
+    
+    # Set up sort-by-name, but only for pubmed batches.
+    batch_list = [(b.name.lower(), (b.uid, b.name, b.uid)) \
+        for b in queue.batches \
+        if b.source_id == pm_source.uid]
+    batch_list.sort()
+    
+    # Eliminate the names used for sort, keep just the tuples
+    batch_list = [t for n, t in batch_list]
 
     # Allow (require) a new batch if none exist.
     if batch_list == []:
         batch_list = [(-1, ' - new batch - ', -1)]
-
-    batch_list.sort()
-    batch_list.reverse()
     
     return batch_list
     

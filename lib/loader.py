@@ -526,6 +526,7 @@ class Parser:
                 file.close()
             except:
                 print 'unable to load file, or msg'
+                print traceback.print_exc()
                 return []
         
         records = []

@@ -205,10 +205,6 @@ def list [html] (request):
     cursor = get_publisher().get_cursor()
     source_catalog = get_publisher().get_source_catalog()
 
-    # Sort terms by their token
-    sources = [(id, source.name) for id, source in source_catalog.sources.items()]
-    sources.sort()
-
     header('List editing queues')
     title_bar('List editing queues')
     if has_messages():
@@ -227,7 +223,9 @@ def list [html] (request):
     """
     queue = Queue()
     queue.load(cursor)
-    for batch in queue.batches:
+    sort_list = [(b.name.lower(), b) for b in queue.batches]
+    sort_list.sort()
+    for n, batch in sort_list:
         batch_stats = batch.get_statistics(cursor)
 
         source_id = batch.source_id
@@ -286,9 +284,8 @@ def receive [html] (request, batch_id=None):
     try:
         num_records = int(form.get('num_records'))
     except:
-        add_message('Please enter the number of expected records.')
-        return add(request)
-
+        num_records = 0
+    
     # FIXME: Think through this better.  Should clean up empty files at least.
     try:
         upload = request.form.get('upload')
@@ -319,16 +316,14 @@ def receive [html] (request, batch_id=None):
         mapped_terms = source_catalog.get_mapped_terms(source_id)
         parser = Parser(source)
         records = parser.parse(upload.tmp_filename, mapped_terms=mapped_terms)
-        if num_records == len(records):
-            batch.add_records(records)
-            batch.save(cursor)
-            
-            if form.get('find_duplicates', '') == 'yes':
-                batch.find_duplicates(cursor, source_catalog)
+        batch.add_records(records)
+        batch.save(cursor)
+        
+        if form.get('find_duplicates', '') == 'yes':
+            batch.find_duplicates(cursor, source_catalog)
                 
-        else:
-            print 'count mismatch'
-            add_message('Batch not saved: Record count mismatch, %s specified, %s found' % (num_records, len(records)))
+        if num_records != len(records):
+            add_message('Batch saved: Record count mismatch, %s specified, %s found' % (num_records, len(records)))
 
         cursor.close()
     except:
