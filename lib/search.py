@@ -303,9 +303,9 @@ class SearchIndex:
                     for syn in concept.synonyms:
                         #print 'add synonym "%s" for term "%s"' % \
                         #    (syn, concept.term)
-                        doc.add(PyLucene.Field(ctype, syn,
+                        doc.add(PyLucene.Field(ctype, unicode(syn, 'latin-1'),
                             False, True, True))
-                        f = PyLucene.Field('all', syn,
+                        f = PyLucene.Field('all', unicode(syn, 'latin-1'),
                             False, True, True)
                         f.setBoost(2.0)
                         doc.add(f)
@@ -324,9 +324,9 @@ class SearchIndex:
                     gazeteer.feature_codes[feature.feature_type],
                     render_capitalized(region_name), 
                     render_capitalized(gazeteer.country_codes[feature.country_code]))
-                doc.add(PyLucene.Field('location', full_name,
+                doc.add(PyLucene.Field('location', unicode(full_name, 'latin-1'),
                     False, True, True))
-                doc.add(PyLucene.Field('all', full_name,
+                doc.add(PyLucene.Field('all', unicode(full_name, 'latin-1'),
                     False, True, True))
                 
             writer.addDocument(doc)
