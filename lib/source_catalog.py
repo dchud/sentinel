@@ -122,6 +122,31 @@ class SourceCatalog:
         except:
             return {}
 
+    def get_complete_mapping (self, term_names=[], mapping_source_id=12):
+        """
+        Return a dict of mapping terms (keys) and lists of mapped source terms
+        (values) as (source_id, term_id) tuples from every available source.  
+        For use in generating dynamic search statements.
+        """
+        try:
+            terms = {}
+            if term_names == []:
+                term_names = [term.name for term in self.get_source(mapping_source_id).terms.values()]
+            for term_name in term_names:
+                for source_id, source in self.sources.items():
+                    # Don't map mapped terms to the mapping_source
+                    if source_id == mapping_source_id:
+                        continue
+                    mapped_term = self.get_mapped_term(term_name, source_id, mapping_source_id)
+                    if not mapped_term == None:
+                        if terms.has_key(term_name):
+                            terms[term_name].append(mapped_term)
+                        else:
+                            terms[term_name] = [mapped_term]
+            return terms
+        except:
+            return {}                
+    
 
     def delete_term (self, cursor, id):
         try:

@@ -167,11 +167,13 @@ def find [html] (request):
     if form.has_errors():
         return render()
     
+    source_catalog = get_publisher().get_source_catalog()
+    complete_mapping = source_catalog.get_complete_mapping()
     search = Search(field=field, token=token, allow_curated=allow_curated)
     
     try:
         cursor = get_publisher().get_cursor()
-        results = search.search(cursor)
+        results = search.search(cursor, term_mapping=complete_mapping)
     except:
         form.info(str('Unable to perform search'))
         form.set_error('token', 'Unable to perform search')

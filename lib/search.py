@@ -4,21 +4,20 @@ from canary.loader import QueuedRecord
 
 class Search:
 
-    # FIXME: what are you thinking, make it dynamic!!!!
-    FIELDS = {
-        'author': (10, 22),
-        'title': (10, 79),
-        'unique id': (10, 62)
-        }
-        
+    FIELDS = [
+        'author',
+        'title',
+        'record id',
+        'unique id',
+        ]
+    
     def __init__ (self, field='', token='', allow_curated=False):
         self.field = field
         self.token = token
         self.allow_curated = allow_curated
         
         
-    def search (self, cursor):
-        
+    def search (self, cursor, term_mapping={}):
         results = Results()
         if self.field == '' \
             or self.token == '':
@@ -32,17 +31,21 @@ class Search:
                 results.add_result(record)
             else:
                 search_token = self.token + '%'
-                if self.field in self.FIELDS.keys():
+                if self.field in self.FIELDS \
+                    and term_mapping.has_key(self.field):
                     if self.field == 'title':
                         search_token = '%' + search_token
-                    source_id, term_id = self.FIELDS[self.field]
-                    cursor.execute("""
+                    
+                    select_clause = """
                         SELECT queued_record_id
                         FROM queued_record_metadata
-                        WHERE source_id = %s
-                        AND term_id = %s
+                        WHERE ("""
+                    select_clause += ' OR '.join(['(source_id = %s AND term_id = %s) ' % \
+                        (term.source_id, term.uid) for term in term_mapping[self.field]])
+                    
+                    cursor.execute(select_clause + """)
                         AND value LIKE %s
-                        """, (source_id, term_id, search_token)
+                        """, (search_token)
                         )
                     rows = cursor.fetchall()
                     for row in rows:
