@@ -37,6 +37,7 @@ class QueueActions:
     _q_exports = [
         '_q_index',
         'edit',
+        'setmeta',
         ]
 
     def __init__ (self, batch_id):
@@ -62,6 +63,8 @@ class QueueActions:
                 return delete(request, self.batch_id)
             elif action == 'dedupe':
                 return dedupe(request, self.batch_id)
+            elif action == 'setmeta':
+                return setmeta(request, self.batch_id)
             else:
                 raise TraversalError
         except:
@@ -131,6 +134,55 @@ class QueueActions:
         
         request.redirect(str('/admin/queue/list'))
 
+
+    def setmeta [html] (self, request):
+        
+        context = get_publisher().context
+        
+        batch = Batch(uid=self.batch_id)
+        batch.load(context, show='all', size='all')
+        
+        source_catalog = context.get_source_catalog()
+        
+        form = MyForm(context)
+        form.add(form2.IntWidget, 'term_id', 
+            title='Term ID',
+            size=4,
+            required=True)
+        form.add(form2.StringWidget, 'term_value', 
+            title='New value',
+            size=20,
+            required=True)
+        form.add_submit('set meta', 'set meta')
+        
+        def render [html] ():
+            header('Set metadata')
+            title_bar('Set metadata for items in batch %s' % self.batch_id)
+            form.render()
+            footer()
+        
+        if not form.is_submitted():
+            return render()
+        
+        if form.has_errors():
+            return render()
+        
+        try:
+            term = source_catalog.get_term(form['term_id'])
+            if term:
+                count = 0
+                for rec_id, rec in batch.queued_records.items():
+                    rec.add_metadata(term, form['term_value'])
+                    rec.save(context)
+                    count += 1
+                add_message('Updated %s records' % count)
+                form.logger.info(str('Updated %s records' % count))
+        except:
+            add_message('Unable to set metadata')
+            form.logger.info(str('Unable to set metadata'))
+            print traceback.print_exc()
+        
+        request.redirect(str('/admin/queue/list'))
 
 
 
@@ -256,13 +308,14 @@ def list [html] (request):
             <td>%s</td>
             <td>
                 [<a href='/admin/queue/%s/edit'>edit</a>]
+                [<a href='/admin/queue/%s/setmeta'>set meta</a>]
                 [<a href='/admin/queue/%s/add'>add</a>]
                 [<a href='/admin/queue/%s/dedupe'>dedupe</a>]
                 [<a href='/admin/queue/%s/delete'>delete</a>]
             </td>
         </tr>
         """ % (str(batch.date_added)[0:10], 
-            batch.uid, batch.uid, batch.uid, batch.uid)
+            batch.uid, batch.uid, batch.uid, batch.uid, batch.uid)
     """
     </table>
     """
@@ -463,3 +516,4 @@ def dedupe [html] (request, batch_id):
     add_message('Ran dedupe on batch')
     request.redirect(str('/admin'))
     
+

@@ -437,7 +437,7 @@ class Batch (DTable):
         
         if use_loaded:
             for rec in self.loaded_records:
-                rec.load(context, source=source)
+                rec.load(context)
                 rec.check_for_duplicates(context, complete_term_map)
         else:
             for id, rec in self.queued_records.items():

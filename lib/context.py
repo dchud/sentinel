@@ -40,7 +40,6 @@ class Cacheable (object):
             or uid == -1:
             item = object.__new__(cls)
             item.__init__(*args, **kwargs)
-            print 'Context:', context, 'uid:', uid
             return item
             
         full_cache_key = '%s:%s' % (cls.CACHE_KEY, uid)
