@@ -104,7 +104,7 @@ def find [html] (request):
         return render()
 
     
-    header('Find outcome')
+    header('Find outcome', show_javascript=True)
     """
     <h3>Find outcome</h3>
     """

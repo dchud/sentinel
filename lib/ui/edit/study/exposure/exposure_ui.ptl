@@ -104,7 +104,7 @@ def find [html] (request):
         return render()
 
     
-    header('Find exposure')
+    header('Find exposure', show_javascript=True)
     """
     <h3>Find exposure</h3>
     """

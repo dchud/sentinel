@@ -37,23 +37,23 @@ def render_queued_record [html] (queued_record, abstract=True):
     if abstract:
         if not queued_record.abstract == '':
             """
-            <div class='label'>
-                <span id='abstract-link'>Show/hide abstract</span>
-            </div>
-            <div class='abstract'>
-                <p>
-                    <b>Abstract:</b> <br />
+        <div class='label'>
+            <span id='abstract-link'>Show/hide abstract</span>
+        </div>
+        <div class='abstract'>
+            <p>
+                <b>Abstract:</b> <br />
             """
             queued_record.abstract
             """
-                </p>
-            </div>
+            </p>
+        </div>
             """
         else:
             """
-            <p>
-            No abstract available.
-            </p>
+        <p>
+        No abstract available.
+        </p>
             """
     """
     </div>
