@@ -117,11 +117,9 @@ class RecordActions:
                 cursor = get_publisher().get_cursor()
                 record.save(cursor)
                 form.logger.info(str('Updated record %s' % record.uid))
-                request.session.message = str('Updated record %s' % record.uid)
                 add_message('Updated record %s' % record.uid)
             except:
                 form.logger.error(str('Could not update record %s' % record.uid))
-                request.session.message = str('Could not update record %s' % record.uid)
                 add_message('Could not update record %s' % record.uid)
         else:
             add_message('Did not update record %s' % record.uid)
@@ -180,10 +178,10 @@ class RecordActions:
                 form.logger.error(str('Unable to delete record %s' % self.record_id))
                 raise PublishError
             form.logger.info(str('Deleted record %s' % self.record_id))
-            request.session.message = str('Deleted record')
+            add_message('Deleted record')
             request.redirect(str('/admin'))
         else:
-            request.session.message = str('Term not deleted')
+            add_message('Term not deleted')
             request.redirect(str('/admin'))
 
 def find [html] (request):

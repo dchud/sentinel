@@ -1,7 +1,8 @@
-_q_exports = ['_q_index',
-              'delete',
-              'edit',
-             ]
+_q_exports = [
+    '_q_index',
+    'delete',
+    'edit',
+    ]
 
 
 from quixote import get_publisher
@@ -13,6 +14,7 @@ from dulcinea.database import get_transaction
 from canary.ui.admin.admin_ui import title_bar
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found
+from canary.ui.pages import has_messages, add_message, render_messages
 from canary.qx_defs import MyForm
 from canary.source_catalog import SourceCatalog, Source, Term
 
@@ -137,10 +139,11 @@ def create [html] (request):
         get_publisher().set_source_catalog(new_source_catalog)
         cursor.close()
         form.logger.info(str('Created new term.'))
-        request.session.message = str('Created new term.')
+        add_message('Created new term.')
         request.redirect(str('/admin/source/%s/terms' % term.source_id))
     except:
         form.logger.error(str('Unable to create term.'))
+        add_message('Unable to create term.')
         raise PublishError
 
 
@@ -221,10 +224,10 @@ def edit [html] (request, term_id=None):
         get_publisher().set_source_catalog(source_catalog)
         cursor.close()
         form.logger.info(str('Updated term %s' % term.uid))
-        request.session.message = str('Updated term %s' % term.uid)
+        add_message('Updated term %s' % term.uid)
     except:
         form.logger.error(str('Could not update term %s' % term.uid))
-        request.session.message = str('Could not update term %s' % term.uid)
+        add_message('Could not update term %s' % term.uid)
 
     request.redirect(str('/admin/source/%s/terms' % term.source_id))
 
@@ -280,8 +283,8 @@ def delete [html] (request, term_id=None):
             form.logger.error(str('Unable to delete term %s' % term.uid))
             PublishError
         form.logger.info(str('Deleted term %s' % term.uid))
-        request.session.message = str('Deleted term')
+        add_message('Deleted term')
         request.redirect(str('/admin/source/%s/terms' % term.source_id))
     else:
-        request.session.message = str('Term not deleted')
+        add_message('Term not deleted')
         request.redirect(str('/admin/source/%s/terms' % term.source_id))

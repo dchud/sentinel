@@ -17,6 +17,7 @@ from canary.qx_defs import MyForm
 from canary.ui.admin.admin_ui import title_bar
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found
+from canary.ui.pages import has_messages, add_message, render_messages
 
 
 def _q_index [html] (request):
@@ -107,11 +108,11 @@ def create [html] (request):
         get_transaction().commit()
         cursor.close()
         form.logger.info(str('Created new value.'))
-        request.session.message = str('Created new value.')
+        add_message('Created new value.')
         request.redirect(str('/admin/dv_data/group/%s/values' % value_group_id))
     except:
         form.logger.error(str('Unable to create value.'))
-        request.session.message = str('Unable to create new value.')
+        add_message('Unable to create new value.')
         request.redirect(str('/admin/dv_data/group/%s/values' % value_group_id))
         
 
@@ -171,10 +172,10 @@ def edit [html] (request, value_id=None):
         get_transaction().commit()
         print 'committed dbmodel'
         form.logger.info(str('Updated value %s' % value.value_id))
-        request.session.message = str('Updated value %s' % value.value_id)
+        add_message('Updated value %s' % value.value_id)
     except:
         form.logger.error(str('Could not update value %s' % value.value_id))
-        request.session.message = str('Could not update value %s' % value.value_id)
+        add_message = str('Could not update value %s' % value.value_id)
 
     request.redirect(str('/admin/dv_data/group/%s/values' % value.value_group_id))
 
@@ -232,11 +233,11 @@ def delete [html] (request, value_id=None):
             get_publisher().set_dbmodel(new_db_model)
             cursor.close()
             form.logger.info(str('Deleted value %s' % value.value_id))
-            request.session.message = str('Deleted value')
+            add_message('Deleted value')
         except:
             form.logger.error(str('Unable to delete value %s' % value.value_id))
-            request.session.message = str('Could not delete value')
+            add_message('Could not delete value')
     else:
-        request.session.message = str('Value not deleted')
+        add_message('Value not deleted')
 
     request.redirect(str('/admin/dv_data/group/%s/values' % value.value_group_id))

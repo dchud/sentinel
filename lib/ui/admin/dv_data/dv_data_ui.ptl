@@ -11,6 +11,7 @@ from canary.db_model import DBModel, Value, ValueGroup
 from canary.ui.admin.admin_ui import title_bar
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found
+from canary.ui.pages import has_messages, add_message, render_messages
 
 
 def _q_index [html] (request):
@@ -18,14 +19,8 @@ def _q_index [html] (request):
     header('DVData:')
     title_bar('DVData:')
     
-    try:
-        if request.session.message:
-            """
-            <h4><font color='red'>%s</font></h4>
-            """ % request.session.message
-            request.session.message = None
-    except:
-        pass
+    if has_messages():
+        render_messages()
 
     db_model = get_publisher().get_dbmodel()
     dv_groups = db_model.get_groups()

@@ -19,6 +19,7 @@ from canary.qx_defs import MyForm
 from canary.ui.admin.admin_ui import title_bar
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found
+from canary.ui.pages import has_messages, add_message, render_messages
 
 
 def _q_index [html] (request):
@@ -208,11 +209,11 @@ def edit [html] (group_id):
         get_publisher().set_dbmodel(new_db_model)
         get_transaction().commit()
         form.logger.info(str('Updated value group %s' % group.value_group_id))
-        request.session.message = str('Updated group')
+        add_message('Updated group')
         request.redirect(str('/admin/dv_data/'))
     except:
         form.logger.info(str('Did not update value group %s' % group.value_group_id))
-        request.session.message = str('Did not update group')
+        add_message('Did not update group')
         request.redirect(str('/admin/dv_data/'))
 
 
@@ -234,15 +235,9 @@ def values [html] (group_id):
     header('Values')
     title_bar('Values')
 
-    try:
-        if request.session.message:
-            """
-            <h4><font color='red'>%s</font></h4>
-            """ % request.session.message
-            request.session.message = None
-    except:
-        pass
-
+    if has_messages():
+        render_messages()
+        
     """
     <h3>Values for group '%s' (uid=%s, <a href='/admin/dv_data/group/%s/edit'>edit</a>)</h3>
     """ % (group.group_name, group_id, group_id)

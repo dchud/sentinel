@@ -16,6 +16,7 @@ from dulcinea.database import get_transaction
 from canary.ui.admin.admin_ui import title_bar
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found
+from canary.ui.pages import has_messages, add_message, render_messages
 from canary.qx_defs import MyForm
 from canary.source_catalog import SourceCatalog, Source, Term
 
@@ -140,11 +141,11 @@ def create [html] (request):
         get_publisher().set_source_catalog(source_catalog)
         cursor.close()
         form.logger.info(str('Created source %s' % source_name))
-        request.session.message = str('Created source %s' % source_name)
+        add_message('Created source %s' % source_name)
         request.redirect(str('/admin/sources'))
     except:
         form.logger.info(str('Unable to create source'))
-        request.session.message = str('Unable to create source')
+        add_message('Unable to create source')
         request.redirect(str('/admin/sources'))
 
 
@@ -225,11 +226,11 @@ def edit [html] (request, source_id=None):
         get_publisher().set_source_catalog(source_catalog)
         cursor.close()
         form.logger.info(str('Edited source %s' % source.uid))
-        request.session.message = str('Edited source %s' % source.name)
+        add_message('Edited source %s' % source.name)
         request.redirect(str('/admin/sources'))
     except:
         form.logger.error(str('Unable to edit source %s' % source.uid))
-        request.session.message = str('Unable to edit source %s' % source.uid)
+        add_message('Unable to edit source %s' % source.uid)
         request.redirect(str('/admin/sources'))
 
 
@@ -303,15 +304,9 @@ def terms [html] (request, source_id=None):
     header('Source terms')
     title_bar('Source terms')
 
-    try:
-        if request.session.message:
-            """
-            <h4><font color='red'>%s</font></h4>
-            """ % request.session.message
-            request.session.message = None
-    except:
-        pass
-
+    if has_messages():
+        render_messages()
+    
     """
     <h3>Terms for source '%s' (uid=%s, <a href='/admin/source/%s/edit'>edit</a>)</h3>
     """ % (source.name, source_id, source_id)
