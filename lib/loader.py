@@ -91,7 +91,8 @@ class QueuedRecord (DTable):
         if self.metadata.has_key(md_key):
             return self.metadata[md_key]
         else:
-            return None
+            # FIXME: temporary fix, better API would be better
+            return ''
             
             
     def get_mapped_metadata (self, source_id, term_map={}):
