@@ -309,14 +309,14 @@ def terms [html] (request, source_id=None):
     """ % (source.name, source_id, source_id)
 
     """
-    <table border='0' cellpadding='5' cellspacing='5' bgcolor='#e4e4e4'>
+    <table cellspacing='3' class='gentable'>
         <tr>
             <th>uid</th>
             <th>name</th>
             <th>desc</th>
             <th>token</th>
-            <th>source uid</th>
-            <th>multivalue?</th>
+            <th>multi?</th>
+            <th>map id</th>
             <th>action</th>
         </tr>
     """
@@ -324,31 +324,25 @@ def terms [html] (request, source_id=None):
     # Sort terms by their token
     terms = [(term.token, id) for id, term in source.terms.items()]
     terms.sort()
-    bgcolor = '#ffffff'
     for (token, term_id) in terms:
         term = source.terms[term_id]
         """
-        <tr bgcolor='%s'>
-            <td valign='top'>%s</td>
-            <td valign='top'>%s</td>
-            <td valign='top'>%s</td>
-            <td valign='top'>%s</td>
-            <td valign='top'>%s</td>
-            <td valign='top'>%s</td>
-            <td valign='top'>
-                <a href='/admin/term/%s/edit'>edit</a> -
-                <a href='/admin/term/%s/delete'><font size='-1'>delete</font></a>
+        <tr>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>
+                [<a href='/admin/term/%s/edit'>edit</a>]
+                [<a href='/admin/term/%s/delete'><font size='-1'>delete</font></a>]
             </td>
         </tr>
-        """ % (bgcolor,
-               term.uid, term.name, term.description,
-               term.token, source_id, term.is_multivalue,
+        """ % (term.uid, term.name, term.description,
+               term.token, term.is_multivalue, term.mapped_term_id,
                term.uid, term.uid)
-        if bgcolor == '#ffffff':
-            bgcolor = '#f3f3f3'
-        else:
-            bgcolor = '#ffffff'
-
+        
     """
         <tr>
             <td colspan='7'>
@@ -358,18 +352,21 @@ def terms [html] (request, source_id=None):
     """
 
     """
-        <tr bgcolor='%s'>
+        <tr>
             <form action='/admin/term/create' method='post'>
             <td>-</td>
-            <td><input type='text' name='term_name' size='15'></td>
+            <td>
+                <input type='text' name='term_name' size='15'>
+                <input type='text' name='term_source_id' size='3' value='%s' />
+            </td>
             <td><input type='text' name='term_desc' size='30'></td>
             <td><input type='text' name='term_token' size='5'></td>
-            <td><input type='text' name='term_source_uid' size='3' value='%s'></td>
-            <td><input type='checkbox' name='term_is_multivalue'></td>
+            <td><input type='checkbox' name='is_multivalue'></td>
+            <td><input type='text' name='mapped_term_id' size='3' value='-1'></td>
             <td><input type='submit' value='create'></td>
             </form>
         </tr>
-    """ % (bgcolor, source_id)
+    """ % source_id
 
     """
     </table>

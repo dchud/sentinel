@@ -63,6 +63,8 @@ class TermForm (MyForm):
         MyForm.__init__(self)
         self.add(IntWidget, 'term_uid', title='Term id',
                  size=3, required=False)
+        self.add(IntWidget, 'term_source_id', title='Source id',
+                 size=3, required=True)
         self.add(StringWidget, 'term_name', title='Name',
                  size=30, required=False)
         self.add(TextWidget, 'term_desc', title='Description',
@@ -71,13 +73,11 @@ class TermForm (MyForm):
                  size=8, required=True)
         self.add(IntWidget, 'vocabulary_uid', title='Vocabulary id',
                  size=3, required=False)
-        self.add(IntWidget, 'term_source_uid', title='Source id',
-                 size=3, required=True)
         self.add(CheckboxWidget, 'is_multivalue', title='Multivalue',
                  value=False)
         self.add(StringWidget, 're_multivalue_sep', title='Multivalue separator',
                  size=30, required=False)
-        self.add(IntWidget, 'mapped_term_uid', title='Maps to term id',
+        self.add(IntWidget, 'mapped_term_id', title='Maps to term id',
                  size=3, required=False)
         self.add(SubmitWidget, 'submit', 'submit')
 
@@ -98,35 +98,35 @@ def create [html] (request):
     term_name = form['term_name']
     term_desc = form['term_desc']
     term_token = form['term_token']
-    term_source_uid = form['term_source_uid']
+    term_source_id = form['term_source_id']
 
     publisher = get_publisher()
     source_catalog = get_publisher().get_source_catalog()
-    if term_source_uid and source_catalog.get_source(term_source_uid) == None:
-        form.set_error('term_source_uid', 'Invalid source uid')
+    if term_source_id and source_catalog.get_source(term_source_id) == None:
+        form.set_error('term_source_id', 'Invalid source id')
 
     if form.has_errors():
         return render()
 
+    term = Term(name=term_name)
     if term_desc:
-        term = Term(name=term_name, description=term_desc)
-    else:
-        term = Term(name=term_name)
+        term.description = term_desc
 
     term.token = term_token
-    term.source_uid = term_source_uid
+    term.source_id = term_source_id
 
     # can be null
-    for field in [str('vocabulary_uid'),
-                  str('re_multivalue_sep'),
-                  str('mapped_term_uid')]:
+    for field in [str('vocabulary_uid'), 
+        str('re_multivalue_sep'), 
+        str('mapped_term_id')
+        ]:
         if not form[field] == None:
             term.set(field, form[field])
 
     # boolean values
     for field in [str('is_multivalue')
-                  ]:
-        if not form[field] == None and form[field] == True:
+        ]:
+        if form[field]:
             term.set(field, True)
         else:
             term.set(field, False)
@@ -140,7 +140,7 @@ def create [html] (request):
         cursor.close()
         form.logger.info(str('Created new term.'))
         request.session.message = str('Created new term.')
-        request.redirect(str('/admin/source/%s/terms' % term.source_uid))
+        request.redirect(str('/admin/source/%s/terms' % term.source_id))
     except:
         form.logger.error(str('Unable to create term.'))
         raise PublishError
@@ -170,17 +170,17 @@ def edit [html] (request, term_id=None):
         form.get_widget('term_name').set_value(term.name)
         form.get_widget('term_desc').set_value(term.description)
         form.get_widget('term_token').set_value(term.token)
-        form.get_widget('term_source_uid').set_value(term.source_uid)
+        form.get_widget('term_source_id').set_value(term.source_id)
         form.get_widget('vocabulary_uid').set_value(term.vocabulary_uid)
         form.get_widget('is_multivalue').set_value(term.is_multivalue)
         form.get_widget('re_multivalue_sep').set_value(term.re_multivalue_sep)
-        form.get_widget('mapped_term_uid').set_value(term.mapped_term_uid)
+        form.get_widget('mapped_term_id').set_value(term.mapped_term_id)
         return render()
 
     term_uid = form['term_uid']
     term_name = form['term_name']
     term_desc = form['term_desc']
-    term_source_uid = form['term_source_uid']
+    term_source_id = form['term_source_id']
 
     if not term_uid == term.uid:
         form.set_error('term_uid', 'Term uid cannot be changed')
@@ -197,12 +197,12 @@ def edit [html] (request, term_id=None):
         term.description = term_desc
 
     term.token = form['term_token']
-    term.source_uid = term_source_uid
+    term.source_id = term_source_id
 
     # can be null
     for field in [str('vocabulary_uid'),
                   str('re_multivalue_sep'),
-                  str('mapped_term_uid')]:
+                  str('mapped_term_id')]:
         if not form[field] == None:
             term.set(field, form[field])
 
@@ -228,7 +228,7 @@ def edit [html] (request, term_id=None):
         form.logger.error(str('Could not update term %s' % term.uid))
         request.session.message = str('Could not update term %s' % term.uid)
 
-    request.redirect(str('/admin/source/%s/terms' % term.source_uid))
+    request.redirect(str('/admin/source/%s/terms' % term.source_id))
 
 
 class DeleteTermForm (MyForm):
@@ -283,7 +283,7 @@ def delete [html] (request, term_id=None):
             PublishError
         form.logger.info(str('Deleted term %s' % term.uid))
         request.session.message = str('Deleted term')
-        request.redirect(str('/admin/source/%s/terms' % term.source_uid))
+        request.redirect(str('/admin/source/%s/terms' % term.source_id))
     else:
         request.session.message = str('Term not deleted')
-        request.redirect(str('/admin/source/%s/terms' % term.source_uid))
+        request.redirect(str('/admin/source/%s/terms' % term.source_id))
