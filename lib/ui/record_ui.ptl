@@ -44,9 +44,9 @@ def render_indexing_row [html] (anchor_name, field, value):
     """ % ('25%', anchor_name, field, field, value)
 
 
-def render_substudies [html] (study, show_actions=False):
+def render_methodologies [html] (study, show_actions=False):
     """
-    <table cellspacing='3' id='substudies' class='studytable'>
+    <table cellspacing='3' id='methodologies' class='studytable'>
     
         <tr>
             <th>ID</th>
@@ -65,7 +65,7 @@ def render_substudies [html] (study, show_actions=False):
         </tr>
     """
     
-    for ss in study.substudies:
+    for meth in study.methodologies:
         """
         <tr>
             <td>%s</td>
@@ -75,17 +75,17 @@ def render_substudies [html] (study, show_actions=False):
             <td>%s</td>
             <td>%s</td>
             <td>%s</td>
-        """ % (ss.uid, ss.get_study_type(True),
-            ss.sample_size, ss.get_route(True),
-            ss.get_sampling(True), ss.get_controls(True),
-            ss.get_timing(True))
+        """ % (meth.uid, meth.get_study_type(True),
+            meth.sample_size, meth.get_route(True),
+            meth.get_sampling(True), meth.get_controls(True),
+            meth.get_timing(True))
         if show_actions:
             """
             <td>
-                [<a href='/edit/study/%s/substudy/%s/edit'>edit</a>]
-                [<a href='/edit/study/%s/substudy/%s/delete'>delete</a>]
+                [<a href='/edit/study/%s/methodology/%s/edit'>edit</a>]
+                [<a href='/edit/study/%s/methodology/%s/delete'>delete</a>]
             </td>
-            """ % (study.record_id, ss.uid, study.record_id, ss.uid)
+            """ % (study.record_id, meth.uid, study.record_id, meth.uid)
         """
         </tr>
         """
@@ -163,7 +163,7 @@ class RecordUI:
         #                                          int(record.study_status) or ''))
         #render_indexing_row('Study type', string.join(type_text, '<br/>\n'))
 
-        # FIXME: cascade changes from "methodology" to "study type" into record
+        # FIXME: make changes to "methodology" consistent
         methodology_text = []
         for meth in self.record.methodologies:
             meth_text = self.dbmodel.get_value_description(int(1), int(meth))

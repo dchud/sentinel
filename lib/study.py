@@ -33,9 +33,9 @@ class TableValue:
 
 
 
-class SubStudy (DTable):
+class Methodology (DTable):
 
-    # A SubStudy must have one TYPE
+    # A Methodology must have one TYPE
     TYPES = {
         'experimental' : 1,
         'descriptive' : 2,
@@ -45,8 +45,9 @@ class SubStudy (DTable):
         'case control' : 6,
         }
         
-    # A SubStudy can have at most one TIMING
+    # A Methodology can have at most one TIMING
     TIMING = {
+        '-': -1,
         'unknown' : 0,
         'historical' : 1,
         'concurrent' : 2,
@@ -54,23 +55,26 @@ class SubStudy (DTable):
         'mixed' : 4,
         }
     
-    # A SubStudy can have at most one SAMPLING
+    # A Methodology can have at most one SAMPLING
     SAMPLING = {
+        '-': -1,
         'unknown' : 0,
         'exposure' : 1,
         'outcome' : 2,
         'both' : 3,
         }
         
-    # A SubStudy can have at most one CONTROLS
+    # A Methodology can have at most one CONTROLS
     CONTROLS = {
+        '-': -1,
         'no' : 0,
         'yes' : 1,
         'both' : 2,
         }
         
-    # A SubStudy can have at most one ROUTE
+    # A Methodology can have at most one ROUTE
     ROUTE = {
+        '-': -1,
         'ingestion' : 0,
         'inhalation' : 1,
         'mucocutaneous' : 2,
@@ -84,14 +88,10 @@ class SubStudy (DTable):
         self.study_id = -1
         self.study_type_id = -1
         self.sample_size = 0
-        #self.timing = self.TIMING['unknown']
-        #self.sampling = self.SAMPLING['unknown']
-        #self.controls = self.CONTROLS['no']
-        #self.route = self.ROUTE['other']
-        self.timing = None
-        self.sampling = None
-        self.controls = None
-        self.route = None
+        self.timing = -1
+        self.sampling = -1
+        self.controls = -1
+        self.route = -1
         self.comments = ''
         self.date_modified = None
         self.date_entered = None
@@ -99,7 +99,7 @@ class SubStudy (DTable):
 
     def __str__ (self):
         out = []
-        out.append('<SubStudy uid=%s study_id=%s' % (self.uid, self.study_id))
+        out.append('<Methodology uid=%s study_id=%s' % (self.uid, self.study_id))
         out.append('\tstudy_type=%s' % self.get_text_value(self.TYPES, self.study_type_id))
         out.append('\tsample_size=%s' % self.sample_size)
         for item in ['timing', 'sampling', 'controls', 'route']:
@@ -200,7 +200,7 @@ class SubStudy (DTable):
 
     def set_study_type (self, value):
         """
-        Each substudy has exactly one type.
+        Each methodology has exactly one type.
         """
         if type(value) is types.StringType:
             
@@ -231,12 +231,12 @@ class SubStudy (DTable):
 
     def delete (self, cursor):
         """
-        Delete this substudy from the database.
+        Delete this methodology from the database.
         """
         if not self.uid == -1:
             try:
                 cursor.execute("""
-                    DELETE FROM substudies
+                    DELETE FROM methodologies
                     WHERE uid = %s
                     """, self.uid)
             except:
@@ -248,9 +248,9 @@ class SubStudy (DTable):
     def save (self, cursor):
         
         if self.uid == -1:
-            #print 'inserting new substudy'
+            #print 'inserting new methodology'
             cursor.execute("""
-                INSERT INTO substudies
+                INSERT INTO methodologies
                 (uid, study_id, study_type_id, 
                 sample_size, timing, 
                 sampling, controls, route, comments,
@@ -264,14 +264,14 @@ class SubStudy (DTable):
                 self.sample_size, self.timing,
                 self.sampling, self.controls, self.route, self.comments)
                 )
-            #print 'inserted new substudy'
+            #print 'inserted new methodology'
             self.uid = self.get_new_uid(cursor)
-            #print 'set new substudy uid to %s' % self.uid
+            #print 'set new methodology uid to %s' % self.uid
         else:
-            #print 'updating substudy %s' % self.uid
+            #print 'updating methodology %s' % self.uid
             try:
                 cursor.execute("""
-                    UPDATE substudies
+                    UPDATE methodologies
                     SET study_id = %s, study_type_id = %s,
                     sample_size = %s, timing = %s,
                     sampling = %s, controls = %s, route = %s, comments = %s,
@@ -287,7 +287,7 @@ class SubStudy (DTable):
                 print 'MySQL exception:'
                 for info in sys.exc_info():
                     print 'exception:', info
-            #print 'updated substudy %s' % self.uid
+            #print 'updated methodology %s' % self.uid
         # FIXME: should this be set from the SQL?
         self.date_modified = time.strftime(str('%Y-%m-%d'))
 
@@ -297,13 +297,13 @@ class SubStudy (DTable):
         
         form = MyForm()
         
-        # all substudy types get a sample size
+        # all methodology types get a sample size
         form.add(IntWidget, 'sample_size',
             title='Sample size (study n)',
             size=10, value=int(self.sample_size),
             required=True)
             
-        # all substudy types get a route
+        # all methodology types get a route
         form.add(SingleSelectWidget, 'route',
             title='Route of exposure',
             value=self.get_route(),
@@ -311,7 +311,7 @@ class SubStudy (DTable):
             sort=True,
             required=True)
         
-        # substudy types except experimental and descriptive get timing
+        # methodology types except experimental and descriptive get timing
         if not self.get_study_type() in [
             self.TYPES['experimental'],
             self.TYPES['descriptive']
@@ -323,7 +323,7 @@ class SubStudy (DTable):
                 sort=True,
                 required=True)
     
-        # all the 'c*' substudy types get controls
+        # all the 'c*' methodology types get controls
         if self.get_study_type() in [
             self.TYPES['cross sectional'],
             self.TYPES['cohort'], 
@@ -336,7 +336,7 @@ class SubStudy (DTable):
                 sort=True,
                 required=True)
             
-        # only cross sectional substudies get sampling
+        # only cross sectional methodologies get sampling
         if self.get_study_type() == self.TYPES['cross sectional']:
             form.add(SingleSelectWidget, 'sampling',
                 title='Sampling',
@@ -345,7 +345,7 @@ class SubStudy (DTable):
                 sort=True,
                 required=True)
                     
-        # every substudy type has comments
+        # every methodology type has comments
         form.add(TextWidget, 'comments', 
             title='Comments',
             rows='4', cols='60',
@@ -360,15 +360,18 @@ class SubStudy (DTable):
     
     def process_form (self, form):
         
-        # all substudy types get a sample size
-        print 'setting sample size to %s' % form['sample_size']
-        self.sample_size = form['sample_size']
+        # all methodology types get a sample size
+        if form['sample_size'] <= 0:
+            form.set_error('sample_size', 'Sample size must be greater than zero')
+        else:
+            print 'setting sample size to %s' % form['sample_size']
+            self.sample_size = form['sample_size']
             
-        # all substudy types get a route
+        # all methodology types get a route
         print 'setting route to %s' % form['route']
         self.set_route(form['route'])
         
-        # all substudy types but experimental and descriptive get timing
+        # all methodology types but experimental and descriptive get timing
         if not self.get_study_type() in [
             self.TYPES['experimental'],
             self.TYPES['descriptive']
@@ -376,7 +379,7 @@ class SubStudy (DTable):
             print 'setting timing to %s' % form['timing']
             self.set_timing(form['timing'])
         
-        # all 'c*' substudy types get controls
+        # all 'c*' methodology types get controls
         if self.get_study_type() in [
             self.TYPES['cross sectional'],
             self.TYPES['cohort'],
@@ -390,7 +393,7 @@ class SubStudy (DTable):
             print 'setting sampling to %s' % form['sampling']
             self.set_sampling(form['sampling'])
 
-        # every substudy type can have comments
+        # every methodology type can have comments
         if form['comments']:
             print 'setting comments'
             self.comments = form['comments']
@@ -447,7 +450,7 @@ class Study (DTable):
             
     # For dynamic iteration over related tables
     TABLES = {
-        'substudies' : SubStudy,
+        'methodologies' : Methodology,
         'outcomes': Outcome,
         'exposures': Exposure,
         'species': Species,
@@ -470,7 +473,7 @@ class Study (DTable):
         self.has_outcome_linkage = False
         self.has_genomic = False
         self.comments = ''
-        self.substudies = []
+        self.methodologies = []
         self.outcomes = []
         self.exposures = []
         self.species = []
@@ -537,17 +540,17 @@ class Study (DTable):
             return self.article_type
     
     
-    def add_substudy (self, substudy):
-        for ss in self.substudies:
-            if ss.uid == substudy.uid:
+    def add_methodology (self, methodology):
+        for meth in self.methodologies:
+            if meth.uid == methodology.uid:
                 return
-        substudy.study_id = self.uid
-        self.substudies.append(substudy)
+        methodology.study_id = self.uid
+        self.methodologies.append(methodology)
         
-    def get_substudy (self, id):
-        for substudy in self.substudies:
-            if substudy.uid == id:
-                return substudy
+    def get_methodology (self, id):
+        for methodology in self.methodologies:
+            if methodology.uid == id:
+                return methodology
         return None
 
     def load (self, cursor):
@@ -668,27 +671,27 @@ if __name__ == '__main__':
     s1.set_article_type('review')
     s1.has_exposure_linkage = True
     s1.save(cursor)
-    print 'created study, creating substudy'
+    print 'created study, creating methodology'
     
-    ss1 = SubStudy()
-    ss1.study_id = s1.uid
-    ss1.set_controls('both')
-    ss1.set_timing('concurrent')
-    ss1.set_sampling('exposure')
-    ss1.set_study_type('cross sectional')
-    s1.substudies.append(ss1)
+    meth1 = Methodology()
+    meth1.study_id = s1.uid
+    meth1.set_controls('both')
+    meth1.set_timing('concurrent')
+    meth1.set_sampling('exposure')
+    meth1.set_study_type('cross sectional')
+    s1.methodologies.append(ss1)
     s1.save(cursor)
-    print 'saved study with substudy'
+    print 'saved study with methodology'
     
     
-    print 'setting ss1 route to ingestion'
-    ss1.set_route('ingestion')
+    print 'setting meth1 route to ingestion'
+    meth1.set_route('ingestion')
     s1.save(cursor)
     
-    ss2 = SubStudy()
-    ss2.study_id = s1.uid
-    ss2.set_study_type('cohort')
-    ss2.set_timing('mixed')
-    s1.substudies.append(ss2)
+    meth2 = Methodology()
+    meth2.study_id = s1.uid
+    meth2.set_study_type('cohort')
+    meth2.set_timing('mixed')
+    s1.methodologies.append(ss2)
     s1.save(cursor)
-    print 'saved study with substudy2'
+    print 'saved study with methodology2'
