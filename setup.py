@@ -37,4 +37,5 @@ kw = {'name': "canary",
         ],
     'cmdclass': {'build_py': qx_build_py}}
 
+
 core.setup(**kw)
