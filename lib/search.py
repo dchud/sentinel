@@ -1,8 +1,15 @@
 # $Id$
 
+import PyLucene
+from PyLucene import Field, Term, Document
+from PyLucene import QueryParser, IndexSearcher, StandardAnalyzer, FSDirectory
+
 import canary.context
+from canary.gazeteer import Feature
 from canary.loader import QueuedRecord
 from canary.study import Study
+from canary.utils import render_capitalized
+
 
 class Search:
 
@@ -191,3 +198,136 @@ class PubmedSearch:
             return []
 
             
+
+class SearchIndex:
+    
+    def __init__ (self, context=None):
+        self.context = canary.context.Context()
+        
+        
+    def index_record (self, record, writer=None):
+        # field, value, store?, index?, token?
+        try:
+            if not writer:
+                had_writer = False
+                writer = self.context.get_search_index_writer(False)
+            else:
+                had_writer = True
+            
+            study = Study(record.study_id)
+            
+            print 'starting document'
+            doc = PyLucene.Document()
+            
+            # First, we need to create a unique key so we can later delete
+            # if necessary.  Will try simply uid for now.
+            doc.add(PyLucene.Field('uid', str(record.uid),
+                True, True, False))
+            doc.add(PyLucene.Field('all', str(record.uid),
+                True, True, False))
+            
+            print 'added uid'
+            source_catalog = self.context.get_source_catalog()
+            complete_term_map = source_catalog.get_complete_mapping()
+            mapped_metadata = record.get_mapped_metadata(complete_term_map)
+            
+            # First index all the non-multiple metadata fields
+            for field in ('abstract', 'affiliation', 'grantnum', 'issn', 
+                'journal', 'pubdate', 'issue', 'pages', 'title', 
+                'unique_identifier', 'volume'):
+                val = mapped_metadata.get(field, None)
+                if val:
+                    doc.add(Field(field, val,
+                        False, True, True))
+                    doc.add(Field('all', val,
+                        False, True, True))
+            print 'added singles'
+            
+            # Next, index all the possibly-multiple metadata fields
+            for field in ('author', 'keyword', 'registrynum', 'subject'):
+                vals = mapped_metadata.get(field, None)
+                for val in vals:
+                    doc.add(Field(field, val,
+                        False, True, True))
+                    doc.add(Field('all', val,
+                        False, True, True))
+            print 'added multiples'
+            
+            # All the booleans
+            for bool in ('has_outcomes', 'has_exposures', 
+                'has_relationships', 'has_interspecies', 
+                'has_exposure_linkage', 'has_outcome_linkage', 
+                'has_genomic'):
+                val = getattr(study, bool)
+                # NOTE: I think lucene dislikes '_' in field names ??
+                boolstr = bool.replace('_', '-')
+                doc.add(Field(boolstr, str(int(val)),
+                    False, True, False))
+                # NOTE: no need to add this to 'all'.  I think.
+            
+            # Now, all the UMLS concepts
+            # NOTE: Revisit for synonym "injection".
+            for concept in ('exposures', 'outcomes', 'risk_factors',
+                'species'):
+                for val in getattr(study, concept):
+                    doc.add(Field(concept, val.term,
+                        True, True, True))
+                    doc.add(Field('all', val.term,
+                        True, True, True))
+
+            # And, the locations
+            gazeteer = self.context.get_gazeteer()
+            locs = []
+            for location in study.locations:
+                feature = Feature(uid=location.feature_id)
+                feature.load()
+                if gazeteer.fips_codes.has_key((feature.country_code, feature.adm1)):
+                    region_name = gazeteer.fips_codes[(feature.country_code, feature.adm1)]
+                else:
+                    region_name = ''
+                full_name = '%s (%s, %s, %s)' % (feature.name, 
+                    gazeteer.feature_codes[feature.feature_type],
+                    render_capitalized(region_name), 
+                    render_capitalized(gazeteer.country_codes[feature.country_code]))
+                doc.add(Field('location', full_name,
+                    False, True, True))
+                doc.add(Field('all', full_name,
+                    False, True, True))
+                
+            writer.addDocument(doc)
+            if not had_writer:
+                writer.close()
+        except:
+            import traceback
+            print traceback.print_exc()
+        
+
+    def unindex_record (self, record):
+        """
+        Unindex documents matching this entry's uid.  *Should* 
+        only be one, but could be many, if somehow the same entry 
+        got indexed multiple times.
+        """
+        reader = self.context.get_search_index_reader()
+        term = Term('uid', record.uid)
+        reader.deleteDocuments(term)
+        reader.close()
+
+
+    def search (self, query_string=''):
+        hits = []
+        query_string = str(query_string)
+        try:
+            searcher = PyLucene.IndexSearcher(PyLucene.FSDirectory.getDirectory(
+                self.context.config.search_index_dir, False))
+            analyzer = StandardAnalyzer()
+            query = QueryParser.parse(query_string, 'all', analyzer)
+            hits = searcher.search(query)
+            return hits, searcher
+        except:
+            import traceback
+            print traceback.print_exc()
+            return hits
+
+        
+    

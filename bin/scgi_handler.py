@@ -1,11 +1,14 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.3
 
 # $Id$
+
+import os
 
 from quixote import enable_ptl
 from scgi.quixote_handler import QuixoteHandler, main
 
 enable_ptl()
+os.environ['GCJ_PROPERTIES'] = "disableLuceneLocks=true"
 
 from canary.qx_defs import CanaryPublisher
 

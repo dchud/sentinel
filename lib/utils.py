@@ -121,6 +121,17 @@ def send_email (from_addr, to_addr, subject='', body='', server='localhost'):
         # FIXME: something more graceful please.
         return
 
+def render_capitalized (term):
+    stop_words = ['of', 'the']
+    old_terms = str(term).split(' ')
+    new_terms = []
+    for t in term.split(' '):
+        if t in stop_words:
+            new_terms.append(t)
+        else:
+            new_terms.append(t.lower().capitalize())
+    return ' '.join(new_terms)
+
 
 # simple self-tests
 if __name__ == '__main__':

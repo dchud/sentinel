@@ -1,10 +1,13 @@
 # $Id$
 
+import os
+import pprint
+import traceback
+
 import log4py
 import memcache
 import MySQLdb
-import pprint
-import traceback
+import PyLucene
 
 import quixote.config
 
@@ -77,6 +80,7 @@ class CanaryConfig (quixote.config.Config):
             'static_image_dir',
             'use_cache',
             'cache_server_list',
+            'search_index_dir',
             ]
 
         for var in my_vars:
@@ -153,6 +157,19 @@ class Context:
                     debug=0)
         else:
             self._cache = None
+
+        # Initialize the search index path
+        try:
+            if not os.path.exists(self.config.search_index_dir):
+                os.mkdir(self.config.search_index_dir)
+                self._search_index_store = PyLucene.FSDirectory.getDirectory(
+                    self.config.search_index_dir, True)
+            else:
+                self._search_index_store = PyLucene.FSDirectory.getDirectory(
+                    self.config.search_index_dir, False)
+        except:
+            import traceback
+            print traceback.print_exc()
 
         # Set up log4py Logger
         if not self.__dict__.has_key('_logger'):
@@ -249,3 +266,16 @@ class Context:
         logger.set_formatstring(self._logger.get_formatstring())
         logger.set_loglevel(self._logger.get_loglevel())
         logger.set_rotation(self._logger.get_rotation())
+
+    def get_search_index_writer (self, clobber=False):
+        search_index_store = PyLucene.FSDirectory.getDirectory(
+            self.config.search_index_dir, clobber)
+        return PyLucene.IndexWriter(search_index_store, 
+            PyLucene.StandardAnalyzer(), clobber)
+    
+    def get_search_index_reader (self):
+        return PyLucene.IndexReader.open(self.config.search_index_dir)
+       
+    def get_searcher (self):
+        return PyLucene.IndexSearcher(PyLucene.FSDirectory.getDirectory(
+            self.config.search_index_dir, False))

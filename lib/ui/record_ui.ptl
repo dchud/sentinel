@@ -11,9 +11,10 @@ from canary.gazeteer import Feature
 from canary.loader import QueuedRecord
 from canary.pubmed import Pubmed
 from canary.qx_defs import NotLoggedInError
+from canary.study import Study
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found
-from canary.study import Study
+from canary.utils import render_capitalized
 
 
 _q_exports = [
@@ -199,16 +200,6 @@ def render_methodologies [html] (study, show_actions=False):
         </div>
     """
 
-def render_capitalized [plain] (term):
-    stop_words = ['of', 'the']
-    old_terms = str(term).split(' ')
-    new_terms = []
-    for t in term.split(' '):
-        if t in stop_words:
-            new_terms.append(t)
-        else:
-            new_terms.append(t.lower().capitalize())
-    return ' '.join(new_terms)
     
 def render_locations [html] (study):
     context = canary.context.Context()
