@@ -355,7 +355,8 @@ def curate_two [html] (request, queued_record_id):
         """
         render_pipeline(article_type, step=2)
         render_queued_record(queued_record)
-        render_messages()
+        if has_messages():
+            render_messages()
         """
         <p>
         Indicate whether the study includes each of the following kinds of data.
@@ -448,8 +449,8 @@ def curate_three [html] (request, queued_record_id):
     """
     render_pipeline(article_type, step=3)
     render_queued_record(queued_record)
-    render_messages()
-    
+    if has_messages():
+        render_messages()
     
     if study.has_exposures:
         exposure_categories = [c for c in categories if 'exposure' in c.get_types()]
@@ -585,7 +586,8 @@ def curate_four [html] (request, queued_record_id):
     """
     render_pipeline(article_type, step=4)
     render_queued_record(queued_record)
-    render_messages()
+    if has_messages():
+        render_messages()
 
     """
     <h4>Methodologies</h4>
@@ -639,15 +641,15 @@ def summary [html] (request, queued_record_id):
         
         if len(study.exposures) == 0:
             add_message('You must add at least one exposure.')
-            request.redirect(str('curate_three'))
         
         if len(study.outcomes) == 0:
             add_message('You must add at least one outcome.')
-            request.redirect(str('curate_three'))
         
         if len(study.species) == 0:
             add_message('You must add at least one species')
-            request.redirect(str('curate_three'))
+        
+    if has_messages():
+        return request.redirect(str('curate_three'))
 
 
     form = MyForm()
@@ -665,7 +667,8 @@ def summary [html] (request, queued_record_id):
         """
         render_pipeline(article_type, step=5)
         render_queued_record(queued_record)
-        render_messages()
+        if has_messages():
+            render_messages()
         """
         <p>
         Please review all of the information you have provided
@@ -883,7 +886,8 @@ def category [html] (request, queued_record_id):
 
     render_pipeline(article_type, step=3)
     render_queued_record(queued_record)
-    render_messages()
+    if has_messages():
+        render_messages()
     
     """
     <h4>Broad terms are in <b>bold</b>:</h4>
