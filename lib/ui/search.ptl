@@ -7,7 +7,7 @@ from quixote import form2
 
 from canary.qx_defs import MyForm
 from canary.search import Search
-#from canary.ui.browse_ui import render_record_row
+from canary.ui.record_ui import render_record_row
 from canary.ui.pageframe import header, footer
 
 
@@ -15,19 +15,8 @@ class SearchForm (MyForm):
 
     def __init__ (self):
         MyForm.__init__(self)
-        self.add(form2.SingleSelectWidget, name='field',
-            value='keyword',
-            options=[(opt, opt, opt) for opt in [
-                'keyword',
-                'title',
-                'author',
-                'canary id',
-                'unique id',
-                ]],
-            sort=False,
-            required=True)
         self.add(form2.StringWidget, 'query',
-            title='',
+            title='Enter one or more keywords',
             size=30,
             required=True)
         self.add_submit('go', 'go')
@@ -46,10 +35,18 @@ def search [html] (request):
         """
         <h3>Search:</h3>
         """
-        form.render(self, request, action_url)
+        form.render()
         footer()
 
-    search = Search(form['field'], form['query'])
+    if form['query'] == None \
+        or form['query'] == '':
+        form.set_error('query', 'Please enter search terms')
+
+    if not form.is_submitted() \
+        or form.has_errors():
+        return render()
+    
+    search = Search(token=form['query'])
     results = search.search(cursor, complete_term_mapping).get_results()
     
     header("Search results")
@@ -62,53 +59,20 @@ def search [html] (request):
     <p>
     Your search: "%s" (%s), records found: %s
     </p>
-    """ % (form['query'], form['field'], count)
+    """ % (form['query'], 'keyword', count)
     
     if count > 0:
         """
-        <table cellspacing='5' class='gentable'>
+        <div id="search-result">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
         """
         for record in results:
             render_record_row(record)
         """
-        </table>
+            </table>
+        </div>
         """
     else:
         '<p>Nothing found.</p>'
 
     footer()
-    
-    
-    
-def render_record_row [html] (record):
-    
-    source_catalog = get_publisher().get_source_catalog()
-    complete_term_mapping = source_catalog.get_complete_mapping()
-    
-    mapped_md = record.get_mapped_metadata(term_map=complete_term_mapping)
-    """
-    <tr>
-        <td>
-            <a href='/record/%s'>%s</a> <br />
-            %s <br />
-            <font size='-1'>%s</font>
-        </td>
-    """ % (record.uid,
-        ', '.join(mapped_md['author']),
-        mapped_md['title'],
-        mapped_md['source'])
-        
-    """
-        <td>
-            <!--
-            <a href='http://sfx.library.yale.edu/links?id=[[PMID]]'>
-                <img border='0' src='/yale_sfx2_gif'>
-            </a>
-            -->
-            <!--
-            <a href='http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=PubMed&cmd=Display&dopt=pubmed_pubmed&from_uid=[[PMID]]'>Pubmed related articles</a>
-            -->
-            [links]
-        </td>
-    </tr>
-    """

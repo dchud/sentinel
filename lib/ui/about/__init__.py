@@ -1,6 +1,7 @@
 _q_exports = [
     'contact_us',
     'study_methodologies',
+    'relevance',
     ]
 
 import sys
@@ -15,7 +16,7 @@ this_module = sys.modules[__name__]
 
 contact_us = about_ui.contact_us
 study_methodologies = about_ui.study_methodologies
-
+relevance = about_ui.relevance
 
 # FIXME
 #config = get_publisher().get_config()

@@ -1,7 +1,7 @@
 import string
 import urllib
 
-from quixote import get_publisher
+from quixote import get_publisher, get_request
 from quixote.errors import TraversalError
 
 from canary.ui.pageframe import header, footer
@@ -36,6 +36,22 @@ def _q_lookup (request, record_id):
         return not_found('record')
 
 
+def render_tagged_pubmed [plain] (record, mapped_metadata):
+    request = get_request()
+    request.response.set_content_type('text/plain')
+    source_catalog = get_publisher().get_source_catalog()
+    output = []
+    for source_id, term_id in record.metadata.keys():
+        source = source_catalog.get_source(source_id)
+        term = source.terms[term_id]
+        if term.is_multivalue:
+            for val in record.metadata[(source_id, term_id)]:
+                output.append('%-04s- %s' % (term.token, val))
+        else:
+            output.append('%-04s- %s' % \
+                (term.token, record.metadata[(source_id, term_id)]))
+    '\n'.join(output)
+            
 
 def render_highlighted_value [html] (dbmodel, group_id, value, delim=' - '):
     value_desc = dbmodel.get_value_description(group_id, value)
@@ -81,61 +97,64 @@ def render_data_points [html] (study):
         ]
         
     """
-    <table cellspacing='3' class='studytable'>
+        <div class='studytable'>
+            <table cellspacing='0'>
     """
     
     try:
         """
-            <tr>
+                <tr>
         """
         for key, short, full in data_points:
             """
-                <th><acronym title='%s'>%s</acronym></th>
+                    <th><acronym title='%s'>%s</acronym></th>
             """ % (full, short)
         """
-            </tr>
-        
-            <tr>
+                </tr>
+            
+                <tr>
         """
         for key, short, full in data_points:
             if getattr(study, str(key)):
                 """
-                <td>Yes</td>
+                    <td>Yes</td>
                 """
             else:
                 """
-                <td>No</td>
+                    <td>No</td>
                 """
         """
-            </tr>
+                </tr>
         """
     except:
         import traceback
         print traceback.print_exc()
     
     """
-    </table>
+            </table>
+        </div>
     """
 
 
 def render_methodologies [html] (study, show_actions=False):
     """
-    <table cellspacing='3' id='methodologies' class='studytable'>
-    
-        <tr>
-            <th>Study type</th>
-            <th><acronym title='Sample size'>N</acronym></th>
-            <th><acronym title='Routes of exposure'>Routes</acronym></th>
-            <th>Sampling</th>
-            <th><acronym title='Controls from same population?'>Controls</acronym></th>
-            <th>Timing</th>
+        <div class='studytable'>
+            <table cellspacing='0' cellpadding='5' id='methodologies'>
+        
+                <tr>
+                    <th>Study type</th>
+                    <th><acronym title='Sample size'>N</acronym></th>
+                    <th><acronym title='Routes of exposure'>Routes</acronym></th>
+                    <th>Sampling</th>
+                    <th><acronym title='Controls from same population?'>Controls</acronym></th>
+                    <th>Timing</th>
     """
     if show_actions:
         """
-            <th>Actions</th>
+                    <th>Actions</th>
         """
     """
-        </tr>
+                </tr>
     """
     
     for meth in study.methodologies:
@@ -149,28 +168,29 @@ def render_methodologies [html] (study, show_actions=False):
             study_type = 'cohort (enclosure)'
             
         """
-        <tr>
-            <td>%s</td>
-            <td>%s</td>
-            <td>%s</td>
-            <td>%s</td>
-            <td>%s</td>
-            <td>%s</td>
+                <tr>
+                    <td>%s</td>
+                    <td>%s</td>
+                    <td>%s</td>
+                    <td>%s</td>
+                    <td>%s</td>
+                    <td>%s</td>
         """ % (study_type, meth.sample_size, ', '.join(meth.get_routes(True)),
             meth.get_sampling(True), meth.get_controls(True),
             meth.get_timing(True))
         if show_actions:
             """
-            <td>
-                [<a href='/edit/study/%s/methodology/%s/edit'>edit</a>]
-                [<a href='/edit/study/%s/methodology/%s/delete'>delete</a>]
-            </td>
+                    <td>
+                        [<a href='/edit/study/%s/methodology/%s/edit'>edit</a>]
+                        [<a href='/edit/study/%s/methodology/%s/delete'>delete</a>]
+                    </td>
             """ % (study.record_id, meth.uid, study.record_id, meth.uid)
         """
-        </tr>
+                </tr>
         """
     """
-    </table>
+            </table>
+        </div>
     """
 
 def render_capitalized [plain] (term):
@@ -199,61 +219,52 @@ def render_locations [html] (cursor, study):
             render_capitalized(region_name), 
             render_capitalized(gazeteer.country_codes[feature.country_code])))
         # lat/long = '%.2f / %.2f' % (feature.latitude, feature.longitude),
-    
     """
-    <tr>
-        <th>Locations</th>
-        <td>
+                <tr>
+                    <th valign='top'>Locations</th>
+                    <td>
     """
     '; '.join([str(loc) for loc in locs])
     """
-        </td>
-    </tr>
+                    </td>
+                </tr>
     """
 
 def render_metadata_header [html] (mapped_metadata, show_abstract=False):
     
-    """
-    <table border='0' cellspacing='5' cellpadding='5'>
-
-        <tr>
-
-            <td align='left' valign='top'>
-                %s
-            </td>
-    """ % mapped_metadata['source']
-    
-    """
-            <td align='left' valign='top'>
-
-                [links]
+    authors = mapped_metadata['author']
+    if authors == []:
+        authors = ['[No authors listed]']
         
-            </td>
-
-        </tr>
     """
-    
-    """
-        <tr>
-    
-            <td colspan='2'>
-                <font size='+1'><b>%s</b></font> <br />
-                <b>%s</b> <br />
-                %s
+    <table border='0' cellspacing='0' cellpadding='0'>
+        <tr valign='top'>
+            <td align='left' valign='top'>
+                <h4>%s</h4>
             </td>
-    
+            <td align='left' valign='top'>
+    """ % mapped_metadata['source']    
+                #<h4>[links]</h4>
+    """
+            </td>
         </tr>
+    </table>
+    """
+  
+    """
+    <h3>%s</h3>
+    <h3>%s</h3>
+    <p>
+    %s
+    </p>
     """ % (mapped_metadata['title'], 
-        ', '.join(mapped_metadata['author']),
+        ', '.join(authors),
         mapped_metadata['affiliation'])
 
 
     if show_abstract:
         render_abstract(mapped_metadata)
 
-    """
-    </table>
-    """
 
 
 def render_abstract [html] (mapped_metadata):
@@ -269,18 +280,25 @@ def render_abstract [html] (mapped_metadata):
         abstract = 'No abstract available.'
 
     """
-            <td align='left' valign='top' width='%s'>
-                <b>Abstract:</b>
-    
+            <td align='left' valign='top'>
                 <p>
                 %s
                 </p>
             </td>
-    """ % ('55%', abstract)
-
+    """ % abstract
     """
-            <td align='left' valign='top'>
-                <b>Subject Headings</b>
+        </tr>
+    </table>
+    """
+
+def render_medline [html] (mapped_metadata):
+    """
+    <table border='0' cellspacing='5' cellpadding='5'>
+
+        <tr>
+            
+            <td align='left' valign='top' width='40%'>
+                <h4>MeSH Terms</h4>
                 <p>
     """
 
@@ -290,19 +308,166 @@ def render_abstract [html] (mapped_metadata):
                 None
         """
     else:
-        subjects.sort()
-        for subject in subjects:
+        sort_subjects = []
+        for sub in subjects:
+            if sub.startswith(str('*')):
+                sort_subjects.append((sub[1:], sub))
+            else:
+                sort_subjects.append((sub, sub))
+        sort_subjects.sort()
+        for sort_sub, orig_sub in sort_subjects:
             """
                     %s <br/>
-            """ % subject
+            """ % orig_sub
 
     """
                 </p>
+            </td>
+    """
+    
+    pubmed_record_url = \
+        "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=retrieve&db=pubmed&dopt=abstract&list_uids=%s" % \
+        mapped_metadata['unique_identifier']
+        
+    pubmed_related_url = \
+        "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=link&db=pubmed&dbFrom=pubmed&from_uid=%s" % \
+        mapped_metadata['unique_identifier']
+
+    """
+            <td align='left' valign='top'>
+            
+                <h4>PMID: %s</h4>
+    """ % mapped_metadata['unique_identifier']
+    """
+                <h4>Go to Pubmed:</h4>
+                <p>
+                [<a href='%s'>This record</a>]
+                [<a href='%s'>Related Articles</a>]
+                </p>
+    """ % (pubmed_record_url, pubmed_related_url)
+            
+    if len(mapped_metadata['keyword']) > 0:
+        """
+                <h4>Keywords</h4>
+                <p>
+        """
+        sort_keywords = mapped_metadata['keyword']
+        sort_keywords.sort()
+        for keyword in sort_keywords:
+            """
+                %s <br />
+            """ % keyword
+        """
+                </p>
+        """
+    
+    if len(mapped_metadata['registrynum']) > 0:
+        """
+                <h4>Registry numbers</h4>
+                <p>
+        """
+        sort_regnums = mapped_metadata['registrynum']
+        sort_regnums.sort()
+        for regnum in sort_regnums:
+            """
+                %s <br />
+            """ % regnum
+        """
+                </p>
+        """
+                
+                
+    """
+            </td>
+
+        </tr>
+    </table>
+    """
+    
+
+def render_related [html] (mapped_metadata):
+    """
+    <table border='0' cellspacing='5' cellpadding='5'>
+        <tr>
+            <td colspan='4' align='left' valign='top'>
+                <h3>Find Related Records in the Canary Database</h3>
+            </td>
+        </tr>
+
+        <tr>
+            <td align='left' valign='top'>
+    """
+    authors = mapped_metadata['author']
+    if len(authors) > 0:
+        """
+                <h4>Authors</h4>
+                <p>
+        """
+        authors.sort()
+        for author in authors:
+            quoted_author = urllib.quote_plus(author)
+            """
+                    <a href='/search?query=%s'>%s</a> <br/>
+            """ % (quoted_author, author)
+        """
+                </p>
+        """
+
+    """            
+            </td>
+            
+            <td align='left' valign='top'>
+                <h4>Journal</h4>
+                <p>
+                <a href='/browse/journal/%s'>%s</a> <br/>
+                </p>
+            </td>
+    """ % (mapped_metadata['issn'], mapped_metadata['journal'])
+    
+    """
+            <td align='left' valign='top'>
+                &nbsp;
+            </td>
+            
+            <td align='left' valign='top'>
+                <h4>Coming soon, also find by:</h4>
+                <ul>
+                    <li>Exposure</li>
+                    <li>Outcome</li>
+                    <li>Species</li>
+                    <li>Location</li>
+                </ul>
             </td>
         </tr>
     </table>
     """
     
+    
+def render_export [html] (record, mapped_metadata):
+    """
+    <table border='0' cellspacing='5' cellpadding='5'>
+        <tr>
+            <td colspan='4' align='left' valign='top'>
+                <h3>Export this record</h3>
+                
+                <p>
+                Export this record to your reference manager by 
+                clicking on the appropriate format below and using
+                your web browser's "file -&gt; save as" menu function.
+                Additional formats will be added as requested.
+                </p>
+                
+                <ul>
+                    <li>
+                        <a href='?view=export&amp;format=pubmed'>Tagged/Pubmed (NLM)</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+    """
+
+
 
 def similar [html] (self, request):
 
@@ -434,14 +599,14 @@ Database curators to describe this study:
 
 def render_summary_concept_row [html] (concepts, concept_name):
     """
-    <tr>
-        <th>%s</th>
-        <td>
+                <tr>
+                    <th valign='top'>%s</th>
+                    <td>
     """ % concept_name.capitalize()
     '; '.join([str(con.term) for con in concepts])
     """
-        </td>
-    </tr>
+                    </td>
+                </tr>
     """
 
 
@@ -456,44 +621,149 @@ def render_record [html] (record):
         article_type = study.get_article_type(text=True)
     except:
         return not_found('record')
-    
-    header('Record %s' % record.uid)
+
+    view = get_request().get_form_var('view', default='canary')
+    format = get_request().get_form_var('format', default='')
+
     mapped_metadata = record.get_mapped_metadata(complete_term_map)
+
+    if view == 'export':
+        if format == 'pubmed':
+            return render_tagged_pubmed(record, mapped_metadata)
+            
+    header('Record %s' % record.uid)
     render_metadata_header(mapped_metadata, show_abstract=False)
     """
     <h4>Article type: %s</h4>
     """ % article_type
-
+    
+    """
+    <div id='citation-head'>
+        <div id='top-menu-int'>
+            <table border='0' cellpadding='0' cellspacing='0' width='675'>
+                <tr>
+    """
+    
+    for view_mode, view_name in (
+        ('canary', 'Canary data'),
+        ('abstract', 'Abstract'),
+        ('medline', 'MEDLINE'),
+        ('related', 'Related'),
+        ('export', 'Export'),
+        ):
+        if view == view_mode:
+            """
+                    <td class='tab-highlite'>
+                        <a href='?view=%s' class='tab-highlite'>%s</a>
+                    </td>
+            """ % (view_mode, view_name)
+        else:
+            """
+                    <td>
+                        <a href='?view=%s'>%s</a>
+                    </td>
+            """ % (view_mode, view_name)
+        
+    """
+                <td class='dimmed'>
+                    &nbsp;
+                </td>
+    """
+    """
+                </tr>
+            </table>
+        </div>    
+    """
+    
     if not article_type in ['irrelevant']:
         
-        render_data_points(study)
+        if view == 'canary':
         
-        """
-        <table class='gentable' id='summary'>
-        """
-        
-        if study.has_exposures \
-            and len(study.exposures) > 0:
-            render_summary_concept_row(study.exposures, 'exposures')
+            render_data_points(study)
             
-        if study.has_outcomes \
-            and len(study.outcomes) > 0:
-            render_summary_concept_row(study.outcomes, 'outcomes')
+            if len(study.exposures) > 0 \
+                or len(study.outcomes) > 0 \
+                or len(study.species) > 0 \
+                or len(study.locations) > 0:
+                """
+            <div class='studytable'>
+                <table cellspacing='0' class='head-left'>
+                """
             
-        if len(study.species) > 0:
-            render_summary_concept_row(study.species, 'species')
-            
-        if len(study.locations) > 0:
-            render_locations(cursor, study)
-            
-        """
-        </table>
-        """
-
-    if not article_type in ['irrelevant'] \
-        and len(study.methodologies) > 0:
-        render_methodologies(study)
+                if study.has_exposures \
+                    and len(study.exposures) > 0:
+                    render_summary_concept_row(study.exposures, 'exposures')
+                    
+                if study.has_outcomes \
+                    and len(study.outcomes) > 0:
+                    render_summary_concept_row(study.outcomes, 'outcomes')
+                    
+                if len(study.species) > 0:
+                    render_summary_concept_row(study.species, 'species')
+                    
+                if len(study.locations) > 0:
+                    render_locations(cursor, study)
+                
+                """
+                </table>
+            </div>
+                """
     
-    render_abstract(mapped_metadata)
+            if not article_type in ['irrelevant'] \
+                and len(study.methodologies) > 0:
+                render_methodologies(study)
+            
+        elif view == 'abstract':
+            render_abstract(mapped_metadata)
+            
+        elif view == 'medline':
+            render_medline(mapped_metadata)
+        
+        elif view == 'related':
+            render_related(mapped_metadata)
+            
+        elif view == 'export':
+            render_export(record, mapped_metadata)
+
+    
+    """
+    </div>
+    """
     
     footer()
+
+
+
+def render_record_row [html] (record):
+    
+    source_catalog = get_publisher().get_source_catalog()
+    complete_term_mapping = source_catalog.get_complete_mapping()
+    mapped_md = record.get_mapped_metadata(term_map=complete_term_mapping)
+    author = mapped_md['author']
+    if author == []:
+        author = ['[No authors listed]']
+    """
+                <tr>
+                    <td align='left' valign='top'>
+                        <b><a href='/record/%s'>%s</a></b> 
+                        <br />
+                        %s
+                        <br />
+                        %s
+                    </td>
+    """ % (record.uid, ', '.join(author), mapped_md['title'], mapped_md['source'])
+        
+    """
+                    <td valign='top' width='20%'>
+                        <!--
+                        <a href='http://sfx.library.yale.edu/links?id=[[PMID]]'>
+                            <img border='0' src='/yale_sfx2_gif'>
+                        </a>
+                        -->
+                        <!--
+                        <a href='http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=PubMed&cmd=Display&dopt=pubmed_pubmed&from_uid=[[PMID]]'>Pubmed related articles</a>
+                        -->
+                        [links]
+                    </td>
+                </tr>
+    """

@@ -969,8 +969,8 @@ class Species (DTable):
 
 class Location (DTable):
     
-    def __init__ (self):
-        self.uid = -1
+    def __init__ (self, uid=-1):
+        self.uid = uid
         self.study_id = -1
         self.feature_id = -1
         self.name = ''
@@ -980,7 +980,7 @@ class Location (DTable):
     def __str__ (self):
         out = []
         out.append('<Location uid=%s study_id=%s' % (self.uid, self.study_id))
-        out.append('\tname=%s' % self.name)
+        out.append('\tfeature_id=%s' % self.feature_id)
         out.append('/>')
         return '\n'.join(out)
     

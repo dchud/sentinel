@@ -505,10 +505,12 @@ margin: 20px 10px 20px 10px;  /*top left bottom right */
 
 .head-left th {
 	text-align: left;
+    padding-left: 10px;
 }
 
 .head-left td {
 	text-align: left;
+    padding-left: 10px;
 }
 
 
@@ -607,7 +609,7 @@ div.abstract div.label {
     border-top: 1px dotted #003366;
     border-bottom: 1px dotted #003366;
     padding: 2px;
-    margin: .5em;
+    margin: .3em;
 }
 
 .queued_record {

@@ -90,6 +90,47 @@ def contact_us [html] (request):
     footer()
 
 
+def relevance [html] (request):
+    
+    header('Relevance to human health')
+    """
+    <h2>Relevance to human health</h2>
+    
+    <p>
+    For each study, the curators consider whether the paper presents evidence
+    supporting linkages to human health:
+    </p>
+    
+    <ul>
+        <li>
+        Did the study present data supporting an association between exposure
+        and outcome in the sentinel species?
+        </li>
+        
+        <li>
+        Did the study address comparative susceptibilities to hazards between
+        species, including between animals and man?
+        </li>
+        
+        <li>
+        Is there evidence of a shared exposure pathway between animals and 
+        humans for the exposure (i.e. were humans also at risk from the same
+        exposure)?
+        </li>
+        
+        <li>
+        Did the study present data linking animal and human health outcomes?
+        </li>
+    </ul>
+    
+    <p>
+    Curators also note whether papers present genomic data that would also
+    help build a linkage between the animal health event and human disease risk.
+    </p>
+    """
+    
+    footer()
+
 
 def study_methodologies [html] (request):
     

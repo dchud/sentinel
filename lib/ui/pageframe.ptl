@@ -27,12 +27,10 @@ def header [html] (title, show_pageframe=True, show_javascript=False):
         <meta name="Description" content="" />
         <meta name="Keywords" content="" />
         
-        <style type='text/css' media='screen'>
-            @import url(/style_css);
-        </style>
         <style type="text/css" media="screen">
             @import url(/wdd_styles_css);
         </style>
+        
         <style type="text/css" media="print">
             @import url(/wdd_print_css);
         </style>
@@ -51,7 +49,7 @@ def header [html] (title, show_pageframe=True, show_javascript=False):
         marginwidth="0" marginheight="0"
         background="/images/internal_pg_bg.gif">
     
-        <a class='name' name="top"></a>
+        <a class='name' name="top_of_page"></a>
 
 
     """ 
@@ -66,29 +64,42 @@ def pageframe [html] ():
     """
     <!-- ###  PAGE HEADER  ############################################################## -->
 
-    <table id="header" border="0" width="100%" cellspacing="0" cellpadding="0">
+    <table id="header" border="0" width="850" cellspacing="0" cellpadding="0">
+    
         <tr valign="top">
-            <td width="48%"height="55" align="left" bgcolor="#A6BFF2">
-                <h1 class="graphicHeader">Canary Database Project Logo here</h1>
+            <td bgcolor="#EEEDCO" rowspan="2" width="145" height="124">
+                <img src="/images/bird-logo.gif" alt="Canary Database Logo"
+                    width="145" height="124" valign="bottom">
             </td>
-            <td width="48%" align="right" bgcolor="#A6BFF2" >
+            <td bgcolor="#A6BFF2" height="91">
+                <h1 class="graphicHeader">Canary Database Project</h1>
+                <h2 class="graphicHeader">Animals as Sentinels of Human Environmental Health Hazards</h2>
+            </td>
+            <td bgcolor="#A6BFF2">
                 <p>Standard links on all pages</p>
-            </td>
-            <td width="4%" bgcolor="#A6BFF2">
             </td>
         </tr>
         
         <tr valign="top">
-            <td colspan = "3" width="100%" height="24" align="left" bgcolor="#EEEDC0">
-                <h2 class="graphicHeader">Animals as Sentinels of Human Environmental Health Hazards</h2>
+            <td bgcolor="#EEEDC0" colspan="2" width="725" height="32" align="left">
+                <p style="margin-top:5px; margin-bottom:5px;">&nbsp; &nbsp; &nbsp; &nbsp;
+                    <span style="font-size:12px; font-weight: normal; margin-left:130px; margin-top:10px;">
+                        <form action='/search' method='post'>
+                            Enter a keyword 
+                            <input type="text" name="query" size="15" tabindex="13">
+                            <input type="submit" name="go" value="go">
+                        </form>
+                    </span>
+                </p>
             </td>
         </tr>
         
         <tr>
-            <td width="100%" height="1" colspan="3" bgcolor="#000000">
+            <td width="725" height="1" colspan="3" bgcolor="#000000">
                 <img src="/images/pixel.gif" alt="" width="1" height="1">
             </td>
         </tr>
+
     </table>
     
     <!-- ### INTERNAL PAGE HEADER  ############################################################## -->
@@ -111,13 +122,13 @@ def pageframe [html] ():
     """
     print_header()
     """
-            <div id="breadCrumb">
-                <a href="/">Home</a>
-            </div>
-            
-            <table border="0" cellspacing="0" cellpadding="0">  
-                <tr valign="top">
-                    <td align="left" valign="top">
+                <div id="breadCrumb">
+                    <a href="/">Home</a>
+                </div>
+                
+                <table border="0" cellspacing="0" cellpadding="0">  
+                    <tr valign="top">
+                        <td align="left" valign="top" width="675">
     """
     request = get_publisher().get_request()
     try:
@@ -128,7 +139,9 @@ def pageframe [html] ():
             <a href='/user/'>my page</a> or
             <a href='/logout'>log out</a>
         </span>
-        <br />
+        <p>
+        &nbsp;
+        </p>
         """ % (user.get_id())
     except:
         pass
@@ -165,7 +178,7 @@ def sidebar [html] ():
             <a href="/about/description">Description</a>
             <a href="/about/tour">Take a tour</a>
             <a href="/about/how_to_search">How to search</a>
-            <a href="/about/relevance_to_human_health">Relevance to human health</a>
+            <a href="/about/relevance">Relevance to human health</a>
             <a href="/about/study_methodologies">Study methodologies</a>
             <!--
             <a href="/about/classification_protocol">Classification protocol</a>
@@ -186,7 +199,7 @@ def sidebar [html] ():
         </div>
         <!-- ### SCAN COLUMN MENU  ################################################################# -->
     """
-    search_box()
+    #search_box()
     contact()
     """
         <br>
@@ -239,20 +252,21 @@ def search_box [html] ():
 def contact [html] ():
     """
         <!-- ### SCAN COLUMN CONTACT INFO  ######################################################### -->
-        <img src="/images/pixel.gif" alt="" 
-            width="1" height="1" vspace="15">
+        <img src="/images/pixel.gif" alt="" width="1" height="1" vspace="25">
         <br>
-        <img src="/images/pixel.gif" alt="" 
-            width="1" height="1" hspace="4">
-        <img src="/images/yusm_logo.png" alt="Yale School of Medicine logo." 
-            hspace="30" vspace="0">
+        <img src="/images/pixel.gif" alt="" width="1" height="1" hspace="4">
         <br>
-        <p class="scanColumnAddress">Canary Project<br>Yale School of 
-            Medicine<br>P.O. Box xxxx<br>New Haven, 
-            CT<br>06519-xxxx<br>203.XXX.XXXX<br>
+        <p class="scanColumnAddress">
+            <img src="/images/yusm_logo.png" alt="Yale School of Medicine logo." 
+                hspace="30" vspace="0">
+        <br>
+            Canary Database Project<br>
+            Yale School of Medicine<br>
+            P.O. Box 102283<br>
+            New Haven, CT<br>
+            06510-2283<br>
         </p>
-        <img src="/images/pixel.gif" alt="" 
-            width="1" height="1" vspace="4">
+        <img src="/images/pixel.gif" alt="" width="1" height="1" vspace="4">
         <br> 
         <!-- ### SCAN COLUMN CONTACT INFO  ######################################################### -->
     """
@@ -282,53 +296,53 @@ def sponsored [html] ():
 
 def footer [html] ():
     """
-                    </div>
-                </td>  
-            </tr>
-        </table>
-
+                        </td>  
+                    </tr>
+                </table>
+        
+                <!-- ### FOOTER  ######################################################################### -->
+                <table border="0" width="100%" cellspacing="0" cellpadding="0">
+                    <tr valign="top" align="left">
+                        <td width="96%" valign="top">
+                            <img src="/images/pixel.gif" alt="" width="1" height="1" vspace="6">
+                            <br>
+                            <a href="#top_of_page">
+                                <img src="/images/jump.gif" 
+                                    width="19" height="13" vspace="6" border="0" 
+                                    alt="Top of page.">
+                            </a>
+                            <br>
+                            <p class="footerLinks">
+                                <a href="http://info.med.yale.edu/intmed/occmed/">Yale University 
+                                    Occupational and Environmental Medicine</a>
+                                &nbsp; &nbsp;
+                                <a href="http://www.med.yale.edu/">Yale University School of Medicine </a>
+                            </p>
+                            <img src="/images/blue.gif" width="100%" height="1" vspace="1">
+                            <br>
+                            <p class="footer">
+                                Copyright  2004, Yale University School of Medicine, New Haven,  
+                                Connecticut, USA.
+                                <br>
+                                All rights reserved. 
+                                <a href='/about/contact_us'>Contact us</a> with
+                                    comments or suggestions.
+                            </p>
+                        </td>
+                        <td width="4%" valign="top">
+                            &nbsp;
+                        </td>
+                    </tr>
+                </table>
         <!-- ### FOOTER  ######################################################################### -->
-        <table border="0" width="100%" cellspacing="0" cellpadding="0">
-            <tr valign="top" align="left">
-                <td width="96%" valign="top">
-                    <img src="/images/pixel.gif" alt="" 
-                        width="1" height="1" vspace="6">
-                    <br>
-                    <a href="#top">
-                        <img src="../resources/graphics_misc/jump.gif" 
-                            width="19" height="13" vspace="6" border="0" 
-                            alt="Top of page.">
-                    </a>
-                    <br>
-                    <p class="footerLinks">
-                        <a href="../index.html">Yale University School of Medicine </a> 
-                        &nbsp; &nbsp;
-                        <a href="http://www.yale.edu/">Yale University Home</a>
-                    </p>
-                    <img src="../resources/colors/blue.gif" width="100%" height="1" 
-                        vspace="1">
-                    <br>
-                    <p class="footer">
-                        Copyright  2004, Yale University School of Medicine, New Haven,  
-                        Connecticut, USA.
-                        <br>
-                        All rights reserved. 
-                        <a href='/about/contact_us'>Contact us</a> with
-                            comments or suggestions.
-                    </p>
-                </td>
-                <td width="4%" valign="top">&nbsp;</td>
-            </tr>
-        </table>
-        <!-- ### FOOTER  ######################################################################### -->
-        <p class="footer">
-            <img src="/images/pixel.gif" alt="" 
-                width="1" height="1" vspace="4">
-            <br> 
-            <!-- *** MAIN CONTENT COLUMN END *************************************************************** -->
-            <!-- CLOSE OF PAGE LAYOUT TABLE -->
-            <td width="10%" align="right">
-            </td> 
+                <p class="footer">
+                <img src="/images/pixel.gif" alt="" 
+                    width="1" height="1" vspace="4">
+                <br> 
+                <!-- *** MAIN CONTENT COLUMN END *************************************************************** -->
+                <!-- CLOSE OF PAGE LAYOUT TABLE -->
+                <td width="10%" align="right">
+                </td> 
             </td>
         </tr>
     </table>

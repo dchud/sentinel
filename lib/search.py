@@ -12,7 +12,7 @@ class Search:
         'keyword',
         ]
     
-    def __init__ (self, field='', token='', allow_curated=True, 
+    def __init__ (self, field='keyword', token='', allow_curated=True, 
         allow_uncurated=False):
         self.field = field
         self.token = token.strip()

@@ -9,7 +9,7 @@ from canary.browse import records_by_methodology, records_by_methodology_index
 from canary.study import Methodology
 from canary.ui.pages import not_found
 from canary.ui.pageframe import header, footer
-
+from canary.ui.record_ui import render_record_row
 
 class Browse:
 
@@ -48,27 +48,6 @@ class Browse:
             return not_found('index')
             
 
-def render_record_row [html] (record):
-    
-    source_catalog = get_publisher().get_source_catalog()
-    complete_term_map = source_catalog.get_complete_mapping()
-    mapped_metadata = record.get_mapped_metadata(complete_term_map)
-    link_width = '20%'
-    """
-    <tr>
-        <td align='left' valign='top'>
-            <a href='/record/%s'>%s</a> <br />
-            %s <br />
-            <font size='-1'>%s</font>
-        </td>
-        <td align='center' valign='top' width='%s'>
-            [links]
-        </td>
-    </tr>
-    """ % (record.uid, ', '.join(mapped_metadata['author']),
-        mapped_metadata['title'], mapped_metadata['source'], link_width)
-
-
 
 class BrowseIndex:
     
@@ -98,12 +77,14 @@ class BrowseIndex:
             """ % (self.type, self.type.capitalize(), name, count, article_text)
     
             """
-            <table width='100%' cellspacing='5' cellpadding='5'>
+            <div id="search-result">
+                <table width='100%' border='0' cellspacing='0' cellpadding='0'>
             """
             for record in records:
                 render_record_row(record)
             """
-            </table>
+                </table>
+            </div>
             """
         else:
             return not_found(self.type)
@@ -132,11 +113,12 @@ class YearBrowseIndex (BrowseIndex):
     year of publication.
         </p>
     
-        <table cellspacing='3' class='gentable'>
-            <tr>
-                <th align='center' width='20%'># articles</th>
-                <th align='left'>Year</th>
-            </tr>
+        <div id="table-list">
+            <table cellspacing='3'>
+                <tr>
+                    <th align='center' width='75'># articles</th>
+                    <th align='left'>Year</th>
+                </tr>
         """
         cursor = get_publisher().get_cursor()
         source_catalog = get_publisher().get_source_catalog()
@@ -148,12 +130,13 @@ class YearBrowseIndex (BrowseIndex):
             if not year == 0:
                 """
                 <tr>
-                    <td>%s</td>
+                    <td align='center'>%s</td>
                     <td align='center'><a href='/browse/year/%s'>%s</a></td>
                 </tr>
                 """ % (year_count, year, year)
         """
-        </table>
+            </table>
+        </div>
         """
         footer()
         
@@ -272,11 +255,12 @@ class JournalBrowseIndex (BrowseIndex):
     journal in which the articles appear.
         </p>
     
-        <table cellspacing='3' class='gentable'>
-            <tr>
-                <th align='center'># articles</th>
-                <th align='left'>Journal</th>
-            </tr>
+        <div id="table-list">
+            <table cellspacing='3'>
+                <tr>
+                    <th align='center' width='75'># articles</th>
+                    <th align='left'>Journal</th>
+                </tr>
         """
         
         cursor = get_publisher().get_cursor()
@@ -290,15 +274,16 @@ class JournalBrowseIndex (BrowseIndex):
                 title = title[0:title.index(str('.'))]
                 """
                 <tr>
-                    <td align='center'>%s</td>
-                    <td align='left'><a href='/browse/journal/%s'>%s</a></td>
+                    <td style='text-align:center;'>%s</td>
+                    <td style='text-align:left'><a href='/browse/journal/%s'>%s</a></td>
                 </tr>
                 """ % (count, issn, title)
             else:
                 continue
     
         """
-        </table>
+            </table>
+        </div>
         """
         footer()
 
@@ -350,11 +335,12 @@ class MethodologyBrowseIndex (BrowseIndex):
     methodology.
         </p>
     
-        <table cellspacing='3' class='gentable'>
-            <tr>
-                <th align='center'># articles</th>
-                <th align='left'>Methodology</th>
-            </tr>
+        <div id="table-list">
+            <table cellspacing='3'>
+                <tr>
+                    <th align='center' width='75'># articles</th>
+                    <th align='left'>Methodology</th>
+                </tr>
         """
         cursor = get_publisher().get_cursor()
         records = records_by_methodology_index(cursor)
@@ -364,13 +350,14 @@ class MethodologyBrowseIndex (BrowseIndex):
         meths.sort()
         for meth_name, meth_id, count in meths:
             """
-            <tr>
-                <td align='center'>%s</td>
-                <td align='left'><a href='/browse/methodology/%s'>%s</a></td>
-            </tr>
+                <tr>
+                    <td align='center'>%s</td>
+                    <td align='left'><a href='/browse/methodology/%s'>%s</a></td>
+                </tr>
             """ % (count, meth_id, meth_name.capitalize())
         """
-        </table>
+            </table>
+        </div>
         """
         footer()
 
