@@ -61,9 +61,8 @@ def _q_index [html] (request):
     <p>
     You can browse the database by
         <a href='/browse/year'>year</a>,
-        <a href='/browse/journal'>journal</a>,
-        <a href='/browse/study_type'>study type</a>, or by
-        <a href='/browse/heading'>subject heading</a>.
+        <a href='/browse/journal'>journal</a>, or by
+        <a href='/browse/methodology'>methodology</a>.
     </p>
 
 

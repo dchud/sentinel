@@ -1,0 +1,315 @@
+/* Copyright Yale University, 2001. All rights reverved.        */
+/* Patrick Lynch (patrick.lynch@yale.edu)                       */
+/* ------------------------------------------------------------ */
+a:link {
+    text-decoration: underline;
+    color: black;
+}
+
+a:visited {
+    text-decoration: underline;
+    color: black;
+}
+
+/* ------------------------------------------------------------ */
+body {
+    background-color: #ffffff;
+    color: black;
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 10pt;
+    margin: 0 5%;
+    padding: 0;
+    border: 0;
+    float: none !important;
+    background: transparent;
+}
+
+h1 {
+    color: #000066;
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 14pt;
+    margin-top: .5em;
+    margin-bottom: 1em
+}
+
+h2 {
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 11pt;
+    margin-top: 1.5em;
+    color: black;
+    margin-bottom: .1em
+}
+
+h2.blueBanner {
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 11pt;
+    margin-top: 3em;
+    color: black;
+    font-weight: normal;
+    padding: 3pt 3pt 5pt 4pt;
+    border: thin;
+    border-top: 1pt solid black;
+    margin-bottom: .5em;
+}
+
+h2.noTopMargin {
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 11pt;
+    margin-top: 0em;
+    color: #000066;
+    margin-bottom: .1em
+}
+
+h3 {
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 10pt;
+    color: black;
+    font-weight: normal;
+    font-variant: normal;
+    margin-top: 1.5em;
+}
+
+h3.noTopMargin {
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 10pt;
+    color: black;
+    font-weight: normal;
+    text-transform: uppercase;
+    font-variant: normal;
+    margin-top: 0em;
+    margin-bottom: .1em;
+}
+
+h3.withRule {
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 10pt;
+    margin-top: 3em;
+    color: black;
+    font-weight: normal;
+    text-transform: uppercase;
+    padding: 0pt 0pt 2pt 0pt;
+    border: thin;
+    border-bottom: 1pt solid #556E9B;
+    margin-bottom: 0em;
+}
+
+h4 {
+    color: black;
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 10pt;
+    font-variant: normal;
+    font-weight: bold;
+    margin-bottom: 1em;
+    margin-top: 1em;
+}
+
+h5 {
+    color: black;
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 9pt;
+    font-variant: normal;
+    font-weight: normal;
+    margin-bottom: 1em;
+    margin-top: .1em;
+}
+
+p  {
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 10pt;
+    line-height: 1.4em;
+    color: black;
+    margin-top: .3em;
+    text-align: left;
+    margin-bottom: .8em;
+    padding-bottom: .1em;
+}
+
+ol {
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 10pt;
+    line-height: 1.8em;
+    list-style: square;
+    margin-top: .3em;
+    margin-bottom: .8em;
+}
+
+ul {
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 10pt;
+    line-height: 1.6em;
+    list-style: disc;
+    list-style-position: outside;
+    margin-top: 0em;
+    margin-bottom: .8em;
+}
+
+ul.menuList {
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 10pt;
+    line-height: 1.4em;
+    list-style: square;
+    list-style-position: outside;
+    margin-top: 0em;
+    margin-bottom: .8em
+}
+
+table#main_layout {
+    width: 100%;
+    margin: 0pt;
+    border-spacing: 0pt;
+    border-collapse: separate;
+}
+
+table#header {
+    display: none;
+}
+
+td#main_content_column {
+    padding: 0pt;
+    border-width: 0pt;
+    width: 100%;
+    vertical-align: top;
+    text-align: left;
+}
+
+td#scan_column {
+    display: none;
+}
+
+/* --------------------------------------------------------- */
+#breadCrumb {
+    display: none;
+}
+
+.dateLine {
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 9pt;
+    line-height: 1.1em;
+    color: black;
+    margin-top: .3em;
+}
+
+.footer {
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 8pt;
+    line-height: 1.6em;
+    color: black;
+    margin-top: .3em;
+}
+
+.footerlinks  {
+    display: none;
+}
+
+.printHeader1  {
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 10pt;
+    line-height: 1.4em;
+    color: black;
+    margin-top: 1em;
+    text-align: left;
+    margin-bottom: 0em;
+    padding-bottom: .3em;
+}
+
+.printHeader2  {
+    color: black;
+    border-bottom: .5pt solid #666666;
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 11pt;
+    font-weight: bold;
+    line-height: 1.4em;
+    margin-top: 0em;
+    text-align: left;
+    margin-bottom: 1em;
+}
+
+#nav-buttons a {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11pt;
+    color: #324362;
+    text-decoration: none;
+    display: block;
+    background-color: #C2D0EA;
+    padding: 4pt 4pt 4pt 9pt; 
+    /* top, right, bottom, left */
+    margin: 1pt 0pt; 
+    /* top + bottom, left + right */
+}
+
+#nav-buttons a:hover {
+    color: #000099; 
+    display: block;
+    background-color: #EEEDC0;
+    padding: 4pt 4pt 4pt 9pt; 
+    /* top, right, bottom, left */
+    margin: 1pt 0pt; 
+    /* top + bottom, left + right */
+}
+
+.scanColumnText  {
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 10pt;
+    line-height: 1.4em;
+    color: 415578;
+    margin-top: .3em;
+    text-align: left;
+    margin-left: 1em;
+    margin-bottom: .8em;
+    padding-bottom: .1em;
+}
+
+/* Example with all properties listed ------------------------- */
+.example {
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 11pt;
+    font-style: normal;        
+    /* italic oblique */
+    font-weight: normal;       
+    /* bold */
+    font-variant: normal;      
+    /* small-caps */
+    line-height: 1.3em;
+    text-indent: 0em;
+    text-decoration: none;     
+    /* underline  overline  line-through  blink  */
+    text-transform: none;      
+    /* capitalize  uppercase  lowercase  */
+    text-align: left;          
+    /* left  right  center  justify  */
+    word-spacing: 0em;         
+    /* normal */
+    letter-spacing: 0em;
+    vertical-align: baseline;  
+    /* sub super top text-top middle bottom text-bottom bottom % */
+    padding-left: 0em;
+    padding-right: 0em;
+    padding-top: 0em;
+    padding-bottom: 0em;
+    margin-top: 0em;
+    margin-bottom: .5em;
+    margin-left: 0em;
+    margin-right: 0em;
+    border-top: none;           
+    /* solid  none  */
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    border-color: none;
+    border-style: none;         
+    /* dotted dashed solid double groove ridge inset outset  */
+    border-width: 0pt;          
+    /* thin medium thick  */
+    float: none                 
+    /* left right none  */
+}
+
+/* Example with table properties ------------------------------- */
+table.example {
+    background-color: red;
+    border: 1pt solid black;
+    border: 2pt solid red;
+    border-spacing: 0pt;
+    margin: 0pt;
+    width: 100%;
+}

@@ -8,18 +8,37 @@ def header [html] (title, show_pageframe=True, show_javascript=False):
     """
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
-<HTML>
+<html>
+<!-- ================================================================================ -->
+<!-- Contents Copyright (C) 2004 Yale School of Medicine.-->
+<!-- All rights reserved. -->
+<!-- Web site design by Web Design and Development, ITS-Med, Yale School of Medicine. -->
+<!-- http://its.med.yale.edu/wdd/ -->
+<!-- ================================================================================ -->
+    <head>
 
-    <HEAD>
-
-        <title>Sentinel prototype: %s</title>
-
-        <link rel="stylesheet" href="http://curtis.med.yale.edu:4080/style_css" type="text/css">
-
+        <title>Canary Database: %s</title>
     """ % (title)
-    
+
+
     """
-    </HEAD>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+        <meta name="Publisher" content="Canary Database Project" />
+        <meta name="Description" content="" />
+        <meta name="Keywords" content="" />
+        
+        <style type='text/css' media='screen'>
+            @import url(/style_css);
+        </style>
+        <style type="text/css" media="screen">
+            @import url(/wdd_styles_css);
+        </style>
+        <style type="text/css" media="print">
+            @import url(/wdd_print_css);
+        </style>
+    
+    </head>
+    
     """
     
     if show_javascript:
@@ -28,9 +47,12 @@ def header [html] (title, show_pageframe=True, show_javascript=False):
         """
     
     """
-    <BODY bgcolor='#ffffff'>
+    <body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" 
+        marginwidth="0" marginheight="0"
+        background="/images/internal_pg_bg.gif">
+    
+        <a class='name' name="top"></a>
 
-        <a class='name' name='top'></a>
 
     """ 
     
@@ -42,20 +64,277 @@ def header [html] (title, show_pageframe=True, show_javascript=False):
 
 def pageframe [html] ():
     """
-    <table border='0' width='100%' cellspacing='0' cellpadding='0'>
+    <!-- ###  PAGE HEADER  ############################################################## -->
 
+    <table id="header" border="0" width="100%" cellspacing="0" cellpadding="0">
+        <tr valign="top">
+            <td width="48%"height="55" align="left" bgcolor="#A6BFF2">
+                <h1 class="graphicHeader">Canary Database Project Logo here</h1>
+            </td>
+            <td width="48%" align="right" bgcolor="#A6BFF2" >
+                <p>Standard links on all pages</p>
+            </td>
+            <td width="4%" bgcolor="#A6BFF2">
+            </td>
+        </tr>
+        
+        <tr valign="top">
+            <td colspan = "3" width="100%" height="24" align="left" bgcolor="#EEEDC0">
+                <h2 class="graphicHeader">Animals as Sentinels of Human Environmental Health Hazards</h2>
+            </td>
+        </tr>
+        
         <tr>
+            <td width="100%" height="1" colspan="3" bgcolor="#000000">
+                <img src="/images/pixel.gif" alt="" width="1" height="1">
+            </td>
+        </tr>
+    </table>
+    
+    <!-- ### INTERNAL PAGE HEADER  ############################################################## -->
 
-            <td class='mainbox' width='15%' valign='top' bgcolor='#003366'>
+    <!-- === MAIN PAGE LAYOUT TABLE ==================================================================== -->
 
-                <div class='heading_left'>
-            Animals as Sentinels of Human Environmental Health Hazards
-                </div>
+    <table border="0" width="100%" cellspacing="0" cellpadding="0">
+    
+        <tr valign="top" align="left">
+
+            <!-- *** SCAN COLUMN START *** -->
+            <td id="scan_column" width="147" valign="top" >
 
     """
     sidebar()
     """
+            <!-- *** MAIN CONTENT COLUMN START **************************************************************** -->
+            <td align="left" valign="top">
+            
+    """
+    print_header()
+    """
+            <div id="breadCrumb">
+                <a href="/">Home</a>
+            </div>
+            
+            <table border="0" cellspacing="0" cellpadding="0 >  
+                <tr valign="top">
+                    <td width="400" valign="top" class="rightspace">
+    """
+    request = get_publisher().get_request()
+    try:
+        user = request.session.user
+        """
+        <span class='login_detail'>
+        Logged in as <b>%s</b>:  go to
+            <a href='/user/'>my page</a> or
+            <a href='/logout'>log out</a>
+        </span>
+        <br />
+        """ % (user.get_id())
+    except:
+        pass
 
+
+def print_header [html] ():
+    """
+    <!-- ### PRINT HEADER  -- VISIBLE ONLY FOR PRINTING ######################################### -->
+    <div id="print_banner">
+        <p class="printHeader2">
+            Canary Database Project, Yale School of Medicine
+        </p>
+        <p class="printHeader1">
+            New Haven, Connecticut 065XX, USA   
+            Tel-203.785.xxxx
+            <br>
+            Home URL: http://canarydb.med.yale.edu/
+        </p>
+    </div>
+    <!-- ### PRINT HEADER  -- VISIBLE ONLY FOR PRINTING ######################################### -->
+    """
+    
+    
+def sidebar [html] ():
+    """
+        <!-- ### SCAN COLUMN MENU  ################################################################# -->
+        <div id="nav-buttons">
+            <p>Browse by</p>
+            <a href="/browse/year">Year</a>
+            <a href="/browse/journal">Journal</a>
+            <a href="/browse/methodology">Methodology</a>
+            
+            <p>Using the Database</p>
+            <a href="/about/description">Description</a>
+            <a href="/about/how_to_search">How to search</a>
+            <a href="/about/study_types">Study types</a>
+            <a href="/about/classification_protocol">Classification protocol</a>
+            <a href="/about/glossary">Glossary</a>
+            
+            <p>About the project</p>
+            <a href="/about/project_mission">Mission</a>
+            <a href="/about/examples">Examples of animal sentinels</a>
+            <a href="/about/related_work">Related work</a>
+            
+            <p>About us</p>
+            <a href="/about/project_team">Project team</a>
+            <a href="/about/advisory_board">Advisory Board </a>
+            <a href="/about/contact_us">Contact us</a>
+        </div>
+        <!-- ### SCAN COLUMN MENU  ################################################################# -->
+    """
+    search_box()
+    contact()
+    """
+        <br>
+        </td> 
+    <!-- *** SCAN COLUMN END *** -->
+    <!-- *** GUTTER COLUMN START *** -->
+        <td width="20">
+            <img src="/images/pixel.gif" alt="" width="20" height="1">
+            <br>
+        </td>
+    <!-- *** GUTTER COLUMN END *** -->
+    """
+
+
+
+def search_box [html] ():
+    """
+        <!-- ### SEARCH BOX  ####################################################################### -->
+        <img src="/images/pixel.gif" alt="" 
+            width="1" height="1" hspace="40" vspace="1" />
+            <br />
+        <table cellpadding="7" cellspacing="0" border="0" valign="top">
+            <tr>
+                <td align="left" valign="top">
+                    <form action='/search' method='post'>
+                        <p>
+                        Search:
+                        </p>
+                        <select name='field'>
+                            <option selected value='keyword'>keyword</option>
+                            <option>title</option>
+                            <option>author</option>
+                            <option>canary id</option>
+                            <option>unique id</option>
+                        </select>
+                        <img src="/images/pixel.gif" alt="" 
+                            width="1" height="2" border="0">
+                        <br />
+                        <input type='text' size='15' name='query'>
+                        <input type='submit' name='go' value='go'>
+                        
+                    </form>
+                </td>
+            </tr>
+        </table> 
+        <!-- ### SEARCH BOX  ####################################################################### -->
+    """
+
+
+def contact [html] ():
+    """
+        <!-- ### SCAN COLUMN CONTACT INFO  ######################################################### -->
+        <img src="/images/pixel.gif" alt="" 
+            width="1" height="1" vspace="15">
+        <br>
+        <img src="/images/pixel.gif" alt="" 
+            width="1" height="1" hspace="4">
+        <img src="/images/yusm_logo.png" alt="Yale School of Medicine logo." 
+            hspace="30" vspace="0">
+        <br>
+        <p class="scanColumnAddress">Canary Project<br>Yale School of 
+            Medicine<br>P.O. Box xxxx<br>New Haven, 
+            CT<br>06519-xxxx<br>203.XXX.XXXX<br>
+        </p>
+        <img src="/images/pixel.gif" alt="" 
+            width="1" height="1" vspace="4">
+        <br> 
+        <!-- ### SCAN COLUMN CONTACT INFO  ######################################################### -->
+    """
+        
+        
+def sponsored [html] ():
+    """
+        <b>Sponsored by</b>
+
+        <br>
+
+        <font size='-1' color='#ffffff'>
+        Yale School of Medicine
+        </font>
+        <img src='/images/yusm_logo.png' alt='YSM Logo'>
+
+        <br>
+
+        <font size='-1' color='#ffffff'>
+        This work was made possible by a grant from the National Library of Medicine
+        </font>
+
+    </div>
+
+    """
+
+
+def footer [html] ():
+    """
+                    </div>
+                </td>  
+            </tr>
+        </table>
+
+        <!-- ### FOOTER  ######################################################################### -->
+        <table border="0" width="100%" cellspacing="0" cellpadding="0">
+            <tr valign="top" align="left">
+                <td width="96%" valign="top">
+                    <img src="/images/pixel.gif" alt="" 
+                        width="1" height="1" vspace="6">
+                    <br>
+                    <a href="#top">
+                        <img src="../resources/graphics_misc/jump.gif" 
+                            width="19" height="13" vspace="6" border="0" 
+                            alt="Top of page.">
+                    </a>
+                    <br>
+                    <p class="footerLinks">
+                        <a href="../index.html">Yale University School of Medicine </a> 
+                        &nbsp; &nbsp;
+                        <a href="http://www.yale.edu/">Yale University Home</a>
+                    </p>
+                    <img src="../resources/colors/blue.gif" width="100%" height="1" 
+                        vspace="1">
+                    <br>
+                    <p class="footer">
+                        Copyright  2004, Yale University School of Medicine, New Haven,  
+                        Connecticut, USA.
+                        <br>
+                        All rights reserved. 
+                        <a href='/about/contact_us'>Contact us</a> with
+                            comments or suggestions.
+                    </p>
+                </td>
+                <td width="4%" valign="top">&nbsp;</td>
+            </tr>
+        </table>
+        <!-- ### FOOTER  ######################################################################### -->
+        <p class="footer">
+            <img src="/images/pixel.gif" alt="" 
+                width="1" height="1" vspace="4">
+            <br> 
+            <!-- *** MAIN CONTENT COLUMN END *************************************************************** -->
+            <!-- CLOSE OF PAGE LAYOUT TABLE -->
+            <td width="10%" align="right">
+            </td> 
+            </td>
+        </tr>
+    </table>
+    <!-- CLOSE OF PAGE LAYOUT TABLE -->
+    </body>
+</html>
+    """
+
+
+
+def old_header [html] ():
+    """
             </td>
 
             <td class='mainbox' width='85%' valign='top'>
@@ -111,116 +390,4 @@ def pageframe [html] ():
 
                 </table>
 
-    """
-    request = get_publisher().get_request()
-    try:
-        user = request.session.user
-        """
-        <span class='login_detail'>
-        Logged in as <b>%s</b>:  go to
-            <a href='/user/'>my page</a> or
-            <a href='/logout'>log out</a>
-        </span>
-        <br />
-        """ % (user.get_id())
-    except:
-        pass
-
-
-def sidebar [html] ():
-    """
-
-    <div class='side'>
-
-        <p>
-        <b><a class='side' href='/'>Home</a></b>
-        </p>
-
-        <br>
-
-        <b>Browse by</b>: <br>
-        - <a class='side' href='/browse/year'>Year</a> <br>
-        - <a class='side' href='/browse/journal'>Journal</a> <br>
-        - <a class='side' href='/browse/methodology'>Methodology</a> <br>
-        <!--
-            - <a class='side' href='/browse/heading'>Subject Heading</a> <br>
-        -->
-
-        <br>
-
-        <b>Using the database</b> <br>
-        <a class='side' href='/about/description'>Description</a> <br>
-        <a class='side' href='/about/how_to_search'>How to search</a> <br>
-        <!-- deprecated, merged into glossary
-        <a class='side' href='/about/field_definitions'>Field definitions</a> <br>
-        -->
-        <!-- deprecated, merged into Description
-        <a class='side' href='/about/database_objectives'>Database objectives</a> <br>
-        -->
-        <a class='side' href='/about/study_types'>Study types</a> <br>
-        <a class='side' href='/about/classification_protocol'>Classification protocol</a> <br>
-        <!--
-        How to find studies <br>
-        -->
-        <!--
-        How we collect studies <br>
-        -->
-        <!--
-        Sources list <br>
-        -->
-        <a class='side' href='/about/glossary'>Glossary</a><br>
-
-        <br>
-
-        <b>About the project</b> <br>
-        <a class='side' href='/about/project_mission'>Project mission</a> <br>
-        <!--
-        <a class='side' href='/about/what_are_animal_sentinels'>What are animal <br>
-        sentinels?</a> <br>
-        -->
-        <a class='side' href='/about/examples'>Examples of animal sentinels</a> <br>
-        <a class='side' href='/about/related_work'>Related work</a> <br>
-
-        <br>
-
-        <b>About us</b> <br>
-        <a class='side' href='/about/project_team'>Project team</a> <br>
-        <a class='side' href='/about/advisory_board'>Advisory Board</a> <br>
-        <a class='side' href='/about/contact_us'>Contact us</a> <br>
-
-
-        <br>
-
-        <b>Sponsored by</b>
-
-        <br>
-
-        <font size='-1' color='#ffffff'>
-        Yale School of Medicine
-        </font>
-        <img src='/images/yusm_logo.png' alt='YSM Logo'>
-
-        <br>
-
-        <font size='-1' color='#ffffff'>
-        This work was made possible by a grant from the National Library of Medicine
-        </font>
-
-    </div>
-
-    """
-
-
-def footer [html] ():
-    """
-
-            </td>
-
-        </tr>
-
-    </table>
-
-    </BODY>
-
-</HTML>
     """

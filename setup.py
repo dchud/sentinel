@@ -32,14 +32,15 @@ kw = {'name': "canary",
         'canary.ui.html',
         'canary.ui.user',
         ],
-    'data_files': [
-        ('/home/dlc33/sites/canary_project/images', [
+    'data_files': [('/home/dlc33/sites/canary_project/images', [
             'lib/ui/images/favicon.ico',
             'lib/ui/images/brynn_canaries_alpha_left.png', 
             'lib/ui/images/yusm_logo.png',
             'lib/ui/images/algorithm.png',
-            ]),
-        ],
+	    'lib/ui/images/pixel.gif',
+            ]
+	),
+	],
     'cmdclass': {'build_py': qx_build_py}}
 
 core.setup(**kw)

@@ -1,9 +1,11 @@
+/*
 body {
     background-color: White;
     /*
     padding: 2px;
     */
 }
+*/
 
 .banner {
     color: #003366;
@@ -62,6 +64,7 @@ body {
     height: 1000px;
 }
 
+/*
 a:link {
     color: #003366;
 }
@@ -103,9 +106,18 @@ a.name:hover {
     text-decoration: none;
     color: #000000;
 }
+*/
+
 
 .gentable {
-	width: 70%;
+	/*
+    width: 70%;
+    */
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 12px;
+    line-height: 1.5em;
+    color: black;
+
 }
 
 .gentable th {
@@ -113,7 +125,10 @@ a.name:hover {
 	color: #333;
 	background: #eee;
 	border: 1px solid #ccc;
-	font-size: medium;
+    text-align: center;
+	/*
+    font-size: medium;
+    */
 }
 
 .gentable td {
@@ -124,14 +139,35 @@ a.name:hover {
 }
 
 #exposures td, #outcomes td, #species td, #summary td {
+    /*
     font-size: small;
+    */
 }
 
-.centered-td td {
-    text-align: center;
+/*
+    Quick fixes to stop our style's clashing with new WDD one.
+*/
+
+dl {
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 12px;
+    line-height: 1.5em;
+    color: black;
+}
+
+.glossary {
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 12px;
+    line-height: 1.5em;
+    color: black;
 }
 
 .studytable {
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    font-size: 12px;
+    line-height: 1.5em;
+    color: black;
+    text-align: center;
 	width: 70%;
 }
 
@@ -144,7 +180,9 @@ a.name:hover {
 	color: #333;
 	background: #eee;
 	border: 1px solid #ccc;
+    /*
 	font-size: medium;
+    */
 }
 
 .studytable td {
@@ -152,7 +190,9 @@ a.name:hover {
 	background: #fff;
 	border-bottom: 1px solid #e5e5e5;
 	padding: 5px;
+    /*
     font-size: small;
+    */
 }
 
 #pipeline {

@@ -132,7 +132,7 @@ class YearBrowseIndex (BrowseIndex):
     year of publication.
         </p>
     
-        <table width='70%' cellspacing='3' cellpadding='3'>
+        <table cellspacing='3' class='gentable'>
             <tr>
                 <th align='center' width='20%'># articles</th>
                 <th align='left'>Year</th>
@@ -148,8 +148,8 @@ class YearBrowseIndex (BrowseIndex):
             if not year == 0:
                 """
                 <tr>
-                    <td align='center'>%s</td>
-                    <td align='left'><a href='/browse/year/%s'>%s</a></td>
+                    <td>%s</td>
+                    <td align='center'><a href='/browse/year/%s'>%s</a></td>
                 </tr>
                 """ % (year_count, year, year)
         """
@@ -272,9 +272,9 @@ class JournalBrowseIndex (BrowseIndex):
     journal in which the articles appear.
         </p>
     
-        <table width='70%' cellspacing='3' cellpadding='3'>
+        <table cellspacing='3' class='gentable'>
             <tr>
-                <th align='center' width='20%'># articles</th>
+                <th align='center'># articles</th>
                 <th align='left'>Journal</th>
             </tr>
         """
@@ -350,9 +350,9 @@ class MethodologyBrowseIndex (BrowseIndex):
     methodology.
         </p>
     
-        <table width='70%' cellspacing='3' cellpadding='3'>
+        <table cellspacing='3' class='gentable'>
             <tr>
-                <th align='center' width='20%'># articles</th>
+                <th align='center'># articles</th>
                 <th align='left'>Methodology</th>
             </tr>
         """
