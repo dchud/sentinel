@@ -288,6 +288,10 @@ def curate_two [html] (request, queued_record_id):
         'has_outcome_linkage',
         title='Linkage between animal exposure/outcome and human health outcomes',
         value=study.has_outcome_linkage)
+    form.add(CheckboxWidget,
+        'has_genomic',
+        title='Linkage to genomic data',
+        value=study.has_genomic)
     
     form.add(SubmitWidget, 'continue', value='continue')
     
@@ -322,7 +326,8 @@ def curate_two [html] (request, queued_record_id):
         'has_relationships',
         'has_interspecies',
         'has_exposure_linkage',
-        'has_outcome_linkage'
+        'has_outcome_linkage',
+        'has_genomic',
         ]:
         if form[bool_item]:
             print 'setting %s == True' % bool_item

@@ -115,6 +115,7 @@ class Study (DTable):
         self.has_interspecies = False
         self.has_exposure_linkage = False
         self.has_outcome_linkage = False
+        self.has_genomic = False
         self.comments = ''
         self.types = []
         self.outcomes = []
@@ -142,6 +143,7 @@ class Study (DTable):
         out.append('\thas_interspecies=%s' % self.has_interspecies)
         out.append('\thas_exposure_linkage=%s' % self.has_exposure_linkage)
         out.append('\thas_outcome_linkage=%s' % self.has_outcome_linkage)
+        out.append('\thas_genomic=%s' % self.has_genomic)
         # What are you wanting here?  TYPES is not like OUTCOMES, is it?
         #for table_name in self.TABLES:
         #    if len(getattr(self, table_name)) > 0:
@@ -376,6 +378,7 @@ class Study (DTable):
                 has_outcomes, has_exposures, 
                 has_relationships, has_interspecies, 
                 has_exposure_linkage, has_outcome_linkage,
+                has_genomic,
                 comments, sample_size, timing, 
                 sampling, controls, route, 
                 date_modified, date_entered)
@@ -392,6 +395,7 @@ class Study (DTable):
                 self.has_outcomes, self.has_exposures, 
                 self.has_relationships, self.has_interspecies, 
                 self.has_exposure_linkage, self.has_outcome_linkage,
+                self.has_genomic,
                 self.comments, self.sample_size, self.timing, 
                 self.sampling, self.controls, self.route)
                 )
@@ -407,6 +411,7 @@ class Study (DTable):
                     has_outcomes = %s, has_exposures = %s, 
                     has_relationships = %s, has_interspecies = %s, 
                     has_exposure_linkage = %s, has_outcome_linkage = %s,
+                    has_genomic = %s,
                     comments = %s, sample_size = %s, timing = %s,
                     sampling = %s, controls = %s, route = %s,
                     date_modified = NOW()
@@ -415,6 +420,7 @@ class Study (DTable):
                     self.has_outcomes, self.has_exposures, 
                     self.has_relationships, self.has_interspecies, 
                     self.has_exposure_linkage, self.has_outcome_linkage,
+                    self.has_genomic,
                     self.comments, self.sample_size, self.timing, 
                     self.sampling, self.controls, self.route,
                     self.uid)
