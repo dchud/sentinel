@@ -10,7 +10,7 @@ from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found
 from canary.qx_defs import MyForm
 from canary.loader import QueuedRecord
-from canary.report import Report, Study
+from canary.study import Study
 
 
 
