@@ -1,0 +1,292 @@
+_q_exports = ['_q_index',
+              'delete',
+              'edit',
+             ]
+
+
+from quixote import get_publisher
+from quixote.errors import AccessError, PublishError, TraversalError
+#from quixote.form2 import Form
+from quixote.form2 import StringWidget, IntWidget, TextWidget
+from quixote.form2 import CheckboxWidget, SubmitWidget
+
+from dulcinea.database import get_transaction
+
+from canary.ui.admin.admin_ui import title_bar
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found
+from canary.qx_defs import MyForm
+from canary.source_catalog import SourceCatalog, Source, Term
+
+
+def _q_index [html] (request):
+    header('Term:')
+    """
+    <h2>Term</h2>
+    """
+    footer()
+
+
+class TermActions:
+
+    _q_exports = ['_q_index',
+                 ]
+
+    def __init__ (self, term_id):
+        self.term_id = term_id
+
+
+    def _q_index [html] (self, request):
+        header('Admin: Term summary', request=request)
+        """
+        <h2>Term summary</h2>
+        """
+        footer()
+
+    def _q_lookup [html] (self, request, action):
+        try:
+            if action == 'edit':
+                return edit(request, self.term_id)
+            if action == 'delete':
+                return delete(request, self.term_id)
+            else:
+                raise TraversalError
+        except:
+            return not_found('term')
+
+
+
+
+class TermForm (MyForm):
+
+    def __init__ (self):
+        MyForm.__init__(self)
+        self.add(IntWidget, 'term_uid', title='Term id',
+                 size=3, required=False)
+        self.add(StringWidget, 'term_name', title='Name',
+                 size=30, required=False)
+        self.add(TextWidget, 'term_desc', title='Description',
+                 rows=4, cols=64, wrap='virtual', required=False)
+        self.add(StringWidget, 'term_token', title='Token',
+                 size=8, required=True)
+        self.add(IntWidget, 'vocabulary_uid', title='Vocabulary id',
+                 size=3, required=False)
+        self.add(IntWidget, 'term_source_uid', title='Source id',
+                 size=3, required=True)
+        self.add(CheckboxWidget, 'is_multivalue', title='Multivalue',
+                 value=False)
+        self.add(StringWidget, 're_multivalue_sep', title='Multivalue separator',
+                 size=30, required=False)
+        self.add(IntWidget, 'mapped_term_uid', title='Maps to term id',
+                 size=3, required=False)
+        self.add(SubmitWidget, 'go', 'go')
+
+
+def create [html] (request):
+
+    form = TermForm()
+
+    def render [html] ():
+        header('Create term', request=request)
+        title_bar('Create Term')
+        form.render()
+        footer()
+
+    if not form.is_submitted():
+        return render()
+
+    term_name = form['term_name']
+    term_desc = form['term_desc']
+    term_token = form['term_token']
+    term_source_uid = form['term_source_uid']
+
+    publisher = get_publisher()
+    source_catalog = get_publisher().get_source_catalog()
+    if term_source_uid and source_catalog.get_source(term_source_uid) == None:
+        form.set_error('term_source_uid', 'Invalid source uid')
+
+    if form.has_errors():
+        return render()
+
+    if term_desc:
+        term = Term(name=term_name, description=term_desc)
+    else:
+        term = Term(name=term_name)
+
+    term.token = term_token
+    term.source_uid = term_source_uid
+
+    # can be null
+    for field in [str('vocabulary_uid'),
+                  str('re_multivalue_sep'),
+                  str('mapped_term_uid')]:
+        if not form[field] == None:
+            term.set(field, form[field])
+
+    # boolean values
+    for field in [str('is_multivalue')
+                  ]:
+        if not form[field] == None and form[field] == True:
+            term.set(field, True)
+        else:
+            term.set(field, False)
+
+    try:
+        cursor = get_publisher().get_cursor()
+        term.save(cursor)
+        new_source_catalog = SourceCatalog()
+        new_source_catalog.load_sources(cursor)
+        get_publisher().set_source_catalog(new_source_catalog)
+        cursor.close()
+        form.logger.info(str('Created new term.'))
+        request.session.message = str('Created new term.')
+        request.redirect(str('/admin/source/%s/terms' % term.source_uid))
+    except:
+        form.logger.error(str('Unable to create term.'))
+        raise PublishError
+
+
+def edit [html] (request, term_id=None):
+
+    form = TermForm()
+
+    source_catalog = get_publisher().get_source_catalog()
+    term = source_catalog.get_term(str(term_id))
+    if term == None:
+        print 'term not found in catalog'
+        return not_found('term')
+
+    print 'got term'
+
+    def render [html] ():
+        print 'term.edit.render'
+        header('Edit term')
+        title_bar('Edit Term')
+        form.render()
+        """
+        <h5>Term last modified: %s</h5>
+        """ % str(term.date_modified)[0:10]   # FIXME in source_catalog
+        footer()
+
+    if not form.is_submitted():
+        form.get_widget('term_uid').set_value(term.uid)
+        form.get_widget('term_name').set_value(term.name)
+        form.get_widget('term_desc').set_value(term.description)
+        form.get_widget('term_token').set_value(term.token)
+        form.get_widget('term_source_uid').set_value(term.source_uid)
+        form.get_widget('vocabulary_uid').set_value(term.vocabulary_uid)
+        form.get_widget('is_multivalue').set_value(term.is_multivalue)
+        form.get_widget('re_multivalue_sep').set_value(term.re_multivalue_sep)
+        form.get_widget('mapped_term_uid').set_value(term.mapped_term_uid)
+        return render()
+
+    term_uid = form['term_uid']
+    term_name = form['term_name']
+    term_desc = form['term_desc']
+    term_source_uid = form['term_source_uid']
+
+    if not term_uid == term.uid:
+        form.set_error('term_uid', 'Term uid cannot be changed')
+        form.get_widget('term_uid').set_value(term.uid)
+
+    if not term_name or term_name == '':
+        form.set_error('term_name', 'Name cannot be blank')
+
+    if form.has_errors():
+        return render()
+
+    term.name = term_name
+    if not term_desc == None:
+        term.description = term_desc
+
+    term.token = form['term_token']
+    term.source_uid = term_source_uid
+
+    # can be null
+    for field in [str('vocabulary_uid'),
+                  str('re_multivalue_sep'),
+                  str('mapped_term_uid')]:
+        if not form[field] == None:
+            term.set(field, form[field])
+
+    # boolean values
+    for field in [str('is_multivalue'),
+                  ]:
+        if not form[field] == None and form[field] == True:
+            term.set(field, True)
+        else:
+            term.set(field, False)
+
+
+    try:
+        cursor = get_publisher().get_cursor()
+        term.save(cursor)
+        source_catalog = SourceCatalog()
+        source_catalog.load_sources(cursor)
+        get_publisher().set_source_catalog(source_catalog)
+        cursor.close()
+        form.logger.info(str('Updated term %s' % term.uid))
+        request.session.message = str('Updated term %s' % term.uid)
+    except:
+        form.logger.error(str('Could not update term %s' % term.uid))
+        request.session.message = str('Could not update term %s' % term.uid)
+
+    request.redirect(str('/admin/source/%s/terms' % term.source_uid))
+
+
+class DeleteTermForm (MyForm):
+
+    def __init__ (self):
+        MyForm.__init__(self)
+        self.add(IntWidget, 'term_uid', title='Term id', required=True)
+        self.add(CheckboxWidget, 'are_you_sure',
+                 title='Are you sure you want to delete this term?',
+                 value=False)
+        self.add(SubmitWidget, 'go', 'go')
+
+
+def delete [html] (request, term_id=None):
+
+    form = DeleteTermForm()
+
+    source_catalog = get_publisher().get_source_catalog()
+    term = source_catalog.get_term(term_id)
+    if term == None:
+        return not_found('term')
+
+    def render [html] ():
+        header('Delete term')
+        title_bar('Delete term')
+        form.render()
+        footer()
+
+    if not form.is_submitted():
+        form.get_widget('term_uid').set_value(term.uid)
+        return render()
+
+    term_uid = form['term_uid']
+    if not term_uid == term.uid:
+        form.set_error('term_uid', 'Term id cannot change')
+        form.get_widget('term_uid').set_value(term.uid)
+
+    if form.has_errors():
+        return render()
+
+    are_you_sure = form['are_you_sure']
+    if are_you_sure:
+        try:
+            cursor = get_publisher().get_cursor()
+            source_catalog.delete_term(cursor, term.uid)
+            new_source_catalog = SourceCatalog()
+            new_source_catalog.load_sources(cursor, True)
+            get_publisher().set_source_catalog(new_source_catalog)
+            cursor.close()
+        except:
+            form.logger.error(str('Unable to delete term %s' % term.uid))
+            PublishError
+        form.logger.info(str('Deleted term %s' % term.uid))
+        request.session.message = str('Deleted term')
+        request.redirect(str('/admin/source/%s/terms' % term.source_uid))
+    else:
+        request.session.message = str('Term not deleted')
+        request.redirect(str('/admin/source/%s/terms' % term.source_uid))

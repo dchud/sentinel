@@ -1,0 +1,195 @@
+_q_exports = [
+             ]
+
+from log4py import Logger
+
+from quixote import get_publisher
+from quixote.errors import AccessError, PublishError, TraversalError
+
+from canary.ui.pageframe import header, footer
+from canary.source_catalog import SourceCatalog
+
+
+def title_bar [html] (action=''):
+    """
+    <h2>
+        <a href='/admin/'>Admin</a>
+    """
+    if not action == '':
+        ' : %s' % (action)
+    """
+    </h2>
+    """
+
+
+def _q_index [html] (request):
+    header('Admin', request=request)
+    title_bar()
+    """
+    <table border='0' cellspacing='5' cellpadding='5' bgcolor='#f3f3f3'>
+    <tr bgcolor='#ffffff'>
+        <td>Queue</td>
+        <td><a href='/admin/queue/add'>Add batch</a></td>
+        <td> - </td>
+        <td> - </td>
+    </tr>
+    <tr bgcolor='#ffffff'>
+        <td>Users</td>
+        <td><a href='/admin/users'>List</a></td>
+        <td><a href='/admin/user/create'>Create</a></td>
+        <td> - </td>
+    </tr>
+    <tr bgcolor='#ffffff'>
+        <td>Sources</td>
+        <td><a href='/admin/sources'>List</a></td>
+        <td><a href='/admin/source/create'>Create</a></td>
+        <td><a href='/admin/reload_sources'>Reload</a></td>
+    </tr>
+    <tr bgcolor='#ffffff'>
+        <td>ZODB</td>
+        <td><a href='/admin/zodb_keys'>List keys</a></td>
+        <td> - </td>
+        <td> - </td>
+    </tr>
+    </table>
+    """
+    footer()
+
+
+def users [html] (request):
+    header('Admin: List users', request=request)
+    title_bar('List Users')
+    user_db = get_publisher().get_user_db()
+    users = user_db.get_users()
+    sorted_users = [(user.email, user.get_id()) for user in users]
+    sorted_users.sort()
+    """
+    <table border='0' cellspacing='5' cellpadding='5' bgcolor='#f3f3f3'>
+    <tr>
+        <th>id</th>
+        <th>email</th>
+        <th>name</th>
+        <th>actions</th>
+    </tr>
+    """
+    for email, id in sorted_users:
+        user = user_db.get_user(id)
+        """
+    <tr bgcolor='#ffffff'>
+        <td>%s</td>
+        <td>%s</td>
+        <td>%s</td>
+        <td><a href='/admin/user/%s/edit'>edit</a> -
+            <a href='/admin/user/%s/delete'><font size='-1'>delete</font></a>
+            </td>
+    </tr>
+        """ % (id, email, user.name, id, id)
+    """
+    </table>
+    """
+    footer()
+
+
+def sources [html] (request):
+    header('Admin: List sources', request=request)
+    title_bar('List Sources')
+
+    try:
+        if request.session.message:
+            """
+            <h4><font color='red'>%s</font></h4>
+            """ % request.session.message
+            request.session.message = None
+    except:
+        pass
+
+    source_catalog = get_publisher().get_source_catalog()
+
+    if len(source_catalog.sources) == 0:
+        """
+        <b>No sources found.</b> <br/>
+        """
+    else:
+        sources = [(source.name, source.uid) for id, source in source_catalog.sources.items()]
+        sources.sort()
+        bgcolor = '#ffffff'
+        """
+        <table border='0' cellspacing='5' cellpadding='5' bgcolor='#e4e4e4'>
+        <tr>
+            <th align='left'>Source name</th>
+            <th align='left'>edit sources</th>
+            <th align='left'>show terms</th>
+            <th align='left'>remove source</th>
+        </tr>
+        """
+        for (name, source_id) in sources:
+            source = source_catalog.get_source(source_id)
+            """
+            <tr bgcolor='%s'>
+                <td align='left'>%s</td>
+                <td align='middle'><a href='/admin/source/%s/edit'>edit</a></td>
+                <td align='middle'><a href='/admin/source/%s/terms'>terms</a></td>
+                <td align='middle'><a href='/admin/source/%s/delete'>delete</a></td>
+            </tr>
+            """ % (bgcolor, source.name, source.uid, source.uid, source.uid)
+            if bgcolor == '#ffffff':
+                bgcolor = '#f3f3f3'
+            else:
+                bgcolor = '#ffffff'
+        """
+        </table>
+        """
+    footer()
+
+
+def reload_sources [html] (request):
+    header('Admin: Reload sources', request=request)
+    title_bar('Reload Sources')
+    try:
+        source_catalog = SourceCatalog()
+        cursor = get_publisher().get_cursor()
+        source_catalog.load_sources(cursor)
+        cursor.close()
+        get_publisher().set_source_catalog(source_catalog)
+        logger = Logger().get_instance()
+        get_publisher().configure_logger(logger)
+        logger.info(str('Sources reloaded'))
+        """
+        <p>
+        Sources reloaded.
+        </p>
+        """
+    except:
+        raise PublishError
+    footer()
+
+
+# show_keys is a debugging task which roughly indicates ZODB state
+def zodb_keys [html] (request):
+    header('Admin: List ZODB keys', request=request)
+    title_bar('List ZODB keys')
+    zodb = get_publisher().get_root()
+    keys = zodb.keys()
+    keys.sort()
+    """
+    <h3>ZODB keys</h3>
+    <ul>
+    """
+    for key in keys:
+        '<li>%s:\t%s</li>\n' % (key, zodb[key])
+    """
+    </ul>
+
+    <h3>Session keys</h3>
+    <ul>
+    """
+    session_mgr = get_publisher().session_mgr
+    keys = session_mgr.sorted_keys()
+    for key in keys:
+        """
+        <li>%s:\t%s (<a href='/admin/session/%s/delete'>delete</a>)</li>\n
+        """ % (key, session_mgr[key], key)
+    """
+    </ul>
+    """
+    footer()

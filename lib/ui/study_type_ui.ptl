@@ -1,0 +1,83 @@
+from quixote import get_publisher
+from quixote.errors import TraversalError
+
+from canary.ui.browse import render_result_row
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found
+
+_q_exports = ['_q_index']
+
+
+def _q_index [html] (request):
+    return not_found('study type')
+
+
+def render_records_by_study_type [html] (s_type_name, records):
+    header('Browse by study type: %s' % (s_type_name))
+
+    count = len(records)
+    if count > 0:
+        if count == 1:
+            article_text = 'article'
+        else:
+            article_text = 'articles'
+
+        """
+        <h2><a href='/browse/study_type'>Browse by Study Type</a>: %s (%s %s)</h2>
+        """ % (s_type_name, count, article_text)
+
+        """
+        <table width='100%' cellspacing='5' cellpadding='5'>
+        """
+        for record in records:
+            render_result_row(record[0], record[1], record[2], record[3])
+        """
+        </table>
+        """
+    else:
+        return not_found('study type')
+
+    footer()
+
+
+def records_by_study_type (s_type, cursor):
+    results = []
+    cursor.execute("""
+        SELECT reference_id
+        FROM reference_methodology
+        WHERE methodology = %s
+        """, s_type)
+    id_rows = cursor.fetchall()
+    for id_row in id_rows:
+        cursor.execute("""
+            SELECT authors, title, source, pubmed_id
+            FROM sentinel_studies
+            WHERE reference_id = %s
+            """, id_row[0])
+        while 1:
+            row = cursor.fetchone()
+            if row == None: break
+            results.append((row[0], row[1], row[2], row[3]))
+    return results
+
+
+
+def _q_lookup (request, name):
+    try:
+        if name:
+            s_type = int(name)
+            cursor = get_publisher().get_cursor()
+            records = records_by_study_type(s_type, cursor)
+            if len(records) == 0:
+                print "No records found."
+                raise Error
+            cursor.close()
+            dbmodel = get_publisher().get_dbmodel()
+            s_name = dbmodel.get_value_description(int(1), int(s_type))
+            return render_records_by_study_type(s_name, records)
+        else:
+            print "s_type not present"
+            raise Error
+    except:
+        print "if not specified, unknown error."
+        return not_found('study type')

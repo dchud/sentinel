@@ -1,0 +1,9 @@
+Todo for canary library
+-----------------------
+
+- move namespace to canary:
+    - reorganize code
+    - fix setup.py
+- set up static html dir for css, images
+
+- upgrade scgi (?)

@@ -1,0 +1,256 @@
+_q_exports = ['_q_index',
+              'delete',
+              'edit',
+             ]
+
+
+
+from quixote import get_publisher
+from quixote.errors import TraversalError
+from quixote.form2 import StringWidget, CheckboxWidget, PasswordWidget, SubmitWidget
+
+from dulcinea.database import get_transaction
+
+from canary.ui.admin.admin_ui import title_bar
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found
+from canary.qx_defs import MyDulcineaUser, MyForm
+from canary.utils import is_valid_email, is_valid_password
+
+
+
+def _q_index [html] (request):
+    header('User:')
+    """
+    <h2>User</h2>
+    """
+    footer()
+
+
+class UserActions:
+
+    _q_exports = ['_q_index',
+                 ]
+
+    def __init__ (self, user_id):
+        self.user_id = user_id
+
+    def _q_index [html] (self, request):
+        header('blah', request=request)
+        """
+        blah
+        """
+        footer()
+
+    def _q_lookup [html] (self, request, action):
+        try:
+            if action == 'edit':
+                return edit(self.user_id)
+            elif action == 'delete':
+                return delete(self.user_id)
+            else:
+                raise TraversalError
+        except:
+            return not_found('user')
+
+
+class UserForm (MyForm):
+
+    def __init__ (self):
+        MyForm.__init__(self)
+        self.add(StringWidget, 'user_id', title='User id',
+                 size=10, required=True)
+        self.add(StringWidget, 'user_email', title='User email',
+                 size=30, required=True)
+        self.add(StringWidget, 'user_name', title='User name', size=30)
+        self.add(CheckboxWidget, 'is_editor', title='Editor', value=False)
+        self.add(CheckboxWidget, 'is_admin', title='Administrator', value=False)
+        self.add(CheckboxWidget, 'is_active', title='Active', value=True)
+        self.add(PasswordWidget, 'user_pass',
+                 title='Set user password', required=False)
+        self.add(SubmitWidget, 'go', value='go')
+
+
+def create [html] (request):
+
+    form = UserForm()
+
+    def render [html] ():
+        header('Create user', request=request)
+        title_bar('Create User')
+        form.render()
+        footer()
+
+    if not form.is_submitted():
+        return render()
+
+    user_id = form['user_id']
+    user_email = form['user_email']
+    user_pass = form['user_pass']
+    if user_id:
+        if str(' ') in user_id:
+            form.set_error('user_id', 'User id cannot contain spaces.')
+        user_db = get_publisher().get_user_db()
+        if not user_db.get_user(user_id) == None:
+            form.set_error('user_id',
+                           'A user with that id already exists, please choose another.')
+    if not user_email or not is_valid_email(user_email):
+        form.set_error('user_email', 'Please enter a valid email address.')
+
+    if not is_valid_password(user_pass):
+        form.set_error('user_pass', 'Please enter a password (min. 4 characters)')
+
+    if form.has_errors():
+        return render()
+
+    # FIXME:  need to trap DulcineaUser.set_id() validation errors?
+    user = MyDulcineaUser(user_id)
+    user.email = user_email
+    user.set_password(user_pass)
+    if not form['user_name'] == None:
+        user.name = form['user_name']
+    if form['is_editor']:
+        user.is_editor = True
+    if form['is_admin']:
+        user.is_admin = True
+    if form['is_active']:
+        user.is_active = True
+
+    user_db = get_publisher().get_user_db()
+    user_db.add_user(user)
+    get_transaction().commit()
+    form.logger.info(str('Created user %s' % user_id))
+
+    header('Admin: User created', request=request)
+    title_bar('User %s created' % (user_id))
+    footer()
+
+
+
+def edit [html] (user_id=None):
+
+    form = UserForm()
+
+    user_db = get_publisher().get_user_db()
+    user = user_db.get_user(user_id)
+    if user == None:
+        raise TraversalError
+
+    def render [html] ():
+        header('Edit user %s' % user_id)
+        title_bar('Edit User %s' % user_id)
+        form.render()
+        footer()
+
+    if not form.is_submitted():
+        form.get_widget('user_id').set_value(user.get_id())
+        form.get_widget('user_email').set_value(user.email)
+        form.get_widget('user_name').set_value(user.name)
+        form.get_widget('is_editor').set_value(user.is_editor)
+        form.get_widget('is_admin').set_value(user.is_admin)
+        # FIXME: admin page for updating users en masse?
+        try:
+            form.get_widget('is_active').set_value(user.is_active)
+        except:
+            form.get_widget('is_active').set_value(True)
+        return render()
+
+    user_id = form['user_id']
+    user_email = form['user_email']
+    user_pass = form['user_pass']
+    if not user_id == user.get_id():
+        form.set_error('user_id', 'User id cannot be changed')
+        form.get_widget('user_id').set_value(user.get_id())
+    if not is_valid_email(user_email):
+        form.set_error('user_email', 'Please enter a valid email address.')
+    if not user_pass == None and not is_valid_password(user_pass):
+        form.set_error('user_pass', 'Must be at least 4 charcters.')
+
+    if form.has_errors():
+        return render()
+
+    user.email = user_email
+
+    if not form['user_name'] == None:
+        user.name = form['user_name']
+
+    if form['is_editor']:
+        user.is_editor = True
+    else:
+    	user.is_editor = False
+
+    if form['is_admin']:
+        user.is_admin = True
+    else:
+    	user.is_admin = False
+
+    if form['is_active']:
+        user.is_active = True
+    else:
+        user.is_active = False
+
+    if user_pass:
+        user.set_password(user_pass)
+
+    get_transaction().commit()
+    form.logger.info(str('Edited user %s' % user_id))
+    header('Admin: User updated')
+    title_bar('User %s updated' % (user_id))
+    footer()
+
+
+
+class DeleteUserForm (MyForm):
+
+    def __init__ (self):
+        MyForm.__init__(self)
+        self.add(StringWidget, 'user_id',
+                 title='User id', required=True)
+        self.add(CheckboxWidget, 'are_you_sure',
+                 title='Are you sure you want to delete this user?',
+                 value=False)
+        self.add(SubmitWidget, 'go', 'go')
+
+
+def delete [html] (user_id=None):
+
+    form = DeleteUserForm()
+
+    user_db = get_publisher().get_user_db()
+    user = user_db.get_user(user_id)
+    if user == None:
+        return not_found('user')
+
+    def render [html] ():
+        header('Delete user')
+        title_bar('Delete user')
+        form.render()
+        footer()
+
+    if not form.is_submitted():
+        form.get_widget('user_id').set_value(user_id)
+        return render()
+
+    if not form['user_id'] == user_id:
+        form.set_error('user_id', 'User id cannot change')
+        form.get_widget('user_id').set_value(user_id)
+
+    if form.has_errors():
+        return render()
+
+    are_you_sure = form['are_you_sure']
+    if are_you_sure:
+        try:
+            del(user_db.users[user_id])
+            get_transaction().commit()
+            form.logger.info(str('Deleted user %s' % user_id))
+        except:
+            get_transaction().abort()
+            form.logger.error(str('Unable to delete user %s' % user_id))
+
+        header('Admin: User deleted')
+        title_bar('User deleted')
+    else:
+        header('Admin: User not deleted')
+        title_bar('User not deleted')
+    footer()

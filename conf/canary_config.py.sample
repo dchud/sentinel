@@ -1,0 +1,43 @@
+# Config file for the Quixote demo.  This ensures that debug and error
+# messages will be logged, and that you will see full error information
+# in your browser.  (The default settings shipped in Quixote's config.py
+# module are for security rather than ease of testing/development.)
+
+ACCESS_LOG = "/home/user/sites/canary_project/logs/access.log"
+DEBUG_LOG = "/home/user/sites/canary_project/logs/debug.log"
+ERROR_LOG = "/home/user/sites/canary_project/logs/error.log"
+
+DISPLAY_EXCEPTIONS = "html" # None
+SECURE_ERRORS = 0
+
+FIX_TRAILING_SLASH = 1
+
+MAIL_FROM = "foo@example.com"     # eg. "webmaster@example.com"
+MAIL_SERVER = "localhost"
+MAIL_DEBUG_ADDR = "foo@example.com"   # eg. "developers@example.com"
+
+UPLOAD_DIR = "/home/user/sites/canary_project/upload"
+
+
+# Variables defined locally for sentineltestsite.
+# Note that quixote.config.Config has been subclassed
+# as qx_defs.MyConfig to include these vars.
+
+SESSION_COOKIE_NAME = "canary_database_session"
+SESSION_COOKIE_DOMAIN = "your.hostname"
+SESSION_COOKIE_PATH = "/"
+
+
+DB_POOL_SIZE = 5
+DB_HOST = "localhost"
+DB_NAME = "dbname"
+DB_USER = "dbuser"
+DB_PASSWD = "dbpass"
+
+LOG_DIR = "/home/user/sites/canary_project/logs"
+
+STATIC_HTML_DIR = "/home/user/projects/canary/lib/ui/html"
+STATIC_IMAGE_DIR = "/home/user/projects/canary/lib/ui/images"
+
+ZODB_CONNECTION_STRING = "file:/home/user/sites/canary_project/data/data"
+

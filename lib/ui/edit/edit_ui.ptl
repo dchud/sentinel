@@ -1,0 +1,61 @@
+_q_exports = ['_q_index',
+              'view',
+             ]
+
+from log4py import Logger
+
+from quixote import get_publisher
+from quixote.errors import AccessError, PublishError, TraversalError
+
+from canary.loader import Queue
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found
+from canary.source_catalog import SourceCatalog
+
+
+def title_bar [html] (action=''):
+    """
+    <h2>
+        <a href='/edit/'>Edit</a>
+    """
+    if not action == '':
+        ' : %s' % (action)
+    """
+    </h2>
+    """
+
+
+def _q_index [html] (request):
+    header('Edit', request=request)
+    title_bar('Edit')
+    """
+    <table border='0' cellspacing='5' cellpadding='5' bgcolor='#f3f3f3'>
+    <tr bgcolor='#ffffff'>
+        <th>Queue id</th>
+        <th>Source</th>
+        <th># Recs</th>
+        <th>Load date</th>
+        <th>Actions</th>
+    </tr>
+    """
+    source_catalog = get_publisher().get_source_catalog()
+    cursor = get_publisher().get_cursor()
+    queue = Queue()
+    queue.load(cursor)
+    for batch in queue.batches:
+        source_uid = batch['source_uid']
+        source = source_catalog.get_source(source_uid)
+        """
+        <tr bgcolor='#ffffff'>
+            <td align='center'>%s</td>
+            <td align='center'>%s</td>
+            <td align='right'>%s</td>
+            <td align='center'>%s</td>
+            <td align='center'><a href='/edit/batch/%s/view'>view</a></td>
+        </tr>
+        """ % (batch['uid'], source.name, batch['num_records'],
+               str(batch['date_added'])[0:10], batch['uid'])
+    """
+    </table>
+    """
+    footer()

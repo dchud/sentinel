@@ -1,0 +1,139 @@
+from quixote.form import Form
+from quixote import get_publisher
+
+from canary.ui.browse import render_result_row
+from canary.ui.pageframe import header, footer
+
+
+class Search (Form):
+
+    def __init__ (self):
+        Form.__init__(self)
+        self.add_widget('option_select',
+                        name='field',
+                        allowed_values=('keyword', 'author', 'title'),
+                        descriptions=('keyword', 'author', 'title'))
+        self.add_widget('string',
+                        'query',
+                        title='',
+                        size=30,
+                        required=0)
+        self.add_submit_button("go", "go")
+
+
+    def render [html] (self, request, action_url, show_header=1):
+        if show_header:
+            header("Search the database")
+            """
+            <h3>Search:</h3>
+            """
+        Form.render(self, request, action_url)
+        if show_header:
+            footer()
+
+
+    def process (self, request):
+        values = Form.process(self, request)
+        if not values["query"]:
+            self.error["query"] = "Please enter your query."
+        return values
+
+
+
+    def action [html] (self, request, submit_button, values):
+        query = None
+        field = 'keyword'
+        header("Search results")
+
+        '<h3>Search results</h3>'
+
+        #self.render(request, 'search', show_header=0)
+
+        if values.has_key('field'):
+            field = values['field']
+
+        if values.has_key('query'):
+            query = values['query']
+            results = self.get_records(field, query)
+            count = len(results)
+            """
+            <p>
+            Records found: %(count)s
+            </p>
+            """ % vars()
+            """
+            <table width='100%' cellspacing='5' cellpadding='5'>
+            """
+            for record in results:
+                render_result_row(record[0], record[1], record[2], record[3])
+            """
+            </table>
+            """
+        else:
+            '<p>Nothing found.</p>'
+
+        footer()
+
+
+    def get_records (self, field, query):
+
+        cursor = get_publisher().get_cursor()
+        wildcard_query = '%' + query + '%'
+
+        if field == 'keyword':
+            cursor.execute("""
+            SELECT DISTINCT authors, title, source, pubmed_id
+            FROM sentinel_studies
+            WHERE authors like %s
+            OR title like %s
+            OR abstract like %s
+            """, (wildcard_query,
+                    wildcard_query,
+                    wildcard_query))
+        elif field == 'title':
+            cursor.execute("""
+            SELECT DISTINCT authors, title, source, pubmed_id
+            FROM sentinel_studies
+            WHERE title like %s
+            """, (wildcard_query))
+        elif field == 'author':
+            cursor.execute("""
+            SELECT DISTINCT authors, title, source, pubmed_id
+            FROM sentinel_studies
+            WHERE authors like %s
+            """, (wildcard_query))
+
+        results = []
+        while 1:
+            row = cursor.fetchone()
+            if row == None: break
+            results.append((row[0], row[1], row[2], row[3]))
+
+        cursor.close()
+        return results
+
+
+    #def render_result_row [html] (self,
+    #                              authors,
+    #                              title,
+    #                              source,
+    #                              pmid):
+    #    """
+    #    <tr>
+    #        <td align='left' valign='top'>
+    #            <a href='/record/%(pmid)s'>%(authors)s</a> <br />
+    #            %(title)s <br />
+    #            <font size='-1'>%(source)s</font>
+    #        </td>
+    #        <td align='center' valign='top'>
+    #            <a href='http://sfx.library.yale.edu/links?id=pmid:%(pmid)s'>
+    #                <img border='0' src='yale_sfx2_gif'>
+    #            </a>
+    #        </td>
+    #    </tr>
+    #    """ % vars()
+
+
+
+def search (request):
+    return Search().handle(request)

@@ -1,0 +1,81 @@
+import urllib
+
+from quixote import get_publisher
+from quixote.errors import TraversalError
+
+from canary.ui.browse import render_result_row
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found
+
+_q_exports = ['_q_index']
+
+
+def _q_index [html] (request):
+    return not_found('heading')
+
+
+def render_records_by_heading [html] (name, records):
+    header('Browse by Heading: %s' % (name))
+
+    count = len(records)
+    if count > 0:
+
+        if count == 1:
+            article_text = 'article'
+        else:
+            article_text = 'articles'
+
+        """
+        <h2><a href='/browse/heading'>Browse by Heading</a>: %s (%s %s)</h2>
+        """ % (name, count, article_text)
+
+        """
+        <table width='100%' cellspacing='5' cellpadding='5'>
+        """
+        for record in records:
+            render_result_row(record[0], record[1], record[2], record[3])
+        """
+        </table>
+        """
+    else:
+        return not_found('heading')
+
+    footer()
+
+
+def records_by_heading (term, cursor):
+    results = []
+    # GROUP BY reference_id because some terms repeat w/diff qualifiers
+    cursor.execute("""
+        SELECT reference_id
+        FROM reference_mesh
+        WHERE term = %s
+        GROUP BY reference_id
+        """, term)
+    id_rows = cursor.fetchall()
+    for id_row in id_rows:
+        cursor.execute("""
+            SELECT authors, title, source, pubmed_id
+            FROM sentinel_studies
+            WHERE reference_id = %s
+            """, id_row[0])
+        while 1:
+            row = cursor.fetchone()
+            if row == None: break
+            results.append((row[0], row[1], row[2], row[3]))
+    return results
+
+
+
+def _q_lookup (request, name):
+    try:
+        if name:
+            unencoded_name = urllib.unquote_plus(name)
+            cursor = get_publisher().get_cursor()
+            records = records_by_heading(unencoded_name, cursor)
+            cursor.close()
+            return render_records_by_heading(unencoded_name, records)
+        else:
+            raise Error
+    except:
+        return not_found('heading')

@@ -1,0 +1,216 @@
+from canary.ui.tests import *
+
+
+def header [html] (title, show_pageframe=True, request=None):
+    """
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<HTML>
+
+    <HEAD>
+
+        <title>Sentinel prototype: %s</title>
+
+        <link rel="stylesheet" href="http://curtis.med.yale.edu:4080/style_css" type="text/css">
+
+        <a class='name' name='top'></a>
+
+    </HEAD>
+
+
+    <BODY bgcolor='#ffffff'>
+
+    """ % (title)
+
+    if show_pageframe:
+        pageframe(request=request)
+
+
+
+
+def pageframe [html] (request=None):
+    """
+    <table border='0' width='100%' cellspacing='0' cellpadding='0'>
+
+        <tr>
+
+            <td class='mainbox' width='15%' valign='top' bgcolor='#003366'>
+
+                <div class='heading_left'>
+            Animals as Sentinels of Human Environmental Health Hazards
+                </div>
+
+    """
+    sidebar()
+    """
+
+            </td>
+
+            <td class='mainbox' width='85%' valign='top'>
+
+                <table border='0' width='80%'>
+
+                    <tr>
+
+                        <td align='center' valign='middle' width='75%'>
+
+                            <h1 class='heading'>
+                                Canary Database Project
+                            </h1>
+
+                        </td>
+
+                        <td width='25%'>
+
+                            <img src='/images/brynn_canaries_alpha_left_png'
+                                alt='Canary Database Project logo'>
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td colspan='2' bgcolor='#94c6ef'>
+
+                            <form action='/search' method='post'>
+                                <b>&nbsp;Search</b>:&nbsp;
+                                <select name='field'>
+                                    <option selected value='keyword'>keyword</option>
+                                    <option>author</option>
+                                    <option>title</option>
+                                </select>
+                                <input type='text' size='30' name='query'>
+                                <input type='submit' name='go' value='go'>
+                                <input type='reset' name='clear' value='clear'>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                    <!-- spacer -->
+                    <tr>
+                        <td colspan='2'>&nbsp;</td>
+                    </tr>
+
+                </table>
+
+    """
+    if not request == None and not request.session.user == None:
+        """
+        <span class='login_detail'>
+        Logged in as <b>%s</b>:  go to
+            <a href='/user/'>my page</a> or
+            <a href='/user/logout'>log out</a>
+        </span>
+        <br />
+        """ % (request.session.user.id)
+
+
+def sidebar [html] ():
+    """
+
+    <div class='side'>
+
+        <p>
+        <b><a class='side' href='/'>Home</a></b>
+        </p>
+
+        <br>
+
+        <b>Browse by</b>: <br>
+        - <a class='side' href='/browse/year'>Year</a> <br>
+        - <a class='side' href='/browse/journal'>Journal</a> <br>
+        - <a class='side' href='/browse/study_type'>Study Type</a> <br>
+        - <a class='side' href='/browse/heading'>Subject Heading</a> <br>
+
+        <br>
+
+        <b>Using the database</b> <br>
+        <a class='side' href='/about/description'>Description</a> <br>
+        <a class='side' href='/about/how_to_search'>How to search</a> <br>
+        <!-- deprecated, merged into glossary
+        <a class='side' href='/about/field_definitions'>Field definitions</a> <br>
+        -->
+        <!-- deprecated, merged into Description
+        <a class='side' href='/about/database_objectives'>Database objectives</a> <br>
+        -->
+        <a class='side' href='/about/study_types'>Study types</a> <br>
+        <a class='side' href='/about/classification_protocol'>Classification protocol</a> <br>
+        <!--
+        How to find studies <br>
+        -->
+        <!--
+        How we collect studies <br>
+        -->
+        <!--
+        Sources list <br>
+        -->
+        <a class='side' href='/about/glossary'>Glossary</a><br>
+
+        <br>
+
+        <b>About the project</b> <br>
+        <a class='side' href='/about/project_mission'>Project mission</a> <br>
+        <!--
+        <a class='side' href='/about/what_are_animal_sentinels'>What are animal <br>
+        sentinels?</a> <br>
+        -->
+        <a class='side' href='/about/examples'>Examples of animal sentinels</a> <br>
+        <a class='side' href='/about/related_work'>Related work</a> <br>
+
+        <br>
+
+        <b>About us</b> <br>
+        <a class='side' href='/about/project_team'>Project team</a> <br>
+        <a class='side' href='/about/advisory_board'>Advisory Board</a> <br>
+        <a class='side' href='/about/contact_us'>Contact us</a> <br>
+
+
+        <br>
+
+        <b>Sponsored by</b>
+
+        <br>
+
+        <font size='-1' color='#ffffff'>
+        Yale School of Medicine
+        </font>
+        <img src='/images/yusm_logo_png' alt='YSM Logo'>
+
+        <br>
+
+        <font size='-1' color='#ffffff'>
+        This work was made possible by a grant from the National Library of Medicine
+        </font>
+
+    </div>
+
+    """
+
+
+def footer [html] ():
+
+    #from os import environ
+    #import time
+    #t = time.strftime(str("%H:%M:%S, %Y-%m-%d"))
+    #if environ.has_key('HOSTNAME'):
+    #    host = environ['HOSTNAME']
+    #else:
+    #    host = 'localhost'
+    """
+
+            </td>
+
+        </tr>
+
+    </table>
+
+    </BODY>
+
+</HTML>
+    """
+
+

@@ -1,0 +1,117 @@
+from log4py import Logger
+
+from quixote import get_publisher
+from quixote.errors import AccessError, PublishError, TraversalError
+from quixote.form2 import CheckboxWidget, TextWidget, SubmitWidget
+
+from dulcinea.database import get_transaction
+
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found
+from canary.qx_defs import MyForm
+from canary.loader import QueuedRecord
+from canary.report import Report, Study
+
+
+def exposures [html] (request, queued_record_id):
+    
+    print 'getting session and record'
+    session = request.session
+    cursor = get_publisher().get_cursor()
+    
+    # load the queued_record
+    queued_record = QueuedRecord()
+    queued_record.uid = int(queued_record_id)
+    queued_record.load(cursor)
+    print 'done'
+   
+    print 'creating report'
+    # create a Report
+    report = Report()
+    report.record_id = queued_record.uid
+    report.curator_user_id = session.user.get_id()
+    report.is_exposures_only = True
+    report.type = report.TYPE_EXPOSURES_ONLY
+    
+    print 'setting up form'
+    form = MyForm()
+    form.add(TextWidget, 'exposures', title='Exposures',
+        rows=4, cols=60, wrap='virtual', required=False)
+    form.add(CheckboxWidget, 'has_exposure_linkage', 
+        title='Has exposure linkage to humans?', value=False)
+    form.add(TextWidget, 'species', title='Species',
+        rows=4, cols=60, wrap='virtual', required=False)
+    form.add(CheckboxWidget, 'has_interspecies', 
+        title='Has differing susceptabilities among species?', value=False)
+    form.add(TextWidget, 'comments', title='Comments',
+        rows=8, cols='60', wrap='virtual', required=False)
+    form.add(SubmitWidget, 'go', value='go')
+
+    def render [html] ():
+        print 'rendering form'
+        header('Curate review', request=request)
+        """
+        <h3>Curate review</h3>
+        """
+        form.render()
+        footer()
+    
+    if not form.is_submitted():
+        return render()
+
+    if form.has_errors():
+        return render()
+    
+    # set queued record state = finished
+    comments = form['comments']
+    if comments != None and comments != '':
+        report.comments = comments
+
+    # true by default / by definition
+    report.meta['has_exposures'] = True
+    report.meta['has_outcomes'] = False
+    report.meta['has_outcome_linkage'] = False
+    
+    has_outcome_linkage = form['has_exposure_linkage']
+    if has_exposure_linkage:
+        report.meta['has_exposure_linkage'] = True
+    
+    has_interspecies = form['has_interspecies']
+    if has_interspecies:
+        report.meta['has_interspecies'] = True
+        
+    # save/update report
+    report.status = report.STATUS_CURATED
+    print 'saving/inserting report'
+    report.save(cursor)
+    
+    # save/update queued_record
+    print 'updating queued record status'
+    queued_record.status = queued_record.STATUS_FINISHED
+    print 'updating queued record'
+    queued_record.save(cursor)
+
+    # clean up    
+    print 'cleaning up'
+    cursor.close()
+
+    # FIXME: should we just do this?
+    # request.redirect('/edit/finished')
+    
+    header('Curate', request=request)
+    """
+    <h2>Record finished</h2>
+    
+    <p>
+    Thank you!  The record has been saved.
+    </p>
+    
+    <p>
+    You can <a href='/user'>go to your page</a>.
+    </p>
+    
+    <p>
+    You can <a href='/edit'>go to the queue</a>.
+    </p>
+    """
+    footer()

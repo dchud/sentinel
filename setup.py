@@ -1,0 +1,31 @@
+import os
+
+from distutils import core
+from quixote.qx_distutils import qx_build_py
+
+kw = {'name': "canary",
+    'version': "0.1",
+    'description': "Beta version of the Canary Database Project site",
+    'author': "Dan Chudnov",
+    'author_email': "daniel.chudnov@yale.edu",
+    'package_dir': {'canary': 'lib'},
+    'packages': [
+	'canary',
+	'canary.ui',
+	'canary.ui.about',
+	'canary.ui.admin',
+	'canary.ui.admin.queue',
+	'canary.ui.admin.session',
+	'canary.ui.admin.source',
+	'canary.ui.admin.term',
+	'canary.ui.admin.user',
+	'canary.ui.edit',
+	'canary.ui.edit.batch',
+	'canary.ui.edit.report',
+	'canary.ui.html',
+	'canary.ui.images',
+	'canary.ui.user',
+	],
+    'cmdclass': {'build_py': qx_build_py}}
+
+core.setup(**kw)

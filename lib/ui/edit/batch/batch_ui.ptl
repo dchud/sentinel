@@ -1,0 +1,179 @@
+_q_exports = ['_q_index',
+              'view',
+             ]
+
+from log4py import Logger
+
+from quixote import get_publisher
+from quixote.errors import AccessError, PublishError, TraversalError
+
+from canary.loader import Batch, Queue
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found
+from canary.source_catalog import SourceCatalog
+
+
+def title_bar [html] (action=''):
+    """
+    <h2>
+        <a href='/edit/'>Edit</a>
+    """
+    if not action == '':
+        ' : %s' % (action)
+    """
+    </h2>
+    """
+
+
+def _q_index [html] (request):
+    header('Edit', request=request)
+    title_bar('Edit')
+    """
+    <h2>a batch</h2>
+    """
+    footer()
+
+
+class BatchActions:
+
+    _q_exports = ['_q_index',
+                 ]
+
+    def __init__ (self, batch_id):
+        self.batch_id = batch_id
+
+    def _q_index [html] (self, request):
+        header('Edit', request=request)
+        """
+        blah
+        """
+        footer()
+
+    def _q_lookup [html] (self, request, action):
+        try:
+            if action == 'view':
+                start = request.get_form_var('start', default=0)
+                size = request.get_form_var('size', default=25)
+                try:
+                    start = int(start)
+                    size = int(size)
+                except ValueError:
+                    return view(request, batch_id=self.batch_id)
+                if start != None and size != None:
+                    return view(request, batch_id=self.batch_id, start=start, size=size)
+                elif start != None:
+                    return view(request, batch_id=self.batch_id, start=start)
+                elif size != None:
+                    return view(request, batch_id=self.batch_id, size=size)
+                else:
+                    return view(request, batch_id=self.batch_id)
+            else:
+                raise TraversalError
+        except:
+            return not_found('batch')
+
+
+def view [html] (request, batch_id=None, start=0, size=25):
+
+    header('Edit: View queued records', request=request)
+    title_bar('View queued records, batch %s' % batch_id)
+
+    try:
+        cursor = get_publisher().get_cursor()
+        batch = Batch()
+        batch.uid = batch_id
+        batch.load(cursor)
+        if len(batch.queued_records) > 0:
+            pager(batch, start, size)
+            """
+            <table border='0' cellspacing='5' cellpadding='5' bgcolor='#f3f3f3'>
+            <tr>
+                <th valign='top'>id</th>
+                <th valign='top'>Status</th>
+                <th valign='top'>User</th>
+                <th valign='top'>Title</th>
+                <th valign='top'>Source</th>
+                <th valign='top'>Actions</th>
+            </tr>
+            """
+            for record_id in batch.queued_records.keys()[start:start+size]:
+                record = batch.queued_records[record_id]
+                """
+                <tr bgcolor='#ffffff'>
+                    <td valign='top' align='center'>%s</td>
+                    <td valign='top'>%s</td>
+                    <td valign='top'>%s</td>
+                    <td valign='top'>%s</td>
+                    <td valign='top'>%s</td>
+                """ % (record_id, get_status_text(record.status),
+                       record.user_id, record.title, record.source)
+                
+                if record.status == record.STATUS_UNCLAIMED:
+                    """
+                    <td valign='top'><a href='/edit/report/%s/curate'>curate</a></td>
+                    """ % record_id
+                elif record.status == record.STATUS_CLAIMED:
+                    if record.user_id == request.session.user.get_id():
+                        """
+                        <td valign='top'><a href='/edit/report/%s/curate'>curate</a></td>
+                        """ % record_id
+                    else:
+                        """
+                        <td valign='top'>claimed</td>
+                        """
+                elif record.status == record.STATUS_FINISHED:
+                    """
+                    <td valign='top'>finished</td>
+                    """
+                """
+                </tr>
+                """    
+            """
+            </table>
+            """
+            pager(batch, start, size)
+        cursor.close()
+    except:
+        raise PublishError
+
+    footer()
+
+
+def pager [html] (batch, start, size):
+    
+    # total number of pages, by size, in this list
+    num_pages = len(batch.queued_records) / size
+
+    # currently viewed page, as determined by size, within this list
+    cur_page = start / size
+    
+    # no need to show the pager if there's only one page
+    if num_pages > 1:
+        '''
+        <p>
+        Browse: 
+        '''
+        for i in range(0, num_pages):
+            start = str(i * size)
+            end = str((i + 1) * size)
+            text = start + '-' + end
+            if i != cur_page:
+                ' <a href="view?start=%s&size=%s">%s</a> ' % (i * size, size, text)
+            else:
+                ' <b>%s</b> ' % text
+        '''
+        </p>
+        '''
+
+def get_status_text (status):
+    if status == 0:
+        return 'Unclaimed'
+    elif status == 1:
+        return 'Claimed'
+    elif status == 2:
+        return 'Curated'
+    else:
+        return ''
+
+
+

@@ -1,0 +1,72 @@
+
+from quixote import get_publisher
+from quixote.errors import TraversalError
+
+from canary.ui.browse import render_result_row
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found
+
+
+_q_exports = ['_q_index']
+
+
+def _q_index [html] (request):
+    return not_found('year')
+
+
+def render_records_by_year [html] (year, records):
+    header('Browse by Year: %d' % (year))
+
+    count = len(records)
+
+    if count > 0:
+        if count == 1:
+            article_text = 'article'
+        else:
+            article_text = 'articles'
+
+        """
+        <h2><a href='/browse/year'>Browse by Year</a>: %s (%s %s)</h2>
+        """ % (year, count, article_text)
+        """
+        <table width='100%' cellspacing='5' cellpadding='5'>
+        """
+        for record in records:
+            render_result_row(record[0], record[1], record[2], record[3])
+        """
+        </table>
+        """
+    else:
+        return not_found('year')
+    footer()
+
+
+def records_by_year (year, cursor):
+    results = []
+    cursor.execute("""
+        SELECT authors, title, source, pubmed_id
+        FROM sentinel_studies
+        WHERE year_published = %s
+        """, year)
+    while 1:
+        row = cursor.fetchone()
+        if row == None: break
+        results.append((row[0], row[1], row[2], row[3]))
+    return results
+
+
+
+def _q_lookup (request, year):
+    try:
+        if year:
+            year = int(year)
+            cursor = get_publisher().get_cursor()
+            records = records_by_year(year, cursor)
+            if len(records) == 0:
+                raise Error
+            cursor.close()
+            return render_records_by_year(year, records)
+        else:
+            raise Error
+    except:
+        return not_found('year')

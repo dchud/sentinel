@@ -1,0 +1,90 @@
+_q_exports = ['delete',
+             ]
+
+
+from quixote import get_session_manager
+from quixote.form2 import CheckboxWidget, StringWidget, SubmitWidget
+
+from canary.ui.admin.admin_ui import title_bar
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found
+from canary.qx_defs import MyForm
+
+def _q_index [html] (request):
+    header('Session:')
+    """
+    <h2>Session</h2>
+    """
+    footer()
+
+
+class SessionActions:
+
+    _q_exports = ['_q_index',
+                 ]
+
+    def __init__ (self, session_id):
+        self.session_id = session_id
+
+    def _q_index [html] (self, request):
+        header('Session', request=request)
+        """
+        <h2>Session</h2>
+        """
+        footer()
+
+    def _q_lookup [html] (self, request, action):
+        try:
+            if action == 'delete':
+                return delete(self.session_id)
+            else:
+                raise TraversalError
+        except:
+            return not_found('session')
+
+
+
+def delete [html] (session_id=None):
+
+    form = MyForm()
+    form.add(StringWidget, 'session_id', title='Session id', required=True)
+    form.add(CheckboxWidget, 'are_you_sure',
+             title='Are you sure you want to delete this session?',
+             value=False)
+    form.add(SubmitWidget, 'go', 'go')
+
+    session_manager = get_session_manager()
+    session = session_manager[session_id]
+    if session == None:
+        print 'session not found'
+        return not_found('session')
+
+    def render [html] ():
+        header('Delete session')
+        title_bar('Delete session')
+        form.render()
+        footer()
+
+    if not form.is_submitted():
+        form.get_widget('session_id').set_value(session_id)
+        return render()
+
+    if not form['session_id'] == session_id:
+        form.set_error('session_id', 'Inconsistent session id')
+        form.get_widget('session_id').set_value(session_id)
+
+    if form.has_errors():
+        return render()
+
+    are_you_sure = form['are_you_sure']
+    if are_you_sure:
+        del(session_manager[session_id])
+        get_transaction().commit()
+        form.logger.info(str('Deleted session %s' % session_id))
+        header('Admin: Session deleted')
+        title_bar('Session deleted')
+    else:
+        header('Admin: Session not deleted')
+        title_bar('Session not deleted')
+    footer()
+

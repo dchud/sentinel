@@ -1,0 +1,161 @@
+from log4py import Logger
+
+from quixote import get_publisher
+from quixote.errors import AccessError, PublishError, TraversalError
+from quixote.form2 import CheckboxWidget, TextWidget, SubmitWidget
+
+from dulcinea.database import get_transaction
+
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found
+from canary.qx_defs import MyForm
+from canary.loader import QueuedRecord
+from canary.report import Report, Study
+
+
+
+def curate_next [html] (request, queued_record_id):
+    
+    session = request.session
+    cursor = get_publisher().get_cursor()
+
+    print 'loading record'
+    # load the record
+    queued_record = QueuedRecord()
+    queued_record.uid = queued_record_id
+    queued_record.load(cursor)
+
+    # clean up    
+    cursor.close()
+   
+    print 'checking whether already claimed'
+    if queued_record.status == queued_record.STATUS_CLAIMED:
+        if queued_record.user_id != session.user.get_id():
+            print 'user mismatch'
+            return claimed_by_other_user(request=request)
+
+
+    print 'next basic ?s'
+    # throw up the basic questions
+    header('Curate: Step Two', request=request)
+    
+    """
+    <h3>Curate: Step Two</h3>
+    
+    <p>
+    Please answer the following questions, reading straight from top to bottom.
+    In other words, if your answer to question the first question is true, click
+    its "YES" link without continuing further down the page; if not, do the same
+    for the next question, and so on.
+    </p>
+
+    <table border='0' cellspacing='6' cellpadding='15' bgcolor='#f3f3f3'>
+    
+        <tr bgcolor='#ffffff'>
+        
+            <td colspan='2'>
+            "%s", <b>%s</b>
+            </td>
+            
+        </tr>
+    
+    """ % (queued_record.title, queued_record.source)
+
+
+    """
+        <tr bgcolor='#ffffff'>
+            
+            <td>
+            Did the investigator(s) <b>manipulate exposures</b>?
+            </td>
+            
+            <td>
+            <a href='experimental'>YES</a>
+            </td>
+            
+        </tr>
+        
+        
+        <tr bgcolor='#ffffff'>
+        
+            <td>
+            Was there only a <b>single sample group</b>, i.e., no group comparisons?
+            </td>
+            
+            <td>
+            <a href='descriptive'>YES</a>
+            </td>
+            
+        </tr>
+        
+        
+        <tr bgcolor='#ffffff'>
+        
+            <td>
+            Were exposures measured only <b>in aggregate</b>, i.e., not individually?
+            </td>
+            
+            <td>
+            <a href='aggregate'>YES</a>
+            </td>
+            
+        </tr>
+        
+        
+        <tr bgcolor='#ffffff'>
+            
+            <td>
+            Was the study directionality <b>forward</b>?
+            </td>
+            
+            <td>
+            <a href='cohort'>YES</a>
+            </td>
+            
+        </tr>
+        
+        
+        <tr bgcolor='#ffffff'>
+        
+            <td>
+            Was the study directionality <b>backward</b>?
+            </td>
+            
+            <td>
+            <a href='case-control'>YES</a>
+            </td>
+            
+        </tr>
+        
+
+        <tr bgcolor='#ffffff'>
+        
+            <td>
+            Was the study directionality <b>simultaneous</b>?
+            </td>
+            
+            <td>
+            <a href='cross_sectional'>YES</a>
+            </td>
+            
+        </tr>
+        
+        <!--
+        <tr bgcolor='#ffffff'>
+        
+            <td>
+            If you do not want to curate this record now, and would like
+            to allow another curator to do so instead, click 'UNCLAIM' at right.
+            </td>
+            
+            <td>
+            <a href='unclaim'>UNCLAIM</a>
+            </td>
+            
+        </tr>
+        -->
+        
+    </table>
+    """
+    
+    footer()

@@ -1,0 +1,436 @@
+import string
+import urllib
+
+from quixote import get_publisher
+from quixote.errors import TraversalError
+
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found
+from canary.pubmed import Pubmed
+from canary.record import Record, SubjectHeading
+
+_q_exports = ['_q_index',
+              ]
+
+
+def _q_index [html] (request):
+    return not_found('record')
+
+
+def render_highlighted_value [html] (dbmodel, group_id, value, delim=' - '):
+    value_desc = dbmodel.get_value_description(group_id, value)
+    range = []
+    group = dbmodel.get_group(group_id)
+    keys = group.values.keys()
+    keys.sort()
+    for key in keys:
+        value = group.values[key]
+        if value_desc == value.description:
+            style = 'chosen'
+        else:
+            style = 'not_chosen'
+        range.append("""<span class='%s'>%s</span>""" % (style, value.description))
+    return string.join(range, delim)
+
+
+def render_indexing_row [html] (anchor_name, field, value):
+    """
+    <tr>
+        <td align='left' valign='top' width='%s'>
+            (<a href='/glossary#%s' title='Definition of %s'>?</a>) %s
+        </td>
+        <td align='left' valign='top'>%s</td>
+    <tr>
+    """ % ('25%', anchor_name, field, field, value)
+
+
+class RecordUI:
+
+    _q_exports = ['similar',
+                  ]
+
+    def __init__ (self, record, dbmodel):
+        if record == None:
+            return not_found('record')
+        self.record = record
+        self.dbmodel = dbmodel
+
+
+    def _q_index [html] (self, request):
+        header('Record %s' % self.record.reference_id)
+        """
+    <table border='0' cellspacing='5' cellpadding='5'>
+
+        <tr>
+
+            <td align='left' valign='top'>
+                %s
+            </td>
+
+            <td align='left' valign='top'>
+
+                <a href='http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=PubMed&cmd=Display&dopt=pubmed_pubmed&from_uid=%s'>Pubmed related articles</a>
+
+                <!-- leave out for now...
+                <a href="http://sfx.library.yale.edu/links?id=pmid:%s">
+                    <img border='0' src='/yale_sfx2_gif'>
+                </a>
+                -->
+
+            </td>
+
+        </tr>
+        """ % (self.record.source, self.record.pubmed_id, self.record.pubmed_id)
+
+        """
+        <tr>
+
+            <td colspan='2'>
+                <font size='+1'><b>%s</b></font> <br />
+                <b>%s</b> <br />
+                %s
+            </td>
+
+        </tr>
+        """ % (self.record.title, self.record.authors, self.record.institution)
+
+
+        """
+        <tr>
+            <td colspan='2'>
+                <table border='0' cellspacing='1' cellpadding='0'>
+        """
+
+        #type_text = []
+        #type_text.append(render_highlighted_value(dbmodel,
+        #                                          int(14),
+        #                                          int(record.infdisease_or_toxicant)))
+        #type_text.append(render_highlighted_value(dbmodel,
+        #                                          int(9),
+        #                                          int(record.study_type) or ''))
+        #type_text.append(render_highlighted_value(dbmodel,
+        #                                          int(10),
+        #                                          int(record.study_status) or ''))
+        #render_indexing_row('Study type', string.join(type_text, '<br/>\n'))
+
+        # FIXME: cascade changes from "methodology" to "study type" into record
+        methodology_text = []
+        for meth in self.record.methodologies:
+            meth_text = self.dbmodel.get_value_description(int(1), int(meth))
+            methodology_text.append("""<span class='chosen'>%s</span>""" % meth_text)
+        render_indexing_row('study_type',
+                            'Study type',
+                            string.join(methodology_text, ', '))
+
+
+        #render_indexing_row('Sampling',
+        #                    render_highlighted_value(dbmodel,
+        #                                             int(3),
+        #                                             int(record.sampling)))
+
+        study_sample_size = """<span class='chosen'>%s</span>""" % self.record.study_sample_size
+        render_indexing_row('sample',
+                            'Sample size',
+                            study_sample_size)
+
+        animal_types = []
+        for type, val in (('Wildlife', self.record.get_boolean('animal_type_wildlife')),
+                          ('Domestic', self.record.get_boolean('animal_type_domestic')),
+                          ('Companion', self.record.get_boolean('animal_type_companion'))):
+            if val == 'Yes':
+                style = 'chosen'
+            else:
+                style = 'not_chosen'
+            animal_types.append("""<span class='%s'>%s</span>""" % (style, type))
+        render_indexing_row('animal',
+                            'Animal type',
+                            string.join(animal_types, ' - '))
+
+        species_text = []
+        for species in self.record.species:
+            species_text.append("""<span class='chosen'>%s</span>""" % (species))
+        render_indexing_row('species',
+                            'Species',
+                            string.join(species_text, ', '))
+
+        #render_indexing_row('Controls from same population? ',
+        #                    render_highlighted_value(dbmodel,
+        #                                             int(7),
+        #                                             int(self.record.controls_from_same_population)))
+
+        #render_indexing_row('Timing',
+        #                    render_highlighted_value(dbmodel, int(2), int(self.record.timing)))
+
+
+        exposure_text = []
+        exposure_set = []
+        for exp in self.record.exposures:
+            exposure_text.append("""<span class='chosen'>%s</span>""" % exp.capitalize())
+            if not exp == '':
+                exposure_set.append(exp)
+        render_indexing_row('causative',
+                            'Causative factors',
+                            string.join(exposure_text, ', '))
+        if len(exposure_set) > 0:
+            exposure_or_set = '(' + string.join(exposure_set, ' OR ') + ')'
+        else:
+            exposure_or_set = ''
+
+        #exposure_route = """
+        #    <span class='chosen'>%s</span>
+        #    """ % dbmodel.get_value_description(int(8),
+        #                                        int(self.record.exposure_route))
+        #render_indexing_row('Exposure route', exposure_route)
+
+        outcome_text = []
+        outcome_set = []
+        for outcome in self.record.outcomes:
+            disease_text, relevance_int = outcome
+            relevance_text = self.dbmodel.get_value_description(int(5), int(relevance_int))
+            if not disease_text == '':
+                outcome_set.append(disease_text)
+            line = """<span class='chosen'>%s</span>""" % (disease_text.capitalize())
+            if not relevance_text == '':
+                line = line + """ (%s)""" % (relevance_text)
+            outcome_text.append(line)
+        render_indexing_row('disease-outcomes',
+                            'Disease outcomes',
+                            string.join(outcome_text, ', '))
+
+        if len(outcome_set) > 0:
+            outcome_or_set = '(' + string.join(outcome_set, ' OR ') + ')'
+        else:
+            outcome_or_set = ''
+
+        if not exposure_or_set == '':
+            if not outcome_or_set == '':
+                pubmed_query = exposure_or_set + ' AND ' + outcome_or_set + ' AND human'
+            else:
+                pubmed_query = exposure_or_set + ' AND human'
+        elif not outcome_or_set == '':
+            pubmed_query = outcome_or_set + ' AND human'
+
+        #if pubmed_query:
+        #    """
+        #    <tr>
+        #        <td align='left' valign='top' width='%s'>
+        #            &nbsp;
+        #        </td>
+        #        <td align='left' valign='top'><a href='http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&usehistory=y&term=%s'>
+        #            Search Pubmed for these factors and outcomes
+        #        </td>
+        #    <tr>
+        #    """ % ('25%', urllib.quote_plus(str(pubmed_query)))
+
+
+        render_indexing_row('human_data',
+                            'Human data in study? ',
+                            render_highlighted_value(self.dbmodel,
+                                                     int(12),
+                                                     int(self.record.human_data)))
+
+        curator_comments = """
+            %s (<span class='chosen'>%s</span>)
+            """ % (self.record.curator_comments,
+                   self.dbmodel.get_value_description(int(11), int(self.record.curator)))
+        render_indexing_row('curators',
+                            'Comments (curator)',
+                            curator_comments)
+
+
+        """
+                </table>
+            </td>
+        </tr>
+
+
+        <tr>
+
+        """
+        if not self.record.abstract == '':
+            abstract = self.record.abstract
+        else:
+            abstract = 'No abstract available.'
+
+        """
+            <td align='left' valign='top' width='%s'>
+                <b>Abstract:</b>
+
+                <p>
+                %s
+                </p>
+            </td>
+        """ % ('55%', abstract)
+
+        """
+            <td align='left' valign='top'>
+                <b>MeSH Subject Headings</b>
+                <!--
+        (<a href="http://curtis.med.yale.edu/medline/concept-graph?action=pmid&pmid=%s">visualize</a>):
+                -->
+                <p>
+        """ % (self.record.pubmed_id)
+
+        for heading in self.record.mesh:
+            encoded_term = urllib.quote_plus(heading.term)
+            """
+                    <a href='/heading/%s'>%s</a> <br/>
+            """ % (encoded_term, heading.string)
+
+        """
+                </p>
+            </td>
+        </tr>
+
+    </table>
+        """
+
+        footer()
+
+
+    def similar [html] (self, request):
+
+        pubmed_query = ''
+
+        exposure_set = []
+        for exp in self.record.exposures:
+            if not exp == '':
+                exposure_set.append(exp)
+        if len(exposure_set) > 0:
+            exposure_or_set = '(' + string.join(exposure_set, ' OR ') + ')'
+        else:
+            exposure_or_set = ''
+
+        outcome_set = []
+        for outcome in self.record.outcomes:
+            disease_text, relevance_int = outcome
+            relevance_text = self.dbmodel.get_value_description(int(5), int(relevance_int))
+            if not disease_text == '':
+                outcome_set.append(disease_text)
+        if len(outcome_set) > 0:
+            outcome_or_set = '(' + string.join(outcome_set, ' OR ') + ')'
+        else:
+            outcome_or_set = ''
+
+        if not exposure_or_set == '':
+            if not outcome_or_set == '':
+                pubmed_query = exposure_or_set + ' AND ' + outcome_or_set + ' AND human'
+            else:
+                pubmed_query = exposure_or_set + ' AND human'
+        elif not outcome_or_set == '':
+            pubmed_query = outcome_or_set + ' AND human'
+
+        pubmed = Pubmed()
+        result_count, query_key, webenv = pubmed.esearch(str(pubmed_query))
+        pubmed.efetch(query_key, webenv)
+
+        header('Similar')
+
+
+        """
+    <h2>Similar articles from Pubmed</h2>
+
+    <table border='0' cellspacing='5' cellpadding='5'>
+
+        <tr>
+
+            <td align='left' valign='top'>
+                %s
+                <br/>
+                (<a href='/record/%s'>Back to full record</a>)
+            </td>
+
+            <td align='left' valign='top'>
+
+                <a href='http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=PubMed&cmd=Display&dopt=pubmed_pubmed&from_uid=%s'>Pubmed related articles</a>
+
+                <!-- leave out for now...
+                <a href="http://sfx.library.yale.edu/links?id=pmid:%s">
+                    <img border='0' src='/yale_sfx2_gif'>
+                </a>
+                -->
+
+            </td>
+
+        </tr>
+        """ % (self.record.source,
+               self.record.pubmed_id,
+               self.record.pubmed_id,
+               self.record.pubmed_id)
+
+        """
+        <tr>
+
+            <td colspan='2'>
+                <font size='+1'><b>%s</b></font> <br />
+                <b>%s</b> <br />
+                %s
+            </td>
+
+        </tr>
+        """ % (self.record.title,
+               self.record.authors,
+               self.record.institution)
+
+        """
+        <tr>
+
+            <td colspan='2'>
+
+                <p>
+Below are articles found by searching MEDLINE via Pubmed for the following
+combination of the Causative Factors and Disease Outcome terms used by Canary
+Database curators to describe this study:
+                </p>
+
+                <ul>
+                    <li><b>%s</b></li>
+                </ul>
+
+            </td>
+
+        </tr>
+        """ % (pubmed_query or 'No terms available for this record')
+
+        """
+        <tr>
+            <td colspan='2'>
+        """
+        if result_count > 0:
+            """
+            <pre>
+                %s
+            </pre>
+            """ % (pubmed.results)
+        else:
+            'No results available for this record'
+        """
+            </td>
+        </tr>
+        """
+
+        """
+    </table>
+        """
+        footer()
+
+
+
+
+def _q_lookup (request, name):
+    try:
+        if (name):
+            id = int(name)
+            cursor = get_publisher().get_cursor()
+            dbmodel = get_publisher().get_dbmodel()
+            record = Record()
+            record.load_by_pmid(id, cursor)
+            cursor.close()
+            if not hasattr(record, 'reference_id'):
+                raise TraversalError
+            #return render_record(record, dbmodel)
+            return RecordUI(record, dbmodel)
+        else:
+            raise TraversalError
+    except:
+        return not_found('record')

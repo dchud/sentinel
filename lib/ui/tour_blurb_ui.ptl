@@ -1,0 +1,26 @@
+from quixote.html import htmltext
+
+from canary.ui.tour_blurb import blurbs
+
+# render a specific blurb into a table row
+def render_blurb_row [html] (id=1):
+    blurb = blurbs[id]
+    if blurb == None:
+        return ''
+    """
+    <tr>
+        <td align='center' valign='middle' width='150'>
+	    <img src='/%s' width='144' alt='%s'>
+	</td>
+        <td align='left' valign='top'>
+	    <p>
+		<font size='-1'>%s</font>
+	    </p>
+	</td>
+    </tr>
+    """ % (blurb[0], blurb[1], htmltext(blurb[2]))
+
+
+# generate and render a specified number of blurbs
+def render_random_blurbs [html] (count=3):
+    pass

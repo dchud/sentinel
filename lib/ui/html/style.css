@@ -1,0 +1,131 @@
+body {
+    background-color: White;
+    /*
+    padding: 2px;
+    */
+}
+
+.banner {
+    color: #003366;
+    border-bottom: 2px solid #94c6ef;
+    border-bottom-width: medium;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.mainbox {
+    padding: 10px;
+}
+
+.heading {
+    font-weight: bold;
+    font-size: x-large;
+    text-align: center;
+    padding-bottom: 6px;
+    /*
+    border-bottom: 2px solid #003366;
+    */
+}
+
+.heading_left {
+    font-weight: bold;
+    font-size: large;
+    border-bottom: 2px solid #94c6ef;
+    border-bottom-width: medium;
+    color: #e5c900;
+    /*
+    padding-right: 5px;
+    text-align: right;
+    */
+}
+
+.acronym {
+    /*
+    border-top: solid #94c6ef;
+    border-top-width: thin;
+    line-height: .90;
+    text-align: left;
+    */
+    padding-top: 1px;
+    font-weight: bold;
+    color: #003366;
+    /* below is from .banner */
+    border-bottom: 2px solid #94c6ef;
+    border-bottom-width: medium;
+    background-color: #ffffff;
+    left-margin: 154px;
+}
+
+.side {
+    #color: #e2de8a;
+    color: #e5c900;
+    height: 1000px;
+}
+
+a:link {
+    color: #003366;
+}
+
+a:visited {
+    color: #003366;
+}
+
+a:hover {
+    background-color: #f9f7d1;
+    text-decoration: underline;
+    color: #003366;
+}
+
+a:active {
+    color: #003366;
+}
+
+a.side:link {
+    color: #fffffe;
+}
+
+a.side:visited {
+    color: #fffffe;
+}
+
+a.side:hover {
+    background-color: #003366;
+    text-decoration: underline;
+    color: #fffffe;
+}
+
+a.side:active {
+    color: #fffffe;
+}
+
+a.name:hover {
+    background-color: #ffffff;
+    text-decoration: none;
+    color: #000000;
+}
+
+.mission {
+    width: 70%;
+    text-align: justify;
+    padding: 15px;
+    background-color: #f9f7d1;
+    border: 1px solid #003366;
+}
+
+
+.chosen {
+    color: #000000;
+    font-weight: bold;
+}
+
+.not_chosen {
+    color: #c4c4c4;
+}
+
+.login_detail {
+    border-top: 1px dotted #003366;
+    border-bottom: 1px dotted #003366;
+    padding: 2px;
+    margin: 3px;
+}
+

@@ -1,0 +1,351 @@
+_q_exports = ['_q_index',
+              'curate',
+              'traditional',
+              'review',
+              'outcomes',
+              'exposures',
+              'curate_next',
+              'finish',
+              'unclaim',
+             ]
+
+from log4py import Logger
+
+from quixote import get_publisher
+from quixote.errors import AccessError, PublishError, TraversalError
+from quixote.form2 import CheckboxWidget, SubmitWidget
+
+from dulcinea.database import get_transaction
+
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found
+from canary.qx_defs import MyForm
+from canary.loader import QueuedRecord
+from canary.ui.edit.report.traditional import traditional
+from canary.ui.edit.report.review import review
+from canary.ui.edit.report.outcomes import outcomes
+from canary.ui.edit.report.exposures import exposures
+from canary.ui.edit.report.curate_next import curate_next
+#from canary.ui.edit.report.finish import finish
+
+
+def title_bar [html] (action=''):
+    """
+    <h2>
+        <a href='/edit/'>Edit</a>
+    """
+    if not action == '':
+        ' : %s' % (action)
+    """
+    </h2>
+    """
+
+
+def _q_index [html] (request):
+    header('Edit', request=request)
+    title_bar('Edit')
+    """
+    <h2>a report</h2>
+    """
+    footer()
+
+
+class ReportActions:
+
+    _q_exports = []
+
+    def __init__ (self, queued_record_id):
+        try:
+            self.queued_record_id = int(queued_record_id)
+        except:
+            print 'invalid queued_record_id (non-int)'
+            return not_found('record')
+
+    def _q_index [html] (self, request):
+        header('Curate', request=request)
+        """
+        blah
+        """
+        footer()
+
+    def _q_lookup [html] (self, request, action):
+        try:
+            if action == 'curate':
+                return curate(request, self.queued_record_id)
+            elif action == 'traditional':
+                return traditional(request, self.queued_record_id)
+            elif action == 'review':
+                return review(request, self.queued_record_id)
+            elif action == 'outcomes':
+                return outcomes(request, self.queued_record_id)
+            elif action == 'exposures':
+                return exposures(request, self.queued_record_id)
+            elif action == 'curate-next':
+                return curate_next(request, self.queued_record_id)
+            #elif action == 'finish':
+            #    return finish(request, self.queued_record_id)
+            elif action == 'unclaim':
+                return unclaim(request, self.queued_record_id)
+            else:
+                raise TraversalError
+        except:
+            return not_found('report')
+            
+
+def curate [html] (request, queued_record_id):
+    
+    session = request.session
+    cursor = get_publisher().get_cursor()
+
+    print 'loading record'
+    # load the record
+    queued_record = QueuedRecord()
+    queued_record.uid = queued_record_id
+    queued_record.load(cursor)
+   
+    print 'checking whether already claimed'
+    if queued_record.status == queued_record.STATUS_CLAIMED:
+        if queued_record.user_id != session.user.get_id():
+            print 'user mismatch'
+            return claimed_by_other_user(request=request)
+
+    # if it's None, bail
+    # FIXME: best way?  or is that right?
+
+    print 'checking nad setting status'
+    # if it's not already, set its status to CLAIMED and its curator 
+    record_updated = False
+
+    if queued_record.status == queued_record.STATUS_UNCLAIMED:
+        queued_record.status = queued_record.STATUS_CLAIMED
+        record_updated = True
+    
+    if queued_record.user_id == '':
+        queued_record.user_id = session.user.get_id()
+        record_updated = True
+
+    if record_updated:
+        print 'updating record'
+        queued_record.save(cursor)
+
+    # clean up    
+    cursor.close()
+
+    print 'starting basic ?s'
+    # throw up the basic questions
+    header('Curate:', request=request)
+
+    """
+    <p>
+    Please answer the following questions, reading straight from top to bottom.
+    In other words, if your answer to question the first question is true, click
+    its "YES" link without continuing further down the page; if not, do the same
+    for the next question, and so on.
+    </p>
+
+    <table border='0' cellspacing='6' cellpadding='15' bgcolor='#f3f3f3'>
+    
+        <tr bgcolor='#ffffff'>
+        
+            <td colspan='2'>
+            "%s", <b>%s</b>
+            </td>
+            
+        </tr>
+    
+    """ % (queued_record.title, queued_record.source)
+
+
+    """
+        <tr bgcolor='#ffffff'>
+            
+            <td>
+            Does this paper report a <b>traditional study</b>?
+            </td>
+            
+            <td>
+            <a href='traditional'>YES</a>
+            </td>
+            
+        </tr>
+        
+        
+        <tr bgcolor='#ffffff'>
+        
+            <td>
+            Is this paper a <b>review</b>?
+            </td>
+            
+            <td>
+            <a href='review'>YES</a>
+            </td>
+            
+        </tr>
+        
+        
+        <tr bgcolor='#ffffff'>
+        
+            <td>
+            Does this paper report <b>outcomes</b>, but not exposures?
+            </td>
+            
+            <td>
+            <a href='outcomes'>YES</a>
+            </td>
+            
+        </tr>
+        
+        
+        <tr bgcolor='#ffffff'>
+            
+            <td>
+            Does this paper report <b>exposures</b>, but not outcomes?
+            </td>
+            
+            <td>
+            <a href='exposures'>YES</a>
+            </td>
+            
+        </tr>
+        
+        
+        <tr bgcolor='#ffffff'>
+        
+            <td>
+            If none of the above apply, click 'NEXT' at right
+            </td>
+            
+            <td>
+            <a href='curate-next'>NEXT</a>
+            </td>
+            
+        </tr>
+        
+        
+        <tr bgcolor='#ffffff'>
+        
+            <td>
+            If you do not want to curate this record now, and would like
+            to allow another curator to do so instead, click 'UNCLAIM' at right.
+            </td>
+            
+            <td>
+            <a href='unclaim'>UNCLAIM</a>
+            </td>
+            
+        </tr>
+        
+    </table>
+    """
+    
+    footer()
+    
+    
+    
+
+def unclaim [html] (request, queued_record_id):
+    
+    session = request.session
+    queued_record = QueuedRecord()
+    queued_record.uid = int(queued_record_id)
+    
+    cursor = get_publisher().get_cursor()
+    queued_record.load(cursor)
+    
+    if queued_record.status == queued_record.STATUS_CLAIMED:
+        if queued_record.user_id != session.user.get_id():
+            print 'user mismatch'
+            return claimed_by_other_user(request)
+    elif queued_record.status == queued_record.STATUS_UNCLAIMED:
+        return not_claimed(request)
+
+    form = MyForm()
+    form.add(CheckboxWidget, 'are_you_sure', 
+        title='Are you sure?', value=False)
+    form.add(SubmitWidget, 'go', value='go')
+
+    def render [html] ():
+        header('Curate: Unclaim report')
+        """
+        <h3>Curate: Unclaim report</h3>
+        """
+        form.render()
+        footer()
+    
+    if not form.is_submitted():
+        return render()
+
+    if form.has_errors():
+        return render()
+    
+    are_you_sure = form['are_you_sure']
+    if are_you_sure:
+        session.queued_record = None
+        queued_record.status = queued_record.STATUS_UNCLAIMED
+        queued_record.user_id = ''
+        queued_record.save(cursor)
+        header('Edit: Report unclaimed')
+        """
+        <h3>Edit:  Report unclaimed</h3>
+        """
+    else:
+        header('Edit: Report not unclaimed')
+        """
+        <h3>Edit: Report not unclaimed</h3>
+        """
+    
+    """
+        <p>
+        You can go back to the <a href='/edit'>editing queue</a>.
+        </p>
+        
+        <p>
+        You can <a href='/user'>go to your page</a>.
+        </p>
+    """
+
+    cursor.close()
+    footer()
+    
+    
+    
+def claimed_by_other_user [html] (request=None):
+    header('Curate:  Record claimed by other user', request=request)
+    """
+    <h3>Curate:  Record claimed by other user</h3>
+    
+    <p>
+    Sorry, that record has already been claimed by another user.
+    </p>
+    
+    <p>
+    You can return to the <a href='/edit'>editing queue</a>.
+    </p>
+    
+    <p>
+    You can <a href='/user'>go to your page</a>.
+    </p>
+    """
+    footer()
+    
+    
+def not_claimed [html] (request=None):
+    header('Curate:  Record not claimed', request=request)
+    """
+    <h3>Curate:  Record not claimed</h3>
+    
+    <p>
+    Sorry, you cannot unclaim that record.
+    </p>
+    
+    <p>
+    You can return to the <a href='/edit'>editing queue</a>.
+    </p>
+    
+    <p>
+    You can <a href='/user'>go to your page</a>.
+    </p>
+    """
+    footer()
+    
+    

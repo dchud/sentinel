@@ -1,0 +1,159 @@
+from quixote import get_publisher, get_session_manager
+from quixote.form2 import PasswordWidget, StringWidget, SubmitWidget
+from dulcinea.database import get_transaction
+from dulcinea.user import hash_password
+
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found
+from canary.qx_defs import MyForm
+
+
+_q_exports = [
+    'login',
+    'logout',
+    ]
+
+
+def _q_index [html] (request):
+    session = request.session
+    if session.user == None:
+        header('Not logged in.')
+        """
+        <h2>Not logged in</h2>
+
+        <p>
+        From here you can:
+
+        <a href='/user/login'>log in</a>.
+        </p>
+        """
+        footer()
+    else:
+        header('User %s' % session.user.id)
+        """
+        <h2>User %s</h2>
+
+        <p>
+        From here you can:
+        </p>
+        <ul>
+            <li><a href='/user/logout'>log out</a></li>
+        """ % (session.user.id)
+        if session.user.is_editor:
+            """
+            <li>view <a href='/edit/'>curators' tasks</a></li>
+            """
+        if session.user.is_admin:
+            """
+            <li>view <a href='/admin/'>administrators' tasks</a></li>
+            """
+        """
+        </ul>
+        """
+        footer()
+
+
+
+class LoginForm (MyForm):
+
+    def __init__ (self):
+        MyForm.__init__(self)
+        self.add(StringWidget, 'user_id', title='Your user id',
+                 size=10, required=1)
+        self.add(PasswordWidget, 'user_pass', title='Password',
+                 size=10, required=1)
+        self.add_hidden('go', None)
+        self.add(SubmitWidget, 'login', 'login')
+
+
+def login (request):
+
+    form = LoginForm()
+
+    def render [html] ():
+        header('Log in')
+        """
+        <h3>Log in:</h3>
+        """
+        form.render()
+        footer()
+
+    if not form.is_submitted():
+        return render()
+
+    user_id = form['user_id']
+    user_pass = form['user_pass']
+    if user_id == None:
+        form.set_error('user_id', 'User id cannot be blank.')
+    else:
+        if user_pass == None:
+            form.set_error('user_pass', 'Password cannot be blank.')
+        else:
+            user_db = get_publisher().get_user_db()
+            user = user_db.get_user(user_id)
+            if user == None:
+                form.set_error('user_id', 'Invalid user id or password.')
+            else:
+                if not user.valid_password(user_pass):
+                    form.set_error('user_id', 'Invalid user id or password')
+
+    if form.has_errors():
+        return render()
+
+    user_db = get_publisher().get_user_db()
+    user = user_db.get_user(user_id)
+    if not user == None:
+        # before we add the user to this session, expire any old ones
+        # belonging to this same user
+        session_mgr = get_publisher().session_mgr
+        for session_id in session_mgr.sorted_keys():
+            old_session = session_mgr[session_id]
+            if old_session.actual_user.id == user.id:
+                del(session_mgr[session_id])
+        request.session.set_actual_user(user)
+        get_transaction().commit()
+        form.logger.info(str('User %s logged in' % user.id))
+        if form['go']:
+            return request.redirect(form['go'])
+        else:
+            return request.redirect('/user/')
+    else:
+        request.session.user = None
+        get_transaction().commit()
+        return not_found('user')
+
+
+def logout [html] (request):
+
+    if request.session.user is None:
+        header('Not logged in.')
+        print 'logout: not logged in.'
+        """
+        <h2>Not logged in</h2>
+
+        <p>
+        You were not logged in.
+        </p>
+
+        <p>
+        You can <a href='/user/login'>log in</a>.
+        </p>
+        """
+    else:
+        header('Log out')
+        old_user_id = request.session.user.id
+        get_session_manager().expire_session(request)
+        form = LoginForm()
+        form.logger.info(str('User %s logged out' % old_user_id))
+        """
+        <h2>Logged out</h2>
+
+        <p>
+        You have logged out.
+        </p>
+
+        <p>
+        You can <a href='/user/login'>log in</a> again.
+        </p>
+        """
+    footer()

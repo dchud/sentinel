@@ -1,0 +1,182 @@
+_q_exports = ['_q_index',
+              'add',
+              'receive',
+             ]
+
+import os
+import stat
+import traceback
+
+from quixote import get_publisher
+from quixote.errors import AccessError, PublishError, TraversalError
+from quixote.form2 import StringWidget, IntWidget
+from quixote.form2 import SingleSelectWidget, SubmitWidget
+from quixote.html import html_quote
+
+from dulcinea.database import get_transaction
+
+from canary.ui.admin.admin_ui import title_bar
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found
+from canary.loader import Batch, Parser
+from canary.qx_defs import MyForm
+from canary.source_catalog import SourceCatalog, Source
+
+
+def _q_index [html] (request):
+    header('Queue:')
+    """
+    <h2>Queue</h2>
+    """
+    footer()
+
+
+class QueueActions:
+
+    _q_exports = ['_q_index',
+                 ]
+
+    def __init__ (self, queue_id):
+        self.queue_id = queue_id
+
+
+    def _q_index [html] (self, request):
+        header('Admin: Term summary', request=request)
+        """
+        <h2>Term summary</h2>
+        """
+        footer()
+
+    def _q_lookup [html] (self, request, action):
+        try:
+            if action == 'edit':
+                return edit(request, self.queue_id)
+            if action == 'delete':
+                return delete(request, self.queue_id)
+            else:
+                raise TraversalError
+        except:
+            return not_found('queue')
+
+
+
+
+def add [html] (request):
+
+    source_catalog = get_publisher().get_source_catalog()
+
+    # Sort terms by their token
+    sources = [(id, source.name) for id, source in source_catalog.sources.items()]
+    sources.sort()
+
+    header('Upload records', request=request)
+    title_bar('Upload records')
+
+    try:
+        if request.session.message:
+            """
+            <h4><font color='red'>%s</font></h4>
+            """ % request.session.message
+            request.session.message = None
+    except:
+        pass
+
+    """
+    <form enctype='multipart/form-data'
+        method='POST'
+        action='receive'>
+    <p>
+    Source:<br/>
+        <select name='source_uid'<br/>
+
+    """
+    for (id, name) in sources:
+        """
+        <option value='%s'>%s
+        """ % (id, name)
+    """
+        </select>
+    </p>
+
+    <p>
+    File to upload: <br/>
+        <input type='file' name='upload'>
+    </p>
+
+    <p>
+    Expected #records: <br/>
+        <input type='text' name='num_records' size='4'>
+    </p>
+
+    <p>
+        <input type='submit' value='Upload'>
+    </p>
+    </form>
+    """
+    footer()
+
+
+def receive [html] (request):
+
+    result = []
+    form = request.form
+    request.session.message = None
+
+    try:
+        source_uid = int(form.get('source_uid'))
+    except:
+        request.session.message = str('Please choose a source.')
+        return add(request)
+
+    try:
+        num_records = int(form.get('num_records'))
+    except:
+        request.session.message = str('Please enter the number of expected records.')
+        return add(request)
+
+    # FIXME: Think through this better.  Should clean up empty files at least.
+    try:
+        upload = request.form.get('upload')
+        size = os.stat(upload.tmp_filename)[stat.ST_SIZE]
+        if not upload.base_filename or size == 0:
+            request.session.message = str('Nothing uploaded.')
+    except:
+        request.session.message = str('Upload failed.')
+        return add(request)
+
+    try:
+        cursor = get_publisher().get_cursor()
+        batch = Batch(file_name=upload.tmp_filename, source_uid=source_uid)
+        batch.save(cursor)
+        source_catalog = get_publisher().get_source_catalog()
+        source = source_catalog.get_source(source_uid)
+        parser = Parser(source)
+        records = parser.load(upload.tmp_filename)
+        batch.num_records = len(records)
+        if batch.num_records == num_records:
+            batch.add_records(cursor, records)
+            batch.save(cursor)
+        else:
+            request.session.message = str('Record count mismatch: %s specified, %s found') % (num_records, len(records))
+
+        cursor.close()
+    except:
+        print traceback.print_exc()
+        request.session.message = str('Unable to load batch.')
+
+    if request.session.message:
+        # FIXME:  do cleanup here?
+        return add(request)
+
+    header('Uploaded records', request=request)
+    """
+    <p>You just uploaded <code>%s</code> (%d bytes)<br>
+    """ % (html_quote(upload.base_filename), size)
+    """
+    which is temporarily stored in <code>%s</code>.</p>
+    """ % html_quote(upload.tmp_filename)
+    """
+    <p>And has id %s and date_added %s.</p>
+    """ % (batch.uid, batch.date_added)
+
+    footer()
