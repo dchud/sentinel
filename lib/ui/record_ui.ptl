@@ -754,7 +754,7 @@ def render_record_row [html] (record, score=None):
     if score:
         """
                         <div class='relevance-box'>
-                            <div class="relevance" style="width: %s%s"></div>
+                            <div class="relevance" style="width: %s%s"><img src='/images/pixel.gif' alt='' width='' height=''></div>
                         </div>
         """ % (int(score * 100), '%')
         
