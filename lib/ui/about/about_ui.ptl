@@ -73,7 +73,7 @@ def contact_us [html] (request):
 
     form.logger.info(str('Mailed admins from %s' % user_email))
 
-    header('Contact us: Message sent', request=request)
+    header('Contact us: Message sent')
     """
     <h2>Message sent</h2>
 

@@ -1,0 +1,304 @@
+_q_exports = [
+    '_q_index',
+    'create',
+    'delete',
+    'edit',
+    'values',
+    ]
+
+import re
+
+from quixote import get_publisher
+from quixote.errors import AccessError, TraversalError
+from quixote.form2 import StringWidget, IntWidget, TextWidget
+from quixote.form2 import CheckboxWidget, SubmitWidget
+
+from dulcinea.database import get_transaction
+
+from canary.db_model import DBModel, ValueGroup
+from canary.qx_defs import MyForm
+from canary.ui.admin.admin_ui import title_bar
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found
+
+
+def _q_index [html] (request):
+    header('Value group:')
+    """
+    <h2>Value Group</h2>
+    """
+    footer()
+
+
+class GroupActions:
+    
+    _q_exports = [
+        '_q_index',
+        ]
+        
+    def __init__ (self, group_id):
+        self.group_id = group_id
+        
+    def _q_index [html] (self, request):
+        header('Admin: Value Group')
+        title_bar('Admin: Value Group')
+        footer()
+
+    def _q_lookup (self, request, action):
+        try:
+            if action == 'delete':
+                return delete(self.group_id)
+            elif action == 'edit':
+                return edit(self.group_id)
+            elif action == 'values':
+                return values(self.group_id)
+            else:
+                raise TraversalError
+        except:
+            return not_found('value group')
+
+
+
+class GroupForm (MyForm):
+    
+    def __init__ (self):
+        MyForm.__init__(self)
+        self.add(StringWidget, 'group_name', title='Value group name', 
+            size='30', required=True)
+        self.add(TextWidget, 'group_description', title='Description',
+            rows='2', cols='40', required=False)
+        self.add(SubmitWidget, 'go', 'go')
+
+
+def create [html] (request):
+
+    form = GroupForm()
+    
+    def render [html] ():
+        header('Create value group')
+        title_bar('Create value group')
+        form.render()
+        footer()
+        
+    if not form.is_submitted():
+        return render()
+    
+    db_model = get_publisher().get_dbmodel()
+    
+    group_name = form['group_name']
+    if db_model.has_group(group_name):
+        form.set_error('group_name', 'Group name already exists, choose another')
+        
+    if form.has_errors():
+        return render()
+    
+    if form['group_description']:
+        group_description = form['group_description']
+    else:
+        group_description = ''
+        
+    new_value_group = ValueGroup(group_name, group_description)
+    
+    try:
+        cursor = get_publisher().get_cursor()
+        new_value_group.save(cursor, update_values=False)
+        new_db_model = DBModel()
+        new_db_model.load_from_db(cursor)
+        cursor.close()
+        get_publisher().set_dbmodel(new_db_model)
+        get_transaction().commit()
+        form.logger.info(str('Created value group'))
+        header('Admin: Created value group')
+        title_bar('Created value group')
+    except:
+        form.logger.warn(str('Unable to save new value group'))
+        header('Admin: Unable to create value group')
+        title_bar('Unable to create value group')
+    
+    footer()
+
+
+def delete [html] (group_id):
+    
+    try:
+        group_id = int(group_id)
+        db_model = get_publisher().get_dbmodel()
+        group = db_model.get_group(group_id)
+        if group == None:
+            raise TraversalError('value group not found')
+    except:
+        return not_found('value group')
+        
+    form = MyForm()
+    form.add(CheckboxWidget, 'are_you_sure',
+             title='Are you sure you want to delete this value group?',
+             value=False)
+    form.add(SubmitWidget, 'go', 'go')
+
+    def render [html] ():
+        header('Delete value group')
+        title_bar('Delete value group: %s' % group.group_name)
+        form.render()
+        footer()
+
+    if not form.is_submitted():
+        return render()
+
+    are_you_sure = form['are_you_sure']
+    if are_you_sure:
+        cursor = get_publisher().get_cursor()
+        db_model.delete_group(cursor, group.value_group_id)
+        new_db_model = DBModel()
+        new_db_model.load_from_db(cursor)
+        cursor.close()
+        get_publisher().set_dbmodel(new_db_model)
+        get_transaction().commit()
+        form.logger.info(str('Deleted value group %s' % group.value_group_id))
+        header('Admin: value group deleted')
+        title_bar('Value group deleted')
+    else:
+        form.logger.info(str('Did not delete value group %s' % group.value_group_id))
+        header('Admin: value group not deleted')
+        title_bar('Value group not deleted')
+    footer()
+
+
+
+def edit [html] (group_id):
+
+    form = GroupForm()
+
+    try:
+        group_id = int(group_id)
+        db_model = get_publisher().get_dbmodel()
+        group = db_model.get_group(group_id)
+        if group == None:
+            raise TraversalError('value group not found')
+    except:
+        return not_found('value group')
+        
+    print 'got group'
+    def render [html] ():
+        header('Edit value group')
+        title_bar('Edit value group: %s' % group.group_name)
+        form.render()
+        footer()
+
+    if not form.is_submitted():
+        form.get_widget('group_name').set_value(group.group_name)
+        form.get_widget('group_description').set_value(group.description)
+        return render()
+
+    if form.has_errors():
+        return render()
+
+    group_name = form['group_name']
+    group.group_name = group_name
+    
+    if form['group_description']:
+        group.description = form['group_description']
+        
+    request = get_publisher().get_request()
+        
+    try:
+        cursor = get_publisher().get_cursor()
+        group.save(cursor)
+        new_db_model = DBModel()
+        new_db_model.load_from_db(cursor)
+        cursor.close()
+        get_publisher().set_dbmodel(new_db_model)
+        get_transaction().commit()
+        form.logger.info(str('Updated value group %s' % group.value_group_id))
+        request.session.message = str('Updated group')
+        request.redirect(str('/admin/dv_data/'))
+    except:
+        form.logger.info(str('Did not update value group %s' % group.value_group_id))
+        request.session.message = str('Did not update group')
+        request.redirect(str('/admin/dv_data/'))
+
+
+
+
+def values [html] (group_id):
+
+    request = get_publisher().get_request()
+    
+    try:
+        group_id = int(group_id)
+        db_model = get_publisher().get_dbmodel()
+        group = db_model.get_group(group_id)
+        if group == None:
+            raise TraversalError('value group not found')
+    except:
+        return not_found('value group')
+
+    header('Values')
+    title_bar('Values')
+
+    try:
+        if request.session.message:
+            """
+            <h4><font color='red'>%s</font></h4>
+            """ % request.session.message
+            request.session.message = None
+    except:
+        pass
+
+    """
+    <h3>Values for group '%s' (uid=%s, <a href='/admin/dv_data/group/%s/edit'>edit</a>)</h3>
+    """ % (group.group_name, group_id, group_id)
+
+    """
+    <table border='0' cellpadding='5' cellspacing='5' bgcolor='#e4e4e4'>
+        <tr>
+            <th>number</th>
+            <th>description</th>
+            <th>action</th>
+        </tr>
+    """
+
+    values = group.get_values()
+    bgcolor = '#ffffff'
+    for (serial_number, value) in values:
+        """
+        <tr bgcolor='%s'>
+            <td valign='top'>%s</td>
+            <td valign='top'>%s</td>
+            <td valign='top'>
+                <a href='/admin/dv_data/value/%s/edit'>edit</a> -
+                <a href='/admin/dv_data/value/%s/delete'><font size='-1'>delete</font></a>
+            </td>
+        </tr>
+        """ % (bgcolor, value.serial_number, value.description, 
+            value.value_id, value.value_id)
+        if bgcolor == '#ffffff':
+            bgcolor = '#f3f3f3'
+        else:
+            bgcolor = '#ffffff'
+        
+    """
+        <tr>
+            <td colspan='3'>
+            Add a new value:
+            </td>
+        </tr>
+    """
+
+    """
+        <tr bgcolor='%s'>
+            <form action='/admin/dv_data/value/create' method='post'>
+            <input type='hidden' name='value_group_id' value='%s'>
+            <td><input type='text' name='value_serial_number' size='5'></td>
+            <td><input type='text' name='value_description' size='30'></td>
+            <td><input type='submit' value='go'></td>
+            </form>
+        </tr>
+    """ % (bgcolor, group.value_group_id)
+
+    """
+    </table>
+    """
+
+    footer()
+
+

@@ -1,8 +1,10 @@
 
 _q_exports = []
 
+from quixote import get_publisher
 
-def header [html] (title, show_pageframe=True, request=None):
+
+def header [html] (title, show_pageframe=True):
     """
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
@@ -24,12 +26,12 @@ def header [html] (title, show_pageframe=True, request=None):
     """ % (title)
 
     if show_pageframe:
-        pageframe(request=request)
+        pageframe()
 
 
 
 
-def pageframe [html] (request=None):
+def pageframe [html] ():
     """
     <table border='0' width='100%' cellspacing='0' cellpadding='0'>
 
@@ -99,7 +101,9 @@ def pageframe [html] (request=None):
                 </table>
 
     """
-    if not request == None and not request.session.user == None:
+    request = get_publisher().get_request()
+    if not request == None \
+        and not request.session.user == None:
         """
         <span class='login_detail'>
         Logged in as <b>%s</b>:  go to

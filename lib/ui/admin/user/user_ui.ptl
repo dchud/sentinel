@@ -36,7 +36,7 @@ class UserActions:
         self.user_id = user_id
 
     def _q_index [html] (self, request):
-        header('blah', request=request)
+        header('blah')
         """
         blah
         """
@@ -76,7 +76,7 @@ def create [html] (request):
     form = UserForm()
 
     def render [html] ():
-        header('Create user', request=request)
+        header('Create user')
         title_bar('Create User')
         form.render()
         footer()
@@ -121,7 +121,7 @@ def create [html] (request):
     get_transaction().commit()
     form.logger.info(str('Created user %s' % user_id))
 
-    header('Admin: User created', request=request)
+    header('Admin: User created')
     title_bar('User %s created' % (user_id))
     footer()
 
@@ -177,12 +177,12 @@ def edit [html] (user_id=None):
     if form['is_editor']:
         user.is_editor = True
     else:
-    	user.is_editor = False
+        user.is_editor = False
 
     if form['is_admin']:
         user.is_admin = True
     else:
-    	user.is_admin = False
+        user.is_admin = False
 
     if form['is_active']:
         user.is_active = True

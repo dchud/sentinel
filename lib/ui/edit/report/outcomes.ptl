@@ -44,7 +44,7 @@ def outcomes [html] (request, queued_record_id):
     form.add(SubmitWidget, 'go', value='go')
 
     def render [html] ():
-        header('Curate review', request=request)
+        header('Curate review')
         """
         <h3>Curate review</h3>
         """
@@ -93,7 +93,7 @@ def outcomes [html] (request, queued_record_id):
     # FIXME: should we just do this?
     # request.redirect('/edit/finished')
     
-    header('Curate', request=request)
+    header('Curate')
     """
     <h2>Record finished</h2>
     

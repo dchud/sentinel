@@ -1,0 +1,87 @@
+_q_exports = [
+    '_q_index',
+    ]
+
+from quixote import get_publisher
+from quixote.errors import TraversalError
+
+from dulcinea.database import get_transaction
+
+from canary.db_model import DBModel, Value, ValueGroup
+from canary.ui.admin.admin_ui import title_bar
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found
+
+
+def _q_index [html] (request):
+    
+    header('DVData:')
+    title_bar('DVData:')
+    
+    try:
+        if request.session.message:
+            """
+            <h4><font color='red'>%s</font></h4>
+            """ % request.session.message
+            request.session.message = None
+    except:
+        pass
+
+    db_model = get_publisher().get_dbmodel()
+    dv_groups = db_model.get_groups()
+    bgcolor = '#f3f3f3'
+    if len(dv_groups) > 0:
+        """
+        <table bgcolor='%s' cellspacing='5' cellpadding='5'>
+            <tr>
+                <th>group id</th>
+                <th>name</th>
+                <th width='%s'>description</th>
+                <th>value count</th>
+                <th width='%s'>actions</th>
+            </tr>
+        """ % (bgcolor, '40%', '20%')
+        
+        for group in dv_groups:
+            if bgcolor == '#f3f3f3':
+                bgcolor = '#ffffff'
+            else:
+                bgcolor = '#f3f3f3'
+            """
+            <tr bgcolor='%s'>
+                <td align='center'>%s</td>
+                <td>%s</td>
+                <td>%s</td>
+                <td align='center'>%s</td>
+            """ % (bgcolor, group.value_group_id, group.group_name,
+                group.description, group.group_size())
+            """
+                <td align='center'>
+                    <a href='group/%s/edit'>edit</a> -
+                    <a href='group/%s/values'>values</a> -
+                    <a href='group/%s/delete'>delete</a>
+                </td>
+            </tr>
+            """ % (group.value_group_id, group.value_group_id, group.value_group_id)
+            
+        """
+            <tr bgcolor='%s'>
+                <form method='post' action='/admin/dv_data/group/create'>
+                <td align='center' valign='top'> - </td>
+                <td valign='top'><input type='text' name='group_name' size='30'></td>
+                <td>
+                    <textarea name='group_description' 
+                        rows='2' cols='30' wrap='virtual'></textarea>
+                </td>
+                <td> - </td>
+                <td><input type='submit' name='create' value='create'></td>
+                </form>
+            </tr>
+        """ % bgcolor
+        """
+        </table>
+        """
+    footer()
+
+
+

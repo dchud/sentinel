@@ -123,6 +123,9 @@ class MySessionPublisher(SessionPublisher):
 
     def get_dbmodel (self):
         return self._dbmodel
+    
+    def set_dbmodel (self, db_model):
+        self._dbmodel = db_model
 
     def get_user_db (self):
         return self._zodb_root['user_db']

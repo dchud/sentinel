@@ -1,0 +1,242 @@
+_q_exports = [
+    '_q_index',
+    'create',
+    'delete',
+    'edit',
+    ]
+
+
+from quixote import get_publisher
+from quixote.errors import AccessError, PublishError, TraversalError
+from quixote.form2 import StringWidget, IntWidget, TextWidget, CheckboxWidget, SubmitWidget
+
+from dulcinea.database import get_transaction
+
+from canary.db_model import DBModel, Value
+from canary.qx_defs import MyForm
+from canary.ui.admin.admin_ui import title_bar
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found
+
+
+def _q_index [html] (request):
+    header('Value:')
+    """
+    <h2>Value</h2>
+    """
+    footer()
+
+
+class ValueActions:
+
+    _q_exports = [
+        '_q_index',
+        ]
+
+    def __init__ (self, value_id):
+        self.value_id = value_id
+
+    def _q_index [html] (self, request):
+        header('Admin: Value summary')
+        """
+        <h2>Value summary</h2>
+        """
+        footer()
+
+    def _q_lookup [html] (self, request, action):
+        try:
+            if action == 'edit':
+                return edit(request, self.value_id)
+            if action == 'delete':
+                return delete(request, self.value_id)
+            else:
+                raise TraversalError
+        except:
+            return not_found('value')
+
+
+
+
+class ValueForm (MyForm):
+
+    def __init__ (self):
+        MyForm.__init__(self)
+        self.add(IntWidget, 'value_group_id', title='Value group id',
+            size=3, required=True)
+        self.add(IntWidget, 'value_serial_number', title='Serial number',
+            size=3, required=True)
+        self.add(TextWidget, 'value_description', title='Description',
+            rows=2, cols=40, wrap='virtual', required=False)
+        self.add(SubmitWidget, 'go', 'go')
+
+
+def create [html] (request):
+
+    form = ValueForm()
+
+    def render [html] ():
+        header('Create value')
+        title_bar('Create Value')
+        form.render()
+        footer()
+
+    if not form.is_submitted():
+        return render()
+
+    value_group_id = form['value_group_id']
+    if form['value_description']:
+        value_description = form['value_description']
+    else:
+        value_description = ''
+    value_serial_number = form['value_serial_number']
+
+    if form.has_errors():
+        return render()
+        
+    value = Value(value_group_id, value_serial_number, value_description)
+
+    try:
+        group = get_publisher().get_dbmodel().get_group(value_group_id)
+        if group == None:
+            raise TraversalError('group not found')
+        cursor = get_publisher().get_cursor()
+        value.save(cursor)
+        new_db_model = DBModel()
+        new_db_model.load_from_db(cursor)
+        get_publisher().set_dbmodel(new_db_model)
+        get_transaction().commit()
+        cursor.close()
+        form.logger.info(str('Created new value.'))
+        request.session.message = str('Created new value.')
+        request.redirect(str('/admin/dv_data/group/%s/values' % value_group_id))
+    except:
+        form.logger.error(str('Unable to create value.'))
+        request.session.message = str('Unable to create new value.')
+        request.redirect(str('/admin/dv_data/group/%s/values' % value_group_id))
+        
+
+
+def edit [html] (request, value_id=None):
+
+    form = ValueForm()
+    
+    try:
+        value_id = int(value_id)
+        db_model = get_publisher().get_dbmodel()
+        value = db_model.get_value(value_id)
+        if value == None:
+            raise TraversalError('value not found')
+    except:
+        return not_found('value')
+   
+    def render [html] ():
+        header('Edit value')
+        title_bar('Edit Value')
+        form.render()
+        footer()
+    
+    if not form.is_submitted():
+        form.get_widget('value_group_id').set_value(value.value_group_id)
+        form.get_widget('value_serial_number').set_value(value.serial_number)
+        form.get_widget('value_description').set_value(value.description)
+        return render()
+
+    value_group_id = form['value_group_id']
+    value_serial_number = form['value_serial_number']
+    
+    print 'checking for errors'
+    if not value_group_id == value.value_group_id:
+        form.set_error('value_group_id', 'Value group id cannot be changed')
+        form.get_widget('value_group_id').set_value(value.value_group_id)
+
+    if form.has_errors():
+        return render()
+
+    print 'updating values'
+    value.serial_number = value_serial_number
+
+    if not form['value_description'] == None:
+        value.description = form['value_description']
+
+    try:
+        print 'updating'
+        cursor = get_publisher().get_cursor()
+        value.save(cursor)
+        print 'saved value'
+        new_db_model = DBModel()
+        new_db_model.load_from_db(cursor)
+        print 'reloaded dbmodel'
+        cursor.close()
+        get_publisher().set_dbmodel(new_db_model)
+        get_transaction().commit()
+        print 'committed dbmodel'
+        form.logger.info(str('Updated value %s' % value.value_id))
+        request.session.message = str('Updated value %s' % value.value_id)
+    except:
+        form.logger.error(str('Could not update value %s' % value.value_id))
+        request.session.message = str('Could not update value %s' % value.value_id)
+
+    request.redirect(str('/admin/dv_data/group/%s/values' % value.value_group_id))
+
+
+class DeleteValueForm (MyForm):
+
+    def __init__ (self):
+        MyForm.__init__(self)
+        
+
+def delete [html] (request, value_id=None):
+    
+    
+    form = MyForm()
+    form.add(IntWidget, 'value_uid', title='Value id', required=True)
+    form.add(CheckboxWidget, 'are_you_sure',
+        title='Are you sure you want to delete this value?',
+        value=False)
+    form.add(SubmitWidget, 'go', 'go')
+
+    try:
+        value_id = int(value_id)
+        db_model = get_publisher().get_dbmodel()
+        value = db_model.get_value(value_id)
+        if value == None:
+            raise TraversalError('value not found')
+    except:
+        return not_found('value')
+
+    def render [html] ():
+        header('Delete value')
+        title_bar('Delete value')
+        form.render()
+        footer()
+
+    if not form.is_submitted():
+        form.get_widget('value_uid').set_value(value.value_id)
+        return render()
+
+    value_uid = form['value_uid']
+    if not value_uid == value.value_id:
+        form.set_error('value_uid', 'Value id cannot change')
+        form.get_widget('value_uid').set_value(value.value_id)
+
+    if form.has_errors():
+        return render()
+
+    are_you_sure = form['are_you_sure']
+    if are_you_sure:
+        try:
+            cursor = get_publisher().get_cursor()
+            value.delete(cursor)
+            new_db_model = DBModel()
+            new_db_model.load_from_db(cursor)
+            get_publisher().set_dbmodel(new_db_model)
+            cursor.close()
+            form.logger.info(str('Deleted value %s' % value.value_id))
+            request.session.message = str('Deleted value')
+        except:
+            form.logger.error(str('Unable to delete value %s' % value.value_id))
+            request.session.message = str('Could not delete value')
+    else:
+        request.session.message = str('Value not deleted')
+
+    request.redirect(str('/admin/dv_data/group/%s/values' % value.value_group_id))

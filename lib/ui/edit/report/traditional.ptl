@@ -36,7 +36,7 @@ def traditional [html] (request, queued_record_id):
     form.add(SubmitWidget, 'go', value='go')
 
     def render [html] ():
-        header('Curate traditional report', request=request)
+        header('Curate traditional report')
         """
         <h3>Curate traditional report</h3>
         """
@@ -72,7 +72,7 @@ def traditional [html] (request, queued_record_id):
     # FIXME: should we just do this?
     # request.redirect('/edit/finished')
     
-    header('Curate', request=request)
+    header('Curate')
     """
     <h2>Record finished</h2>
     

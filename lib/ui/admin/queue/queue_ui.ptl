@@ -41,7 +41,7 @@ class QueueActions:
 
 
     def _q_index [html] (self, request):
-        header('Admin: Term summary', request=request)
+        header('Admin: Term summary')
         """
         <h2>Term summary</h2>
         """
@@ -69,7 +69,7 @@ def add [html] (request):
     sources = [(id, source.name) for id, source in source_catalog.sources.items()]
     sources.sort()
 
-    header('Upload records', request=request)
+    header('Upload records')
     title_bar('Upload records')
 
     try:
@@ -168,7 +168,7 @@ def receive [html] (request):
         # FIXME:  do cleanup here?
         return add(request)
 
-    header('Uploaded records', request=request)
+    header('Uploaded records')
     """
     <p>You just uploaded <code>%s</code> (%d bytes)<br>
     """ % (html_quote(upload.base_filename), size)

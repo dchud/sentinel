@@ -23,7 +23,7 @@ def title_bar [html] (action=''):
 
 
 def _q_index [html] (request):
-    header('Admin', request=request)
+    header('Admin')
     title_bar()
     """
     <table border='0' cellspacing='5' cellpadding='5' bgcolor='#f3f3f3'>
@@ -46,6 +46,12 @@ def _q_index [html] (request):
         <td><a href='/admin/reload_sources'>Reload</a></td>
     </tr>
     <tr bgcolor='#ffffff'>
+        <td>DV Data</td>
+        <td><a href='/admin/dv_data'>List</a></td>
+        <td><a href='/admin/dv_data/group/create'>Create Group</a></td>
+        <td>Edit (pulldown + js)</td>
+    </tr>
+    <tr bgcolor='#ffffff'>
         <td>ZODB</td>
         <td><a href='/admin/zodb_keys'>List keys</a></td>
         <td> - </td>
@@ -57,7 +63,7 @@ def _q_index [html] (request):
 
 
 def users [html] (request):
-    header('Admin: List users', request=request)
+    header('Admin: List users')
     title_bar('List Users')
     user_db = get_publisher().get_user_db()
     users = user_db.get_users()
@@ -91,7 +97,7 @@ def users [html] (request):
 
 
 def sources [html] (request):
-    header('Admin: List sources', request=request)
+    header('Admin: List sources')
     title_bar('List Sources')
 
     try:
@@ -143,7 +149,7 @@ def sources [html] (request):
 
 
 def reload_sources [html] (request):
-    header('Admin: Reload sources', request=request)
+    header('Admin: Reload sources')
     title_bar('Reload Sources')
     try:
         source_catalog = SourceCatalog()
@@ -166,7 +172,7 @@ def reload_sources [html] (request):
 
 # show_keys is a debugging task which roughly indicates ZODB state
 def zodb_keys [html] (request):
-    header('Admin: List ZODB keys', request=request)
+    header('Admin: List ZODB keys')
     title_bar('List ZODB keys')
     zodb = get_publisher().get_root()
     keys = zodb.keys()

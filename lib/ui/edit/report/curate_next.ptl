@@ -37,7 +37,7 @@ def curate_next [html] (request, queued_record_id):
 
     print 'next basic ?s'
     # throw up the basic questions
-    header('Curate: Step Two', request=request)
+    header('Curate: Step Two')
     
     """
     <h3>Curate: Step Two</h3>

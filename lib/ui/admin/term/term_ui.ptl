@@ -37,7 +37,7 @@ class TermActions:
 
 
     def _q_index [html] (self, request):
-        header('Admin: Term summary', request=request)
+        header('Admin: Term summary')
         """
         <h2>Term summary</h2>
         """
@@ -87,7 +87,7 @@ def create [html] (request):
     form = TermForm()
 
     def render [html] ():
-        header('Create term', request=request)
+        header('Create term')
         title_bar('Create Term')
         form.render()
         footer()
@@ -153,13 +153,10 @@ def edit [html] (request, term_id=None):
     source_catalog = get_publisher().get_source_catalog()
     term = source_catalog.get_term(str(term_id))
     if term == None:
-        print 'term not found in catalog'
         return not_found('term')
 
-    print 'got term'
 
     def render [html] ():
-        print 'term.edit.render'
         header('Edit term')
         title_bar('Edit Term')
         form.render()

@@ -1,8 +1,9 @@
-_q_exports = ['_q_index',
-              'edit',
-              'delete',
-              'terms',
-             ]
+_q_exports = [
+    '_q_index',
+    'edit',
+    'delete',
+    'terms',
+    ]
 
 import re
 
@@ -30,15 +31,16 @@ def _q_index [html] (request):
 
 class SourceActions:
 
-    _q_exports = ['_q_index',
-                 ]
+    _q_exports = [
+        '_q_index',
+        ]
 
     def __init__ (self, source_id):
         self.source_id = source_id
 
 
     def _q_index [html] (self, request):
-        header('Admin: Source summary', request=request)
+        header('Admin: Source summary')
         """
         <h2>Source summary</h2>
         """
@@ -83,7 +85,7 @@ def create [html] (request):
     form = SourceForm()
 
     def render [html] ():
-        header('Create source', request=request)
+        header('Create source')
         title_bar('Create Source')
         form.render()
         footer()

@@ -42,7 +42,7 @@ def title_bar [html] (action=''):
 
 
 def _q_index [html] (request):
-    header('Edit', request=request)
+    header('Edit')
     title_bar('Edit')
     """
     <h2>a report</h2>
@@ -62,7 +62,7 @@ class ReportActions:
             return not_found('record')
 
     def _q_index [html] (self, request):
-        header('Curate', request=request)
+        header('Curate')
         """
         blah
         """
@@ -133,7 +133,7 @@ def curate [html] (request, queued_record_id):
 
     print 'starting basic ?s'
     # throw up the basic questions
-    header('Curate:', request=request)
+    header('Curate:')
 
     """
     <p>
@@ -310,7 +310,7 @@ def unclaim [html] (request, queued_record_id):
     
     
 def claimed_by_other_user [html] (request=None):
-    header('Curate:  Record claimed by other user', request=request)
+    header('Curate:  Record claimed by other user')
     """
     <h3>Curate:  Record claimed by other user</h3>
     
@@ -330,7 +330,7 @@ def claimed_by_other_user [html] (request=None):
     
     
 def not_claimed [html] (request=None):
-    header('Curate:  Record not claimed', request=request)
+    header('Curate:  Record not claimed')
     """
     <h3>Curate:  Record not claimed</h3>
     

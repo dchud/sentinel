@@ -27,7 +27,7 @@ class SessionActions:
         self.session_id = session_id
 
     def _q_index [html] (self, request):
-        header('Session', request=request)
+        header('Session')
         """
         <h2>Session</h2>
         """
