@@ -739,6 +739,7 @@ def summary [html] (request, queued_record_id):
         request.redirect(str('summary'))
     elif form.get_submit() == str('finish'):
         queued_record.status = queued_record.STATUS_CURATED
+        queued_record.duplicate_score = 0
         queued_record.save(cursor)
         study.set_status(str('curated'))
         history_messages.append('Set record status to curated')
