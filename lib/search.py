@@ -6,8 +6,8 @@ from PyLucene import QueryParser, IndexSearcher, StandardAnalyzer, FSDirectory
 
 from canary.concept import Concept
 from canary.gazeteer import Feature
-from canary.loader import QueuedRecord
-from canary.study import Study
+import canary.loader 
+import canary.study
 from canary.utils import render_capitalized
 
 
@@ -54,11 +54,14 @@ class Search:
                         pass
                     else:
                         # Should be curated articles only
-                        select_clause += ' AND queued_records.status = %s ' % QueuedRecord.STATUS_CURATED
-                        select_clause += ' AND studies.article_type > %s ' % Study.ARTICLE_TYPES['irrelevant']
+                        select_clause += ' AND queued_records.status = %s ' % \
+                            canary.loader.QueuedRecord.STATUS_CURATED
+                        select_clause += ' AND studies.article_type > %s ' % \
+                            canary.study.Study.ARTICLE_TYPES['irrelevant']
                 else:
                     # Should be uncurated articles only
-                    select_clause += ' AND queued_records.status != %s' % QueuedRecord.STATUS_CURATED
+                    select_clause += ' AND queued_records.status != %s' % \
+                        canary.loader.QueuedRecord.STATUS_CURATED
 
                 search_token = '%' + self.token.replace(' ', '% ') + '%'
                 cursor.execute(select_clause + """
@@ -67,7 +70,7 @@ class Search:
                     )
                 rows = cursor.fetchall()
                 for row in rows:
-                    record = QueuedRecord(context, row[0])
+                    record = canary.loader.QueuedRecord(context, row[0])
                     results.add_result(record)
 
             else:
@@ -93,16 +96,19 @@ class Search:
                             pass
                         else:
                             # Should be curated articles only
-                            select_clause += ' AND queued_records.status = %s' % QueuedRecord.STATUS_CURATED
-                            select_clause += ' AND studies.article_type > %s ' % Study.ARTICLE_TYPES['irrelevant']
+                            select_clause += ' AND queued_records.status = %s' % \
+                                canary.loader.QueuedRecord.STATUS_CURATED
+                            select_clause += ' AND studies.article_type > %s ' % \
+                                canary.study.Study.ARTICLE_TYPES['irrelevant']
                     else:
                         # Should be uncurated articles only
-                        select_clause += ' AND queued_records.status != %s' % QueuedRecord.STATUS_CURATED
+                        select_clause += ' AND queued_records.status != %s' % \
+                            canary.loader.QueuedRecord.STATUS_CURATED
                     
                     cursor.execute(select_clause + ' AND value LIKE %s ', search_token)
                     rows = cursor.fetchall()
                     for row in rows:
-                        record = QueuedRecord(context, row[0])
+                        record = canary.loader.QueuedRecord(context, row[0])
                         results.add_result(record)
         except:
             print 'Unable to perform search'
@@ -215,9 +221,9 @@ class SearchIndex:
             else:
                 had_writer = True
             
-            study = Study(self.context, record.study_id)
+            study = canary.study.Study(self.context, record.study_id)
             
-            print 'starting document'
+            #print 'starting document'
             doc = PyLucene.Document()
             
             # First, we need to create a unique key so we can later delete
@@ -227,6 +233,14 @@ class SearchIndex:
             doc.add(PyLucene.Field('all', str(record.uid),
                 True, True, False))
             
+            # Second, save internal-use metadata.  These should probably
+            # be x'd out at Query-time.
+            doc.add(PyLucene.Field('record-status', str(record.status),
+                False, True, False))
+            doc.add(PyLucene.Field('article-type', str(study.article_type),
+                False, True, False))
+            
+            
             source_catalog = self.context.get_source_catalog()
             complete_term_map = source_catalog.get_complete_mapping()
             mapped_metadata = record.get_mapped_metadata(complete_term_map)
@@ -234,13 +248,22 @@ class SearchIndex:
             # First index all the non-multiple metadata fields
             for field in ('abstract', 'affiliation', 'issn', 
                 'journal', 'pubdate', 'issue', 'pages', 'title', 
-                'unique_identifier', 'volume'):
+                'volume'):
                 val = mapped_metadata.get(field, None)
                 if val:
                     doc.add(PyLucene.Field(field, val,
                         False, True, True))
                     doc.add(PyLucene.Field('all', val,
                         False, True, True))
+            
+            # 'unique_identifier' must be specially treated because 
+            # of the '_'
+            val = mapped_metadata.get('unique_identifier', None)
+            if val:
+                doc.add(PyLucene.Field('unique-identifier', val,
+                    False, True, True))
+                doc.add(PyLucene.Field('all', val,
+                    False, True, True))
             
             # Next, index all the possibly-multiple metadata fields
             # Give these (especially for author and subject) a little
@@ -275,11 +298,11 @@ class SearchIndex:
             for ctype in ('exposures', 'outcomes', 'risk_factors',
                 'species'):
                 for val in getattr(study, ctype):
-                    print 'finding %s concepts for %s' % (ctype, val.term)
+                    #print 'finding %s concepts for %s' % (ctype, val.term)
                     concept = Concept(self.context, val.concept_id)
                     for syn in concept.synonyms:
-                        print 'add synonym "%s" for term "%s"' % \
-                            (syn, concept.term)
+                        #print 'add synonym "%s" for term "%s"' % \
+                        #    (syn, concept.term)
                         doc.add(PyLucene.Field(ctype, syn,
                             False, True, True))
                         f = PyLucene.Field('all', syn,
@@ -321,7 +344,7 @@ class SearchIndex:
         got indexed multiple times.
         """
         reader = self.context.get_search_index_reader()
-        term = Term('uid', record.uid)
+        term = Term('uid', str(record.uid))
         reader.deleteDocuments(term)
         reader.close()
 

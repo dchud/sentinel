@@ -16,7 +16,7 @@ from quixote import form2
 
 from canary.loader import Batch, QueuedRecord, Queue, Parser
 from canary.qx_defs import MyForm
-from canary.search import PubmedSearch, Search
+import canary.search
 from canary.ui.edit.study.utils import get_sfx_link
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import add_message, has_messages, render_messages, not_found
@@ -47,6 +47,7 @@ class FindRecordForm (MyForm):
                 ('title', 'title (partial ok)', 'title'),
                 ('canary id', 'canary record id', 'canary id'),
                 ('unique id', 'external unique id', 'unique id'),
+                ('anything', 'anything', 'anything'),
                 ],
             sort=False,
             required=True)
@@ -236,20 +237,38 @@ def find [html] (request):
     
     source_catalog = context.get_source_catalog()
     complete_mapping = source_catalog.get_complete_mapping()
-    search = Search(field=field, token=token, allow_curated=allow_curated,
-        allow_uncurated=True)
-    
+    search_index = canary.search.SearchIndex(context)
+
+    query = ''
+    if field == 'author':
+        query = '+author:%s*' % token
+    elif field == 'title':
+        query = '+title:"%s*"' % token
+    elif field == 'canary id':
+        query = '+uid:%s' % token
+    elif field == 'unique id':
+        query = '+unique-identifier:%s' % token
+    elif field == 'anything':
+        query = '+all:"%s*"' % token
+    if not allow_curated:
+        query += ' -record-status:%s' % QueuedRecord.STATUS_CURATED
+        
     try:
-        results = search.search(context, term_mapping=complete_mapping)
+        hits, searcher = search_index.search(query)
+        results = []
+        for i, doc in hits:
+            uid = doc.get(str('uid'))
+            results.append(QueuedRecord(context, uid))
+        searcher.close()
     except:
         form.info(str('Unable to perform search'))
         form.set_error('token', 'Unable to perform search')
         return render()
         
     header('Edit: Find record')
-    res = results.get_results()
-    title_bar('Find record: "%s" (%s): %s result(s)' % (token, field, len(res)))
-    render_results(res)
+    title_bar('Find record: "%s" (%s): %s result(s)' % \
+        (token, field, len(results)))
+    render_results(results)
     footer()
     
     
@@ -330,7 +349,7 @@ def pubmed [html] (request):
     if form.has_errors():
         return render()
 
-    pmsearch = PubmedSearch()
+    pmsearch = canary.search.PubmedSearch()
     if form['pmid']:
         pmid = form['pmid']
         data = pmsearch.fetch(pmid)

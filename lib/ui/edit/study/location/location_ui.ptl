@@ -100,7 +100,7 @@ def find [html] (request):
         return render()
     
     search_term = form['search_term']
-    locations = gazeteer.search(search_term)
+    locations = gazeteer.search(context, search_term)
     if len(locations) == 0:
         form.set_error('search_term', 'No locations found.')
         

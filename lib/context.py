@@ -221,7 +221,7 @@ class Context:
         Do nothing.
         """
         if self.config.use_db_pool:
-            cursor.close()
+            #cursor.close()
             self.connection.close()
         else:
             # Do nothing (leave the cursor as it is)

@@ -10,6 +10,7 @@ import types
 import dtuple
 
 import canary.context
+import canary.search
 from canary.source_catalog import Source, Term, SourceCatalog
 from canary.study import Study
 from canary.utils import DTable
@@ -334,6 +335,11 @@ class QueuedRecord (canary.context.Cacheable, DTable):
                     self.save_metadata_value(context,source_id, term_id, val)
             if context.config.use_cache:
                 context.cache_set('%s:%s' % (self.CACHE_KEY, self.uid), self)
+
+            # Index, first deleting just in case.
+            search_index = canary.search.SearchIndex(context)
+            search_index.unindex_record(self)
+            search_index.index_record(self)
 
         except:
             print traceback.print_exc()

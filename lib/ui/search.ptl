@@ -11,6 +11,7 @@ import canary.context
 from canary.loader import QueuedRecord
 from canary.qx_defs import MyForm
 from canary.search import Search, SearchIndex
+from canary.study import Study
 from canary.ui.record_ui import render_record_row
 from canary.ui.pageframe import header, footer
 
@@ -48,7 +49,25 @@ def search [html] (request):
     
     try:
         search_index = SearchIndex(context)
-        hits, searcher = search_index.search(form['q'])
+        
+        # We need to restrict access to only "public" and "relevant"
+        # studies here.
+        raw_query = form['q']
+        
+        # Limit to curated studies
+        sane_record_status = 'record-status:%s' % QueuedRecord.STATUS_CURATED
+        # Eliminate irrelevant, duplicate.
+        # FIXME: Note that this assumes everything between trad/curated
+        # are valid here!
+        sane_article_type = 'article-type:[%s TO %s]' % \
+            (Study.ARTICLE_TYPES['traditional'], 
+            Study.ARTICLE_TYPES['curated'])
+
+        # Glue it back together
+        sane_query= '%s AND (%s AND %s)' % (raw_query, sane_record_status,
+            sane_article_type)
+
+        hits, searcher = search_index.search(sane_query)
         
         header("Search results")
         """

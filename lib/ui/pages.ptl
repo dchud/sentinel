@@ -32,23 +32,25 @@ def _q_index [html] (request):
     </p>
 
     <h3>
-    The Canary Database allows you to locate sentinel studies according to:
+    The Canary Database allows you to locate and visualize patterns
+    in sentinel studies according to:
     </h3>
 
     <table width='70%' border='0' cellspacing='10' cellpadding='5'>
         <tr>
-            <td align='left' valign='top' width='50%'>
+            <td align='left' valign='top'>
                 <ul type='circle'>
                     <li>Exposures</li>
                     <li>Disease outcomes (animal)</li>
-                    <li>Species</li>
+                    <li>Species (and types)</li>
                 </ul>
             </td>
-            <td align='left' valign='top' width='50%'>
+            <td align='left' valign='top'>
                 <ul type='circle'>
                     <li>Study methodologies</li>
                     <li>Authors</li>
                     <li>Journals</li>
+                    <li>Locations</li>
                 </ul>
             </td>
         </tr>

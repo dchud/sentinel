@@ -33,21 +33,20 @@ if __name__ == '__main__':
     # Index all records
     record_count = 0
     try:
-        # FIXME: get all records that are curated and not irrelevant
+        # Index everything, now
         cursor.execute("""
             SELECT uid
             FROM queued_records
-            WHERE status = %s
             ORDER BY uid
-            """, QueuedRecord.STATUS_CURATED)
+            """)
         rows = cursor.fetchall()
         for row in rows:
             uid = int(row[0])
             print 'loading record %s' % uid
             record = QueuedRecord(context, uid)
-            print 'indexing record %s' % uid
+            #print 'indexing record %s' % uid
             si.index_record(record, writer)
-            print 'indexed record %s' % uid
+            #print 'indexed record %s' % uid
             record_count += 1
     except:
         import traceback

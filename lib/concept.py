@@ -473,7 +473,7 @@ class CategoryConcept (DTable):
             row = dtuple.DatabaseTuple(desc, row)
             self.groups.append(row['category_group_id'])
         
-        self.concept = Concept(context, uid=self.concept_id)
+        self.concept = Concept(context, self.concept_id)
         context.close_cursor(cursor)
         
         
