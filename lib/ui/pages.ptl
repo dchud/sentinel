@@ -24,7 +24,7 @@ def _q_index [html] (request):
     <tr valign='top'>
     <td width='400' valign='top' class='rightspace'>
 
-    <h1>The Canary Database Project</h1>
+    <h1>The Canary Database</h1>
     <p>
     The Canary Database contains studies in the biomedical literature
     that explore the use of wildlife, domestic, and companion animals as

@@ -35,7 +35,7 @@ def contact_us [html] (request):
         </p>
 
         <p>
-        <b>The Canary Database Project at Yale</b> <br/>
+        <b>The Canary Database at Yale</b> <br/>
         Yale Occupational and Environmental Medicine Program <br/>
         135 College Street, Room 366 <br/>
         New Haven, CT  06510-2283 <br/>
@@ -124,11 +124,11 @@ def disclaimer [html] (request):
 
 
 
-def relevance [html] (request):
+def linkage [html] (request):
     
-    header('Relevance to human health')
+    header('Linkage to human health')
     """
-    <h2>Relevance to human health</h2>
+    <h2>Linkage to human health</h2>
     
     <p>
     For each study, the curators consider whether the paper presents evidence

@@ -3,7 +3,7 @@
 _q_exports = [
     'contact_us',
     'study_methodologies',
-    'relevance',
+    'linkage',
     'tour',
     'disclaimer',
     'questionnaire',
@@ -24,7 +24,7 @@ this_module = sys.modules[__name__]
 
 contact_us = about_ui.contact_us
 study_methodologies = about_ui.study_methodologies
-relevance = about_ui.relevance
+linkage = about_ui.linkage
 tour = about_ui.tour
 disclaimer = about_ui.disclaimer
 questionnaire = about_ui.questionnaire

@@ -24,7 +24,7 @@ def header [html] (title, show_pageframe=True, show_javascript=False):
 
     """
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-        <meta name="Publisher" content="Canary Database Project" />
+        <meta name="Publisher" content="Canary Database" />
         <meta name="Description" content="" />
         <meta name="Keywords" content="" />
         
@@ -71,7 +71,7 @@ def pageframe [html] ():
                 <img src="/images/bird-logo.gif" alt="Canary Database Logo"
                     width="145" height="124" valign="bottom"></td>
             <td bgcolor="#A6BFF2" height="91">
-                <h1 class="graphicHeader">Canary Database Project</h1>
+                <h1 class="graphicHeader">Canary Database</h1>
                 <h2 class="graphicHeader">Animals as Sentinels of Human Environmental Health Hazards</h2>
             </td>
             <td bgcolor="#A6BFF2">
@@ -157,7 +157,7 @@ def print_header [html] ():
     <!-- ### PRINT HEADER  -- VISIBLE ONLY FOR PRINTING ######################################### -->
     <div id="print_banner">
         <p class="printHeader2">
-            Canary Database Project, Yale School of Medicine
+            Canary Database, Yale School of Medicine
         </p>
         <p class="printHeader1">
             New Haven, Connecticut 065XX, USA   
@@ -183,7 +183,7 @@ def sidebar [html] ():
             <a href="/about/description">Description</a>
             <a href="/about/tour">Take a tour</a>
             <a href="/about/how_to_search">How to search</a>
-            <a href="/about/relevance">Relevance to human health</a>
+            <a href="/about/linkage">Linkage to human health</a>
             <a href="/about/study_methodologies">Study methodologies</a>
             <!--
             <a href="/about/classification_protocol">Classification protocol</a>
@@ -265,7 +265,7 @@ def contact [html] ():
             <img src="/images/yusm_logo.png" alt="Yale School of Medicine logo." 
                 hspace="30" vspace="0">
         <br>
-            Canary Database Project<br>
+            Canary Database<br>
             Yale School of Medicine<br>
             P.O. Box 102283<br>
             New Haven, CT<br>
@@ -375,7 +375,7 @@ def old_header [html] ():
                         <td align='center' valign='middle' width='75%'>
 
                             <h1 class='heading'>
-                                Canary Database Project
+                                Canary Database
                             </h1>
 
                         </td>
@@ -383,7 +383,7 @@ def old_header [html] ():
                         <td width='25%'>
 
                             <img src='/images/brynn_canaries_alpha_left.png'
-                                alt='Canary Database Project logo'>
+                                alt='Canary Database logo'>
 
                         </td>
 
