@@ -74,6 +74,7 @@ def records_by_journal (context, issn, term_map={}):
             AND queued_records.uid = studies.record_id
             AND queued_records.status = 2
             AND studies.article_type >= 2
+            AND studies.article_type < 8
             AND (%s)
             """ % issn_clause
         #print 'sql:', select_clause
@@ -106,6 +107,7 @@ def records_by_journal_index (context,term_map={}):
         AND queued_records.uid = studies.record_id
         AND queued_records.status = 2
         AND studies.article_type >= 2
+        AND studies.article_type < 8
         AND (%s)
         GROUP BY value
         ORDER BY journal_title
@@ -132,6 +134,7 @@ def records_by_methodology (context, methodology_id):
             AND studies.uid = methodologies.study_id
             AND queued_records.status = 2
             AND studies.article_type >= 2
+            AND studies.article_type < 8
             AND methodologies.study_type_id = %s        
             """, methodology_id
             )
@@ -156,6 +159,7 @@ def records_by_methodology_index (context):
         AND studies.record_id = queued_records.uid
         AND queued_records.status = 2
         AND studies.article_type >= 2
+        AND studies.article_type < 8
         GROUP BY study_type_id
         """)
     results = []
@@ -182,6 +186,7 @@ def records_by_year (context, year, term_map={}):
             AND queued_records.uid = studies.record_id
             AND queued_records.status = 2
             AND studies.article_type >= 2
+            AND studies.article_type < 8
             AND (%s)
             """ % year_clause
         #print 'sql:', select_clause
@@ -214,6 +219,7 @@ def records_by_year_index (context, term_map={}):
         AND queued_records.uid = studies.record_id
         AND queued_records.status = 2
         AND studies.article_type >= 2
+        AND studies.article_type < 8
         AND (%s)
         GROUP BY SUBSTRING(value, 1, 4)
         ORDER BY value DESC
