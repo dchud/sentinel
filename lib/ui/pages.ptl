@@ -242,7 +242,7 @@ def login [html] (request):
         if form['go']:
             return request.redirect(form['go'])
         else:
-            return request.redirect('/user/')
+            return request.redirect(str('/user/'))
     else:
         request.session.user = None
         get_transaction().commit()
@@ -265,9 +265,9 @@ def logout [html] (request):
         </p>
         """
     else:
-        header('Log out')
         old_user_id = request.session.user.id
         get_session_manager().expire_session(request)
+        header('Log out')
         form = LoginForm()
         form.logger.info(str('User %s logged out' % old_user_id))
         """
