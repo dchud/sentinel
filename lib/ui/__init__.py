@@ -61,8 +61,8 @@ def _q_lookup (request, name=''):
     elif name == 'wdd_styles.css':
         return StaticFile('/home/dlc33/projects/canary/lib/ui/html/wdd_styles.css',
             mime_type='text/css', cache_time=60)
-    elif name == 'wdd_styles_print.css':
-        return StaticFile('/home/dlc33/projects/canary/lib/ui/html/wdd_styles_print.css',
+    elif name == 'wdd_print.css':
+        return StaticFile('/home/dlc33/projects/canary/lib/ui/html/wdd_print.css',
             mime_type='text/css', cache_time=60)
     elif name == 'search':
         return search(request)

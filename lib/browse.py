@@ -178,7 +178,7 @@ def records_by_year (cursor, year, term_map={}):
             AND studies.article_type >= 2
             AND (%s)
             """ % year_clause
-        print 'sql:', select_clause
+        #print 'sql:', select_clause
         cursor.execute(select_clause + """
             AND SUBSTRING(queued_record_metadata.value, 1, 4) LIKE %s
             """, str(year) + '%'
