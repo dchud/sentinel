@@ -118,10 +118,10 @@ def render_methodologies [html] (study, show_actions=False):
     
         <tr>
             <th>Study type</th>
-            <th>N</th>
-            <th>Routes</th>
+            <th><acronym title='Sample size'>N</acronym></th>
+            <th><acronym title='Routes of exposure'>Routes</acronym></th>
             <th>Sampling</th>
-            <th>Controls</th>
+            <th><acronym title='Controls from same population?'>Controls</acronym></th>
             <th>Timing</th>
     """
     if show_actions:

@@ -1,5 +1,8 @@
 # browse.py
 
+
+from canary.loader import QueuedRecord
+
 def records_by_heading (term, cursor):
     results = []
     # GROUP BY reference_id because some terms repeat w/diff qualifiers
@@ -23,7 +26,6 @@ def records_by_heading (term, cursor):
     return results
 
 
-
 def records_by_heading_index (cursor):
 
     cursor.execute("""
@@ -41,14 +43,65 @@ def records_by_heading_index (cursor):
     return results
 
 
-
-def records_by_journal (nlm_journal_code, cursor):
-    results = []
+# NOTE: queued_record.status is hard-coded to 2
+def records_by_journal (cursor, issn, term_map={}):
+    journal_title = ''
+    queued_records = []
+    issn_terms = term_map['issn']
+    issn_clause = ' OR '.join(['queued_record_metadata.term_id=%s' % term.uid for term in issn_terms])
+    
     cursor.execute("""
-        SELECT authors, title, source, pubmed_id
-        FROM sentinel_studies
-        WHERE nlm_journal_code = %s
-        """, nlm_journal_code)
+        SELECT journal_title
+        FROM medline_journals
+        WHERE issn = %s
+        """, issn)
+    try:
+        rows = cursor.fetchall()
+        if len(rows) != 1:
+            raise Exception('Journal not found')
+        
+        journal_title = rows[0][0]
+        
+        select_clause = """
+            SELECT queued_records.uid
+            FROM queued_records, queued_record_metadata
+            WHERE queued_record_metadata.queued_record_id = queued_records.uid
+            AND queued_records.status = 2
+            AND (%s)
+            """ % issn_clause
+        #print 'sql:', select_clause
+        cursor.execute(select_clause + """
+            AND queued_record_metadata.value = %s
+            """, issn
+            )
+        while 1:
+            row = cursor.fetchone()
+            if row == None: break
+            queued_record = QueuedRecord(row[0])
+            queued_records.append(queued_record)
+        for queued_record in queued_records:
+            queued_record.load(cursor)
+    except:
+        import traceback
+        print traceback.print_exc()
+    return journal_title, queued_records
+
+
+def records_by_journal_index (cursor, term_map={}):
+    results = []
+    issn_terms = term_map['issn']
+    issn_clause = ' OR '.join(['term_id=%s' % term.uid for term in issn_terms])
+    select_clause = """
+        SELECT COUNT(*) AS the_count, value, journal_title, abbreviation
+        FROM queued_record_metadata, queued_records, medline_journals
+        WHERE queued_record_metadata.queued_record_id = queued_records.uid
+        AND queued_record_metadata.value = medline_journals.issn
+        AND queued_records.status = 2
+        AND (%s)
+        GROUP BY value
+        ORDER BY journal_title
+        """ % issn_clause
+    cursor.execute(select_clause)
     while 1:
         row = cursor.fetchone()
         if row == None: break
@@ -56,50 +109,43 @@ def records_by_journal (nlm_journal_code, cursor):
     return results
 
 
-def records_by_journal_index (cursor):
-
-    cursor.execute("""
-        SELECT source, nlm_journal_code, COUNT(*)
-        FROM sentinel_studies
-        GROUP BY nlm_journal_code
-        ORDER BY source
-        """)
-    results = []
-    while 1:
-        row = cursor.fetchone()
-        if row == None: break
-        results.append((row[0], row[1], row[2]))
-    return results
 
 
-
-def records_by_study_type (s_type, cursor):
-    results = []
-    cursor.execute("""
-        SELECT reference_id
-        FROM reference_methodology
-        WHERE methodology = %s
-        """, s_type)
-    id_rows = cursor.fetchall()
-    for id_row in id_rows:
+def records_by_methodology (cursor, methodology_id):
+    queued_records = []
+    
+    try:
         cursor.execute("""
-            SELECT authors, title, source, pubmed_id
-            FROM sentinel_studies
-            WHERE reference_id = %s
-            """, id_row[0])
+            SELECT queued_records.uid
+            FROM queued_records, studies, methodologies
+            WHERE queued_records.uid = studies.record_id
+            AND studies.uid = methodologies.study_id
+            AND queued_records.status = 2
+            AND methodologies.study_type_id = %s        
+            """, methodology_id
+            )
         while 1:
             row = cursor.fetchone()
             if row == None: break
-            results.append((row[0], row[1], row[2], row[3]))
-    return results
+            queued_record = QueuedRecord(row[0])
+            queued_records.append(queued_record)
+        for queued_record in queued_records:
+            queued_record.load(cursor)
+    except:
+        import traceback
+        print traceback.print_exc()
+    return queued_records
 
 
-def records_by_study_type_index (cursor):
+def records_by_methodology_index (cursor):
 
     cursor.execute("""
-        SELECT methodology, COUNT(methodology) as mcount
-        FROM reference_methodology
-        GROUP BY methodology
+        SELECT study_type_id, COUNT(study_type_id) as the_count
+        FROM methodologies, studies, queued_records
+        WHERE methodologies.study_id = studies.uid
+        AND studies.record_id = queued_records.uid
+        AND queued_records.status = 2
+        GROUP BY study_type_id
         """)
     results = []
     while 1:
@@ -111,29 +157,53 @@ def records_by_study_type_index (cursor):
 
 
 
-def records_by_year (year, cursor):
+def records_by_year (cursor, year, term_map={}):
+    queued_records = []
+    year_terms = term_map['pubdate']
+    year_clause = ' OR '.join(['queued_record_metadata.term_id=%s' % term.uid for term in year_terms])
+    
+    try:
+        select_clause = """
+            SELECT queued_records.uid
+            FROM queued_records, queued_record_metadata
+            WHERE queued_records.uid = queued_record_metadata.queued_record_id
+            AND queued_records.status = 2
+            AND (%s)
+            """ % year_clause
+        print 'sql:', select_clause
+        cursor.execute(select_clause + """
+            AND SUBSTRING(queued_record_metadata.value, 1, 4) LIKE %s
+            """, str(year) + '%'
+            )
+        while 1:
+            row = cursor.fetchone()
+            if row == None: break
+            queued_record = QueuedRecord(row[0])
+            queued_records.append(queued_record)
+        for queued_record in queued_records:
+            queued_record.load(cursor)
+    except:
+        import traceback
+        print traceback.print_exc()
+    return queued_records
+
+
+def records_by_year_index (cursor, term_map={}):
+
     results = []
-    cursor.execute("""
-        SELECT authors, title, source, pubmed_id
-        FROM sentinel_studies
-        WHERE year_published = %s
-        """, year)
-    while 1:
-        row = cursor.fetchone()
-        if row == None: break
-        results.append((row[0], row[1], row[2], row[3]))
-    return results
-
-
-def records_by_year_index (cursor):
-
-    cursor.execute("""
-        SELECT year_published, COUNT(year_published) AS yearcount
-        FROM sentinel_studies
-        GROUP BY year_published
-        ORDER BY year_published DESC
-        """)
-    results = []
+    year_terms = term_map['pubdate']
+    year_clause = ' OR '.join(['term_id=%s' % term.uid for term in year_terms])
+    
+    select_clause = """
+        SELECT COUNT(*) AS the_count, SUBSTRING(value, 1, 4) AS the_year
+        FROM queued_record_metadata, queued_records
+        WHERE queued_record_metadata.queued_record_id = queued_records.uid
+        AND queued_records.status = 2
+        AND (%s)
+        GROUP BY SUBSTRING(value, 1, 4)
+        ORDER BY value DESC
+        """ % year_clause
+    cursor.execute(select_clause)
     while 1:
         row = cursor.fetchone()
         if row == None: break

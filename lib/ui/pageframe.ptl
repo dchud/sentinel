@@ -141,8 +141,10 @@ def sidebar [html] ():
         <b>Browse by</b>: <br>
         - <a class='side' href='/browse/year'>Year</a> <br>
         - <a class='side' href='/browse/journal'>Journal</a> <br>
-        - <a class='side' href='/browse/study_type'>Study Type</a> <br>
-        - <a class='side' href='/browse/heading'>Subject Heading</a> <br>
+        - <a class='side' href='/browse/methodology'>Methodology</a> <br>
+        <!--
+            - <a class='side' href='/browse/heading'>Subject Heading</a> <br>
+        -->
 
         <br>
 

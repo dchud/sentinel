@@ -5,7 +5,8 @@ from quixote import get_publisher
 from canary.browse import records_by_year, records_by_year_index
 from canary.browse import records_by_heading, records_by_heading_index
 from canary.browse import records_by_journal, records_by_journal_index
-from canary.browse import records_by_study_type, records_by_study_type_index
+from canary.browse import records_by_methodology, records_by_methodology_index
+from canary.study import Methodology
 from canary.ui.pages import not_found
 from canary.ui.pageframe import header, footer
 
@@ -27,7 +28,7 @@ class Browse:
         <p>
         You can browse the database by <a href='/browse/year'>year</a>,
         <a href='/browse/journal'>journal</a>,
-        <a href='/browse/study_type'>study type</a>,
+        <a href='/browse/methodology'>study type</a>,
         or by <a href='/browse/heading'>subject heading</a>.
         
         """
@@ -37,36 +38,35 @@ class Browse:
         try:
             if name == 'year':
                 return YearBrowseIndex(request)
-            elif name == 'heading':
-                return HeadingBrowseIndex(request)
+            #elif name == 'heading':
+            #    return HeadingBrowseIndex(request)
             elif name == 'journal':
                 return JournalBrowseIndex(request)
-            elif name == 'study_type':
-                return StudyTypeBrowseIndex(request)
+            elif name == 'methodology':
+                return MethodologyBrowseIndex(request)
         except:
             return not_found('index')
             
 
 def render_record_row [html] (record):
-    authors, title, source, pmid = record
+    
+    source_catalog = get_publisher().get_source_catalog()
+    complete_term_map = source_catalog.get_complete_mapping()
+    mapped_metadata = record.get_mapped_metadata(complete_term_map)
     link_width = '20%'
     """
     <tr>
         <td align='left' valign='top'>
-            <a href='/record/%(pmid)s'>%(authors)s</a> <br />
-            %(title)s <br />
-            <font size='-1'>%(source)s</font>
+            <a href='/record/%s'>%s</a> <br />
+            %s <br />
+            <font size='-1'>%s</font>
         </td>
-        <td align='center' valign='top' width='%(link_width)s'>
-            <!--
-            <a href='http://sfx.library.yale.edu/links?id=pmid:%(pmid)s'>
-                <img border='0' src='/yale_sfx2_gif'>
-            </a>
-            -->
-            <a href='http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=PubMed&cmd=Display&dopt=pubmed_pubmed&from_uid=%(pmid)s'>Pubmed related articles</a>
+        <td align='center' valign='top' width='%s'>
+            [links]
         </td>
     </tr>
-    """ % vars()
+    """ % (record.uid, ', '.join(mapped_metadata['author']),
+        mapped_metadata['title'], mapped_metadata['source'], link_width)
 
 
 
@@ -139,17 +139,19 @@ class YearBrowseIndex (BrowseIndex):
             </tr>
         """
         cursor = get_publisher().get_cursor()
-        records = records_by_year_index(cursor)
+        source_catalog = get_publisher().get_source_catalog()
+        complete_term_map = source_catalog.get_complete_mapping()
+        records = records_by_year_index(cursor, complete_term_map)
         cursor.close()
         for record in records:
-            year, year_count = record
+            year_count, year = record
             if not year == 0:
                 """
                 <tr>
-                    <td align='center'>%(year_count)s</td>
-                    <td align='left'><a href='/browse/year/%(year)s'>%(year)s</a></td>
+                    <td align='center'>%s</td>
+                    <td align='left'><a href='/browse/year/%s'>%s</a></td>
                 </tr>
-                """ % vars()
+                """ % (year_count, year, year)
         """
         </table>
         """
@@ -161,14 +163,18 @@ class YearBrowseIndex (BrowseIndex):
             if year:
                 year = int(year)
                 cursor = get_publisher().get_cursor()
-                records = records_by_year(year, cursor)
+                source_catalog = get_publisher().get_source_catalog()
+                complete_term_map = source_catalog.get_complete_mapping()
+                records = records_by_year(cursor, year, term_map=complete_term_map)
                 if len(records) == 0:
-                    raise Error
+                    raise Exception('No records found')
                 cursor.close()
                 return self.render_records(year, records)
             else:
                 raise Error
         except:
+            import traceback
+            print traceback.print_exc()
             return not_found(self.type)
             
 
@@ -249,7 +255,7 @@ class HeadingBrowseIndex (BrowseIndex):
 class JournalBrowseIndex (BrowseIndex):
     
     _q_exports = [
-        '_q_exports',
+        '_q_index',
         ]
         
     def __init__ (self, request):
@@ -274,18 +280,20 @@ class JournalBrowseIndex (BrowseIndex):
         """
         
         cursor = get_publisher().get_cursor()
-        journals = records_by_journal_index(cursor)
+        source_catalog = get_publisher().get_source_catalog()
+        complete_term_map = source_catalog.get_complete_mapping()
+        results = records_by_journal_index(cursor, complete_term_map)
         cursor.close()
-        for journal in journals:
-            source, nlm_journal_code, count = journal
-            if str('.') in source:
-                title = source[0:source.index(str('.'))]
+        for result in results:
+            count, issn, title, abbr = result
+            if str('.') in title:
+                title = title[0:title.index(str('.'))]
                 """
                 <tr>
-                    <td align='center'>%(count)s</td>
-                    <td align='left'><a href='/browse/journal/%(nlm_journal_code)s'>%(title)s</a></td>
+                    <td align='center'>%s</td>
+                    <td align='left'><a href='/browse/journal/%s'>%s</a></td>
                 </tr>
-                """ % vars()
+                """ % (count, issn, title)
             else:
                 continue
     
@@ -294,86 +302,91 @@ class JournalBrowseIndex (BrowseIndex):
         """
         footer()
 
-    def _q_lookup (self, request, name=0):
+    def _q_lookup (self, request, issn=0):
         try:
-            if name:
+            if issn:
                 cursor = get_publisher().get_cursor()
-                records = records_by_journal(name, cursor)
+                source_catalog = get_publisher().get_source_catalog()
+                complete_term_map = source_catalog.get_complete_mapping()
+                title, records = records_by_journal(cursor, issn, 
+                    term_map=complete_term_map)
                 if len(records) == 0:
-                    raise Error
-                source = records[0][2]
-                if str('.') in source:
-                    title = source[0:source.index(str('.'))]
+                    raise Exception('No records found')
+                if str('.') in title:
+                    title = title[0:title.index(str('.'))]
                 else:
                     title = '-'
                 cursor.close()
     
                 return self.render_records(title, records)
         except:
+            import traceback
+            print traceback.print_exc()
             return not_found(self.type)
             
 
 
-class StudyTypeBrowseIndex (BrowseIndex):
-    
+class MethodologyBrowseIndex (BrowseIndex):
+        
     def __init__ (self, request):
-        self.type = 'study_type'
+        self.type = 'methodology'
         
     def _q_index [html] (self, request):
 
-        header('Browse by Study Type')
+        header('Browse by Methodology')
         """
-        <h2>Browse by Study Type</h2>
+        <h2>Browse by Methodology</h2>
     
         <p>
     The Canary database curators determine, for each included study, the type
     of methodology employed by the researchers (using <a
-    href='/classification_protocol'>this classification protocol</a>).  For
-    detailed explanations of each, see our <a href='/study_types'>study type
+    href='/about/classification_protocol'>this classification protocol</a>).  For
+    detailed explanations of each, see our <a href='/about/study_types'>study type
     overview</a>.
         </p>
     
         <p>
     Below is a list of the number of articles in the Canary Database by their
-    study type.
+    methodology.
         </p>
     
         <table width='70%' cellspacing='3' cellpadding='3'>
             <tr>
                 <th align='center' width='20%'># articles</th>
-                <th align='left'>Study Type</th>
+                <th align='left'>Methodology</th>
             </tr>
         """
-        dbmodel = get_publisher().get_dbmodel()
         cursor = get_publisher().get_cursor()
-        types = records_by_study_type_index(cursor)
+        records = records_by_methodology_index(cursor)
         cursor.close()
-        for type in types:
-            s_type, count = type
-            s_name = dbmodel.get_value_description(int(1), int(s_type))
+        meths = [(Methodology().get_text_value(Methodology.TYPES, 
+                meth_id), meth_id, count) for meth_id, count in records]
+        meths.sort()
+        for meth_name, meth_id, count in meths:
             """
             <tr>
-                <td align='center'>%(count)s</td>
-                <td align='left'><a href='/browse/study_type/%(s_type)s'>%(s_name)s</a></td>
+                <td align='center'>%s</td>
+                <td align='left'><a href='/browse/methodology/%s'>%s</a></td>
             </tr>
-            """ % vars()
+            """ % (count, meth_id, meth_name.capitalize())
         """
         </table>
         """
         footer()
 
+
     def _q_lookup (self, request, name):
         try:
             if name:
-                s_type = int(name)
+                meth_id = int(name)
                 cursor = get_publisher().get_cursor()
-                records = records_by_study_type(s_type, cursor)
+                records = records_by_methodology(cursor, meth_id)
                 if len(records) == 0:
-                    raise Error
+                    raise Exception('No records found')
                 cursor.close()
-                dbmodel = get_publisher().get_dbmodel()
-                s_name = dbmodel.get_value_description(int(1), int(s_type))
-                return self.render_records(s_name, records)
+                
+                return self.render_records(Methodology().get_text_value(Methodology.TYPES,
+                    meth_id).capitalize(), records)
             else:
                 raise Error
         except:
