@@ -325,6 +325,9 @@ def footer [html] ():
                                 <br />
                                 Please review our <a href='/about/disclaimer'>site disclaimer</a>.
                                 <br />
+                                This project is supported by <a href="http://www.nlm.nih.gov/">National Library of Medicine</a> Information Systems Grant #1 G08 LM07881-01.
+
+                                <br />
                                 <a href='/about/contact_us'>Contact us</a> with
                                     comments or suggestions.
                             </p>
