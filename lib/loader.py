@@ -241,7 +241,7 @@ class Batch (DTable):
         self.uid = -1
         self.file_name = file_name
         self.source_id = source_id
-        self.num_records = -1
+        self.num_records = 0
         self.name = ''
         self.date_added = ''
         self.queued_records = {}
@@ -251,7 +251,7 @@ class Batch (DTable):
     def add_records (self, records):
         for record in records:
             self.loaded_records.append(record)
-        self.num_records = len(self.loaded_records)
+            self.num_records += 1
             
     
     def get_statistics (self, cursor):
@@ -315,13 +315,11 @@ class Batch (DTable):
             #print 'load: adding rec', record.uid
             self.queued_records[record.uid] = record
         self.num_records = len(self.queued_records)
+        #print 'loaded %s queued_records for batch %s' % (self.num_records, self.uid)
 
 
     def save (self, cursor):
         
-        # Recalc, handy for queue stats
-        self.num_records = len(self.queued_records) + len(self.loaded_records)
-            
         if self.uid == -1:
             cursor.execute("""
                 INSERT INTO queued_batches
@@ -348,10 +346,6 @@ class Batch (DTable):
                 self.uid)
                 )
         
-        # save the records
-        #for record_id in self.queued_records.keys():
-        #    record = self.queued_records[record_id]
-        #    record.save(cursor)
         for record in self.loaded_records:
             record.queued_batch_id = self.uid
             record.save(cursor)
