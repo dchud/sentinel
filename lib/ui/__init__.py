@@ -44,7 +44,7 @@ css_files = load_static_exports('/home/dlc33/projects/canary/lib/ui/html',
                                 '.css')
 for file, path in css_files:
     _q_exports.append(file)
-    setattr(this_module, file, StaticFile(path, cache_time=60))
+    setattr(this_module, file, StaticFile(path, mime_type='text/css', cache_time=60))
 
 js_files = load_static_exports('/home/dlc33/projects/canary/lib/ui/html', '.js')
 for file, path in js_files:
@@ -55,10 +55,10 @@ for file, path in js_files:
 record = record_ui
 
 def _q_lookup (request, name=''):
-    if name == 'search':
-        return search(request)
-    elif name == 'favicon.ico':
+    if name == 'favicon.ico':
         return request.redirect('/images/favicon.ico')
+    elif name == 'search':
+        return search(request)
     elif name == 'browse':
         return Browse(request)
     else:
