@@ -66,17 +66,20 @@ class SourceForm (MyForm):
     def __init__ (self):
         MyForm.__init__(self)
         self.add(IntWidget, 'source_uid', title='Source uid',
-                 size=3, required=False)
+            size=3, required=False)
         self.add(StringWidget, 'source_name', title='Name',
-                 size=30, required=True)
+            size=30, required=True)
         self.add(TextWidget, 'source_desc', title='Description',
-                 rows=4, cols=64, required=False)
+            rows=4, cols=64, required=False)
         self.add(StringWidget, 're_result_sep',
-                 title='Result separator regexp',
-                 size='40', required=False)
+            title='Result separator regexp',
+            size='40', required=False)
         self.add(StringWidget, 're_term_token',
-                 title='Term token regexp',
-                 size='40', required=False)
+            title='Term token regexp',
+            size='40', required=False)
+        self.add(StringWidget, 'sfx_pattern',
+            title='SFX pattern',
+            size='60', required=False)
         self.add(SubmitWidget, 'submit', value='submit')
 
 
@@ -126,6 +129,9 @@ def create [html] (request):
 
     if form['re_term_token']:
         source.re_term_token = form['re_term_token']
+        
+    if form['sfx_pattern']:
+        source.sfx_pattern = form['sfx_pattern']
 
     try:
         cursor = get_publisher().get_cursor()
@@ -171,6 +177,7 @@ def edit [html] (request, source_id=None):
         form.get_widget('source_desc').set_value(source.description)
         form.get_widget('re_result_sep').set_value(source.re_result_sep)
         form.get_widget('re_term_token').set_value(source.re_term_token)
+        form.get_widget('sfx_pattern').set_value(source.sfx_pattern)
         return render()
 
     source_uid = form['source_uid']
@@ -209,6 +216,8 @@ def edit [html] (request, source_id=None):
     if form['re_term_token']:
         source.re_term_token = form['re_term_token']
         form.logger.debug(str('re_term_token = "%s"' % form['re_term_token']))
+    if form['sfx_pattern']:
+        source.sfx_pattern = form['sfx_pattern']
     try:
         cursor = get_publisher().get_cursor()
         source.save(cursor)

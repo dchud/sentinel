@@ -14,6 +14,11 @@ class SubjectHeading:
     def __init__ (self, string=''):
         if not string == '':
             self.parse_string(string)
+        else:
+            self.string = string
+            self.term = ''
+            self.qualifier = ''
+            self.is_focus = False
 
 
     def parse_string (self, string):

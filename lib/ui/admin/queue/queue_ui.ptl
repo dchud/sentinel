@@ -88,7 +88,7 @@ def add [html] (request):
         action='receive'>
     <p>
     Source:<br/>
-        <select name='source_uid'<br/>
+        <select name='source_id'><br/>
 
     """
     for (id, name) in sources:
@@ -124,7 +124,9 @@ def receive [html] (request):
     request.session.message = None
 
     try:
-        source_uid = int(form.get('source_uid'))
+        source_id = int(form.get('source_id'))
+        source_catalog = get_publisher().get_source_catalog()
+        source = source_catalog.get_source(source_id)
     except:
         request.session.message = str('Please choose a source.')
         return add(request)
@@ -147,26 +149,20 @@ def receive [html] (request):
 
     try:
         cursor = get_publisher().get_cursor()
-        print 'generating batch'
-        batch = Batch(file_name=upload.tmp_filename, source_uid=source_uid)
+        batch = Batch(file_name=upload.tmp_filename, source_id=source_id)
         batch.save(cursor)
-        print 'saved batch'
         source_catalog = get_publisher().get_source_catalog()
-        source = source_catalog.get_source(source_uid)
-        print 'generating parser'
+        source = source_catalog.get_source(source_id)
+        mapped_terms = source_catalog.get_mapped_terms(source_id)
         parser = Parser(source)
-        print 'parsing'
-        records = parser.load(upload.tmp_filename)
+        records = parser.parse(upload.tmp_filename, mapped_terms=mapped_terms)
         batch.num_records = len(records)
-        print 'batch.num_records =', batch.num_records
         if batch.num_records == num_records:
-            print 'adding records'
-            batch.add_records(cursor, records)
-            print 'saving records'
+            batch.add_records(records)
             batch.save(cursor)
         else:
             print 'count mismatch'
-            request.session.message = str('Record count mismatch: %s specified, %s found') % (num_records, len(records))
+            request.session.message = str('Batch not saved: Record count mismatch, %s specified, %s found') % (num_records, len(records))
 
         cursor.close()
     except:

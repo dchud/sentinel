@@ -27,15 +27,21 @@ def get_current_study (cursor, id):
         return None
 
 def render_queued_record [html] (queued_record, abstract=True):
+    source_catalog = get_publisher().get_source_catalog()
+    #source = source_catalog.get_source(queued_record.source_id)
+    # FIXME: this is a hack!
+    source = source_catalog.get_source(queued_record.metadata.keys()[0][0])
+    mapped_terms = source_catalog.get_mapped_terms(source.uid)
+    mapped_metadata = queued_record.get_mapped_metadata(source.uid, mapped_terms)
     """
     <div class='queued_record'>
         <p>
             "%s", <em>%s</em>
         </p>
-    """ % (queued_record.title, queued_record.source)
+    """ % (mapped_metadata['title'] or '-', mapped_metadata['source'] or '-')
     
     if abstract:
-        if not queued_record.abstract == '':
+        if not mapped_metadata['abstract'] == '':
             """
         <div class='label'>
             <span id='abstract-link'>Show/hide abstract</span>
@@ -44,7 +50,7 @@ def render_queued_record [html] (queued_record, abstract=True):
             <p>
                 <b>Abstract:</b> <br />
             """
-            queued_record.abstract
+            mapped_metadata['abstract']
             """
             </p>
         </div>
@@ -68,7 +74,17 @@ def is_same_user (queued_record):
             return False
     except:
         return False
+        
 
+def get_sfx_link (source_id, unique_identifier):
+    source_catalog = get_publisher().get_source_catalog()
+    source = source_catalog.get_source(source_id)
+    query_string = source.sfx_pattern.replace('[[UI]]', unique_identifier)
+    # FIXME!
+    base_url = 'http://sfx.library.yale.edu/sfx_local?'
+    return base_url + query_string
+    
+    
 def claimed_by_other_user [html] ():
     header('Curate:  Record claimed by other user')
     """
@@ -106,8 +122,8 @@ def render_exposures [html] (study):
     """
     <table class='gentable' id='exposures'>
         <tr>
+            <th>exposure</th>
             <th>source</th>
-            <th>term</th>
             <th>actions</th>
         </tr>
     """
@@ -120,7 +136,7 @@ def render_exposures [html] (study):
                 [<a href='exposure/%s/delete'>delete</a>]
             </td>
         </tr>
-        """ % (exp.UMLS_SOURCES[exp.concept_source_id], exp.term, exp.uid)
+        """ % (exp.term, exp.UMLS_SOURCES[exp.concept_source_id], exp.uid)
     """
     </table>
     """
@@ -129,8 +145,8 @@ def render_outcomes [html] (study):
     """
     <table class='gentable' id='outcomes'>
         <tr>
+            <th>outcome</th>
             <th>source</th>
-            <th>term</th>
             <th>actions</th>
         </tr>
     """
@@ -141,8 +157,8 @@ def render_outcomes [html] (study):
             <td>%s</td>
             <td>[<a href='outcome/%s/delete'>delete</a>]</td>
         </tr>
-        """ % (outcome.UMLS_SOURCES[outcome.concept_source_id], 
-            outcome.term, outcome.uid)
+        """ % (outcome.term, outcome.UMLS_SOURCES[outcome.concept_source_id], 
+            outcome.uid)
     """
     </table>
     """
@@ -151,8 +167,8 @@ def render_species [html] (study):
     """
     <table class='gentable' id='species'>
         <tr>
+            <th>species</th>
             <th>source</th>
-            <th>term</th>
             <th>actions</th>
         </tr>
     """
@@ -163,8 +179,8 @@ def render_species [html] (study):
             <td>%s</td>
             <td>[<a href='species/%s/delete'>delete</a>]</td>
         </tr>
-        """ % (spec.UMLS_SOURCES[spec.concept_source_id], 
-            spec.term, spec.uid)
+        """ % (spec.term, spec.UMLS_SOURCES[spec.concept_source_id], 
+            spec.uid)
     """
     </table>
     """

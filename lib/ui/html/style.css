@@ -131,6 +131,10 @@ a.name:hover {
 	width: 70%;
 }
 
+#batch_view {
+    width: 90%;
+}
+
 .studytable th {
 	padding: 5px;
 	color: #333;

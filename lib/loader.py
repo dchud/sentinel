@@ -2,13 +2,14 @@ import email
 import re
 import time
 import traceback
+import types
 
 import dtuple
 
 from quixote import enable_ptl
 enable_ptl()
 
-from canary.source_catalog import Source
+from canary.source_catalog import Source, Term
 from canary.utils import DTable
 
 class Queue:
@@ -47,64 +48,166 @@ class QueuedRecord (DTable):
         self.user_id = ''
         self.status = self.STATUS_UNCLAIMED
         self.study_id = -1
+        self.metadata = {}
         self.title = ''
         self.source = ''
-        self.abstract = ''
+        self.unique_identifier = ''
 
     def __str__ (self):
         out = []
         out.append('<QueuedRecord uid=%s queued_batch_id=%s' % (self.uid, self.queued_batch_id))
         out.append('\tstatus=%s study_id=%s' % (self.get_status(text=True), self.study_id))
-        out.append('\ttitle=%s' % self.title)
-        out.append('\tsource=%s' % self.source)
         return '\n'.join(out)
 
-    def load (self, cursor):
+
+    def add_metadata (self, source_id, term, value, extra=''):
         """
-        Load a batch's queued records.
+        Add a metadata value for a given source metadata field,
+        appending to a list or setting the single value depending
+        on whether the term allows multiple values.
         """
+        md_key = (source_id, term.uid)
+        if term.is_multivalue:
+            if self.metadata.has_key(md_key):
+                if not value in self.metadata[md_key]:
+                    self.metadata[md_key].append(value)
+            else:
+                self.metadata[md_key] = [value]
+        else:
+            self.metadata[md_key] = value
+            
+    
+    def get_metadata (self, source_id, term):
+        """
+        Get the metadata value, of the list of values, for a given sources
+        metadata field.
+        """
+        md_key = (source_id, term.uid)
+        if self.metadata.has_key(md_key):
+            return self.metadata[md_key]
+        else:
+            return None
+            
+            
+    def get_mapped_metadata (self, source_id, term_map={}):
+        """
+        For every field in this record that is mapped from a specific source,
+        return a map to its metadata values.
+        """
+        mapped_metadata = {}
+        term_info_set = [(source_id, term, mapped_name) for mapped_name, term in term_map.items()]
+        for term_info in term_info_set:
+            source_id, term, mapped_name = term_info
+            mapped_metadata[mapped_name] = self.get_metadata(source_id, term)
+        return mapped_metadata
+        
+
+    def load (self, cursor, load_metadata=True, source=None):
+        """
+        Load a batch's queued record.
+        
+        Note that if a source is not specified, every term will be
+        looked-up again from the DB (rather than read from memory).
+        """
+        # To be safe, specify full table.field names because names overlap
         cursor.execute("""
-            SELECT status, queued_batch_id, user_id, study_id, title, source, abstract
-            FROM queued_records
-            WHERE uid = %s
+            SELECT queued_records.uid, queued_records.queued_batch_id,
+            queued_records.status, queued_records.user_id, 
+            queued_records.user_id, queued_records.study_id,
+            queued_records.title, queued_records.source,
+            queued_records.unique_identifier,
+            queued_batches.source_id
+            FROM queued_records, queued_batches
+            WHERE queued_records.uid = %s
+            AND queued_batches.uid = queued_records.queued_batch_id
             """, int(self.uid))
         fields = [d[0] for d in cursor.description]
         desc = dtuple.TupleDescriptor([[f] for f in fields])
         row = cursor.fetchone()
         row = dtuple.DatabaseTuple(desc, row)
+        # remove source_id from fields, it's not a proper attribute on self
+        fields.remove('source_id')
+        # but save it for later!
+        source_id = row['source_id']
         for field in fields:
             self.set(field, row[field])
+            
+        if load_metadata:
+            cursor.execute("""
+                SELECT *
+                FROM queued_record_metadata
+                WHERE queued_record_id = %s
+                AND source_id = %s
+                """, (self.uid, source_id))
+            fields = [d[0] for d in cursor.description]
+            desc = dtuple.TupleDescriptor([[f] for f in fields])
+            rows = cursor.fetchall()
+            for row in rows:
+                row = dtuple.DatabaseTuple(desc, row)
+                if source:
+                    term = source.terms[row['term_id']]
+                else:
+                    term = Term(uid=row['term_id'])
+                    term.load(cursor)
+                self.add_metadata(source_id, term, row['value'], row['extra'])
+    
 
 
     def save (self, cursor):
         
         if self.uid == -1:
-            print 'inserting new record:', self
+            #print 'inserting new record:', self
             cursor.execute("""
                 INSERT INTO queued_records
                 (uid, 
-                queued_batch_id, status, user_id, 
-                study_id, title, source, abstract)
+                queued_batch_id, status, user_id, study_id,
+                title, source, unique_identifier)
                 VALUES (NULL, 
-                %s, %s, %s,
-                %s, %s, %s, %s)
-                """, (self.queued_batch_id, self.status, self.user_id, 
-                self.study_id, self.title, self.source, self.abstract)
+                %s, %s, %s, %s,
+                %s, %s, %s)
+                """, (self.queued_batch_id, self.status, self.user_id, self.study_id,
+                self.title, self.source, self.unique_identifier)
                 )
             self.uid = self.get_new_uid(cursor)
 
         else:
             cursor.execute("""
                 UPDATE queued_records
-                SET queued_batch_id = %s, status = %s, user_id = %s, 
-                study_id = %s, title = %s, source = %s, abstract = %s
+                SET queued_batch_id = %s, status = %s, user_id = %s, study_id = %s,
+                title = %s, source = %s, unique_identifier = %s
                 WHERE uid = %s
-                """, (self.queued_batch_id, self.status, self.user_id, 
-                self.study_id, self.title, self.source, self.abstract,
+                """, (self.queued_batch_id, self.status, self.user_id, self.study_id,
+                self.title, self.source, self.unique_identifier,
                 self.uid)
                 )
         # FIXME: should this be set from the SQL?
         self.date_modified = time.strftime(str('%Y-%m-%d'))
+        
+        cursor.execute("""
+            DELETE FROM queued_record_metadata
+            WHERE queued_record_id = %s
+            """, self.uid)
+        for key, val in self.metadata.items():
+            # FIXME: extra?
+            source_id, term_id = key
+            if isinstance(val, types.ListType):
+                for value in val:
+                    self.save_metadata_value(cursor, source_id, term_id, value)
+            else:
+                self.save_metadata_value(cursor, source_id, term_id, val)
+ 
+ 
+    def save_metadata_value (self, cursor, source_id, term_id, value, extra=None):
+        # FIXME: extra?
+        cursor.execute("""
+            INSERT INTO queued_record_metadata
+            (uid, queued_record_id, source_id,
+            term_id, value, extra)
+            VALUES (NULL, %s, %s,
+            %s, %s, NULL)
+            """, (self.uid, source_id, 
+            term_id, value)
+            )
 
 
     def get_status (self, text=False):
@@ -126,28 +229,44 @@ class QueuedRecord (DTable):
 
 
 
-class Batch:
+class Batch (DTable):
 
     # FIXME: init shouldn't need a damn cursor, write a load() function
-    def __init__ (self, file_name=None, source_uid=-1):
+    def __init__ (self, file_name='', source_id=-1):
         self.uid = -1
         self.file_name = file_name
-        self.source_uid = source_uid
+        self.source_id = source_id
         self.num_records = -1
         self.queued_records = {}
         self.loaded_records = []
 
 
-    def load (self, cursor):
+    def load (self, cursor, load_metadata=True):
         """
-        Load a batch's queued records.
+        Load a batch and its queued records.
         """
+        if self.uid == -1:
+            return
+            
         cursor.execute("""
-                       SELECT uid, status, user_id, study_id, title, source, abstract
-                       FROM queued_records
-                       WHERE queued_batch_id = %s
-                       ORDER BY status
-                       """, int(self.uid))
+            SELECT * 
+            FROM queued_batches
+            WHERE uid = %s
+            """, self.uid)
+        fields = [d[0] for d in cursor.description]
+        desc = dtuple.TupleDescriptor([[f] for f in fields])
+        rows = cursor.fetchall()
+        for row in rows:
+            row = dtuple.DatabaseTuple(desc, row)
+            for field in fields:
+                self.set(field, row[field])
+        
+        cursor.execute("""
+            SELECT *
+            FROM queued_records
+            WHERE queued_batch_id = %s
+            ORDER BY status, uid
+            """, int(self.uid))
         fields = [d[0] for d in cursor.description]
         desc = dtuple.TupleDescriptor([[f] for f in fields])
         rows = cursor.fetchall()
@@ -155,18 +274,25 @@ class Batch:
             row = dtuple.DatabaseTuple(desc, row)
             record = QueuedRecord()
             for field in fields:
+                #print 'record: setting %s to %s' % (field, row[field])
                 record.set(field, row[field])
+            record.load(cursor, load_metadata)
+            #print 'load: adding rec', record.uid
             self.queued_records[record.uid] = record
 
 
     def save (self, cursor):
+        
+        if not self.num_records == len(self.loaded_records):
+            self.num_records = len(self.loaded_records)
+            
         if self.uid == -1:
             cursor.execute("""
                            INSERT INTO queued_batches
-                           (uid, file_name, source_uid, num_records, date_added)
+                           (uid, file_name, source_id, num_records, date_added)
                            VALUES
                            (NULL, %s, %s, %s, CURDATE())
-                           """, (self.file_name, self.source_uid, self.num_records)
+                           """, (self.file_name, self.source_id, self.num_records)
                            )
             cursor.execute("""
                            SELECT LAST_INSERT_ID() AS new_uid
@@ -193,11 +319,8 @@ class Batch:
             record.save(cursor)
 
 
-    def add_records (self, cursor, records):
-    
+    def add_records (self, records):
         for record in records:
-            print 'add_records record'
-            #self.queued_records[record.id] = record
             self.loaded_records.append(record)
 
 
@@ -205,74 +328,81 @@ class Batch:
 
 class Parser:
 
-    def __init__ (self, source):
+    def __init__ (self, source=None):
         self.re_result_sep = re.compile(source.re_result_sep)
         self.re_term_token = re.compile(source.re_term_token)
+        self.source = source
 
 
-    def load (self, file_name):
-        file = open(file_name)
-        msg = email.message_from_file(file)
-        file.close()
+    def parse (self, file_name, mapped_terms={}, is_email=True):
+        lines = []
+        try:
+            file = open(file_name)
+            if is_email:
+                data = email.message_from_file(file)
+                lines = data.get_payload().split('\n')
+            else:
+                lines = file.read().split('\n')
+            file.close()
+        except:
+            print 'unable to load file, or msg'
+            return []
 
         records = []
-        title = ''
-        source = ''
-        abstract = ''
         value = ''
-        current_token = ''
-        lines = msg.get_payload().split('\n')
+        current_token = current_value = ''
+        current_record = QueuedRecord()
         for line in lines:
             if self.re_result_sep.match(line):
-                if not title == '' and not source == '':
-                    new_record = QueuedRecord()
-                    new_record.title = title
-                    new_record.source = source
-                    new_record.abstract = abstract
-                    records.append(new_record)
-                    #print 'added %s: %s (%s)' % (len(records), title, source)
-                    title = ''
-                    source = ''
-                    abstract = ''
-                else:
-                    # reading first record
-                    pass
+                # Matches record separator, so is either first record or new record
+                if len(current_record.metadata) > 0:
+                    mapped_metadata = current_record.get_mapped_metadata(self.source.uid, mapped_terms)
+                    current_record.title = mapped_metadata['title']
+                    current_record.source = mapped_metadata['source']
+                    current_record.unique_identifier = mapped_metadata['unique_identifier']
+                    records.append(current_record)
+                current_token = current_value = ''
+                current_record = QueuedRecord()
             else:
                 match = self.re_term_token.match(line)
                 if match:
+                    # Line contains token, i.e. is start of value
                     # Note: match.group(0) == line  (damn that snake!)
                     token = match.group(1)
                     value = match.group(2)
-                    current_token = token
-                    if token == 'TI':
-                        title = value
-                    elif token == 'SO':
-                        source = value
-                    elif token == 'AB':
-                        abstract = value
+                    term = self.source.get_term_from_token(current_token)
+                    if term:
+                        if term.is_multivalue \
+                            and not term.re_multivalue_sep == '':
+                            values = current_value.split(term.re_multivalue_sep)
+                            for val in values:
+                                #print 'Adding value for token %s ("%s").' % (current_token, val)
+                                current_record.add_metadata(self.source.uid, term, val.strip())
+                        else:
+                            #print 'Adding value for token %s ("%s").' % (current_token, current_value)
+                            current_record.add_metadata(self.source.uid, term, current_value)
                     else:
+                        #print 'No term found for token %s ("%s").' % (current_token, current_value)
                         pass
-                    #term = source.get_term_from_token(field_token)
+                    current_token = token
+                    current_value = value
                 else:
+                    # Line does not contain token, i.e. is value cont'd or blank
                     if not line.strip() == '':
-                        value = value + ' ' + line.strip()
-                        if current_token == 'TI':
-                            title = value
-                        elif current_token == 'SO':
-                            source = value
-                        elif current_token == 'AB':
-                            abstract = value
+                        # Line isn't blank, so it continues a value
+                        current_value = current_value + ' ' + line.strip()
                     else:
                         # blank line
                         pass
         # Note: we don't catch the last record in the loop above,
         # so do it 'manually' here
-        if not title == '' and not source == '':
-            new_record = QueuedRecord()
-            new_record.title = title
-            new_record.source = source
-            new_record.abstract = abstract
-            records.append(new_record)
+        # FIXME: is this a useful check?
+        if not current_record == None:
+            mapped_metadata = current_record.get_mapped_metadata(self.source.uid, mapped_terms)
+            current_record.title = mapped_metadata['title']
+            current_record.source = mapped_metadata['source']
+            current_record.unique_identifier = mapped_metadata['unique_identifier']
+            records.append(current_record)
         return records
 
 
@@ -283,7 +413,9 @@ if __name__ == '__main__':
     source.re_term_token = '^([A-Z][A-Z]+) +-[ ](.*)'
 
     parser = Parser(source)
-    records = parser.load('/home/dlc33/projects/sentinel/record_parser/test-data/ovid-medline-12.txt')
+    records = parser.parse('/home/dlc33/projects/sentinel/record_parser/test-data/ovid-medline-12.txt')
     print len(records), 'records:'
     print records
+    
+    
 

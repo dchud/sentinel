@@ -43,8 +43,8 @@ def _q_index [html] (request):
     queue = Queue()
     queue.load(cursor)
     for batch in queue.batches:
-        source_uid = batch['source_uid']
-        source = source_catalog.get_source(source_uid)
+        source_id = batch['source_id']
+        source = source_catalog.get_source(source_id)
         """
         <tr>
             <td>%s</td>

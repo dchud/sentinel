@@ -10,6 +10,7 @@ from quixote.errors import AccessError, PublishError, TraversalError
 from canary.loader import Batch, Queue
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found
+from canary.ui.edit.study.utils import get_sfx_link
 from canary.source_catalog import SourceCatalog
 
 
@@ -74,31 +75,34 @@ class BatchActions:
 
 
 def view [html] (request, batch_id=None, start=0, size=25):
-
+    # FIXME: Refactor this, why is it all in a big try/except?
+    
     header('Edit: View queued records')
     title_bar('View queued records, batch %s' % batch_id)
     
     try:
         cursor = get_publisher().get_cursor()
         batch = Batch()
-        batch.uid = batch_id
-        batch.load(cursor)
+        batch.uid = int(batch_id)
+        #batch.load(cursor, start=start, size=size)
+        # We avoid loading all metadata here because batches might be big
+        # (i.e. too much metadata to load every time).
+        batch.load(cursor, load_metadata=False)
         if len(batch.queued_records) > 0:
             pager(batch, start, size)
             """
-            <table cellspacing='5' class='gentable'>
-            <tr>
-                <th>id</th>
-                <th>Status</th>
-                <th>User</th>
-                <th>Title</th>
-                <th>Source</th>
-                <th>Actions</th>
-            </tr>
+            <table cellspacing='5' id='batch_view' class='gentable'>
+                <tr>
+                    <th>id</th>
+                    <th>Status</th>
+                    <th>User</th>
+                    <th>Title</th>
+                    <th>Source</th>
+                    <th>Actions</th>
+                </tr>
             """
             
-            for record_id in batch.queued_records.keys()[start:start+size]:
-                record = batch.queued_records[record_id]
+            for record_id, record in batch.queued_records.items()[start:start+size]:
                 status = record.get_status()
                 """
                 <tr>
@@ -108,28 +112,33 @@ def view [html] (request, batch_id=None, start=0, size=25):
                     <td>%s</td>
                     <td>%s</td>
                 """ % (record_id, record.get_status(text=True),
-                       record.user_id, record.title, record.source)
+                    record.user_id, record.title, record.source)
+                    
+                """
+                    <td>
+                        [<a href='%s'>sfx links</a>]
+                """ % get_sfx_link(batch.source_id, record.unique_identifier)
+                
                 if status == record.STATUS_UNCLAIMED:
                     """
-                    <td>[<a href='/edit/study/%s/curate_one'>curate</a>]</td>
+                        [<a href='/edit/study/%s/curate_one'>curate</a>]</td>
                     """ % record_id
                 elif status == record.STATUS_CLAIMED:
                     if record.user_id == request.session.user.get_id():
                         """
-                        <td>
-                            [<a href='/edit/study/%s/curate_one'>curate</a>]
-                            [<a href='/edit/study/%s/unclaim'>unclaim</a>]
-                        </td>
+                        [<a href='/edit/study/%s/curate_one'>curate</a>]
+                        [<a href='/edit/study/%s/unclaim'>unclaim</a>]
                         """ % (record_id, record_id)
                     else:
                         """
-                        <td>claimed</td>
+                        [claimed]
                         """
                 elif status == record.STATUS_CURATED:
                     """
-                    <td>curated</td>
+                        [curated]
                     """
                 """
+                    </td>
                 </tr>
                 """    
             """
