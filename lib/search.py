@@ -66,3 +66,36 @@ class Results:
         
     def get_results (self):
         return self.records
+        
+        
+        
+class PubmedSearch:
+    """
+    Query/download records from Pubmed, one function per EUtility:
+        
+        http://eutils.ncbi.nlm.nih.gov/entrez/query/static/eutils_help.html
+    """
+
+    def __init__ (self):
+        self.efetch_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=[[UI]]&mode=text&report=medline'
+
+    def fetch (self, ui):
+        """
+        Fetch one or more records; ui can be a single ui, or a list of uis.
+        
+        Returns a single list of text lines to be parsed.
+    http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=15148598&mode=text&report=medline
+        """
+
+        import types, urllib
+        
+        try:
+            if isinstance(ui, types.ListType):
+                url = self.efetch_url.replace('[[UI]]', 
+                    (','.join([str(pmid) for pmid in ui])))
+            else:
+                url = self.efetch_url.replace('[[UI]]', str(ui))
+            data = urllib.urlopen(url)
+            return data.read().split('\n')
+        except:
+            return []

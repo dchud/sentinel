@@ -271,3 +271,15 @@ fieldset {
     padding: 6px;
 }
 
+#curator-panel-left {
+    padding: 1px;
+    float: left;
+    width: 45%;
+    border-right: 1px solid #ddd;
+}
+
+#curator-panel-right {
+    padding: 1px;
+    margin-left: 50%;
+    /*float: right;*/
+}

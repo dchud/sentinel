@@ -12,17 +12,24 @@ enable_ptl()
 from canary.source_catalog import Source, Term
 from canary.utils import DTable
 
+
 class Queue:
 
     def __init__ (self):
         self.batches = []
+        
+    def get_batch_by_name (self, name):
+        for batch in self.batches:
+            if batch.name == name:
+                return batch
+        return None
 
     def load (self, cursor):
         cursor.execute("""
-                       SELECT *
-                       FROM queued_batches
-                       ORDER BY uid, date_added
-                       """)
+            SELECT *
+            FROM queued_batches
+            ORDER BY uid, date_added
+            """)
         fields = [d[0] for d in cursor.description]
         desc = dtuple.TupleDescriptor([[f] for f in fields])
         rows = cursor.fetchall()
@@ -244,6 +251,7 @@ class Batch (DTable):
     def add_records (self, records):
         for record in records:
             self.loaded_records.append(record)
+        self.num_records = len(self.loaded_records)
             
     
     def get_statistics (self, cursor):
@@ -306,19 +314,22 @@ class Batch (DTable):
             record.load(cursor, load_metadata)
             #print 'load: adding rec', record.uid
             self.queued_records[record.uid] = record
+        self.num_records = len(self.queued_records)
 
 
     def save (self, cursor):
         
-        if not self.num_records == len(self.loaded_records):
-            self.num_records = len(self.loaded_records)
+        # Recalc, handy for queue stats
+        self.num_records = len(self.queued_records) + len(self.loaded_records)
             
         if self.uid == -1:
             cursor.execute("""
                 INSERT INTO queued_batches
-                (uid, file_name, source_id, num_records, date_added, name)
+                (uid, file_name, source_id, num_records, name, 
+                date_added)
                 VALUES
-                (NULL, %s, %s, %s, %s, CURDATE())
+                (NULL, %s, %s, %s, %s, 
+                CURDATE())
                 """, (self.file_name, self.source_id, self.num_records, self.name)
                 )
             cursor.execute("""
@@ -355,20 +366,22 @@ class Parser:
         self.source = source
 
 
-    def parse (self, file_name, mapped_terms={}, is_email=True):
-        lines = []
-        try:
-            file = open(file_name)
-            if is_email:
-                data = email.message_from_file(file)
-                lines = data.get_payload().split('\n')
-            else:
-                lines = file.read().split('\n')
-            file.close()
-        except:
-            print 'unable to load file, or msg'
-            return []
-
+    def parse (self, file_name='', mapped_terms={}, is_email=True, data=[]):
+        lines = data
+        if lines == [] \
+            and not file_name =='':
+            try:
+                file = open(file_name)
+                if is_email:
+                    data = email.message_from_file(file)
+                    lines = data.get_payload().split('\n')
+                else:
+                    lines = file.read().split('\n')
+                file.close()
+            except:
+                print 'unable to load file, or msg'
+                return []
+        
         records = []
         value = ''
         current_token = current_value = ''
@@ -377,6 +390,8 @@ class Parser:
             if self.re_result_sep.match(line):
                 # Matches record separator, so is either first record or new record
                 if len(current_record.metadata) > 0:
+                    # Don't miss last token/value
+                    self._add_metadata(current_token, current_value, current_record)
                     mapped_metadata = current_record.get_mapped_metadata(self.source.uid, mapped_terms)
                     current_record.title = mapped_metadata['title']
                     current_record.source = mapped_metadata['source']
@@ -391,20 +406,7 @@ class Parser:
                     # Note: match.group(0) == line  (damn that snake!)
                     token = match.group(1)
                     value = match.group(2)
-                    term = self.source.get_term_from_token(current_token)
-                    if term:
-                        if term.is_multivalue \
-                            and not term.re_multivalue_sep == '':
-                            values = current_value.split(term.re_multivalue_sep)
-                            for val in values:
-                                #print 'Adding value for token %s ("%s").' % (current_token, val)
-                                current_record.add_metadata(self.source.uid, term, val.strip())
-                        else:
-                            #print 'Adding value for token %s ("%s").' % (current_token, current_value)
-                            current_record.add_metadata(self.source.uid, term, current_value)
-                    else:
-                        #print 'No term found for token %s ("%s").' % (current_token, current_value)
-                        pass
+                    self._add_metadata(current_token, current_value, current_record)
                     current_token = token
                     current_value = value
                 else:
@@ -417,8 +419,9 @@ class Parser:
                         pass
         # Note: we don't catch the last record in the loop above,
         # so do it 'manually' here
-        # FIXME: is this a useful check?
-        if not current_record == None:
+        if not current_record == None \
+            and not current_record.metadata == {}:
+            self._add_metadata(current_token, current_value, current_record)
             mapped_metadata = current_record.get_mapped_metadata(self.source.uid, mapped_terms)
             current_record.title = mapped_metadata['title']
             current_record.source = mapped_metadata['source']
@@ -426,6 +429,18 @@ class Parser:
             records.append(current_record)
         return records
 
+
+    def _add_metadata (self, token, value, record):
+        term = self.source.get_term_from_token(token)
+        if term:
+            if term.is_multivalue \
+                and not term.re_multivalue_sep == '':
+                values = value.split(term.re_multivalue_sep)
+                for val in values:
+                    record.add_metadata(self.source.uid, term, val.strip())
+            else:
+                record.add_metadata(self.source.uid, term, value)
+                    
 
 if __name__ == '__main__':
 

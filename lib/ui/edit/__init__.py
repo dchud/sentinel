@@ -1,6 +1,8 @@
-_q_exports = ['_q_index',
+_q_exports = [
+    '_q_index',
     'batch',
     'find',
+    'pubmed',
     'study',
     ]
 
@@ -16,6 +18,7 @@ from canary.ui.edit import batch, edit_ui, study
 
 _q_index = edit_ui._q_index
 find = edit_ui.find
+pubmed = edit_ui.pubmed
 
 
 def _q_access (request):

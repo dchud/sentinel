@@ -115,8 +115,9 @@ class SourceCatalog:
             if term_names == []:
                 term_names = [term.name for term in self.get_source(mapping_source_id).terms.values()]
             for term_name in term_names:
-                terms[term_name] = self.get_mapped_term(term_name, 
-                    source_id, mapping_source_id)
+                term = self.get_mapped_term(term_name, source_id, mapping_source_id)
+                if not term == None:
+                    terms[term_name] = term
             return terms
         except:
             return {}
