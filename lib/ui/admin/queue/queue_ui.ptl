@@ -19,7 +19,7 @@ from dulcinea.database import get_transaction
 from canary.ui.admin.admin_ui import title_bar
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found, add_message, has_messages, render_messages
-from canary.loader import Batch, Parser
+from canary.loader import Batch, Queue, Parser
 from canary.qx_defs import MyForm
 from canary.source_catalog import SourceCatalog, Source
 
@@ -34,13 +34,14 @@ def _q_index [html] (request):
 
 class QueueActions:
 
-    _q_exports = ['_q_index',
-                 ]
+    _q_exports = [
+        '_q_index',
+        'edit',
+        ]
 
-    def __init__ (self, queue_id):
-        self.queue_id = queue_id
-
-
+    def __init__ (self, batch_id):
+        self.batch_id = batch_id
+        
     def _q_index [html] (self, request):
         header('Admin: Term summary')
         """
@@ -51,13 +52,77 @@ class QueueActions:
     def _q_lookup [html] (self, request, action):
         try:
             if action == 'edit':
-                return edit(request, self.queue_id)
+                return edit(request, self.batch_id)
             if action == 'delete':
-                return delete(request, self.queue_id)
+                return delete(request, self.batch_id)
             else:
                 raise TraversalError
         except:
+            import traceback
+            print traceback.print_exc()
             return not_found('queue')
+            
+            
+    def edit [html] (self, request):
+        
+        cursor = get_publisher().get_cursor()
+        batch = Batch(uid=self.batch_id)
+        batch.load(cursor, load_metadata=False)
+        
+        source_catalog = get_publisher().get_source_catalog()
+        # Sort terms by their token
+        sources = [(id, source.name) for id, source in source_catalog.sources.items()]
+        sources.sort()
+        
+        form = MyForm()
+        form.add(form2.StringWidget, 'batch_name', 
+            title='Batch name',
+            value=batch.name,
+            size=40,
+            required=True)
+        form.add(form2.SingleSelectWidget, 'source_id', 
+            title='Source',
+            options=[(id, name, id) for id, name in sources],
+            value=batch.source_id,
+            sort=True,
+            required=True)
+        form.add_submit('edit', 'edit')
+        
+        def render [html] ():
+            header('Edit batch')
+            title_bar('Edit batch %s' % self.batch_id)
+            form.render()
+            footer()
+        
+        if not form.is_submitted():
+            form.get_widget('batch_name').set_value(batch.name)
+            form.get_widget('source_id').set_value(batch.source_id)
+            return render()
+            
+        has_changed = False
+        if not form['batch_name'] == batch.name:
+            has_changed = True
+            batch.name = form['batch_name']
+        if not form['source_id'] == batch.source_id:
+            has_changed = True
+            batch.source_id = form['source_id']
+        
+        if form.has_errors():
+            return render()
+        
+        if has_changed:
+            try:
+                batch.save(cursor)
+                add_message('Edited batch %s' % self.batch_id)
+                form.logger.info(str('Edited batch %s' % self.batch_id))
+            except:
+                add_message('Could not edit batch')
+                form.logger.info(str('Could not edit batch'))
+        else:
+            add_message('Batch unchanged')
+        
+        cursor.close()
+        request.redirect(str('/admin/queue/list'))
 
 
 
@@ -115,6 +180,72 @@ def add [html] (request):
     """
     footer()
 
+
+
+def list [html] (request):
+
+    cursor = get_publisher().get_cursor()
+    source_catalog = get_publisher().get_source_catalog()
+
+    # Sort terms by their token
+    sources = [(id, source.name) for id, source in source_catalog.sources.items()]
+    sources.sort()
+
+    header('List editing queues')
+    title_bar('List editing queues')
+    if has_messages():
+        render_messages()
+
+    """
+    <table cellspacing='5' class='gentable'>
+    <tr>
+        <th>Batch</th>
+        <th>Name</th>
+        <th>Source</th>
+        <th>Status (unclaimed/claimed/curated/total (% done))</th>
+        <th>Load date</th>
+        <th>Actions</th>
+    </tr>
+    """
+    queue = Queue()
+    queue.load(cursor)
+    for batch in queue.batches:
+        batch_stats = batch.get_statistics(cursor)
+
+        source_id = batch.source_id
+        source = source_catalog.get_source(source_id)
+        """
+        <tr>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+        """ % (batch.uid, batch.name, source.name)
+        
+        # Avoid division by zero for empty batches
+        if batch.num_records > 0:
+            percent_done = float(batch_stats['curated']) / batch.num_records * 100.0
+        else:
+            percent_done = 0
+        """
+            <td>%s / %s / %s / %s (%s%s done)</td>
+        """ % (batch_stats['unclaimed'],
+            batch_stats['claimed'],
+            batch_stats['curated'],
+            batch.num_records,
+            str('%2.1f' % percent_done),
+            str('%'))
+        """
+            <td>%s</td>
+            <td>[<a href='/admin/queue/%s/edit'>edit</a>]</td>
+        </tr>
+        """ % (str(batch.date_added)[0:10], batch.uid)
+    """
+    </table>
+    """
+    
+    cursor.close()
+    footer()
+    
 
 def receive [html] (request):
 

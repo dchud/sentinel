@@ -33,9 +33,19 @@ def _q_index [html] (request):
     <table cellspacing='5' class='gentable'>
     <tr>
         <th>Queue</th>
-        <td>List</td>
+        <td><a href='/admin/queue/list'>List</a></td>
         <td><a href='/admin/queue/create'>Create</a></td>
         <td><a href='/admin/queue/add'>Load batch</a></td>
+    </tr>
+    <tr>
+        <th>Record</th>
+        <td colspan='3'>
+            <form action='/admin/record/find'>
+                Find by canary id:
+                <input type='text' size='5' name='record_uid' />
+                <input type='submit' name='find' value='find' />
+            </form>
+        </td>
     </tr>
     <tr>
         <th>Users</th>

@@ -269,8 +269,8 @@ class QueuedRecord (DTable):
 class Batch (DTable):
 
     # FIXME: init shouldn't need a damn cursor, write a load() function
-    def __init__ (self, file_name='', source_id=-1):
-        self.uid = -1
+    def __init__ (self, uid=-1, file_name='', source_id=-1):
+        self.uid = uid
         self.file_name = file_name
         self.source_id = source_id
         self.num_records = 0
@@ -384,9 +384,9 @@ class Batch (DTable):
         else:
             cursor.execute("""
                 UPDATE queued_batches
-                SET file_name = %s, num_records = %s, name = %s
+                SET file_name = %s, num_records = %s, name = %s, source_id = %s
                 WHERE uid = %s
-                """, (self.file_name, self.num_records, self.name,
+                """, (self.file_name, self.num_records, self.name, self.source_id,
                 self.uid)
                 )
         

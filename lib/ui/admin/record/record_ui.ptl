@@ -1,0 +1,208 @@
+_q_exports = [
+    '_q_index',
+    ]
+
+
+from quixote import get_publisher
+from quixote.errors import AccessError, PublishError, TraversalError
+from quixote import form2
+
+from dulcinea.database import get_transaction
+
+from canary.ui.admin.admin_ui import title_bar
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found, add_message, has_messages, render_messages
+from canary.loader import Queue, QueuedRecord
+from canary.qx_defs import MyForm
+from canary.source_catalog import SourceCatalog, Source
+
+
+def _q_index [html] (request):
+    header('Record:')
+    """
+    <h2>Record</h2>
+    """
+    footer()
+
+
+class RecordActions:
+
+    _q_exports = [
+        '_q_index',
+        'edit',
+        ]
+
+    def __init__ (self, record_id):
+        self.record_id = record_id
+
+    def _q_index [html] (self, request):
+        header('Admin: Record summary')
+        """
+        <h2>Record summary</h2>
+        """
+        footer()
+
+    def _q_lookup [html] (self, request, action):
+        try:
+            if action == 'edit':
+                return edit(request, self.record_id)
+            if action == 'delete':
+                raise TraversalError
+                #return delete(request, self.record_id)
+            else:
+                raise TraversalError
+        except:
+            return not_found('record')
+
+    
+    def edit [html] (self, request):
+    
+        cursor = get_publisher().get_cursor()
+        
+        queue = Queue()
+        queue.load(cursor)
+        
+        batches = [(b.uid, b.name) for b in queue.batches]
+        batches.sort()
+    
+        record = QueuedRecord(self.record_id)
+        record.load(cursor)
+        
+        form = MyForm()
+        form.add(form2.StringWidget, 'record_user_id', 
+            title='User id',
+            size=30, required=False)
+        form.add(form2.SingleSelectWidget, 'record_queued_batch_id', 
+            title='Queued batch id',
+            options=[(id, name, id) for id, name in batches],
+            sort=True,
+            required=True)
+        form.add_submit('edit', 'edit')
+    
+        def render [html] ():
+            header('Edit record')
+            title_bar('Edit record %s' % record.uid)
+            """
+            <p>
+            "%s", %s
+            </p>
+            """ % (record.title, record.source)
+            form.render()
+            footer()
+    
+        if not form.is_submitted():
+            form.get_widget('record_user_id').set_value(record.user_id)
+            form.get_widget('record_queued_batch_id').set_value(record.queued_batch_id)
+            return render()
+    
+        has_changed = False
+        
+        if not form['record_user_id'] == record.user_id:
+            has_changed = True
+            record.user_id = form['record_user_id']
+    
+        if not form['record_queued_batch_id'] == record.queued_batch_id:
+            has_changed = True
+            record.queued_batch_id = form['record_queued_batch_id']
+            
+        if form.has_errors():
+            return render()
+    
+        if has_changed:
+            try:
+                cursor = get_publisher().get_cursor()
+                record.save(cursor)
+                form.logger.info(str('Updated record %s' % record.uid))
+                request.session.message = str('Updated record %s' % record.uid)
+                add_message('Updated record %s' % record.uid)
+            except:
+                form.logger.error(str('Could not update record %s' % record.uid))
+                request.session.message = str('Could not update record %s' % record.uid)
+                add_message('Could not update record %s' % record.uid)
+        else:
+            add_message('Did not update record %s' % record.uid)
+    
+        cursor.close()
+        request.redirect(str('/admin'))
+
+
+def find [html] (request):
+    
+    form = MyForm(method='get')
+    form.add(form2.IntWidget, 'record_uid',
+        title='Record id',
+        required=True)
+    form.add_submit('find', 'find')
+    
+    def render [html] ():
+        header('Find record')
+        title_bar('Find record')
+        if has_messages():
+            render_messages()
+        form.render()
+        footer()
+        
+    if not form.is_submitted():
+        form.get_widget('record_uid').set_value(request.get_form_var('record_uid', ''))
+        return render()
+    
+    if form.has_errors():
+        return render()
+        
+    cursor = get_publisher().get_cursor()
+    record = QueuedRecord(form['record_uid'])
+    record.load(cursor, load_metadata=False)
+    
+    if not record.source == '':
+        request.redirect(str('/admin/record/%s/edit' % record.uid))
+    else:
+        form.set_error('record_uid', 'Record not found')
+        return render()
+
+
+def delete [html] (request, record_id=None):
+
+    form = MyForm()
+    form.add(form2.IntWidget, 'record_uid', title='Record id', required=True)
+    form.add(form2.CheckboxWidget, 'are_you_sure',
+        title='Are you sure you want to delete this record?',
+        value=False)
+    form.add_submit('delete', 'delete')
+
+    source_catalog = get_publisher().get_source_catalog()
+
+    def render [html] ():
+        header('Delete record')
+        title_bar('Delete record')
+        form.render()
+        footer()
+
+    if not form.is_submitted():
+        form.get_widget('record_uid').set_value(record_id)
+        return render()
+
+    record_uid = form['record_uid']
+    if not record_uid == record.uid:
+        form.set_error('record_uid', 'Term id cannot change')
+        form.get_widget('record_uid').set_value(record_id)
+
+    if form.has_errors():
+        return render()
+
+    are_you_sure = form['are_you_sure']
+    if are_you_sure:
+        try:
+            cursor = get_publisher().get_cursor()
+            new_source_catalog = SourceCatalog()
+            new_source_catalog.load_sources(cursor, True)
+            get_publisher().set_source_catalog(new_source_catalog)
+            cursor.close()
+        except:
+            form.logger.error(str('Unable to delete record %s' % record_id))
+            raise PublishError
+        form.logger.info(str('Deleted record %s' % record_id))
+        request.session.message = str('Deleted record')
+        request.redirect(str('/admin'))
+    else:
+        request.session.message = str('Term not deleted')
+        request.redirect(str('/admin'))

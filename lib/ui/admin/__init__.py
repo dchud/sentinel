@@ -1,5 +1,6 @@
 _q_exports = [
     'queue',
+    'record',
     'session',
     'source',
     'source_map',
@@ -20,6 +21,7 @@ from dulcinea.database import get_transaction
 
 from canary.ui.admin import admin_ui
 from canary.ui.admin import queue
+from canary.ui.admin import record
 from canary.ui.admin import session
 from canary.ui.admin import source
 from canary.ui.admin import term
