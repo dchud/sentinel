@@ -32,8 +32,11 @@ def full_openurl (metadata={}):
     ou = {}
     
     if metadata.get('author', ''):
-        ou['aulast'] = metadata['author'][0].split(' ')[0]
-        ou['auinit'] = metadata['author'][0].split(' ')[1]
+        # Tokens like 'Anonymous' cannot be split, so avoid
+        first_author = metadata['author'][0].split(' ')
+        if len(first_author) > 1:
+            ou['aulast'] = metadata['author'][0].split(' ')[0]
+            ou['auinit'] = metadata['author'][0].split(' ')[1]
     
     if metadata.get('title', ''):
         ou['atitle'] = metadata['title']
