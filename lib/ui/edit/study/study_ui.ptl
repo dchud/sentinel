@@ -465,7 +465,6 @@ def curate_three [html] (request, queued_record_id):
 
 def summary [html] (request, queued_record_id):
     
-    print 'summary()'
     session = request.session
     cursor = get_publisher().get_cursor()
     queued_record = get_queued_record(cursor, queued_record_id)
@@ -477,11 +476,9 @@ def summary [html] (request, queued_record_id):
     study = get_current_study(cursor, queued_record.study_id)
     article_type = study.get_article_type(text=True)
     
-    print 'getting form'
     form = study.create_summary_form()
     
     def render [html] ():
-        print 'render()'
         header('Curate: Study summary')
         """
         <h3>Curate: Study summary</h3>

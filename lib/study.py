@@ -85,6 +85,15 @@ class Study (DTable):
         'both' : 2,
         }
         
+    # A Study can have at most one ROUTE
+    ROUTE = {
+        'ingestion' : 0,
+        'inhalation' : 1,
+        'mucocutaneous' : 2,
+        'vector' : 3,
+        'other' : 4,
+        }
+        
     TABLES = [
         'types', 
         'outcomes', 
@@ -116,6 +125,7 @@ class Study (DTable):
         self.timing = None
         self.sampling = None
         self.controls = None
+        self.route = None
         self.date_modified = None
         self.date_entered = None
         
@@ -301,7 +311,24 @@ class Study (DTable):
             return self._get_text_value(self.CONTROLS, self.controls)
         else:
             return self.controls
+    
+    def set_route (self, route):
+        
+        if type(route) is types.StringType:
             
+            if route in self.ROUTE.keys():
+                self.route = self.ROUTE[route]
+                
+        elif type(route) is types.IntType:
+            
+            if route in self.ROUTE.values():
+                self.route = route
+    
+    def get_route (self, text=False):
+        if text:
+            return self._get_text_value(self.ROUTE, self.route)
+        else:
+            return self.route
 
 
     def load (self, cursor):
@@ -350,7 +377,7 @@ class Study (DTable):
                 has_relationships, has_interspecies, 
                 has_exposure_linkage, has_outcome_linkage,
                 comments, sample_size, timing, 
-                sampling, controls, 
+                sampling, controls, route, 
                 date_modified, date_entered)
                 VALUES 
                 (NULL, 
@@ -359,14 +386,14 @@ class Study (DTable):
                 %s, %s,
                 %s, %s,
                 %s, %s, %s, 
-                %s, %s, 
+                %s, %s, %s,
                 NOW(), NOW())
                 """, (self.record_id, self.status, self.article_type, self.curator_user_id,
                 self.has_outcomes, self.has_exposures, 
                 self.has_relationships, self.has_interspecies, 
                 self.has_exposure_linkage, self.has_outcome_linkage,
                 self.comments, self.sample_size, self.timing, 
-                self.sampling, self.controls)
+                self.sampling, self.controls, self.route)
                 )
             print 'inserted new study'
             self.uid = self.get_new_uid(cursor)
@@ -381,7 +408,7 @@ class Study (DTable):
                     has_relationships = %s, has_interspecies = %s, 
                     has_exposure_linkage = %s, has_outcome_linkage = %s,
                     comments = %s, sample_size = %s, timing = %s,
-                    sampling = %s, controls = %s, 
+                    sampling = %s, controls = %s, route = %s,
                     date_modified = NOW()
                     WHERE uid = %s
                     """, (self.record_id, self.status, self.article_type, self.curator_user_id,
@@ -389,7 +416,7 @@ class Study (DTable):
                     self.has_relationships, self.has_interspecies, 
                     self.has_exposure_linkage, self.has_outcome_linkage,
                     self.comments, self.sample_size, self.timing, 
-                    self.sampling, self.controls,
+                    self.sampling, self.controls, self.route,
                     self.uid)
                     )
             except:
@@ -427,13 +454,20 @@ class Study (DTable):
         # only curated types get these options
         if self.get_article_type() == self.ARTICLE_TYPES['curated']:
             
-            print 'gen-sample_size'
             # all types get a sample size
             form.add(IntWidget, 'sample_size',
                 title='Sample size (study n)',
                 size=10, value=int(self.sample_size))
                 
-            print 'gen-timing'
+            # all types get a route
+            form.add(SingleSelectWidget, 'route',
+                title='Route of exposure',
+                value=self.get_route(),
+                options=[(val, name, val) for name, val in self.ROUTE.items()],
+                sort=True,
+                required=True,
+                )
+
             # study types except experimental and descriptive get timing
             if not self.has_type('experimental') \
                 and not self.has_type('descriptive'):
@@ -445,12 +479,10 @@ class Study (DTable):
                     required=True,
                     )
         
-            print 'gen-controls'
             # all the 'c*' study types get controls
             if self.has_type('cross sectional') \
                 or self.has_type('cohort') \
                 or self.has_type('case control'):
-                print 'adding controls'
                 form.add(SingleSelectWidget, 'controls',
                     title='Controls',
                     value=self.get_controls(),
@@ -459,7 +491,6 @@ class Study (DTable):
                     required=True,
                     )
                 
-            print 'gen-sampling'
             # only cross sectional gets sampling
             if self.has_type('cross sectional'):
                 form.add(SingleSelectWidget, 'sampling',
@@ -469,8 +500,7 @@ class Study (DTable):
                     sort=True,
                     required=True,
                     )
-
-        print 'gen-comments'
+                    
         # every article and study type has comments
         form.add(TextWidget, 'comments', 
             title='Comments',
@@ -493,6 +523,10 @@ class Study (DTable):
             print 'setting sample size to %s' % form['sample_size']
             self.sample_size = form['sample_size']
                 
+            # all curated types get a route
+            print 'setting route to %s' % form['route']
+            self.set_route(form['route'])
+            
             # all curated types but experimental and descriptive get timing
             if not self.has_type('experimental') \
                 and not self.has_type('descriptive'):
@@ -510,7 +544,7 @@ class Study (DTable):
             if self.has_type('cross sectional'):
                 print 'setting sampling to %s' % form['sampling']
                 self.set_sampling(form['sampling'])
-            
+
         # every article and study type has comments
         if form['comments']:
             print 'setting comments'
