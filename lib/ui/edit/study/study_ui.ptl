@@ -23,7 +23,7 @@ from dulcinea.database import get_transaction
 from canary.concept import load_categories, Category
 from canary.loader import QueuedRecord
 from canary.qx_defs import MyForm
-from canary.study import Study, Exposure, Location, Outcome, Species
+from canary.study import Study, Exposure, RiskFactor, Location, Outcome, Species
 from canary.ui import record_ui
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found, add_message, has_messages, render_messages
@@ -889,6 +889,8 @@ def category [html] (request, queued_record_id):
 
     if request.get_form_var('choose', '') == 'choose':
         concept_class = concept_type.capitalize()
+        # Note: "risk_factor" needs to become "RiskFactor"
+        concept_class = str(''.join([t.capitalize() for t in concept_class.split(str('_'))]))
         import sys
         for cat_con in category.concepts:
             index_concept = getattr(sys.modules[__name__], concept_class)()
