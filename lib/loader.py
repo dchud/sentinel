@@ -6,11 +6,8 @@ import types
 
 import dtuple
 
-from quixote import enable_ptl
-enable_ptl()
-
-from canary.study import Study
 from canary.source_catalog import Source, Term, SourceCatalog
+from canary.study import Study
 from canary.utils import DTable
 
 
@@ -64,6 +61,7 @@ class QueuedRecord (DTable):
         self.title = ''
         self.source = ''
         self.unique_identifier = ''
+        self.duplicate_score = 0
 
     def __str__ (self):
         out = []
@@ -136,6 +134,69 @@ class QueuedRecord (DTable):
             if not mapped_metadata.has_key(mapped_name):
                 mapped_metadata[mapped_name] = ''
         return mapped_metadata
+    
+    
+    def check_for_duplicates (self, cursor, term_map={}, save_changes=True):
+        """
+        Simple tests to determine if this record is likely to be a
+        duplicate of an existing record.
+        """
+        score = 0
+        potential_dupes = []
+        mapped_metadata = self.get_mapped_metadata(term_map=term_map)
+        
+        for field in ('unique_identifier', 'title'):
+            # First, check for this exact same field value
+            cursor.execute("""
+                SELECT queued_record_id
+                FROM queued_record_metadata
+                WHERE term_id = %s
+                AND value = %s
+                AND queued_record_id != %s
+                """, (term_map[field].uid, getattr(self, field), self.uid))
+            rows = cursor.fetchall()
+            for row in rows:
+                rec_id = row[0]
+                print 'found dupe %s for field %s' % (rec_id, field)
+                if save_changes:
+                    try:
+                        cursor.execute("""
+                            INSERT INTO duplicates
+                            (uid, new_record_id, old_record_id, term_id)
+                            VALUES 
+                            (NULL, %s, %s, %s)
+                            """, (self.uid, rec_id, term_map[field].uid))
+                    except:
+                        print traceback.print_exc()
+                    
+                self.duplicate_score += 10
+                self.save(cursor)
+        
+        
+    def get_duplicates (self, cursor):
+        """
+        Create a dictionary of apparent duplicates for a given record.
+        Dict is keyed by pre-existing duplicate record's uid, with
+        matching metadata term uids in a list as values.
+        
+        Assume calling function will load records as needed.
+        """
+        duplicates = {}
+        cursor.execute("""
+            SELECT old_record_id, term_id
+            FROM duplicates
+            WHERE new_record_id = %s
+            """, self.uid)
+        rows = cursor.fetchall()
+        for row in rows:
+            old_record_id = row[0]
+            term_id = row[1]
+            try:
+                duplicates[old_record_id].append(term_id)
+            except:
+                duplicates[old_record_id] = [term_id]
+                
+        return duplicates
         
 
     def load (self, cursor, load_metadata=True, source=None):
@@ -152,7 +213,7 @@ class QueuedRecord (DTable):
                 queued_records.status, queued_records.user_id, 
                 queued_records.user_id, queued_records.study_id,
                 queued_records.title, queued_records.source,
-                queued_records.unique_identifier,
+                queued_records.unique_identifier, queued_records.duplicate_score,
                 queued_batches.source_id
                 FROM queued_records, queued_batches
                 WHERE queued_records.uid = %s
@@ -207,12 +268,12 @@ class QueuedRecord (DTable):
                 INSERT INTO queued_records
                 (uid, 
                 queued_batch_id, status, user_id, study_id,
-                title, source, unique_identifier)
+                title, source, unique_identifier, duplicate_score)
                 VALUES (NULL, 
                 %s, %s, %s, %s,
-                %s, %s, %s)
+                %s, %s, %s, %s)
                 """, (self.queued_batch_id, self.status, self.user_id, self.study_id,
-                self.title, self.source, self.unique_identifier)
+                self.title, self.source, self.unique_identifier, self.duplicate_score)
                 )
             self.uid = self.get_new_uid(cursor)
 
@@ -220,10 +281,10 @@ class QueuedRecord (DTable):
             cursor.execute("""
                 UPDATE queued_records
                 SET queued_batch_id = %s, status = %s, user_id = %s, study_id = %s,
-                title = %s, source = %s, unique_identifier = %s
+                title = %s, source = %s, unique_identifier = %s, duplicate_score = %s
                 WHERE uid = %s
                 """, (self.queued_batch_id, self.status, self.user_id, self.study_id,
-                self.title, self.source, self.unique_identifier,
+                self.title, self.source, self.unique_identifier, self.duplicate_score,
                 self.uid)
                 )
         # FIXME: should this be set from the SQL?
@@ -277,7 +338,6 @@ class QueuedRecord (DTable):
                 return ''
 
 
-
     def delete (self, cursor):
         try:
             # First, remove the study (connected table records will
@@ -304,7 +364,6 @@ class QueuedRecord (DTable):
 
 class Batch (DTable):
 
-    # FIXME: init shouldn't need a damn cursor, write a load() function
     def __init__ (self, uid=-1, file_name='', source_id=-1):
         self.uid = uid
         self.file_name = file_name
@@ -315,12 +374,25 @@ class Batch (DTable):
         self.queued_records = {}
         self.loaded_records = []
 
-
     def add_records (self, records):
         for record in records:
             self.loaded_records.append(record)
             self.num_records += 1
             
+    def find_duplicates (self, cursor, source_catalog=None, use_loaded=True):
+        if source_catalog == None:
+            source_catalog = SourceCatalog()
+            source_catalog.load_sources(cursor)
+        term_map = source_catalog.get_mapped_terms(source_id=self.source_id)
+        source = source_catalog.get_source(self.source_id)
+        
+        if use_loaded:
+            for rec in self.loaded_records:
+                rec.load(cursor, source=source)
+                rec.check_for_duplicates(cursor, term_map=term_map)
+        else:
+            for id, rec in self.queued_records.items():
+                rec.check_for_duplicates(cursor, term_map=term_map)
     
     def get_statistics (self, cursor):
         """

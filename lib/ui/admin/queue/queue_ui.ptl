@@ -184,7 +184,13 @@ def add [html] (request, batch_id=None):
         <input type='text' name='batch_name' value='%s' size='30' />
     </p>
     """ % batch_name
+    
     """
+    <p>
+    Find duplicates?: <br/>
+        <input type='checkbox' name='find_duplicates' value='yes'/>
+    </p>
+    
     <p>
         <input type='submit' value='Upload' />
     </p>
@@ -305,11 +311,9 @@ def receive [html] (request, batch_id=None):
                 batch = queue.get_batch_by_name(batch_name)
                 if batch:
                     batch.load(cursor, load_metadata=False)
-                    print 'Adding to batch', batch.name
                 else:
                     batch = Batch(file_name=upload.tmp_filename, source_id=source_id)
                     batch.name = form.get('batch_name') or ''
-                    print 'Creating new batch', batch.name
                     batch.save(cursor)
             
         mapped_terms = source_catalog.get_mapped_terms(source_id)
@@ -318,6 +322,10 @@ def receive [html] (request, batch_id=None):
         if num_records == len(records):
             batch.add_records(records)
             batch.save(cursor)
+            
+            if form.get('find_duplicates', '') == 'yes':
+                batch.find_duplicates(cursor, source_catalog)
+                
         else:
             print 'count mismatch'
             add_message('Batch not saved: Record count mismatch, %s specified, %s found' % (num_records, len(records)))

@@ -210,8 +210,12 @@ def find [html] (request):
         return render()
         
     cursor = get_publisher().get_cursor()
-    record = QueuedRecord(form['record_uid'])
-    record.load(cursor, load_metadata=False)
+    
+    try:
+        record = QueuedRecord(form['record_uid'])
+        record.load(cursor, load_metadata=False)
+    except ValueError:
+        return not_found('record')
     
     if not record.source == '':
         request.redirect(str('/admin/record/%s/edit' % record.uid))
