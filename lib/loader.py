@@ -9,6 +9,7 @@ import dtuple
 from quixote import enable_ptl
 enable_ptl()
 
+from canary.study import Study
 from canary.source_catalog import Source, Term, SourceCatalog
 from canary.utils import DTable
 
@@ -144,55 +145,59 @@ class QueuedRecord (DTable):
         Note that if a source is not specified, every term will be
         looked-up again from the DB (rather than read from memory).
         """
-        # To be safe, specify full table.field names because names overlap
-        cursor.execute("""
-            SELECT queued_records.uid, queued_records.queued_batch_id,
-            queued_records.status, queued_records.user_id, 
-            queued_records.user_id, queued_records.study_id,
-            queued_records.title, queued_records.source,
-            queued_records.unique_identifier,
-            queued_batches.source_id
-            FROM queued_records, queued_batches
-            WHERE queued_records.uid = %s
-            AND queued_batches.uid = queued_records.queued_batch_id
-            """, int(self.uid))
-        fields = [d[0] for d in cursor.description]
-        desc = dtuple.TupleDescriptor([[f] for f in fields])
-        row = cursor.fetchone()
-        row = dtuple.DatabaseTuple(desc, row)
-        # remove source_id from fields, it's not a proper attribute on self
-        fields.remove('source_id')
-        # but save it for later!
-        source_id = row['source_id']
-        for field in fields:
-            self.set(field, row[field])
-            
-        if not source:
-            source_catalog = SourceCatalog()
-            source_catalog.load_sources(cursor)
-        if load_metadata:
-            # NOTE: the "ORDER BY sequence_position" might be a bad hack,
-            # but it should preserve author name order.  
-            # FIXME if not.  And TESTME!
+        try:
+            # To be safe, specify full table.field names because names overlap
             cursor.execute("""
-                SELECT *
-                FROM queued_record_metadata
-                WHERE queued_record_id = %s
-                AND source_id = %s
-                ORDER BY sequence_position
-                """, (self.uid, source_id))
+                SELECT queued_records.uid, queued_records.queued_batch_id,
+                queued_records.status, queued_records.user_id, 
+                queued_records.user_id, queued_records.study_id,
+                queued_records.title, queued_records.source,
+                queued_records.unique_identifier,
+                queued_batches.source_id
+                FROM queued_records, queued_batches
+                WHERE queued_records.uid = %s
+                AND queued_batches.uid = queued_records.queued_batch_id
+                """, int(self.uid))
             fields = [d[0] for d in cursor.description]
             desc = dtuple.TupleDescriptor([[f] for f in fields])
             rows = cursor.fetchall()
-            for row in rows:
-                row = dtuple.DatabaseTuple(desc, row)
-                if source:
-                    term = source.terms[row['term_id']]
-                else:
-                    term = source_catalog.get_term(row['term_id'])
-                self.add_metadata(source_id, term, row['value'], extra=row['extra'])
-    
-
+            if not rows:
+                raise ValueError('Record not found')
+            row = dtuple.DatabaseTuple(desc, rows[0])
+            # remove source_id from fields, it's not a proper attribute on self
+            fields.remove('source_id')
+            # but save it for later!
+            source_id = row['source_id']
+            for field in fields:
+                self.set(field, row[field])
+                
+            if not source:
+                source_catalog = SourceCatalog()
+                source_catalog.load_sources(cursor)
+            if load_metadata:
+                # NOTE: the "ORDER BY sequence_position" might be a bad hack,
+                # but it should preserve author name order.  
+                # FIXME if not.  And TESTME!
+                cursor.execute("""
+                    SELECT *
+                    FROM queued_record_metadata
+                    WHERE queued_record_id = %s
+                    AND source_id = %s
+                    ORDER BY sequence_position
+                    """, (self.uid, source_id))
+                fields = [d[0] for d in cursor.description]
+                desc = dtuple.TupleDescriptor([[f] for f in fields])
+                rows = cursor.fetchall()
+                for row in rows:
+                    row = dtuple.DatabaseTuple(desc, row)
+                    if source:
+                        term = source.terms[row['term_id']]
+                    else:
+                        term = source_catalog.get_term(row['term_id'])
+                    self.add_metadata(source_id, term, row['value'], extra=row['extra'])
+        except ValueError:
+            print traceback.print_exc()
+            return ValueError('Record not found')
 
     def save (self, cursor):
         
@@ -271,6 +276,30 @@ class QueuedRecord (DTable):
             else:
                 return ''
 
+
+
+    def delete (self, cursor):
+        try:
+            # First, remove the study (connected table records will
+            # also be deleted).
+            study = Study(self.study_id)
+            # If it's not loaded, its linked table records won't be deleted.
+            study.load(cursor)
+            study.delete(cursor)
+            
+            # Then, remove the metadata
+            cursor.execute("""
+                DELETE FROM queued_record_metadata
+                WHERE queued_record_id = %s
+                """, self.uid)
+            
+            # Finally, remove this record itself.
+            cursor.execute("""
+                DELETE FROM queued_records
+                WHERE uid = %s
+                """, self.uid)
+        except:
+            print traceback.print_exc()
 
 
 class Batch (DTable):
@@ -465,7 +494,6 @@ class Parser:
                             # blank line
                             pass
             except:
-                import traceback
                 print traceback.print_exc()
                 continue
             
@@ -494,16 +522,6 @@ class Parser:
                 record.add_metadata(self.source.uid, term, value)
                     
 
-if __name__ == '__main__':
-
-    source = Source()
-    source.re_result_sep = '^<.*>'
-    source.re_term_token = '^([A-Z][A-Z]+) +-[ ](.*)'
-
-    parser = Parser(source)
-    records = parser.parse('/home/dlc33/projects/sentinel/record_parser/test-data/ovid-medline-12.txt')
-    print len(records), 'records:'
-    print records
     
     
 

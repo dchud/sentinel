@@ -2,6 +2,7 @@ _q_exports = [
     '_q_index',
     ]
 
+import traceback
 
 from quixote import get_publisher
 from quixote.errors import AccessError, PublishError, TraversalError
@@ -30,6 +31,7 @@ class RecordActions:
     _q_exports = [
         '_q_index',
         'edit',
+        'delete',
         ]
 
     def __init__ (self, record_id):
@@ -47,8 +49,7 @@ class RecordActions:
             if action == 'edit':
                 return edit(request, self.record_id)
             if action == 'delete':
-                raise TraversalError
-                #return delete(request, self.record_id)
+                return delete(request, self.record_id)
             else:
                 raise TraversalError
         except:
@@ -86,7 +87,10 @@ class RecordActions:
             <p>
             "%s", %s
             </p>
-            """ % (record.title, record.source)
+            <p>
+            <a href='/admin/record/%s/delete'>Delete</a> this record.
+            </p>
+            """ % (record.title, record.source, record.uid)
             form.render()
             footer()
     
@@ -126,6 +130,62 @@ class RecordActions:
         request.redirect(str('/admin'))
 
 
+    def delete [html] (self, request):
+    
+        form = MyForm()
+        form.add(form2.IntWidget, 'record_uid', title='Record id', required=True)
+        form.add(form2.CheckboxWidget, 'are_you_sure',
+            title='Are you sure you want to delete this record?',
+            value=False)
+        form.add_submit('delete', 'delete')
+    
+        cursor = get_publisher().get_cursor()
+        record = QueuedRecord(self.record_id)
+        try:
+            record.load(cursor, load_metadata=False)
+        except:
+            print traceback.print_exc()
+            return not_found('record')
+    
+        def render [html] ():
+            header('Delete record')
+            title_bar('Delete record')
+            """
+            <p>
+            "%s", %s
+            </p>
+            """ % (record.title, record.source)
+            form.render()
+            footer()
+    
+        if not form.is_submitted():
+            form.get_widget('record_uid').set_value(self.record_id)
+            return render()
+    
+        record_uid = form['record_uid']
+        if not record_uid == record.uid:
+            form.set_error('record_uid', 'Term id cannot change')
+            form.get_widget('record_uid').set_value(record_id)
+    
+        if form.has_errors():
+            return render()
+    
+        are_you_sure = form['are_you_sure']
+        if are_you_sure:
+            try:
+                cursor = get_publisher().get_cursor()
+                record.delete(cursor)
+                cursor.close()
+            except:
+                form.logger.error(str('Unable to delete record %s' % self.record_id))
+                raise PublishError
+            form.logger.info(str('Deleted record %s' % self.record_id))
+            request.session.message = str('Deleted record')
+            request.redirect(str('/admin'))
+        else:
+            request.session.message = str('Term not deleted')
+            request.redirect(str('/admin'))
+
 def find [html] (request):
     
     form = MyForm(method='get')
@@ -160,49 +220,3 @@ def find [html] (request):
         return render()
 
 
-def delete [html] (request, record_id=None):
-
-    form = MyForm()
-    form.add(form2.IntWidget, 'record_uid', title='Record id', required=True)
-    form.add(form2.CheckboxWidget, 'are_you_sure',
-        title='Are you sure you want to delete this record?',
-        value=False)
-    form.add_submit('delete', 'delete')
-
-    source_catalog = get_publisher().get_source_catalog()
-
-    def render [html] ():
-        header('Delete record')
-        title_bar('Delete record')
-        form.render()
-        footer()
-
-    if not form.is_submitted():
-        form.get_widget('record_uid').set_value(record_id)
-        return render()
-
-    record_uid = form['record_uid']
-    if not record_uid == record.uid:
-        form.set_error('record_uid', 'Term id cannot change')
-        form.get_widget('record_uid').set_value(record_id)
-
-    if form.has_errors():
-        return render()
-
-    are_you_sure = form['are_you_sure']
-    if are_you_sure:
-        try:
-            cursor = get_publisher().get_cursor()
-            new_source_catalog = SourceCatalog()
-            new_source_catalog.load_sources(cursor, True)
-            get_publisher().set_source_catalog(new_source_catalog)
-            cursor.close()
-        except:
-            form.logger.error(str('Unable to delete record %s' % record_id))
-            raise PublishError
-        form.logger.info(str('Deleted record %s' % record_id))
-        request.session.message = str('Deleted record')
-        request.redirect(str('/admin'))
-    else:
-        request.session.message = str('Term not deleted')
-        request.redirect(str('/admin'))

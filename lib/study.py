@@ -2,6 +2,7 @@
 
 import dtuple
 import time
+import traceback
 import types
 
 from quixote import form2
@@ -1471,7 +1472,6 @@ class Study (DTable):
             except:
                 # FIXME: proper exceptions
                 print 'MySQL exception on study.save(new)'
-                import traceback
                 print traceback.print_exc()
                 
             self.uid = self.get_new_uid(cursor)
@@ -1496,7 +1496,6 @@ class Study (DTable):
                     self.uid)
                     )
             except:
-                import traceback
                 print 'MySQL exception on study.update'
                 print 'exception:', traceback.print_exc()
             #print 'updated study %s' % self.uid
@@ -1528,7 +1527,24 @@ class Study (DTable):
                         """, (self.uid, new_history_record['curator_user_id'], 
                         new_history_record['message']))
                 except:
-                    import traceback
                     print 'MySQL exception on study.update / study_history.insert'
                     print 'exception:', traceback.print_exc()
                     
+
+    def delete (self, cursor):
+        try:
+            for table_name in self.TABLES.keys():
+                for item in getattr(self, table_name):
+                    print 'Deleting %s [%s]' % (table_name, item.uid)
+                    item.delete(cursor)
+                #delete_string = "DELETE FROM %s " % table_name
+                #cursor.execute(delete_string + """
+                #    WHERE study_id = %s
+                #    """, self.uid)
+                
+            cursor.execute("""
+                DELETE FROM studies
+                WHERE uid = %s
+                """, self.uid)
+        except:
+            print traceback.print_exc()
