@@ -1,22 +1,24 @@
 _q_exports = [
     '_q_index',
-    'create',
+    'find',
+    'add',
     ]
 
 from quixote.errors import TraversalError
 
-from canary.ui.edit.study.methodology import methodology_ui
-from canary.ui.edit.study.methodology.methodology_ui import MethodologyActions
+from canary.ui.edit.study.exposure import exposure_ui
+from canary.ui.edit.study.exposure.exposure_ui import ExposureActions
 
-_q_index = methodology_ui._q_index
-create = methodology_ui.create
+_q_index = exposure_ui._q_index
+find = exposure_ui.find
+add = exposure_ui.add
 
 
-def _q_lookup (request, methodology_id):
+def _q_lookup (request, exposure_id):
     try:
-        if not methodology_id == None:
-            return MethodologyActions(methodology_id)
+        if not exposure_id == None:
+            return ExposureActions(exposure_id)
         else:
             raise TraversalError
     except:
-        return not_found('methodology')
+        return not_found('exposure')
