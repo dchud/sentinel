@@ -19,6 +19,7 @@ from quixote.errors import PublishError
 from quixote.publish import get_publisher
 from quixote.util import StaticFile
 
+from canary.qx_defs import NotLoggedInError
 from canary.qx_utils import MyStaticFile, load_static_exports
 from canary.ui import about
 from canary.ui import admin
@@ -40,11 +41,11 @@ def error (request):
 
 
 this_module = sys.modules[__name__]
-css_files = load_static_exports('/home/dlc33/projects/canary/lib/ui/html',
-                                '.css')
-for file, path in css_files:
-    _q_exports.append(file)
-    setattr(this_module, file, StaticFile(path, mime_type='text/css', cache_time=60))
+#css_files = load_static_exports('/home/dlc33/projects/canary/lib/ui/html',
+#                                '.css')
+#for file, path in css_files:
+#    _q_exports.append(file)
+#    setattr(this_module, file, StaticFile(path, mime_type='text/css', cache_time=60))
 
 js_files = load_static_exports('/home/dlc33/projects/canary/lib/ui/html', '.js')
 for file, path in js_files:
@@ -57,6 +58,12 @@ record = record_ui
 def _q_lookup (request, name=''):
     if name == 'favicon.ico':
         return request.redirect('/images/favicon.ico')
+    elif name == 'wdd_styles.css':
+        return StaticFile('/home/dlc33/projects/canary/lib/ui/html/wdd_styles.css',
+            mime_type='text/css', cache_time=60)
+    elif name == 'wdd_styles_print.css':
+        return StaticFile('/home/dlc33/projects/canary/lib/ui/html/wdd_styles_print.css',
+            mime_type='text/css', cache_time=60)
     elif name == 'search':
         return search(request)
     elif name == 'browse':

@@ -4,6 +4,7 @@ import urllib
 from quixote import get_publisher, get_request
 from quixote.errors import TraversalError
 
+from canary.qx_defs import NotLoggedInError
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found
 from canary.gazeteer import Feature
@@ -34,6 +35,14 @@ def _q_lookup (request, record_id):
             raise TraversalError
     except:
         return not_found('record')
+
+
+#def _q_access (request):
+#    try:
+#        if request.session == None or request.session.user == None:
+#            raise NotLoggedInError('You must first log in.')
+#    except:
+#        raise NotLoggedInError('You must first log in.')
 
 
 def render_tagged_pubmed [plain] (record, mapped_metadata):

@@ -76,3 +76,11 @@ def search [html] (request):
         '<p>Nothing found.</p>'
 
     footer()
+
+
+#def _q_access (request):
+#    try:
+#        if request.session == None or request.session.user == None:
+#            raise NotLoggedInError('You must first log in.')
+#    except:
+#        raise NotLoggedInError('You must first log in.')

@@ -22,8 +22,8 @@ def _q_index [html] (request):
 
     """
 <table border='0' cellspacing='0' cellpadding='0'>
-    <tr valign='top'
-	<td width='400' valign='top' class='rightspace'>
+    <tr valign='top'>
+    <td width='400' valign='top' class='rightspace'>
 
     <h1>The Canary Database Project</h1>
     <p>
@@ -63,25 +63,40 @@ def _q_index [html] (request):
         <a href='/browse/methodology'>methodology</a>.
     </p>
 
-	</td>
+    </td>
 
-	<td>
+    <td valign='top'>
 
     <div class='news'>
-	<div class='news-head'>
-	    Take a tour
-	</div>
-	<p>
-	Take a quick tour of the Canary Database.
-
-	    <a href='/about/tour' title='Take a tour'>
-	    <img border='0' src='/images/tour-record-small.jpg' 
-		alt='small tour image'/>
-	    </a>
-	</p>
+        <div class='news-head'>
+            Beta tester questionnaire
+        </div>
+        <h3>Attention beta testers!</h3>
+        <p>
+        Please fill out <a href='/about/questionnaire'>this questionnaire</a> 
+        by August 9.  Your continuing support and feedback helps us to improve 
+        the site.
+        </p>
+        
     </div>
 
-	</td>
+    <div class='news'>
+    
+        <div class='news-head'>
+            Take a tour
+        </div>
+        <p>
+        Take a quick tour of the Canary Database.
+    
+            <a href='/about/tour' title='Take a tour'>
+            <img border='0' src='/images/tour-record-small.jpg' 
+            alt='small tour image'/>
+            image went here
+            </a>
+        </p>
+    </div>
+    
+    </td>
     </tr>
 </table>
 
@@ -219,6 +234,14 @@ def login [html] (request):
         header('Log in')
         """
         <h3>Log in:</h3>
+        
+        <p>
+        <b>Please note</b> that while the Canary Database is in private beta
+        mode, <b>all access must be authorized</b>.  If you have been invited to be
+        a beta tester and require access, or are having trouble logging in
+        with the access information already provided to you, please 
+        <a href='/about/contact_us'>contact us</a> for assistance.
+        </p>
         """
         form.render()
         footer()

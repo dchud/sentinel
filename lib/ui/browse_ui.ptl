@@ -2,6 +2,7 @@ import urllib
 
 from quixote import get_publisher
 
+from canary.qx_defs import NotLoggedInError
 from canary.browse import records_by_year, records_by_year_index
 from canary.browse import records_by_heading, records_by_heading_index
 from canary.browse import records_by_journal, records_by_journal_index
@@ -47,6 +48,13 @@ class Browse:
         except:
             return not_found('index')
             
+    #def _q_access (self, request):
+    #    try:
+    #        if request.session == None or request.session.user == None:
+    #            raise NotLoggedInError('You must first log in.')
+    #    except:
+    #        raise NotLoggedInError('You must first log in.')
+
 
 
 class BrowseIndex:

@@ -29,6 +29,11 @@
 		font-family: Verdana, Geneva, Arial, sans-serif;
 		}
 
+    #header p {
+        margin-top:5px;
+        margin-bottom:5px;
+    }
+
 	h1 {
 		font-size: 16px;
 		color: #000066;
@@ -203,6 +208,13 @@
 	width: 147px;
 		}
 
+
+.search {
+    font-size: 12px;
+    font-weight: normal;
+    margin-left: 130px;
+    margin-top: 10px;
+}
 
 
 
