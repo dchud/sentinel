@@ -772,7 +772,7 @@ def render_record_row [html] (record):
                         <!--
                         <a href='http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=PubMed&cmd=Display&dopt=pubmed_pubmed&from_uid=[[PMID]]'>Pubmed related articles</a>
                         -->
-                        [links]
+                        <!--[links]-->
                     </td>
                 </tr>
     """

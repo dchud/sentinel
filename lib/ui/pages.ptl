@@ -73,8 +73,8 @@ def _q_index [html] (request):
         </div>
         <h3>Attention beta testers!</h3>
         <p>
-        Please fill out <a href='/about/questionnaire'>this questionnaire</a> 
-        by August 9.  Your continuing support and feedback helps us to improve 
+        Please fill out <a href='/about/questionnaire'>this questionnaire</a>. 
+        Your continuing support and feedback helps us to improve 
         the site.
         </p>
         
