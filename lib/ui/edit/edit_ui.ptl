@@ -42,7 +42,7 @@ class FindRecordForm (MyForm):
             options=[
                 ('author', 'author name', 'author'),
                 ('title', 'title (partial ok)', 'title'),
-                ('record id', 'canary record id', 'record id'),
+                ('canary id', 'canary record id', 'canary id'),
                 ('unique id', 'external unique id', 'unique id'),
                 ],
             sort=False,
@@ -161,7 +161,7 @@ def find [html] (request):
     if form['allow_curated']:
         allow_curated = True
     
-    if not field in ['record id', 'unique id']:
+    if not field in ['canary id', 'unique id']:
         if len(form['token']) <= 2:
             form.set_error('token', 'Please search for at least three characters')
             
@@ -170,7 +170,8 @@ def find [html] (request):
     
     source_catalog = get_publisher().get_source_catalog()
     complete_mapping = source_catalog.get_complete_mapping()
-    search = Search(field=field, token=token, allow_curated=allow_curated)
+    search = Search(field=field, token=token, allow_curated=allow_curated,
+        allow_uncurated=True)
     
     try:
         cursor = get_publisher().get_cursor()
@@ -276,8 +277,7 @@ def pubmed [html] (request):
             """
             for rec in recs:
                 if not rec.metadata == {}:
-                    mapped_metadata = rec.get_mapped_metadata(pm_source.uid, 
-                        term_map=mapped_terms)
+                    mapped_metadata = rec.get_mapped_metadata(term_map=mapped_terms)
                     """
                 <tr>
                     <td>%s</td>

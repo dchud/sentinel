@@ -142,20 +142,17 @@ def curate_one [html] (request, queued_record_id):
         queued_record.user_id = session.user.get_id()
         record_updated = True
 
-    print 'updating queued_record'
     if record_updated:
         queued_record.save(cursor)
 
     a_type = 'none'
     article_type = 'none'
     
-    print 'setting article_type'
     if not study == None:
         article_type = study.get_article_type(text=True)
         if article_type in ['irrelevant', 'traditional', 'descriptive', 'review']:
             a_type = 'is_%s' % article_type
 
-    print 'setting up form'
     form = MyForm()
     form.add(RadiobuttonsWidget, 
         name='article_type',
@@ -171,7 +168,7 @@ def curate_one [html] (request, queued_record_id):
             ],
         sort=False,
         required=True)
-    form.add(SubmitWidget, 'continue', value='continue')
+    form.add_submit('continue', 'continue')
 
     def render [html] ():
         header('Curate: select type', show_javascript=True)
@@ -323,6 +320,11 @@ def curate_two [html] (request, queued_record_id):
         elif study.has_outcomes:
             
             study.set_article_type('outcomes only')
+            
+        else:
+            
+            # NOTE: perhaps this should be 'traditional'?
+            study.set_article_type('descriptive')
             
             
     if form.has_errors():
@@ -495,6 +497,13 @@ def summary [html] (request, queued_record_id):
     study = get_current_study(cursor, queued_record.study_id)
     article_type = study.get_article_type(text=True)
     
+    if article_type == 'unknown':
+        add_message('Study type set to "descriptive".')
+        study.set_article_type('descriptive')
+        study.save(cursor)
+        cursor.close()
+        request.redirect(str('summary'))
+        
     if article_type == 'curated':
         
         if len(study.exposures) == 0:
@@ -571,6 +580,8 @@ def summary [html] (request, queued_record_id):
     elif form.get_submit() == str('finish'):
         queued_record.status = queued_record.STATUS_CURATED
         queued_record.save(cursor)
+        study.set_status(str('curated'))
+        study.save(cursor)
         cursor.close()
         form.logger.info(str('Finished curating study %s' % study.uid))
         request.redirect(str('/edit'))

@@ -31,8 +31,9 @@ def render_queued_record [html] (queued_record, abstract=True):
     #source = source_catalog.get_source(queued_record.source_id)
     # FIXME: this is a hack!
     source = source_catalog.get_source(queued_record.metadata.keys()[0][0])
-    mapped_terms = source_catalog.get_mapped_terms(source.uid)
-    mapped_metadata = queued_record.get_mapped_metadata(source.uid, mapped_terms)
+    complete_term_map = source_catalog.get_complete_mapping()
+    mapped_metadata = queued_record.get_mapped_metadata(term_map=complete_term_map)
+
     """
     <div class='queued_record'>
         <p>
