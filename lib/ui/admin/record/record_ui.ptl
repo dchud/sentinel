@@ -191,8 +191,8 @@ class RecordActions:
             # the opposite of what we want!).
             context.cache_delete('%s:%s' % (QueuedRecord.CACHE_KEY, 
                 self.record_id))
+            # Simply re-instantiating will restore to cache.
             record = QueuedRecord(self.record_id)
-            context.cache_set('%s:%s' % (record.CACHE_KEY, record.uid), record)
             add_message('Record recached')
             request.redirect(str('/admin'))
         except:
