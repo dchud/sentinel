@@ -1,5 +1,5 @@
 _q_exports = [
-             ]
+    ]
 
 from log4py import Logger
 
@@ -43,7 +43,10 @@ def _q_index [html] (request):
         <th>Sources</th>
         <td><a href='/admin/sources'>List</a></td>
         <td><a href='/admin/source/create'>Create</a></td>
-        <td><a href='/admin/reload_sources'>Reload</a></td>
+        <td>
+            [<a href='/admin/source_map'>Map</a>]
+            [<a href='/admin/reload_sources'>Reload</a>]
+        </td>
     </tr>
     <tr>
         <th>DV Data</th>
@@ -96,6 +99,72 @@ def users [html] (request):
     footer()
 
 
+
+def source_map [html] (request):
+    header('Admin: Source map')
+    title_bar('Source map')
+    
+    source_catalog = get_publisher().get_source_catalog()
+    
+    if len(source_catalog.sources) == 0:
+        """
+        <b>No sources found.</b>
+        """
+    else:
+        mapping_source = source_catalog.get_source_by_name('mapping-source')
+        sources = [(source.name, source.uid) for id, source in source_catalog.sources.items()]
+        
+        # Sort mapping_terms by their name
+        mapping_terms = [(term.name, id) for id, term in mapping_source.terms.items()]
+        mapping_terms.sort()
+        
+        """
+        <table cellspacing='3' class='gentable' id='source_map'>
+            <tr>
+                <th><a href='/admin/source/%s/terms'>mapped name</a></th>
+        """ % mapping_source.uid
+        
+        for source_name, source_id in sources:
+            if not source_name == 'mapping-source':
+                """
+                <th><a href='/admin/source/%s/terms'>%s</a></th>
+                """ % (source_id, source_name)
+        """
+            </tr>
+        """
+        
+        
+        for (token, mapping_term_id) in mapping_terms:
+            mapping_term = mapping_source.terms[mapping_term_id]
+            """
+            <tr>
+                <td><a href='/admin/term/%s/edit'>%s</a></td>
+            """ % (mapping_term.uid, mapping_term.name)
+            
+            for source_name, source_id in sources:
+                if not source_name == 'mapping-source':
+                    mapped_term = source_catalog.get_mapped_term(mapping_term.name,
+                        source_id)
+                    if mapped_term:
+                        """
+                    <td><a href='/admin/term/%s/edit'>%s</a></td>
+                        """ % (mapped_term.uid, mapped_term.token)
+                    else:
+                        """
+                    <td>-</td>
+                        """
+            
+            """
+            </tr>
+            """
+        
+        """
+        </table>
+        """
+        
+    footer()
+    
+    
 def sources [html] (request):
     header('Admin: List sources')
     title_bar('List Sources')

@@ -2,6 +2,7 @@ _q_exports = [
     'queue',
     'session',
     'source',
+    'source_map',
     'sources',
     'term',
     'user',
@@ -30,6 +31,7 @@ from canary.qx_defs import NotLoggedInError
 
 _q_index = admin_ui._q_index
 users = admin_ui.users
+source_map = admin_ui.source_map
 sources = admin_ui.sources
 reload_sources = admin_ui.reload_sources
 zodb_keys = admin_ui.zodb_keys
