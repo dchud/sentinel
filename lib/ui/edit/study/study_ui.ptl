@@ -765,9 +765,9 @@ def summary [html] (request, queued_record_id):
             history_messages.append('Updated comments to "%s"' % study.comments)
     else:
         if not study.comments == '':
-            study.comments = ''
+            study.comments = str('')
             add_message('Updated comments')
-            history_message.append('Updated comments to "")
+            history_messages.append('Updated comments to ""')
 
     if form.get_submit() == str('update'):
         if history_messages:
