@@ -59,6 +59,10 @@ class FindRecordForm (MyForm):
 
 
 def _q_index [html] (request):
+    
+    source_catalog = get_publisher().get_source_catalog()
+    cursor = get_publisher().get_cursor()
+    
     header('Edit: Curator control panel')
     title_bar('Curator control panel')
     
@@ -81,9 +85,8 @@ def _q_index [html] (request):
     """
         <div id='curator-panel-right'>
             <h4>Load a record from Pubmed/MEDLINE</h4>
-            <p>Search either by PMID or keywords.</p>
     """
-    form = LoadPubmedForm()
+    form = LoadPubmedForm(batch_options=get_pubmed_batch_list(cursor))
     form.render()
     """
         </div>
@@ -103,15 +106,14 @@ def _q_index [html] (request):
         <th>Actions</th>
     </tr>
     """
-    source_catalog = get_publisher().get_source_catalog()
-    cursor = get_publisher().get_cursor()
     queue = Queue()
     queue.load(cursor)
     for batch in queue.batches:
         batch_stats = batch.get_statistics(cursor)
 
-        # Don't show finished batches
-        if batch_stats['curated'] == batch.num_records:
+        # Don't show finished, non-empty batches (so, do show empty batches)
+        if batch_stats['curated'] == batch.num_records \
+            and batch.num_records > 0:
             continue
         # Else, carry on!
         source_id = batch.source_id
@@ -123,13 +125,18 @@ def _q_index [html] (request):
             <td>%s</td>
         """ % (batch.uid, batch.name, source.name)
         
+        # Avoid division by zero for empty batches
+        if batch.num_records > 0:
+            percent_done = float(batch_stats['curated']) / batch.num_records * 100.0
+        else:
+            percent_done = 0
         """
             <td>%s / %s / %s / %s (%s%s done)</td>
         """ % (batch_stats['unclaimed'],
             batch_stats['claimed'],
             batch_stats['curated'],
             batch.num_records,
-            str('%2.1f' % (float(batch_stats['curated']) / batch.num_records * 100.0)),
+            str('%2.1f' % percent_done),
             str('%'))
         """
             <td>%s</td>
@@ -242,7 +249,7 @@ def find [html] (request):
 
 class LoadPubmedForm (MyForm):
     
-    def __init__ (self):
+    def __init__ (self, batch_options=[]):
         MyForm.__init__(self)
         self.action_url = '/edit/pubmed'
         self.add(form2.IntWidget, 'pmid',
@@ -255,13 +262,58 @@ class LoadPubmedForm (MyForm):
             size=30,
             hint='Enter keywords to find',
             required=False)
-        self.add_hidden('queue', value='')
+        self.add(form2.SingleSelectWidget, 'batch_id',
+            title='Add to batch:',
+            options=batch_options,
+            sort=False,
+            required=True)
+        self.add_hidden('queue', value='search')
         self.add_submit('find', 'find')
 
 
-def pubmed [html] (request):
+def get_pubmed_batch_list (cursor):
+
+    source_catalog = get_publisher().get_source_catalog()
+    pm_source = source_catalog.get_source_by_name('pubmed-medline')
+
+    queue = Queue()
+    queue.load(cursor)
+    batch_list = []
+    for batch in queue.batches:
+        batch_stats = batch.get_statistics(cursor)
+
+        # Don't show finished, non-empty batches 
+        # (so, do show empty batches)
+        if batch_stats['curated'] == batch.num_records \
+            and batch.num_records > 0:
+            continue
+        # Don't show non-pubmed batches
+        elif batch.source_id != pm_source.uid:
+            continue
+        # Else, carry on!
+        batch_list.insert(0, (batch.uid, batch.name, batch.uid))
+
+    # Allow (require) a new batch if none exist.
+    if batch_list == []:
+        batch_list = [(-1, ' - new batch - ', -1)]
+
+    batch_list.sort()
+    batch_list.reverse()
     
-    form = LoadPubmedForm()
+    return batch_list
+    
+
+def pubmed [html] (request):
+
+    cursor = get_publisher().get_cursor()
+    source_catalog = get_publisher().get_source_catalog()
+    pm_source = source_catalog.get_source_by_name('pubmed-medline')
+
+    queue = Queue()
+    queue.load(cursor)
+    batch_list = get_pubmed_batch_list(cursor)
+    
+    form = LoadPubmedForm(batch_options=batch_list)
     
     def render [html] ():
         header('Edit: Load from Pubmed')
@@ -287,8 +339,6 @@ def pubmed [html] (request):
         keywords = form['keywords']
         data = pmsearch.search(keywords)
         
-    source_catalog = get_publisher().get_source_catalog()
-    pm_source = source_catalog.get_source_by_name('pubmed-medline')
     mapped_terms = source_catalog.get_mapped_terms(pm_source.uid)
     parser = Parser(pm_source)
     recs = parser.parse(mapped_terms=mapped_terms, is_email=False, data=data)
@@ -301,17 +351,15 @@ def pubmed [html] (request):
     
     if form['queue'] \
         and form['queue'] == 'add':
-        cursor = get_publisher().get_cursor()
         queue = Queue()
         queue.load(cursor)
-        batch_name = 'pubmed-load-' + strftime(str('%Y-%m'), localtime())
-        batch = queue.get_batch_by_name(batch_name)
+        batch = queue.get_batch(form['batch_id'])
         if not batch:
             batch = Batch(source_id=pm_source.uid)
-            batch.name = batch_name
+            batch.name = 'pubmed-load-' + strftime(str('%Y-%m'), localtime())
         batch.add_records(recs)
         batch.save(cursor)
-        add_message('Added record to batch %s' % batch_name)
+        add_message('Added record to batch %s' % batch.name)
         request.redirect(str('/edit'))
         
     else:
@@ -335,13 +383,14 @@ def pubmed [html] (request):
                     <td>%s</td>
                     <td>%s</td>
                     <td>%s</td>
-                    <td>[<a href='pubmed?pmid=%s&queue=add'>queue</a>]</td>
+                    <td>[<a href='pubmed?pmid=%s&batch_id=%s&queue=add'>queue</a>]</td>
                 </tr>
                     """ % (mapped_metadata['unique_identifier'],
                         ', '.join(mapped_metadata['author']),
                         mapped_metadata['title'],
                         mapped_metadata['source'],
-                        mapped_metadata['unique_identifier']
+                        mapped_metadata['unique_identifier'],
+                        form['batch_id']
                         )
             """
             </table>

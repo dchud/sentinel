@@ -1,6 +1,7 @@
 _q_exports = [
     '_q_index',
     'add',
+    'create',
     'receive',
     ]
 
@@ -17,7 +18,7 @@ from dulcinea.database import get_transaction
 
 from canary.ui.admin.admin_ui import title_bar
 from canary.ui.pageframe import header, footer
-from canary.ui.pages import not_found
+from canary.ui.pages import not_found, add_message, has_messages, render_messages
 from canary.loader import Batch, Parser
 from canary.qx_defs import MyForm
 from canary.source_catalog import SourceCatalog, Source
@@ -72,14 +73,8 @@ def add [html] (request):
     header('Upload records')
     title_bar('Upload records')
 
-    try:
-        if request.session.message:
-            """
-            <h4><font color='red'>%s</font></h4>
-            """ % request.session.message
-            request.session.message = None
-    except:
-        pass
+    if has_messages():
+        render_messages()
 
     """
     <form enctype='multipart/form-data'
@@ -90,7 +85,7 @@ def add [html] (request):
         <select name='source_id'><br/>
 
     """
-    for (id, name) in sources:
+    for id, name in sources:
         """
         <option value='%s'>%s
         """ % (id, name)
@@ -189,3 +184,44 @@ def receive [html] (request):
     """ % (batch.uid, batch.date_added)
 
     footer()
+
+
+def create [html] (request):
+
+    source_catalog = get_publisher().get_source_catalog()
+
+    # Sort terms by their token
+    sources = [(id, source.name) for id, source in source_catalog.sources.items()]
+    sources.sort()
+
+    form = MyForm()
+    form.add(form2.SingleSelectWidget, name='source_id', title='Source',
+        options=[(id, name, id) for id, name in sources],
+        sort=True,
+        required=True)
+    form.add(form2.StringWidget, 'batch_name', title='Batch name',
+        size=25, required=True)
+    form.add_submit('create', 'create')
+    
+    def render [html] ():
+        header('Create batch')
+        title_bar('Create batch')
+        form.render()
+        footer()
+
+    if not form.is_submitted():
+        return render()
+        
+    try:
+        cursor = get_publisher().get_cursor()
+        batch = Batch(source_id=form['source_id'])
+        batch.name = form['batch_name']
+        batch.save(cursor)
+        cursor.close()
+        add_message('Created batch %s' % batch.uid)
+        form.logger.info(str('Created batch %s' % batch.uid))
+    except:
+        add_message('Could not create batch')
+        form.logger.info(str('Could not create batch'))
+    
+    request.redirect(str('/admin'))

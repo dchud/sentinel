@@ -18,6 +18,12 @@ class Queue:
     def __init__ (self):
         self.batches = []
         
+    def get_batch (self, batch_id):
+        for batch in self.batches:
+            if batch.uid == batch_id:
+                return batch
+        return None
+        
     def get_batch_by_name (self, name):
         for batch in self.batches:
             if batch.name == name:

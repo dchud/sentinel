@@ -1,5 +1,6 @@
 _q_exports = ['_q_index',
               'add',
+              'create',
               'receive',
               ]
 
@@ -10,6 +11,7 @@ from canary.ui.admin.queue import queue_ui
 
 _q_index = queue_ui._q_index
 add = queue_ui.add
+create = queue_ui.create
 receive = queue_ui.receive
 
 

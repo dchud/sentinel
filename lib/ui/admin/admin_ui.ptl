@@ -7,6 +7,7 @@ from quixote import get_publisher
 from quixote.errors import AccessError, PublishError, TraversalError
 
 from canary.ui.pageframe import header, footer
+from canary.ui.pages import has_messages, add_message, render_messages
 from canary.source_catalog import SourceCatalog
 
 
@@ -25,13 +26,17 @@ def title_bar [html] (action=''):
 def _q_index [html] (request):
     header('Admin')
     title_bar()
+    
+    if has_messages():
+        render_messages()
+        
     """
     <table cellspacing='5' class='gentable'>
     <tr>
         <th>Queue</th>
-        <td><a href='/admin/queue/add'>Add batch</a></td>
-        <td> - </td>
-        <td> - </td>
+        <td>List</td>
+        <td><a href='/admin/queue/create'>Create</a></td>
+        <td><a href='/admin/queue/add'>Load batch</a></td>
     </tr>
     <tr>
         <th>Users</th>
@@ -46,6 +51,16 @@ def _q_index [html] (request):
         <td>
             [<a href='/admin/source_map'>Map</a>]
             [<a href='/admin/reload_sources'>Reload</a>]
+        </td>
+    </tr>
+    <tr>
+        <th>UMLS Concepts</th>
+        <td colspan='3'>
+            <form action='concept' method='post'>
+                Find:
+                <input type='text' size='30' name='search_term' />
+                <input type='submit' name='find' value='find' />
+            </form>
         </td>
     </tr>
     <tr>
@@ -169,14 +184,8 @@ def sources [html] (request):
     header('Admin: List sources')
     title_bar('List Sources')
 
-    try:
-        if request.session.message:
-            """
-            <h4><font color='red'>%s</font></h4>
-            """ % request.session.message
-            request.session.message = None
-    except:
-        pass
+    if has_messages():
+        render_messages()
 
     source_catalog = get_publisher().get_source_catalog()
 
