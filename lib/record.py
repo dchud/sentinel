@@ -3,8 +3,6 @@
 import dtuple
 import re
 
-import canary.context
-
 
 class SubjectHeading:
 
@@ -91,8 +89,7 @@ class Record:
         else:
             return "Yes"
 
-    def load_by_pmid (self, pubmed_id):
-        context = canary.context.Context()
+    def load_by_pmid (self, context, pubmed_id):
         cursor = context.get_cursor()
         cursor.execute("""
             SELECT *

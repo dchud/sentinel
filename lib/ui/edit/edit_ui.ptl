@@ -14,7 +14,6 @@ from quixote import get_publisher, get_request
 from quixote.errors import AccessError, PublishError, TraversalError
 from quixote import form2
 
-import canary.context
 from canary.loader import Batch, QueuedRecord, Queue, Parser
 from canary.qx_defs import MyForm
 from canary.search import PubmedSearch, Search
@@ -36,8 +35,8 @@ def title_bar [html] (action=''):
 
 class FindRecordForm (MyForm):
     
-    def __init__ (self):
-        MyForm.__init__(self)
+    def __init__ (self, context):
+        MyForm.__init__(self, context)
         self.action_url = '/edit/find'
         self.add(form2.SingleSelectWidget, 'field',
             value='author',
@@ -63,7 +62,7 @@ class FindRecordForm (MyForm):
 
 def _q_index [html] (request):
     
-    context = canary.context.Context()
+    context = get_publisher().context
     source_catalog = context.get_source_catalog()
     
     header('Edit: Curator control panel')
@@ -79,7 +78,7 @@ def _q_index [html] (request):
         <div id='curator-panel-left'>
             <h4>Find existing record</h4>
     """
-    form = FindRecordForm()
+    form = FindRecordForm(context)
     form.render()
     """
         </div>
@@ -89,7 +88,8 @@ def _q_index [html] (request):
         <div id='curator-panel-right'>
             <h4>Load a record from Pubmed/MEDLINE</h4>
     """
-    form = LoadPubmedForm(batch_options=get_pubmed_batch_list())
+    form = LoadPubmedForm(context, 
+        batch_options=get_pubmed_batch_list(context))
     form.render()
     """
         </div>
@@ -110,12 +110,12 @@ def _q_index [html] (request):
     </tr>
     """
     queue = Queue()
-    queue.load()
+    queue.load(context)
     sort_list = [(b.name.lower(), b) for b in queue.batches]
     sort_list.sort()
     for n, batch in sort_list:
-        batch.load()
-        batch_stats = batch.get_statistics()
+        batch.load(context)
+        batch_stats = batch.get_statistics(context)
 
         source_id = batch.source_id
         source = source_catalog.get_source(source_id)
@@ -209,7 +209,8 @@ def _q_index [html] (request):
     
 def find [html] (request):
     
-    form = FindRecordForm()
+    context = get_publisher().context
+    form = FindRecordForm(context)
     
     def render [html] ():
         header('Edit: Find record')
@@ -233,14 +234,13 @@ def find [html] (request):
     if form.has_errors():
         return render()
     
-    context = canary.context.Context()
     source_catalog = context.get_source_catalog()
     complete_mapping = source_catalog.get_complete_mapping()
     search = Search(field=field, token=token, allow_curated=allow_curated,
         allow_uncurated=True)
     
     try:
-        results = search.search(term_mapping=complete_mapping)
+        results = search.search(context, term_mapping=complete_mapping)
     except:
         form.info(str('Unable to perform search'))
         form.set_error('token', 'Unable to perform search')
@@ -256,8 +256,8 @@ def find [html] (request):
 
 class LoadPubmedForm (MyForm):
     
-    def __init__ (self, batch_options=[]):
-        MyForm.__init__(self)
+    def __init__ (self, context, batch_options=[]):
+        MyForm.__init__(self, context)
         self.action_url = '/edit/pubmed'
         self.add(form2.IntWidget, 'pmid',
             title='PMID:',
@@ -278,13 +278,13 @@ class LoadPubmedForm (MyForm):
         self.add_submit('find', 'find')
 
 
-def get_pubmed_batch_list ():
-    context = canary.context.Context()
+def get_pubmed_batch_list (context):
+    
     source_catalog = context.get_source_catalog()
     pm_source = source_catalog.get_source_by_name('pubmed-medline')
 
     queue = Queue()
-    queue.load()
+    queue.load(context)
     
     # Set up sort-by-name, but only for pubmed batches.
     batch_list = [(b.name.lower(), (b.uid, b.name, b.uid)) \
@@ -303,15 +303,16 @@ def get_pubmed_batch_list ():
     
 
 def pubmed [html] (request):
-    context = canary.context.Context()
+    
+    context = get_publisher().context
     source_catalog = context.get_source_catalog()
     pm_source = source_catalog.get_source_by_name('pubmed-medline')
 
     queue = Queue()
-    queue.load()
-    batch_list = get_pubmed_batch_list()
+    queue.load(context)
+    batch_list = get_pubmed_batch_list(context)
     
-    form = LoadPubmedForm(batch_options=batch_list)
+    form = LoadPubmedForm(context, batch_options=batch_list)
     
     def render [html] ():
         header('Edit: Load from Pubmed')
@@ -351,18 +352,18 @@ def pubmed [html] (request):
     if form['queue'] \
         and form['queue'] == 'add':
         queue = Queue()
-        queue.load()
+        queue.load(context)
         batch = queue.get_batch(form['batch_id'])
         if not batch:
             batch = Batch(source_id=pm_source.uid)
             batch.name = 'pubmed-load-' + strftime(str('%Y-%m'), localtime())
         for rec in recs:
             if not rec.metadata == {}:
-                dupes = rec.check_for_duplicates(complete_term_map)
+                dupes = rec.check_for_duplicates(context, complete_term_map)
                 if dupes:
                     rec.duplicate_score = len(dupes)
         batch.add_records(recs)
-        batch.save()
+        batch.save(context)
         add_message('Added %s record(s) to batch %s' % (len(recs), batch.name))
         request.redirect(str('/edit'))
         
@@ -380,7 +381,7 @@ def pubmed [html] (request):
             """
             for rec in recs:
                 if not rec.metadata == {}:
-                    dupes = rec.check_for_duplicates(complete_term_map)
+                    dupes = rec.check_for_duplicates(context, complete_term_map)
                     mapped_metadata = rec.get_mapped_metadata(term_map=mapped_terms)
                     if dupes:
                         
@@ -408,7 +409,7 @@ def pubmed [html] (request):
                         sort_list = [(k, v) for k, v in dupes.items()]
                         sort_list.sort()
                         for dupe_rec_id, dupe_fields in sort_list:
-                            dupe_rec = QueuedRecord(dupe_rec_id)
+                            dupe_rec = QueuedRecord(context, dupe_rec_id)
                             """
                                 <li>
                                 #%s (%s)

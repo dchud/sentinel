@@ -17,8 +17,8 @@ from canary.ui.pageframe import header, footer
 
 class SearchForm (MyForm):
 
-    def __init__ (self):
-        MyForm.__init__(self, method='get')
+    def __init__ (self, context):
+        MyForm.__init__(self, context, method='get')
         self.add(form2.StringWidget, 'q',
             title='Enter one or more keywords',
             size=30,
@@ -29,8 +29,8 @@ class SearchForm (MyForm):
 
 def search [html] (request):
 
-    form = SearchForm()
-    context = canary.context.Context()
+    context = get_publisher().context
+    form = SearchForm(context)
     source_catalog = context.get_source_catalog()
     complete_term_mapping = source_catalog.get_complete_mapping()
     
@@ -47,7 +47,7 @@ def search [html] (request):
         return render()
     
     try:
-        search_index = SearchIndex()
+        search_index = SearchIndex(context)
         hits, searcher = search_index.search(form['q'])
         
         header("Search results")
@@ -70,9 +70,10 @@ def search [html] (request):
             relevance_map = {}
             for i, doc in hits:
                 uid = doc.get(str('uid'))
-                record = QueuedRecord(uid)
-                score = hits.score(i)
-                render_record_row(record, score)
+                record = QueuedRecord(context, uid)
+                if record.status == record.STATUS_CURATED:
+                    score = hits.score(i)
+                    render_record_row(record, score)
             searcher.close()
             """
                 </table>

@@ -2,7 +2,6 @@
 
 from quixote import get_publisher, get_request
 
-import canary.context
 from canary.gazeteer import Feature
 from canary.loader import QueuedRecord
 from canary.record import SubjectHeading
@@ -11,7 +10,7 @@ from canary.ui.pageframe import header, footer
 
 
 def render_queued_record [html] (queued_record, abstract=True):
-    context = canary.context.Context()
+    context = get_publisher().context
     source_catalog = context.get_source_catalog()
     complete_term_map = source_catalog.get_complete_mapping()
     mapped_metadata = queued_record.get_mapped_metadata(term_map=complete_term_map)
@@ -60,7 +59,7 @@ def is_same_user (queued_record):
         
 
 def get_sfx_link (source_id, unique_identifier):
-    context = canary.context.Context()
+    context = get_publisher().context
     source_catalog = context.get_source_catalog()
     source = source_catalog.get_source(source_id)
     query_string = source.sfx_pattern.replace('[[UI]]', unique_identifier)
@@ -157,7 +156,7 @@ def render_subject_selector [html] (record, study, concept_type):
         return
 
     study_concepts = getattr(study, str(concept_type))
-    context = canary.context.Context()
+    context = get_publisher().context
     source_catalog = context.get_source_catalog()
     complete_term_map = source_catalog.get_complete_mapping()
     mapped_metadata = record.get_mapped_metadata(term_map=complete_term_map)
@@ -264,7 +263,7 @@ def render_species [html] (study):
 
 
 def render_locations [html] (study):
-    context = canary.context.Context()
+    context = get_publisher().context
     gazeteer = context.get_gazeteer()
     """
     <table class='gentable' id='locations'>
@@ -279,7 +278,7 @@ def render_locations [html] (study):
     """
     for location in study.locations:
         feature = Feature(uid=location.feature_id)
-        feature.load()
+        feature.load(context)
         if gazeteer.fips_codes.has_key((feature.country_code, feature.adm1)):
             region_name = gazeteer.fips_codes[(feature.country_code, feature.adm1)]
         else:

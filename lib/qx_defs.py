@@ -98,7 +98,7 @@ class SqlTableMap:
         """
         Return the database connection after doing a rollback.
         """
-        context = canary.context.Context()
+        context = self.get_context()
         conn = context.connection
         #try:    
         #    conn.rollback()
@@ -106,11 +106,14 @@ class SqlTableMap:
         #    pass
         return conn
 
+    def get_context (self):
+        return canary.context.Context()
+        
     def keys (self):
         """
         Get a list of the session IDs in the database.
         """
-        context = canary.context.Context()
+        context = self.get_context()
         cursor = context.get_cursor()
         #context.execute("SELECT uid FROM sessions")
         cursor.execute("SELECT session_id FROM sessions")
@@ -122,7 +125,7 @@ class SqlTableMap:
         """
         Load all of the sessions in the database.
         """
-        context = canary.context.Context()
+        context = self.get_context()
         cursor = context.get_cursor()
         cursor.execute("""
             SELECT session_id, user_id, remote_addr, creation_time, 
@@ -147,9 +150,7 @@ class SqlTableMap:
         """
         Get the given item from the database.
         """
-
-        #cursor = self.get_conn().cursor()
-        context = canary.context.Context()
+        context = self.get_context()
         cursor = context.get_cursor()
         cursor.execute("""
             SELECT session_id, user_id, remote_addr, creation_time, 
@@ -200,7 +201,7 @@ class SqlTableMap:
             #conn = self.get_conn()
             #cursor = self.get_conn().cursor()
             #cursor = conn.cursor()
-            context = canary.context.Context()
+            context = self.get_context()
             cursor = context.get_cursor()
             cursor.execute("""
                 DELETE FROM sessions 
@@ -216,7 +217,7 @@ class SqlTableMap:
 
         #conn = self.get_conn()
         #cursor = conn.cursor()
-        context = canary.context.Context()
+        context = self.get_context()
         cursor = context.get_cursor()
 
         # ORIGINAL: save a db-thrash by checking for update possibility
@@ -268,9 +269,10 @@ class SqlTableMap:
         This goes through the new-style object function __new__ rather than
         through the __init__ function.
         """
+        context = self.get_context()
         session = SqlQuixoteSession.__new__(SqlQuixoteSession)
         session.id = session_id
-        session.user = canary.user.get_user_by_id(user_id)
+        session.user = canary.user.get_user_by_id(context, user_id)
         # FIXME: one '_' to be removed for qx-1.0
         #session.__remote_address = addr
         #session.__creation_time = create_time.ticks()
@@ -352,8 +354,12 @@ class MyForm (Form):
     """
     Automatically creates a logger instance on any arbitrary Form.
     """
-    def __init__ (self, *args, **kwargs):
+    def __init__ (self, context, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
-        self.logger = log4py.Logger().get_instance(self)
-        context = canary.context.Context()
-        context.configure_logger(self.logger)
+        try:
+            self.logger = log4py.Logger().get_instance(self)
+            context.configure_logger(self.logger)
+        except:
+            import traceback
+            print traceback.print_exc()
+            

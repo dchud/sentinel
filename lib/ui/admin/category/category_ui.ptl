@@ -66,7 +66,7 @@ class CategoryActions:
 def concepts [html] (request, category_id):
 
     category = Category(uid=category_id)
-    category.load(load_concepts=True)
+    category.load(context, load_concepts=True)
     
     title = 'List concepts for category "%s"'  % category.name 
     header(title)
@@ -138,9 +138,9 @@ def concepts [html] (request, category_id):
 def edit [html] (request, category_id):
     
     category = Category(uid=category_id)
-    category.load()
+    category.load(context)
     
-    form = MyForm()
+    form = MyForm(context)
     
     concept_types = category.concept_types
     category_types = category.get_types()
@@ -192,7 +192,7 @@ def edit [html] (request, category_id):
     category.name = form['category_name']
     
     try:
-        category.save()
+        category.save(context)
         add_message('Edited category %s' % category_id)
         form.logger.info(str('Edited category %s' % category_id))
     except:
@@ -259,9 +259,10 @@ def list [html] (request):
 
 def create [html] (request):
 
+    context = get_publisher().context
     concept_types = Category().concept_types
 
-    form = MyForm()
+    form = MyForm(context)
     form.add(form2.StringWidget, 'category_name', 
         title='Category name',
         size=40, 
@@ -318,7 +319,7 @@ def create [html] (request):
                 category.add_group(group)
 
     try:
-        category.save()
+        category.save(context)
         add_message('Created category %s' % category.uid)
         form.logger.info(str('Created category %s' % category.uid))
     except:
@@ -330,7 +331,7 @@ def create [html] (request):
 
 def find [html] (request, category_id):
     
-    form = MyForm()
+    form = MyForm(context)
     form.add(form2.StringWidget, 'search_term', 
         title='Concept (term or UMLS id)',
         required=True)
@@ -355,7 +356,7 @@ def find [html] (request, category_id):
     except:
         pass
         
-    concepts = find_concepts(search_term)
+    concepts = find_concepts(context, search_term)
     
     if len(concepts) == 0:
         add_message('No matching concepts found.')
@@ -365,7 +366,7 @@ def find [html] (request, category_id):
         return render()
         
     category = Category(uid=category_id)
-    category.load(load_concepts=True)
+    category.load(context, load_concepts=True)
     
     header('Find concept')
     title_bar('Find concept')
@@ -383,12 +384,11 @@ def add [html] (request, category_id):
         return not_found('concept')
         
     category = Category(uid=category_id)
-    category.load()
+    category.load(context)
     
-    concept = Concept(uid=cid)
-    concept.load()
+    concept = Concept(context, uid=cid)
     
-    form = MyForm()
+    form = MyForm(context)
     form.add_hidden('concept_id',
         value=cid)
     form.add(form2.CheckboxWidget, 'is_broad',
@@ -416,7 +416,7 @@ def add [html] (request, category_id):
         if form['is_default']:
             cat_concept.is_default = True
         print 'saving concept'
-        cat_concept.save()
+        cat_concept.save(context)
         print 'saved'
         add_message('Added concept')
         form.logger.info(str('Added concept %s to category %s' % (concept.uid, cid)))
@@ -444,7 +444,7 @@ def edit_concept [html] (request, category_id):
         return not_found('concept')
 
     category = Category(uid=category_id)
-    category.load()
+    category.load(context)
     
     if cid:
         concept = CategoryConcept(concept_id=cid, category_id=category_id)
@@ -453,11 +453,11 @@ def edit_concept [html] (request, category_id):
     else:
         return not_found('concept')
     
-    concept.load()
+    concept.load(context)
     if concept.uid == -1:
         return not_found('concept')
 
-    form = MyForm()
+    form = MyForm(context)
     form.add_hidden('concept_uid', 
         value=concept.uid)
     form.add(form2.CheckboxWidget, 'is_broad',
@@ -492,7 +492,7 @@ def edit_concept [html] (request, category_id):
         return render()
         
     try:
-        concept.save()
+        concept.save(context)
         add_message('Edited concept %s' % concept.uid)
         form.logger.info(str('Edited concept %s' % concept.uid))
     except:
@@ -514,7 +514,7 @@ def remove [html] (request, category_id):
         return not_found('concept')
 
     category = Category(uid=category_id)
-    category.load()
+    category.load(context)
     
     if cid:
         concept = CategoryConcept(concept_id=cid, category_id=category_id)
@@ -523,11 +523,11 @@ def remove [html] (request, category_id):
     else:
         return not_found('concept')
     
-    concept.load()
+    concept.load(context)
     if concept.uid == -1:
         return not_found('concept')
 
-    form = MyForm()
+    form = MyForm(context)
     form.add_hidden('concept_uid', 
         value=concept.uid)
     form.add(form2.CheckboxWidget, 'are_you_sure',

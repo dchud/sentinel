@@ -53,8 +53,9 @@ class ConceptActions:
 
 
 def find [html] (request):
-    
-    form = MyForm()
+
+    context = get_publisher().context
+    form = MyForm(context)
     form.add(form2.StringWidget, 'search_term', 
         title='Concept (term or UMLS id)',
         required=True)
@@ -79,7 +80,7 @@ def find [html] (request):
     except:
         pass
         
-    concepts = find_concepts(search_term)
+    concepts = find_concepts(context, search_term)
     
     if len(concepts) == 0:
         add_message('No matching concepts found.')
@@ -97,11 +98,12 @@ def find [html] (request):
 
 
 def edit [html] (concept_id=None):
-    concept = Concept(uid=concept_id)
-    concept.load(load_synonyms=True)
+    
+    context = get_publisher().context
+    concept = Concept(context, uid=concept_id, load_synonyms=True)
     synonym_options = [(syn, syn, syn) for syn in concept.synonyms]
     
-    form = MyForm()
+    form = MyForm(context)
     form.add(form2.SingleSelectWidget, 'synonym', 
         title='Choose Preferred Term', 
         value=concept.term,
@@ -130,16 +132,13 @@ def edit [html] (concept_id=None):
     new_synonym = form['synonym']
     
     if form.get_submit() == 'cancel':
-        print 'no'
         add_message('Preferred term unchanged')
     elif form.get_submit() == 'edit':
         if new_synonym == concept.term:
-            print 'no'
             add_message('Preferred term unchanged')
         else:
-            print 'yes'
             concept.term = new_synonym
-            concept.save()
+            concept.save(context)
             form.logger.info(str('Changed term for concept %s' % concept_id))
             add_message('Changed preferred term')
         
@@ -148,10 +147,10 @@ def edit [html] (concept_id=None):
 
 def synonym [html] (concept_id=None):
     
-    concept = Concept(uid=concept_id)
-    concept.load(load_synonyms=True)
+    context = get_publisher().context
+    concept = Concept(context, uid=concept_id, load_synonyms=True)
     
-    form = MyForm()
+    form = MyForm(context)
     form.add(form2.StringWidget, 'new_synonym', 
         title='Add new synonym', 
         required=True)

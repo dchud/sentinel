@@ -26,36 +26,40 @@ class Cacheable (object):
     CACHE_KEY = ''
     
     def __new__ (cls, *args, **kwargs):
-        context = Context()
+        context = None
+        uid = -1
+        
         if args:
-            uid = args[0]
+            context = args[0]
+            uid = args[1]
         elif kwargs:
+            context = kwargs.get('context', None)
             uid = kwargs.get('uid', None)
-        else:
-            uid = -1
+        
+        if context == None \
+            or uid == -1:
+            item = object.__new__(cls)
+            item.__init__(*args, **kwargs)
+            print 'Context:', context, 'uid:', uid
+            return item
+            
         full_cache_key = '%s:%s' % (cls.CACHE_KEY, uid)
         if context.config.use_cache:
             try:
-                if uid \
-                    and uid >= 0:
-                    item = context.cache_get(full_cache_key)
-                    if item:
-                        print 'HIT %s' % full_cache_key
-                        return item
-                    else:
-                        print 'MISS %s' % full_cache_key
+                item = context.cache_get(full_cache_key)
+                if item:
+                    print 'HIT %s' % full_cache_key
+                    return item
                 else:
-                    print 'IGNORE %s' % full_cache_key
+                    print 'MISS %s' % full_cache_key
             except:
                 print 'ERROR %s\n', traceback.print_exc()
         
         item = object.__new__(cls)
         item.__init__(*args, **kwargs)
-        if not uid == -1:
-            item.load()
-            if context.config.use_cache \
-                and not uid == None:
-                context.cache_set(full_cache_key, item)
+        item.load(context)
+        if context.config.use_cache:
+            context.cache_set(full_cache_key, item)
         return item
             
             
@@ -134,23 +138,22 @@ class Context:
                     host=self.config.db_host, user=self.config.db_user,
                     passwd=self.config.db_passwd)
             if not self.__dict__.has_key('_cursor'):
-                print 'getting cursor'
                 self._cursor = self._connection.cursor()
 
         if not self.__dict__.has_key('_dbmodel'):
             print 'd: loading DBModel'
             self._dbmodel = canary.db_model.DBModel()
-            self._dbmodel.load_from_db()
+            self._dbmodel.load(self)
         
         if not self.__dict__.has_key('_source_catalog'):
             print 'd: loading SourceCatalog'
             self._source_catalog = canary.source_catalog.SourceCatalog()
-            self._source_catalog.load_sources(load_terms=True)
+            self._source_catalog.load(self, load_terms=True)
         
         if not self.__dict__.has_key('_gazeteer'):
             print 'd: loading gazeteer codes'
             self._gazeteer = canary.gazeteer.Gazeteer()
-            self._gazeteer.load()
+            self._gazeteer.load(self)
         
         # If not set to use_cache==True, all memcache calls will be
         # avoided.  See self.cache_*.

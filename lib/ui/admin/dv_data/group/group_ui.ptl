@@ -10,11 +10,10 @@ _q_exports = [
 
 import re
 
-from quixote import get_publisher
+from quixote import get_publisher, get_request
 from quixote.errors import AccessError, TraversalError
 from quixote import form2
 
-import canary.context
 from canary.db_model import DBModel, ValueGroup
 from canary.qx_defs import MyForm
 from canary.ui.admin.admin_ui import title_bar
@@ -62,8 +61,8 @@ class GroupActions:
 
 class GroupForm (MyForm):
     
-    def __init__ (self):
-        MyForm.__init__(self)
+    def __init__ (self, context):
+        MyForm.__init__(self, context)
         self.add(form2.StringWidget, 'group_name', title='Value group name', 
             size='30', required=True)
         self.add(form2.TextWidget, 'group_description', title='Description',
@@ -73,7 +72,8 @@ class GroupForm (MyForm):
 
 def create [html] (request):
 
-    form = GroupForm()
+    context = get_publisher().context
+    form = GroupForm(context)
     
     def render [html] ():
         header('Create value group')
@@ -84,7 +84,6 @@ def create [html] (request):
     if not form.is_submitted():
         return render()
     
-    context = canary.context.Context()
     db_model = context.get_dbmodel()
     
     group_name = form['group_name']
@@ -102,9 +101,9 @@ def create [html] (request):
     new_value_group = ValueGroup(group_name, group_description)
     
     try:
-        new_value_group.save(update_values=False)
+        new_value_group.save(context, update_values=False)
         new_db_model = DBModel()
-        new_db_model.load_from_db()
+        new_db_model.load(context)
         context.set_dbmodel(new_db_model)
         form.logger.info(str('Created value group'))
         header('Admin: Created value group')
@@ -119,7 +118,7 @@ def create [html] (request):
 
 def delete [html] (group_id):
     
-    context = canary.context.Context()
+    context = get_publisher().context
     try:
         group_id = int(group_id)
         db_model = context.get_dbmodel()
@@ -129,7 +128,7 @@ def delete [html] (group_id):
     except:
         return not_found('value group')
         
-    form = MyForm()
+    form = MyForm(context)
     form.add(form2.CheckboxWidget, 'are_you_sure',
              title='Are you sure you want to delete this value group?',
              value=False)
@@ -146,9 +145,9 @@ def delete [html] (group_id):
 
     are_you_sure = form['are_you_sure']
     if are_you_sure:
-        db_model.delete_group(group.value_group_id)
+        db_model.delete_group(context, group.value_group_id)
         new_db_model = DBModel()
-        new_db_model.load_from_db()
+        new_db_model.load(context)
         context.set_dbmodel(new_db_model)
         form.logger.info(str('Deleted value group %s' % group.value_group_id))
         header('Admin: value group deleted')
@@ -163,9 +162,8 @@ def delete [html] (group_id):
 
 def edit [html] (group_id):
 
-    form = GroupForm()
-    
-    context = canary.context.Context()
+    context = get_publisher().context
+    form = GroupForm(context)
     
     try:
         group_id = int(group_id)
@@ -197,12 +195,12 @@ def edit [html] (group_id):
     if form['group_description']:
         group.description = form['group_description']
         
-    request = get_publisher().get_request()
+    request = get_request()
         
     try:
-        group.save()
+        group.save(context)
         new_db_model = DBModel()
-        new_db_model.load_from_db()
+        new_db_model.load(context)
         context.set_dbmodel(new_db_model)
         form.logger.info(str('Updated value group %s' % group.value_group_id))
         add_message('Updated group')
@@ -217,8 +215,8 @@ def edit [html] (group_id):
 
 def values [html] (group_id):
 
-    request = get_publisher().get_request()
-    context = canary.context.Context()
+    context = get_publisher().context
+    request = get_request()
     
     try:
         group_id = int(group_id)

@@ -32,8 +32,7 @@ class Queue:
                 return batch
         return None
 
-    def load (self):
-        context = canary.context.Context()
+    def load (self, context):
         cursor = context.get_cursor()
         cursor.execute("""
             SELECT *
@@ -52,9 +51,8 @@ class Queue:
         context.close_cursor(cursor)
         
 
-def find_needed_papers ():
+def find_needed_papers (context):
     """ Find queued papers marked with "needs_paper" == 1."""
-    context = canary.context.Context()
     cursor = context.get_cursor()
     
     records = []
@@ -66,7 +64,7 @@ def find_needed_papers ():
         """, QueuedRecord.STATUS_CURATED)
     rows = cursor.fetchall()
     for row in rows:
-        rec = QueuedRecord(row[0])
+        rec = QueuedRecord(context, row[0])
         records.append(rec)
     
     context.close_cursor(cursor)
@@ -81,7 +79,7 @@ class QueuedRecord (canary.context.Cacheable, DTable):
 
     CACHE_KEY = 'record'
         
-    def __init__ (self, uid=-1, *args, **kwargs):
+    def __init__ (self, context=None, uid=-1, *args, **kwargs):
         try:
             if self.queued_batch_id >= 0:
                 return
@@ -174,13 +172,12 @@ class QueuedRecord (canary.context.Cacheable, DTable):
     
     
     
-    def check_for_duplicates (self, term_map={}):
+    def check_for_duplicates (self, context, term_map={}):
         """
         Simple tests to determine if this record is likely to be a
         duplicate of an existing record.
         """
         
-        context = canary.context.Context()
         cursor = context.get_cursor()
         score = 0
         potential_dupes = {}
@@ -217,16 +214,14 @@ class QueuedRecord (canary.context.Cacheable, DTable):
         return potential_dupes
         
 
-    def load (self, load_metadata=True):
+    def load (self, context, load_metadata=True):
         """
         Load a queued record.
         
         Note that if a source is not specified, every term will be
         looked-up again from the DB (rather than read from memory).
         """
-            
-        context = canary.context.Context()
-        
+           
         # Is it already loaded?  Convenience check for client calls
         # don't need to verify loads from the cache.  It's possible it's
         # already loaded without metadata, in which case: reload.
@@ -258,7 +253,7 @@ class QueuedRecord (canary.context.Cacheable, DTable):
             desc = dtuple.TupleDescriptor([[f] for f in fields])
             rows = cursor.fetchall()
             if not rows:
-                raise ValueError('Record not found')
+                raise ValueError('No records found')
             row = dtuple.DatabaseTuple(desc, rows[0])
             # remove source_id from fields, it's not a proper attribute on self
             fields.remove('batch_source_id')
@@ -289,13 +284,10 @@ class QueuedRecord (canary.context.Cacheable, DTable):
             print traceback.print_exc()
             raise ValueError('Record not found')
         
-        if context.config.use_cache:
-            context.cache_set('%s:%s' % (self.CACHE_KEY, self.uid), self)
         context.close_cursor(cursor)
         
 
-    def save (self):
-        context = canary.context.Context()
+    def save (self, context):
         cursor = context.get_cursor()
         try:
             if self.uid == -1:
@@ -311,7 +303,7 @@ class QueuedRecord (canary.context.Cacheable, DTable):
                     """, (self.queued_batch_id, self.status, self.user_id, self.study_id,
                     self.title, self.source, self.unique_identifier, self.duplicate_score, self.needs_paper)
                     )
-                self.uid = self.get_new_uid()
+                self.uid = self.get_new_uid(context)
     
             else:
                 cursor.execute("""
@@ -336,10 +328,10 @@ class QueuedRecord (canary.context.Cacheable, DTable):
                 if isinstance(val, types.ListType):
                     for value in val:
                         # Automatically save the ordering of each value
-                        self.save_metadata_value(source_id, term_id, 
+                        self.save_metadata_value(context,source_id, term_id, 
                             value, sequence_position=val.index(value))
                 else:
-                    self.save_metadata_value(source_id, term_id, val)
+                    self.save_metadata_value(context,source_id, term_id, val)
             if context.config.use_cache:
                 context.cache_set('%s:%s' % (self.CACHE_KEY, self.uid), self)
 
@@ -349,10 +341,9 @@ class QueuedRecord (canary.context.Cacheable, DTable):
 
         
         
-    def save_metadata_value (self, source_id, term_id, value, 
+    def save_metadata_value (self, context, source_id, term_id, value, 
         sequence_position=0, extra=None):
         
-        context = canary.context.Context()
         cursor = context.get_cursor()
         # FIXME: extra?
         cursor.execute("""
@@ -385,16 +376,15 @@ class QueuedRecord (canary.context.Cacheable, DTable):
                 return ''
 
 
-    def delete (self):
-        context = canary.context.Context()
+    def delete (self, context):
         cursor = context.get_cursor()
 
         try:
             # First, remove the study (connected table records will
             # also be deleted).  But don't delete non-existent studies.
             if self.study_id >= 0:
-                study = Study(self.study_id)
-                study.delete()
+                study = Study(context, self.study_id)
+                study.delete(context)
             
             # Then, remove the metadata
             cursor.execute("""
@@ -433,8 +423,7 @@ class Batch (DTable):
             self.loaded_records.append(record)
             self.num_records += 1
             
-    def find_duplicates (self, use_loaded=True):
-        context = canary.context.Context()
+    def find_duplicates (self, context, use_loaded=True):
         cursor = context.get_cursor()
         source_catalog = context.get_source_catalog()
         complete_term_map = source_catalog.get_complete_mapping()
@@ -442,20 +431,20 @@ class Batch (DTable):
         
         if use_loaded:
             for rec in self.loaded_records:
-                rec.load(source=source)
-                rec.check_for_duplicates(complete_term_map)
+                rec.load(context, source=source)
+                rec.check_for_duplicates(context, complete_term_map)
         else:
             for id, rec in self.queued_records.items():
-                rec.check_for_duplicates(complete_term_map)
+                rec.check_for_duplicates(context, complete_term_map)
         context.close_cursor(cursor)
        
         
-    def get_statistics (self):
+    def get_statistics (self, context):
         """
         Return the state of a Batch based on the number of unclaimed,
         claimed, and finished QueuedRecords it contains.
         """
-        context = canary.context.Context()
+        
         cursor = context.get_cursor()
         stats = {}
         stats['unclaimed'] = stats['claimed'] = stats['curated'] = 0
@@ -481,14 +470,13 @@ class Batch (DTable):
         return stats
 
 
-    def load (self, show='unfinished', start=0, size=25):
+    def load (self, context, show='unfinished', start=0, size=25):
         """
         Load a batch and its queued records.
         """
         if self.uid == -1:
             return
             
-        context = canary.context.Context()
         cursor = context.get_cursor()
         cursor.execute("""
             SELECT * 
@@ -528,18 +516,17 @@ class Batch (DTable):
         rows = cursor.fetchall()
         for row in rows:
             row = dtuple.DatabaseTuple(desc, row)
-            record = QueuedRecord(row['uid'])
+            record = QueuedRecord(context, row['uid'])
             self.queued_records[record.uid] = record
         self.num_records = len(self.queued_records)
         context.close_cursor(cursor)
         
 
-    def save (self):
+    def save (self, context):
         
         # Update num_records
         self.num_records = len(self.queued_records) + len(self.loaded_records)
         
-        context = canary.context.Context()
         cursor = context.get_cursor()
         if self.uid == -1:
             cursor.execute("""
@@ -551,7 +538,7 @@ class Batch (DTable):
                 CURDATE())
                 """, (self.file_name, self.source_id, self.num_records, self.name)
                 )
-            self.uid = self.get_new_uid()
+            self.uid = self.get_new_uid(context)
             self.date_added = time.strftime(str('%Y-%m-%d'))
 
         else:
@@ -565,17 +552,16 @@ class Batch (DTable):
         
         for record in self.loaded_records:
             record.queued_batch_id = self.uid
-            record.save()
+            record.save(context)
         context.close_cursor(cursor)
     
     
-    def delete (self):
+    def delete (self, context):
         """ Delete this batch and all of its records 
         (and all of their respective data)."""
-        context = canary.context.Context()
         try:
             for id, rec in self.queued_records.items():
-                rec.delete()
+                rec.delete(context)
             
             cursor = context.get_cursor()
             cursor.execute("""

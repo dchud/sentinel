@@ -2,14 +2,13 @@
 
 import dtuple
 
-import canary.context
 from canary.utils import DTable
 
 
 
 class Feature (DTable):
 
-    def __init__ (self, uid=-1):
+    def __init__ (self, context=None, uid=-1):
         self.uid = uid
         self.data_source = ''
         self.latitude = 0.0
@@ -22,8 +21,7 @@ class Feature (DTable):
         self.adm2 = ''
         self.name = ''
         
-    def load (self):
-        context = canary.context.Context()
+    def load (self, context):
         cursor = context.get_cursor()
         cursor.execute("""
             SELECT *
@@ -50,8 +48,7 @@ class Gazeteer:
         self.feature_codes = {}
         self.fips_codes = {}
         
-    def load (self):
-        context = canary.context.Context()
+    def load (self, context):
         cursor = context.get_cursor()
         cursor.execute("""
             SELECT code, name
@@ -80,8 +77,7 @@ class Gazeteer:
         context.close_cursor(cursor)
         
             
-    def search (self, feature_name, params={}):
-        context = canary.context.Context()
+    def search (self, context, feature_name, params={}):
         cursor = context.get_cursor()
         results = []
         search_token = feature_name.strip() + '%'

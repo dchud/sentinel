@@ -27,7 +27,7 @@ if __name__ == '__main__':
     context = canary.context.Context()
     cursor = context.get_cursor()
 
-    si = canary.search.SearchIndex()
+    si = canary.search.SearchIndex(context)
     writer = context.get_search_index_writer(True)
     
     # Index all records
@@ -40,14 +40,14 @@ if __name__ == '__main__':
             WHERE status = %s
             ORDER BY uid
             """, QueuedRecord.STATUS_CURATED)
-        while 1:
-            row = cursor.fetchone()
-            if not row:
-                break
+        rows = cursor.fetchall()
+        for row in rows:
             uid = int(row[0])
-            record = QueuedRecord(uid)
-            print 'Index record %s' % uid
+            print 'loading record %s' % uid
+            record = QueuedRecord(context, uid)
+            print 'indexing record %s' % uid
             si.index_record(record, writer)
+            print 'indexed record %s' % uid
             record_count += 1
     except:
         import traceback

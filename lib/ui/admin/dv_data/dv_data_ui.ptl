@@ -7,7 +7,6 @@ _q_exports = [
 from quixote import get_publisher
 from quixote.errors import TraversalError
 
-import canary.context
 from canary.db_model import DBModel, Value, ValueGroup
 from canary.ui.admin.admin_ui import title_bar
 from canary.ui.pageframe import header, footer
@@ -23,7 +22,7 @@ def _q_index [html] (request):
     if has_messages():
         render_messages()
 
-    context = canary.context.Context()
+    context = get_publisher().context
     db_model = context.get_dbmodel()
     dv_groups = db_model.get_groups()
     if len(dv_groups) > 0:

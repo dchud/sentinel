@@ -1,7 +1,6 @@
 import sha
 
 from canary import dtuple
-import canary.context
 from canary.utils import DTable
 
 
@@ -11,31 +10,30 @@ def hash_password (password):
     return sha.new(password).hexdigest()
 
 
-def get_user_by_id (id):
+def get_user_by_id (context, id):
     """     
     Find user for existing user id.
     """
     if id == None:
         return None
     user = User(id=id)
-    user.load()
+    user.load(context)
     return user
 
 
-def get_user_by_uid (uid):
+def get_user_by_uid (context, uid):
     """     
     Find user for existing uid.
     """
     if uid == None:
         return None
     user = User(uid=uid)
-    user.load()
+    user.load(context)
     return user
 
-def get_users ():
+def get_users (context):
     """ Return all users.  """
     users = {}
-    context = canary.context.Context()
     cursor = context.get_cursor()
     cursor.execute("""
         SELECT * 
@@ -92,13 +90,8 @@ class User (DTable):
         """Compatibility method for quixote and old canary code."""
         return self.id
 
-    def load (self):
-        
-        if self.uid >= 0:
-            DTable.load(self)
-            return
+    def load (self, context):
             
-        context = canary.context.Context()
         cursor = context.get_cursor()
             
         if self.id:
@@ -119,9 +112,8 @@ class User (DTable):
         context.close_cursor(cursor)
         
         
-    def save (self):
+    def save (self, context):
         
-        context = canary.context.Context()
         cursor = context.get_cursor()
         try:
             if self.uid == -1:
@@ -135,7 +127,7 @@ class User (DTable):
                     """, (self.id, self.is_active, self.is_admin, self.is_editor,
                     self.name, self.passwd, self.is_assistant, self.email)
                     )
-                self.uid = self.get_new_uid()
+                self.uid = self.get_new_uid(context)
                 print 'User %s created with uid %s' % (self.id, self.uid)
             else:
                 update_phrase = 'UPDATE %s ' % self.TABLE_NAME
@@ -157,10 +149,9 @@ class User (DTable):
         context.close_cursor(cursor)
 
 
-    def delete (self):
+    def delete (self, context):
         """ Delete this user from the database."""
        
-        context = canary.context.Context()
         cursor = context.get_cursor()
         try:
             if self.uid >= 0:

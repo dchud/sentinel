@@ -11,7 +11,6 @@ from log4py import Logger
 from quixote import get_publisher
 from quixote.errors import AccessError, PublishError, TraversalError
 
-import canary.context
 from canary.loader import Batch, Queue, QueuedRecord
 from canary.source_catalog import SourceCatalog
 from canary.study import Study
@@ -81,15 +80,15 @@ class BatchActions:
 def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
     # FIXME: Refactor this, why is it all in a big try/except?
     
+    context = get_publisher().context
     header('Edit: View queued records')
     title_bar('View queued records, batch %s' % batch_id)
     
     try:
-        context = canary.context.Context()
         source_catalog = context.get_source_catalog()
         batch = Batch(batch_id)
-        batch.load(show=show, start=start, size=size)
-        batch_stats = batch.get_statistics()
+        batch.load(context, show=show, start=start, size=size)
+        batch_stats = batch.get_statistics(context)
         if not batch.name == '':
             """
             <h4>Batch: '%s'</h4>
@@ -216,7 +215,7 @@ def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
                     """ 
                     if record.duplicate_score:
                         complete_term_map = source_catalog.get_complete_mapping()
-                        dupes = record.check_for_duplicates(complete_term_map)
+                        dupes = record.check_for_duplicates(context, complete_term_map)
                         mapped_metadata = record.get_mapped_metadata(complete_term_map)
                         
                         """
@@ -228,7 +227,7 @@ def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
                         sort_list = [(k, v) for k, v in dupes.items()]
                         sort_list.sort()
                         for dupe_rec_id, dupe_fields in sort_list:
-                            dupe_rec = QueuedRecord(dupe_rec_id)
+                            dupe_rec = QueuedRecord(context, dupe_rec_id)
                             """
                                 <li>
                                 #%s (%s)
@@ -364,7 +363,7 @@ def update [html] (request, batch_id, start, size):
     # (is_irrelevant || is_duplicate) || (needs_paper)
     # ... and not all.
     
-    context = canary.context.Context()
+    context = get_publisher().context
     source_catalog = context.get_source_catalog()
     user_id = request.session.user.get_id()
     
@@ -373,7 +372,7 @@ def update [html] (request, batch_id, start, size):
         
     try:
         batch = Batch(batch_id)
-        batch.load()
+        batch.load(context)
         for rec_id, rec in batch.queued_records.items():
             # Set to false by default.
             is_irrelevant = is_duplicate = needs_paper = False
@@ -407,14 +406,14 @@ def update [html] (request, batch_id, start, size):
 
                 study.add_history(curator_user_id=user_id,
                     message='; '.join(history_messages))
-                study.save()
+                study.save(context)
                 
                 add_message('Set record %s to %s and curated' % (rec_id, 
                     study.get_article_type(True)))
                 
                 rec.study_id = study.uid
                 rec.status = rec.STATUS_CURATED
-                rec.save()
+                rec.save(context)
             
             else:
                 if (needs_paper == 'on' and rec.needs_paper) \
@@ -429,7 +428,7 @@ def update [html] (request, batch_id, start, size):
                         rec.needs_paper = int(False)
                         add_message('Set record %s "needs paper" to "false"' % rec_id)
                 
-                    rec.save()
+                    rec.save(context)
         
         request.redirect(str('/edit/batch/%s/view' % batch_id))
         

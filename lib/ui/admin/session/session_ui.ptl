@@ -1,10 +1,11 @@
 # $Id$
 
-_q_exports = ['delete',
-             ]
+_q_exports = [
+    'delete',
+    ]
 
 
-from quixote import get_session_manager
+from quixote import get_publisher, get_session_manager
 from quixote import form2
 
 from canary.ui.admin.admin_ui import title_bar
@@ -48,7 +49,8 @@ class SessionActions:
 
 def delete [html] (session_id=None):
 
-    form = MyForm()
+    context = get_publisher().context
+    form = MyForm(context)
     form.add(form2.StringWidget, 'session_id', title='Session id', required=True)
     form.add(form2.CheckboxWidget, 'are_you_sure',
              title='Are you sure you want to delete this session?',

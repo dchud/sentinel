@@ -9,7 +9,6 @@ import urllib
 from quixote import get_publisher, get_request
 from quixote import form2
 
-import canary.context
 from canary.loader import find_needed_papers, QueuedRecord
 from canary.qx_defs import MyForm
 from canary.ui.pageframe import header, footer
@@ -69,7 +68,7 @@ def full_openurl (metadata={}):
 
 def _q_index [html] (request):
     
-    context = canary.context.Context()
+    context = get_publisher().context
     source_catalog = context.get_source_catalog()
     
     header('Assistant: Free Coffee in Suite 501')
@@ -78,7 +77,7 @@ def _q_index [html] (request):
     if has_messages():
         render_messages()
 
-    records = find_needed_papers()
+    records = find_needed_papers(context)
     sort_field = request.get_form_var('sortby', default='source')
     if not sort_field in ('uid', 'source', 'title', 'author'):
         sort_field = 'source'
@@ -134,11 +133,11 @@ def update [html] (request):
     
     try:
         record_id = int(request.get_form_var('record_id', default=None))
-        rec = QueuedRecord(record_id)
+        rec = QueuedRecord(context, record_id)
         if not rec:
             raise ValueError, 'Record %s not found' % record_id
         rec.needs_paper = int(False)
-        rec.save()
+        rec.save(context)
         add_message('Record %s marked as found' % record_id)
         return request.redirect(str('/assistant'))
     except:

@@ -62,15 +62,15 @@ class SpeciesActions:
 
 def find [html] (request):
 
-    queued_record = QueuedRecord(request.queued_record_id)
+    context = get_publisher().context
+    queued_record = QueuedRecord(context, request.queued_record_id)
     
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
     
-    study = Study(queued_record.study_id)
+    study = Study(context, queued_record.study_id)
     study_concepts = getattr(study, str('species'))
-    context = canary.context.Context()
     source_catalog = context.get_source_catalog()
     complete_term_map = source_catalog.get_complete_mapping()
     mapped_metadata = queued_record.get_mapped_metadata(term_map=complete_term_map)
@@ -91,7 +91,7 @@ def find [html] (request):
             if not subject in concept_terms:
                 select_options.append((subject, subject, subject))
         
-    form = MyForm()
+    form = MyForm(context)
     form.add(form2.StringWidget, 'search_term',
         title='Specify the species to add:',
         size='30',
@@ -125,7 +125,7 @@ def find [html] (request):
     else:
         search_term = form['search_term']
 
-    species_list = find_species(search_term)
+    species_list = find_species(context, search_term)
     if len(species_list) == 0:
         form.set_error('search_term', 'No species found.')
         
@@ -150,15 +150,16 @@ def find [html] (request):
 
 def add [html] (request):
     
-    queued_record = QueuedRecord(request.queued_record_id)
+    context = get_publisher().context
+    queued_record = QueuedRecord(context, request.queued_record_id)
     
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
     
-    study = Study(queued_record.study_id)
+    study = Study(context, queued_record.study_id)
     
-    form = MyForm()
+    form = MyForm(context)
     form.action_url = 'add'
     form.add(form2.IntWidget, name='concept_source_id', value=None, required=True)
     form.add(form2.IntWidget, name='concept_id', value=None, required=True)
@@ -201,10 +202,10 @@ def add [html] (request):
     
     try:
         study.add_species(spec)
-        spec.save()
+        spec.save(context)
         study.add_history(curator_user_id=request.session.user.get_id(),
             message='Added species "%s"' % spec.term)
-        study.save()
+        study.save(context)
         form.logger.info(str('Added species %s' % spec.uid))
         add_message('Added species')
         request.redirect(str('../curate_three'))
@@ -219,16 +220,17 @@ def add [html] (request):
 def delete [html] (species_id):
     
     request = get_request()
-    queued_record = QueuedRecord(request.queued_record_id)
+    context = get_publisher().context
+    queued_record = QueuedRecord(contextrequest.queued_record_id)
     
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
     
-    study = Study(queued_record.study_id)
+    study = Study(context, queued_record.study_id)
     species = study.get_species(species_id)
 
-    form = MyForm()
+    form = MyForm(context)
     form.add(form2.CheckboxWidget, 'are_you_sure',
         title='Are you sure you want to delete this species?',
         value=False)
@@ -260,10 +262,10 @@ def delete [html] (species_id):
     
     if form['are_you_sure']:
         try:
-            study.delete_species(species)
+            study.delete_species(context, species)
             study.add_history(curator_user_id=request.session.user.get_id(),
                 message='Deleted species "%s"' % species.term)
-            study.save()
+            study.save(context)
             add_message('Species deleted')
             form.logger.info(str('Deleted species %s' % species_id))
         except:
@@ -335,24 +337,24 @@ def render_found_species [html] (study, species, search_term):
     
 def types [html] (request):
     
-    queued_record = QueuedRecord(request.queued_record_id)
+    context = get_publisher().context
+    queued_record = QueuedRecord(context, request.queued_record_id)
     
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
             
-    study = Study(queued_record.study_id)
+    study = Study(context,queued_record.study_id)
     for spec in study.species:
         spec.clear_types()
         for type in spec.TYPES:
             var = request.get_form_var('species_%s_%s' % (spec.uid, type), '')
             if var:
                 spec.add_type(type)
-        spec.save()
+        spec.save(context)
         add_message('Updated species %s ("%s")' % (spec.uid, spec.term))
     
     # Force reload of this study to pick up species changes
-    context = canary.context.Context()
     context.cache_delete('%s:%s' % (study.CACHE_KEY, study.uid))
     
     request.redirect(str('/edit/study/%s/curate_three' % queued_record.uid))

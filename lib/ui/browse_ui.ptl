@@ -8,7 +8,6 @@ from canary.browse import records_by_year, records_by_year_index
 from canary.browse import records_by_heading, records_by_heading_index
 from canary.browse import records_by_journal, records_by_journal_index
 from canary.browse import records_by_methodology, records_by_methodology_index
-import canary.context
 from canary.qx_defs import NotLoggedInError
 from canary.study import Methodology
 from canary.ui.pages import not_found
@@ -124,10 +123,10 @@ class YearBrowseIndex (BrowseIndex):
                     <th align='left'>Year</th>
                 </tr>
         """
-        context = canary.context.Context()
+        context = get_publisher().context
         source_catalog = context.get_source_catalog()
         complete_term_map = source_catalog.get_complete_mapping()
-        records = records_by_year_index(complete_term_map)
+        records = records_by_year_index(context, complete_term_map)
         for record in records:
             year_count, year = record
             if not year == 0:
@@ -148,10 +147,10 @@ class YearBrowseIndex (BrowseIndex):
         try:
             if year:
                 year = int(year)
-                context = canary.context.Context()
+                context = get_publisher().context
                 source_catalog = context.get_source_catalog()
                 complete_term_map = source_catalog.get_complete_mapping()
-                records = records_by_year(year, term_map=complete_term_map)
+                records = records_by_year(context, year, term_map=complete_term_map)
                 if len(records) == 0:
                     raise Exception('No records found')
                 return self.render_records(year, records)
@@ -201,7 +200,8 @@ class HeadingBrowseIndex (BrowseIndex):
                 <th align='left'>Subject heading</th>
             </tr>
         """
-        headings = records_by_heading_index()
+        context = get_publisher().context
+        headings = records_by_heading_index(context)
         for heading in headings:
             term, term_count, id_count = heading
             encoded_heading = urllib.quote_plus(term)
@@ -260,10 +260,10 @@ class JournalBrowseIndex (BrowseIndex):
                 </tr>
         """
         
-        context = canary.context.Context()
+        context = get_publisher().context
         source_catalog = context.get_source_catalog()
         complete_term_map = source_catalog.get_complete_mapping()
-        results = records_by_journal_index(complete_term_map)
+        results = records_by_journal_index(context, complete_term_map)
         for result in results:
             count, issn, title, abbr = result
             if str('.') in title:
@@ -286,10 +286,10 @@ class JournalBrowseIndex (BrowseIndex):
     def _q_lookup (self, request, issn=0):
         try:
             if issn:
-                context = canary.context.Context()
+                context = get_publisher().context
                 source_catalog = context.get_source_catalog()
                 complete_term_map = source_catalog.get_complete_mapping()
-                title, records = records_by_journal(issn, 
+                title, records = records_by_journal(context, issn, 
                     term_map=complete_term_map)
                 if len(records) == 0:
                     raise Exception('No records found')
@@ -337,7 +337,8 @@ class MethodologyBrowseIndex (BrowseIndex):
                     <th align='left'>Methodology</th>
                 </tr>
         """
-        records = records_by_methodology_index()
+        context = get_publisher().context
+        records = records_by_methodology_index(context)
         meths = [(Methodology().get_text_value(Methodology.TYPES, 
                 meth_id), meth_id, count) for meth_id, count in records]
         meths.sort()
@@ -359,7 +360,8 @@ class MethodologyBrowseIndex (BrowseIndex):
         try:
             if name:
                 meth_id = int(name)
-                records = records_by_methodology(meth_id)
+                context = get_publisher().context
+                records = records_by_methodology(context, meth_id)
                 if len(records) == 0:
                     raise Exception('No records found')
                 

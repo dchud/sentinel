@@ -6,7 +6,6 @@ import urllib
 from quixote import get_publisher, get_request
 from quixote.errors import TraversalError
 
-import canary.context
 from canary.gazeteer import Feature
 from canary.loader import QueuedRecord
 from canary.pubmed import Pubmed
@@ -27,9 +26,10 @@ def _q_index [html] (request):
 
 
 def _q_lookup (request, record_id):
+    context = get_publisher().context
     try:
-        record = QueuedRecord(record_id)
-        study = Study(record.study_id)
+        record = QueuedRecord(context, record_id)
+        study = Study(context, record.study_id)
         
         if not study.get_status(text=True) == 'curated':
             raise ValueError('Record not curated')
@@ -45,7 +45,7 @@ def _q_lookup (request, record_id):
 def render_tagged_pubmed [plain] (record, mapped_metadata):
     request = get_request()
     request.response.set_content_type('text/plain')
-    context = canary.context.Context()
+    context = get_publisher().context
     source_catalog = context.get_source_catalog()
     output = []
     for source_id, term_id in record.metadata.keys():
@@ -202,12 +202,12 @@ def render_methodologies [html] (study, show_actions=False):
 
     
 def render_locations [html] (study):
-    context = canary.context.Context()
+    context = get_publisher().context
     gazeteer = context.get_gazeteer()
     locs = []
     for location in study.locations:
         feature = Feature(uid=location.feature_id)
-        feature.load()
+        feature.load(context)
         if gazeteer.fips_codes.has_key((feature.country_code, feature.adm1)):
             region_name = gazeteer.fips_codes[(feature.country_code, feature.adm1)]
         else:
@@ -412,7 +412,7 @@ def render_related [html] (mapped_metadata):
         for author in authors:
             quoted_author = urllib.quote_plus(author)
             """
-                    <a href='/search?query=%s'>%s</a> <br/>
+                    <a href='/search?q=%s'>%s</a> <br/>
             """ % (quoted_author, author)
         """
                 </p>
@@ -617,15 +617,10 @@ def render_summary_concept_row [html] (concepts, concept_name):
 
 def render_record [html] (record, study):
     
-    try:
-        context = canary.context.Context()
-        source_catalog = context.get_source_catalog()
-        complete_term_map = source_catalog.get_complete_mapping()
-        article_type = study.get_article_type(text=True)
-    except:
-        import traceback
-        print traceback.print_exc()
-        return not_found('record')
+    context = get_publisher().context
+    source_catalog = context.get_source_catalog()
+    complete_term_map = source_catalog.get_complete_mapping()
+    article_type = study.get_article_type(text=True)
 
     view = get_request().get_form_var('view', default='canary')
     format = get_request().get_form_var('format', default='')
@@ -745,7 +740,7 @@ def render_record [html] (record, study):
 
 def render_record_row [html] (record, score=None):
     
-    context = canary.context.Context()
+    context = get_publisher().context
     source_catalog = context.get_source_catalog()
     complete_term_mapping = source_catalog.get_complete_mapping()
     mapped_md = record.get_mapped_metadata(term_map=complete_term_mapping)
@@ -755,16 +750,25 @@ def render_record_row [html] (record, score=None):
     """
                 <tr>
                     <td align='left' valign='top'>
-                    
-                        <b><a href='/record/%s'>%s</a></b> 
-                        <br />
-                        %s
-                        <br />
-                        %s
-                    </td>
-    """ % (record.uid, ', '.join(author), mapped_md['title'], mapped_md['source'])
+    """
+    if score:
+        """
+                        <div class='relevance-box'>
+                            <div class="relevance" style="width: %s%s"></div>
+                        </div>
+        """ % (int(score * 100), '%')
         
     """
+                    <b><a href='/record/%s'>%s</a></b> 
+                    <br />
+                    %s
+                    <br />
+                    %s
+    """ % (record.uid, ', '.join(author), mapped_md['title'], mapped_md['source'])
+    
+    """
+                    </td>
+                    
                     <td valign='top' width='20%'>
                         <!--
                         <a href='http://sfx.library.yale.edu/links?id=[[PMID]]'>

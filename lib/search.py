@@ -5,7 +5,6 @@ from PyLucene import Field, Term, Document
 from PyLucene import QueryParser, IndexSearcher, StandardAnalyzer, FSDirectory
 
 from canary.concept import Concept
-import canary.context
 from canary.gazeteer import Feature
 from canary.loader import QueuedRecord
 from canary.study import Study
@@ -30,18 +29,17 @@ class Search:
         self.allow_uncurated = allow_uncurated
         
         
-    def search (self, term_mapping={}):
+    def search (self, context, term_mapping={}):
         results = Results()
         if self.field == '' \
             or self.token == '':
             return results
 
-        context = canary.context.Context()
         cursor = context.get_cursor()
         try:
             if self.field == 'canary id':
                 token = int(self.token)
-                record = QueuedRecord(token)
+                record = QueuedRecord(context, token)
                 results.add_result(record)
             elif self.field == 'keyword':
                 select_clause = """
@@ -69,7 +67,7 @@ class Search:
                     )
                 rows = cursor.fetchall()
                 for row in rows:
-                    record = QueuedRecord(row[0])
+                    record = QueuedRecord(context, row[0])
                     results.add_result(record)
 
             else:
@@ -104,7 +102,7 @@ class Search:
                     cursor.execute(select_clause + ' AND value LIKE %s ', search_token)
                     rows = cursor.fetchall()
                     for row in rows:
-                        record = QueuedRecord(row[0])
+                        record = QueuedRecord(context, row[0])
                         results.add_result(record)
         except:
             print 'Unable to perform search'
@@ -191,6 +189,8 @@ class PubmedSearch:
                     id = self._get_text(node)
                     id_list.append(id)
         except:
+            import traceback
+            print traceback.print_exc()
             return []
             
         if len(id_list) > 0:
@@ -203,7 +203,7 @@ class PubmedSearch:
 class SearchIndex:
     
     def __init__ (self, context=None):
-        self.context = canary.context.Context()
+        self.context = context
         
         
     def index_record (self, record, writer=None):
@@ -215,7 +215,7 @@ class SearchIndex:
             else:
                 had_writer = True
             
-            study = Study(record.study_id)
+            study = Study(self.context, record.study_id)
             
             print 'starting document'
             doc = PyLucene.Document()
@@ -232,7 +232,7 @@ class SearchIndex:
             mapped_metadata = record.get_mapped_metadata(complete_term_map)
             
             # First index all the non-multiple metadata fields
-            for field in ('abstract', 'affiliation', 'grantnum', 'issn', 
+            for field in ('abstract', 'affiliation', 'issn', 
                 'journal', 'pubdate', 'issue', 'pages', 'title', 
                 'unique_identifier', 'volume'):
                 val = mapped_metadata.get(field, None)
@@ -245,15 +245,17 @@ class SearchIndex:
             # Next, index all the possibly-multiple metadata fields
             # Give these (especially for author and subject) a little
             # boost, less than for canary UMLS concepts
-            for field in ('author', 'keyword', 'registrynum', 'subject'):
+            for field in ('author', 'grantnum', 'keyword', 'registrynum', 
+                'subject'):
                 vals = mapped_metadata.get(field, None)
                 for val in vals:
                     doc.add(PyLucene.Field(field, val,
                         False, True, True))
                     f = PyLucene.Field('all', val,
                         False, True, True)
-                    f.setBoost(1.1)
+                    f.setBoost(1.3)
                     doc.add(f)
+
             
             # All the booleans
             for bool in ('has_outcomes', 'has_exposures', 
@@ -273,21 +275,24 @@ class SearchIndex:
             for ctype in ('exposures', 'outcomes', 'risk_factors',
                 'species'):
                 for val in getattr(study, ctype):
-                    concept = Concept(val.concept_id)
+                    print 'finding %s concepts for %s' % (ctype, val.term)
+                    concept = Concept(self.context, val.concept_id)
                     for syn in concept.synonyms:
+                        print 'add synonym "%s" for term "%s"' % \
+                            (syn, concept.term)
                         doc.add(PyLucene.Field(ctype, syn,
                             False, True, True))
                         f = PyLucene.Field('all', syn,
                             False, True, True)
-                        f.setBoost(1.2)
+                        f.setBoost(2.0)
                         doc.add(f)
 
             # And, the locations
             gazeteer = self.context.get_gazeteer()
             locs = []
             for location in study.locations:
-                feature = Feature(uid=location.feature_id)
-                feature.load()
+                feature = Feature(self.context, uid=location.feature_id)
+                feature.load(self.context)
                 if gazeteer.fips_codes.has_key((feature.country_code, feature.adm1)):
                     region_name = gazeteer.fips_codes[(feature.country_code, feature.adm1)]
                 else:

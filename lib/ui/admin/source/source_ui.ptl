@@ -13,7 +13,6 @@ from quixote import get_publisher
 from quixote.errors import AccessError, TraversalError
 from quixote import form2
 
-import canary.context
 from canary.qx_defs import MyForm
 from canary.source_catalog import SourceCatalog, Source, Term
 from canary.ui.admin.admin_ui import title_bar
@@ -64,8 +63,8 @@ class SourceActions:
 
 class SourceForm (MyForm):
 
-    def __init__ (self):
-        MyForm.__init__(self)
+    def __init__ (self, context):
+        MyForm.__init__(self, context)
         self.add(form2.IntWidget, 'source_uid', title='Source uid',
             size=3, required=False)
         self.add(form2.StringWidget, 'source_name', title='Name',
@@ -86,7 +85,8 @@ class SourceForm (MyForm):
 
 def create [html] (request):
 
-    form = SourceForm()
+    context = get_publisher().context
+    form = SourceForm(context)
 
     def render [html] ():
         header('Create source')
@@ -135,10 +135,9 @@ def create [html] (request):
         source.sfx_pattern = form['sfx_pattern']
 
     try:
-        context = canary.context.Context()
-        source.save()
+        source.save(context)
         source_catalog = SourceCatalog()
-        source_catalog.load_sources(True)
+        source_catalog.load(context, True)
         context.set_source_catalog(source_catalog)
         form.logger.info(str('Created source %s' % source_name))
         add_message('Created source %s' % source_name)
@@ -153,9 +152,9 @@ def create [html] (request):
 
 def edit [html] (request, source_id=None):
 
-    form = SourceForm()
+    context = get_publisher().context
+    form = SourceForm(context)
 
-    context = canary.context.Context()
     source_catalog = context.get_source_catalog()
     source = source_catalog.get_source(source_id)
     if source == None:
@@ -219,9 +218,9 @@ def edit [html] (request, source_id=None):
     if form['sfx_pattern']:
         source.sfx_pattern = form['sfx_pattern']
     try:
-        source.save()
+        source.save(context)
         source_catalog = SourceCatalog()
-        source_catalog.load_sources()
+        source_catalog.load(context)
         context.set_source_catalog(source_catalog)
         form.logger.info(str('Edited source %s' % source.uid))
         add_message('Edited source %s' % source.name)
@@ -234,8 +233,8 @@ def edit [html] (request, source_id=None):
 
 class DeleteSourceForm (MyForm):
 
-    def __init__ (self):
-        MyForm.__init__(self)
+    def __init__ (self, context):
+        MyForm.__init__(self, context)
         self.add(form2.IntWidget, 'source_uid', title='Source id', required=True)
         self.add(form2.CheckboxWidget, 'are_you_sure',
                  title='Are you sure you want to delete this source?',
@@ -245,8 +244,8 @@ class DeleteSourceForm (MyForm):
 
 def delete [html] (source_id=None):
 
-    form = DeleteSourceForm()
-    context = canary.context.Context()
+    context = get_publisher().context
+    form = DeleteSourceForm(context)
     source_catalog = context.get_source_catalog()
     source = source_catalog.get_source(source_id)
     if source == None:
@@ -272,13 +271,12 @@ def delete [html] (source_id=None):
     are_you_sure = form['are_you_sure']
     if are_you_sure:
         try:
-            source_catalog.delete_source(source.uid)
+            source_catalog.delete_source(context, source.uid)
             new_source_catalog = SourceCatalog()
-            new_source_catalog.load_sources(True)
+            new_source_catalog.load(context, True)
             context.set_source_catalog(new_source_catalog)
         except:
             form.logger.error(str('Unable to delete source %s' % source.uid))
-            PublishError
         form.logger.info(str('Deleted source %s' % source.uid))
         header('Admin: Source deleted')
         title_bar('Source deleted')
@@ -291,7 +289,7 @@ def delete [html] (source_id=None):
 
 def terms [html] (request, source_id=None):
 
-    context = canary.context.Context()
+    context = get_publisher().context
     source_catalog = context.get_source_catalog()
     source = source_catalog.get_source(source_id)
     if source == None:

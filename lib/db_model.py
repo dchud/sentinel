@@ -2,7 +2,6 @@
 
 import dtuple
 
-import canary.context
 
 
 class ValueGroup:
@@ -39,10 +38,10 @@ class ValueGroup:
                 return True
         return False
         
-    def delete_value (self, value):
+    def delete_value (self, context, value):
         if self.has_value(value.value_id):
             del(self.values[value.serial_number])
-            value.delete()
+            value.delete(context)
             
     def get_value (self, value_id):
         for serial_number, value in self.values.items():
@@ -60,8 +59,7 @@ class ValueGroup:
     def is_multiple (self):
         return self.allow_multiple
 
-    def save (self, update_values=True):
-        context = canary.context.Context()
+    def save (self, context, update_values=True):
         cursor = context.get_cursor()
         try:
             if self.value_group_id == -1:
@@ -86,7 +84,7 @@ class ValueGroup:
                     """, self.value_group_id)
                 for value_id in self.values:
                     value = self.values[value_id]
-                    value.save()
+                    value.save(context)
                     
         except:
             # FIXME: log something here.  how to handle?  define Error.
@@ -120,8 +118,7 @@ class Value:
         s.append(" />")
         return "\n".join(s)
 
-    def save (self):
-        context = canary.context.Context()
+    def save (self, context):
         cursor = context.get_cursor()
         try:
             if self.value_id == -1:
@@ -145,8 +142,7 @@ class Value:
         context.close_cursor(cursor)
         
             
-    def delete (self):
-        context = canary.context.Context()
+    def delete (self, context):
         cursor = context.get_cursor()
         try:
             cursor.execute("""
@@ -160,6 +156,7 @@ class Value:
             pass
         context.close_cursor(cursor)
 
+
 class DBModel:
     """
     Provides access and maintenance functions for EAV-style discrete value
@@ -170,8 +167,7 @@ class DBModel:
     def __init__ (self):
         self.value_groups = {}
 
-    def load_from_db (self, debug=0):
-        context = canary.context.Context()
+    def load (self, context, debug=0):
         cursor = context.get_cursor()
         
         # load all value groups
@@ -248,8 +244,7 @@ class DBModel:
         return False
         
         
-    def delete_group (self, group_id):
-        context = canary.context.Context()
+    def delete_group (self, context, group_id):
         cursor = context.get_cursor
         try:
             group_id = int(group_id)

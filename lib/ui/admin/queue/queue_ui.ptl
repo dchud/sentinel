@@ -16,7 +16,6 @@ from quixote.errors import AccessError, PublishError, TraversalError
 from quixote import form2
 from quixote.html import html_quote
 
-import canary.context
 from canary.loader import Batch, Queue, Parser
 from canary.qx_defs import MyForm
 from canary.source_catalog import SourceCatalog, Source
@@ -73,16 +72,17 @@ class QueueActions:
             
     def edit [html] (self, request):
         
-        batch = Batch(uid=self.batch_id)
-        batch.load()
+        context = get_publisher().context
         
-        context = canary.context.Context()
+        batch = Batch(uid=self.batch_id)
+        batch.load(context)
+        
         source_catalog = context.get_source_catalog()
         # Sort terms by their token
         sources = [(id, source.name) for id, source in source_catalog.sources.items()]
         sources.sort()
         
-        form = MyForm()
+        form = MyForm(context)
         form.add(form2.StringWidget, 'batch_name', 
             title='Batch name',
             value=batch.name,
@@ -120,7 +120,7 @@ class QueueActions:
         
         if has_changed:
             try:
-                batch.save()
+                batch.save(context)
                 add_message('Edited batch %s' % self.batch_id)
                 form.logger.info(str('Edited batch %s' % self.batch_id))
             except:
@@ -136,7 +136,7 @@ class QueueActions:
 
 def add [html] (request, batch_id=None):
     
-    context = canary.context.Context()
+    context = get_publisher().context
     source_catalog = context.get_source_catalog()
     # Sort terms by their token
     sources = [(id, source.name) for id, source in source_catalog.sources.items()]
@@ -145,7 +145,7 @@ def add [html] (request, batch_id=None):
     batch_name = ''
     if batch_id:
         batch = Batch(uid=batch_id)
-        batch.load()
+        batch.load(context  )
         batch_name = batch.name
     
     header('Upload records')
@@ -204,7 +204,7 @@ def add [html] (request, batch_id=None):
 
 def list [html] (request):
 
-    context = canary.context.Context()
+    context = get_publisher().context
     source_catalog = context.get_source_catalog()
 
     header('List editing queues')
@@ -224,11 +224,11 @@ def list [html] (request):
     </tr>
     """
     queue = Queue()
-    queue.load()
+    queue.load(context)
     sort_list = [(b.name.lower(), b) for b in queue.batches]
     sort_list.sort()
     for n, batch in sort_list:
-        batch_stats = batch.get_statistics()
+        batch_stats = batch.get_statistics(context)
 
         source_id = batch.source_id
         source = source_catalog.get_source(source_id)
@@ -274,7 +274,7 @@ def receive [html] (request, batch_id=None):
 
     result = []
     form = request.form
-    context = canary.context.Context()
+    context = get_publisher().context
     source_catalog = context.get_source_catalog()
         
     try:
@@ -302,29 +302,29 @@ def receive [html] (request, batch_id=None):
     try:
         if batch_id:
             batch = Batch(batch_id)
-            batch.load()
+            batch.load(context)
         else:
             batch_name = form.get('batch_name', '')
             if batch_name:
                 queue = Queue()
-                queue.load()
+                queue.load(context)
                 batch = queue.get_batch_by_name(batch_name)
                 if batch:
-                    batch.load()
+                    batch.load(context)
                 else:
                     batch = Batch(file_name=upload.tmp_filename, 
                         source_id=source_id)
                     batch.name = form.get('batch_name') or ''
-                    batch.save()
+                    batch.save(context)
             
         mapped_terms = source_catalog.get_mapped_terms(source_id)
         parser = Parser(source)
         records = parser.parse(upload.tmp_filename, mapped_terms=mapped_terms)
         batch.add_records(records)
-        batch.save()
+        batch.save(context)
         
         if form.get('find_duplicates', '') == 'yes':
-            batch.find_duplicates()
+            batch.find_duplicates(context)
                 
         if num_records != len(records):
             add_message('Batch saved: Record count mismatch, %s specified, %s found' % (num_records, len(records)))
@@ -354,14 +354,14 @@ def receive [html] (request, batch_id=None):
 
 def create [html] (request):
     
-    context = canary.context.Context()
+    context = get_publisher().context
     source_catalog = context.get_source_catalog()
 
     # Sort terms by their token
     sources = [(id, source.name) for id, source in source_catalog.sources.items()]
     sources.sort()
 
-    form = MyForm()
+    form = MyForm(context)
     form.add(form2.SingleSelectWidget, name='source_id', title='Source',
         options=[(id, name, id) for id, name in sources],
         sort=True,
@@ -382,7 +382,7 @@ def create [html] (request):
     try:
         batch = Batch(source_id=form['source_id'])
         batch.name = form['batch_name']
-        batch.save()
+        batch.save(context)
         add_message('Created batch %s' % batch.uid)
         form.logger.info(str('Created batch %s' % batch.uid))
     except:
@@ -393,16 +393,16 @@ def create [html] (request):
 
 
 def delete [html] (request, batch_id):
-    context = canary.context.Context()
+    context = get_publisher().context
     source_catalog = context.get_source_catalog()
 
     try:
         batch = Batch(batch_id)
-        batch.load()
+        batch.load(context)
     except:
         return not_found('batch')
        
-    form = MyForm()
+    form = MyForm(context)
     form.add(form2.CheckboxWidget, 'are_you_sure',
         title='Are you sure you want to delete this batch?',
         value=False)
@@ -432,8 +432,8 @@ def delete [html] (request, batch_id):
         # Make sure they're absolutely certain!
         if request.get_form_var('are_you_certain', None) == 'YES':
             form.logger.info(str('Deleting batch %s' % batch.uid))
-            batch.load(show='all', size='all')
-            batch.delete()
+            batch.load(context, show='all', size='all')
+            batch.delete(context)
             add_message('Deleted batch')
         else:
             # Add a second widget to double-verify they're certain
@@ -452,13 +452,14 @@ def delete [html] (request, batch_id):
 
 def dedupe [html] (request, batch_id):
 
+    context = get_publisher().context
     try:
         batch = Batch(batch_id)
-        batch.load()
+        batch.load(context)
     except:
         return not_found('batch')
         
-    batch.find_duplicates()
+    batch.find_duplicates(context)
     add_message('Ran dedupe on batch')
     request.redirect(str('/admin'))
     

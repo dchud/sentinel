@@ -58,8 +58,8 @@ class UserActions:
 
 class UserForm (MyForm):
 
-    def __init__ (self):
-        MyForm.__init__(self)
+    def __init__ (self, context):
+        MyForm.__init__(self, context)
         self.add(form2.StringWidget, 'user_id', 
             title='User id',
             size=10, 
@@ -91,7 +91,8 @@ class UserForm (MyForm):
 
 def create [html] (request):
 
-    form = UserForm()
+    context = get_publisher().context
+    form = UserForm(context)
 
     def render [html] ():
         header('Create user')
@@ -108,7 +109,7 @@ def create [html] (request):
     if user_id:
         if str(' ') in user_id:
             form.set_error('user_id', 'User id cannot contain spaces.')
-        user = canary.user.get_user_by_id(user_id)
+        user = canary.user.get_user_by_id(context, user_id)
         if not user:
             form.set_error('user_id',
                 'A user with that id already exists, please choose another.')
@@ -137,7 +138,7 @@ def create [html] (request):
     if form['is_active']:
         user.is_active = True
 
-    user.save()
+    user.save(context)
     form.logger.info(str('Created user %s' % user_id))
     add_message('Created user %s' % user_id)
     
@@ -146,9 +147,10 @@ def create [html] (request):
 
 def edit [html] (user_id=None):
 
-    form = UserForm()
+    context = get_publisher().context
+    form = UserForm(context)
 
-    user = canary.user.get_user_by_id(user_id)
+    user = canary.user.get_user_by_id(context, user_id)
     if user == None:
         raise TraversalError
 
@@ -209,7 +211,7 @@ def edit [html] (user_id=None):
     if user_pass:
         user.set_password(user_pass)
 
-    user.save()
+    user.save(context)
     add_message('Edited user %s' % user_id)
     form.logger.info(str('Edited user %s' % user_id))
     request = get_request()
@@ -219,8 +221,8 @@ def edit [html] (user_id=None):
 
 class DeleteUserForm (MyForm):
 
-    def __init__ (self):
-        MyForm.__init__(self)
+    def __init__ (self, context):
+        MyForm.__init__(self, context)
         self.add(form2.StringWidget, 'user_id',
                  title='User id', required=True)
         self.add(form2.CheckboxWidget, 'are_you_sure',
@@ -231,9 +233,10 @@ class DeleteUserForm (MyForm):
 
 def delete [html] (user_id=None):
 
-    form = DeleteUserForm()
+    context = get_publisher().context
+    form = DeleteUserForm(context)
 
-    user = canary.user.get_user_by_id(user_id)
+    user = canary.user.get_user_by_id(context, user_id)
     if user == None:
         return not_found('user')
 
@@ -257,7 +260,7 @@ def delete [html] (user_id=None):
     are_you_sure = form['are_you_sure']
     if are_you_sure:
         try:
-            user.delete()
+            user.delete(context)
             add_message('Deleted user %s' % user_id)
             form.logger.info(str('Deleted user %s' % user_id))
         except:

@@ -29,7 +29,6 @@ $Id$
 import dtuple
 import time
 
-import canary.context
 from canary.utils import DTable
 
 
@@ -64,15 +63,14 @@ class SourceCatalog:
                 return source
         return None
 
-    def delete_source (self, id):
-        context = canary.context.Context()
+    def delete_source (self, context, id):
         cursor = context.get_cursor()
         try:
             uid = int(id)
             if self.sources.has_key(uid):
                 source = self.sources[uid]
                 for term_id in source.terms.keys():
-                    source.delete_term(term_id)
+                    source.delete_term(context, term_id)
                 cursor.execute("""
                                DELETE FROM sources
                                WHERE uid = %s
@@ -154,28 +152,26 @@ class SourceCatalog:
             return {}                
     
 
-    def delete_term (self, id):
-        context = canary.context.Context()
+    def delete_term (self, context, id):
         cursor = context.get_cursor()
         try:
             uid = int(id)
             if self.terms.has_key(uid):
                 term = self.terms[uid]
                 source = self.get_source(term.source_id)
-                source.delete_term(uid)
+                source.delete_term(context, uid)
         except:
             pass
         context.close_cursor(cursor)
        
-    def load_sources (self, load_terms=True):
+    def load (self, context, load_terms=True):
         sources = {}
-        context = canary.context.Context()
         cursor = context.get_cursor()
         cursor.execute('SELECT uid FROM sources')
         rows = cursor.fetchall()
         for row in rows:
             source = Source(uid=row[0])
-            source.load(load_terms=load_terms)
+            source.load(context, load_terms=load_terms)
             self.sources[source.uid] = source
 
             # index the terms by id if they were loaded
@@ -252,11 +248,10 @@ class Source (CatalogItem):
         return None
 
 
-    def load (self, load_terms=True):
+    def load (self, context, load_terms=True):
         if self.uid == -1:
             return
             
-        context = canary.context.Context()
         cursor = context.get_cursor()
         cursor.execute("""
                        SELECT *
@@ -295,8 +290,7 @@ class Source (CatalogItem):
         context.close_cursor(cursor)
         
         
-    def save (self):
-        context = canary.context.Context()
+    def save (self, context):
         cursor = context.get_cursor()
         if self.uid == -1:
             cursor.execute("""
@@ -323,8 +317,7 @@ class Source (CatalogItem):
         context.close_cursor(cursor)
         
 
-    def delete_term (self, id):
-        context = canary.context.Context()
+    def delete_term (self, context, id):
         cursor = context.get_cursor()
         if id > -1:
             cursor.execute("""
@@ -359,11 +352,10 @@ class Term (CatalogItem):
         out.append('\t/>')
         return '\n'.join(out)
 
-    def load (self):
+    def load (self, context):
         if self.uid == -1:
             return
             
-        context = canary.context.Context()
         cursor = context.get_cursor()
         cursor.execute("""
             SELECT *
@@ -380,8 +372,7 @@ class Term (CatalogItem):
         context.close_cursor(cursor)
         
 
-    def save (self):
-        context = canary.context.Context()
+    def save (self, context):
         cursor = context.get_cursor()
         if self.uid == -1:
             cursor.execute("""

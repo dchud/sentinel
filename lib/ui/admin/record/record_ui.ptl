@@ -10,7 +10,6 @@ from quixote import get_publisher
 from quixote.errors import AccessError, PublishError, TraversalError
 from quixote import form2
 
-import canary.context
 from canary.loader import Queue, QueuedRecord
 from canary.qx_defs import MyForm
 from canary.source_catalog import SourceCatalog, Source
@@ -62,16 +61,17 @@ class RecordActions:
 
     
     def edit [html] (self, request):
-    
+        
+        context = get_publisher().context
         queue = Queue()
-        queue.load()
+        queue.load(context)
         
         batches = [(b.uid, b.name) for b in queue.batches]
         batches.sort()
     
-        record = QueuedRecord(self.record_id)
+        record = QueuedRecord(context, self.record_id)
         
-        form = MyForm()
+        form = MyForm(context)
         form.add(form2.StringWidget, 'record_user_id', 
             title='User id',
             size=30, required=False)
@@ -121,7 +121,7 @@ class RecordActions:
     
         if has_changed:
             try:
-                record.save()
+                record.save(context)
                 form.logger.info(str('Updated record %s' % record.uid))
                 add_message('Updated record %s' % record.uid)
             except:
@@ -135,14 +135,15 @@ class RecordActions:
 
     def delete [html] (self, request):
         
-        form = MyForm()
+        context = get_publisher().context
+        form = MyForm(context)
         form.add(form2.IntWidget, 'record_uid', title='Record id', required=True)
         form.add(form2.CheckboxWidget, 'are_you_sure',
             title='Are you sure you want to delete this record?',
             value=False)
         form.add_submit('delete', 'delete')
     
-        record = QueuedRecord(self.record_id)
+        record = QueuedRecord(context, self.record_id)
     
         def render [html] ():
             header('Delete record')
@@ -170,7 +171,7 @@ class RecordActions:
         are_you_sure = form['are_you_sure']
         if are_you_sure:
             try:
-                record.delete()
+                record.delete(context)
             except:
                 form.logger.error(str('Unable to delete record %s' % self.record_id))
                 raise PublishError
@@ -184,7 +185,7 @@ class RecordActions:
 
     def recache [html] (self, request):
         
-        context = canary.context.Context()
+        context = get_publisher().context
         try:
             # Delete before we set it, otherwise, we won't properly
             # load from the db (it will load from the cache, which is
@@ -192,7 +193,7 @@ class RecordActions:
             context.cache_delete('%s:%s' % (QueuedRecord.CACHE_KEY, 
                 self.record_id))
             # Simply re-instantiating will restore to cache.
-            record = QueuedRecord(self.record_id)
+            record = QueuedRecord(context, self.record_id)
             add_message('Record recached')
             request.redirect(str('/admin'))
         except:
@@ -203,7 +204,8 @@ class RecordActions:
 
 def find [html] (request):
     
-    form = MyForm(method='get')
+    context = get_publisher().context
+    form = MyForm(context, method='get')
     form.add(form2.IntWidget, 'record_uid',
         title='Record id',
         required=True)
@@ -225,7 +227,7 @@ def find [html] (request):
         return render()
         
     try:
-        record = QueuedRecord(form['record_uid'])
+        record = QueuedRecord(context, form['record_uid'])
     except ValueError:
         return not_found('record')
     

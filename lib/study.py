@@ -67,11 +67,10 @@ class ExposureRoute (DTable):
             return self.route
 
 
-    def delete (self):
+    def delete (self, context):
         """
         Delete this route from the database.
         """
-        context = canary.context.Context()
         cursor = context.get_cursor()
         if not self.uid == -1:
             try:
@@ -87,8 +86,7 @@ class ExposureRoute (DTable):
         context.close_cursor(cursor)
         
         
-    def save (self):
-        context = canary.context.Context()
+    def save (self, context):
         cursor = context.get_cursor()
         if self.uid == -1:
             #print 'inserting new exposure_route'
@@ -100,7 +98,7 @@ class ExposureRoute (DTable):
                 """, (self.study_id, self.methodology_id, self.route)
                 )
             #print 'inserted new exposure_route'
-            self.uid = self.get_new_uid()
+            self.uid = self.get_new_uid(context)
             #print 'set new exposure_route uid to %s' % self.uid
         else:
             # Assume all calls to save() are after all routes have been removed
@@ -341,11 +339,10 @@ class Methodology (DTable):
             self.set_sampling('-')
         
 
-    def delete (self):
+    def delete (self, context):
         """
         Delete this methodology, and its exposure_routes, from the database.
         """
-        context = canary.context.Context()
         cursor = context.get_cursor()
         if not self.uid == -1:
             try:
@@ -366,8 +363,7 @@ class Methodology (DTable):
         context.close_cursor(cursor)
         
     
-    def load_routes (self):
-        context = canary.context.Context()
+    def load_routes (self, context):
         cursor = context.get_cursor()
         cursor.execute("""
             SELECT * FROM exposure_routes
@@ -385,8 +381,7 @@ class Methodology (DTable):
         context.close_cursor(cursor)
         
         
-    def save (self):
-        context = canary.context.Context()
+    def save (self, context):
         cursor = context.get_cursor()
         if self.uid == -1:
             #print 'inserting new methodology'
@@ -409,7 +404,7 @@ class Methodology (DTable):
                 int(self.is_mesocosm), int(self.is_enclosure))
                 )
             #print 'inserted new methodology'
-            self.uid = self.get_new_uid()
+            self.uid = self.get_new_uid(context)
             #print 'set new methodology uid to %s' % self.uid
         else:
             #print 'updating methodology %s' % self.uid
@@ -445,16 +440,16 @@ class Methodology (DTable):
             
         for route in self.exposure_routes:
             #print 'saving route', route
-            route.save()
+            route.save(context)
             
         context.close_cursor(cursor)
         
         
 
-    def create_form (self):
+    def create_form (self, context):
         
         #print 'create_form()'
-        form = MyForm()
+        form = MyForm(context)
         
         # all methodology types get a sample size
         #print 'sample size'
@@ -605,12 +600,11 @@ class Methodology (DTable):
             self.comments = form['comments']
 
 
-def find_exposures (search_term):
+def find_exposures (context, search_term):
     exposures = {}
     if search_term \
         and len(search_term) > 0:
         
-        context = canary.context.Context()
         cursor = context.get_cursor()
         query_term = search_term.strip().replace(' ', '% ') + '%'
         cursor.execute("""
@@ -680,11 +674,10 @@ class Exposure (DTable):
         out.append('/>')
         return '\n'.join(out)
     
-    def delete (self):
+    def delete (self, context):
         """
         Delete this exposure from the database.
         """
-        context = canary.context.Context()
         cursor = context.get_cursor()
         if not self.uid == -1:
             try:
@@ -696,8 +689,7 @@ class Exposure (DTable):
                 print traceback.print_exc()
         context.close_cursor(cursor)
         
-    def save (self):
-        context = canary.context.Context()
+    def save (self, context):
         cursor = context.get_cursor()
         if self.uid == -1:
             #print 'inserting new exposure'
@@ -712,7 +704,7 @@ class Exposure (DTable):
                 self.concept_source_id, self.term)
                 )
             #print 'inserted new exposure'
-            self.uid = self.get_new_uid()
+            self.uid = self.get_new_uid(context)
             #print 'set new exposure uid to %s' % self.uid
         else:
             #print 'updating exposure %s' % self.uid
@@ -737,13 +729,12 @@ class Exposure (DTable):
         context.close_cursor(cursor)
 
 
-def find_outcomes (search_term):
+def find_outcomes (context, search_term):
     # Note: for now, limit to only MeSH (umls_source_id==75)
     
     outcomes = {}
     if search_term \
         and len(search_term) > 0:
-        context = canary.context.Context()
         cursor = context.get_cursor()
         query_term = search_term.strip().replace(' ', '% ') + '%'
         cursor.execute("""
@@ -812,11 +803,10 @@ class Outcome (DTable):
         out.append('/>')
         return '\n'.join(out)
     
-    def delete (self):
+    def delete (self, context):
         """
         Delete this outcome from the database.
         """
-        context = canary.context.Context()
         cursor = context.get_cursor()
         if not self.uid == -1:
             try:
@@ -831,8 +821,7 @@ class Outcome (DTable):
                     print 'exception:', info
         context.close_cursor(cursor)
         
-    def save (self):
-        context = canary.context.Context()
+    def save (self, context):
         cursor = context.get_cursor()
         if self.uid == -1:
             #print 'inserting new outcome'
@@ -847,7 +836,7 @@ class Outcome (DTable):
                 self.concept_source_id, self.term)
                 )
             #print 'inserted new outcome'
-            self.uid = self.get_new_uid()
+            self.uid = self.get_new_uid(context)
             #print 'set new outcome uid to %s' % self.uid
         else:
             #print 'updating outcome %s' % self.uid
@@ -871,13 +860,12 @@ class Outcome (DTable):
         self.date_modified = time.strftime(str('%Y-%m-%d'))
         context.close_cursor(cursor)
 
-def find_risk_factors (search_term):
+def find_risk_factors (context, search_term):
     # Note: for now, limit to only MeSH (umls_source_id==75)
     
     risk_factors = {}
     if search_term \
         and len(search_term) > 0:
-        context = canary.context.Context()
         cursor = context.get_cursor()
         query_term = search_term.strip().replace(' ', '% ') + '%'
         cursor.execute("""
@@ -946,11 +934,10 @@ class RiskFactor (DTable):
         out.append('/>')
         return '\n'.join(out)
     
-    def delete (self):
+    def delete (self, context):
         """
         Delete this risk_factor from the database.
         """
-        context = canary.context.Context()
         cursor = context.get_cursor()
         if not self.uid == -1:
             try:
@@ -965,8 +952,7 @@ class RiskFactor (DTable):
                     print 'exception:', info
         context.close_cursor(cursor)
         
-    def save (self):
-        context = canary.context.Context()
+    def save (self, context):
         cursor = context.get_cursor()
         if self.uid == -1:
             #print 'inserting new risk factor'
@@ -981,7 +967,7 @@ class RiskFactor (DTable):
                 self.concept_source_id, self.term)
                 )
             #print 'inserted new risk factor'
-            self.uid = self.get_new_uid()
+            self.uid = self.get_new_uid(context)
             #print 'set new risk factor uid to %s' % self.uid
         else:
             #print 'updating risk factor us' % self.uid
@@ -1005,12 +991,11 @@ class RiskFactor (DTable):
         self.date_modified = time.strftime(str('%Y-%m-%d'))
         context.close_cursor(cursor)
         
-def find_species (search_term):
+def find_species (context,search_term):
     
     species_map = {}
     if search_term \
         and len(search_term) > 0:
-        context = canary.context.Context()
         cursor = context.get_cursor()
         query_term = search_term.strip().replace(' ', '% ') + '%'
         cursor.execute("""
@@ -1132,11 +1117,10 @@ class Species (DTable):
         else:
             return self.types
     
-    def delete (self):
+    def delete (self, context):
         """
         Delete this species from the database.
         """
-        context = canary.context.Context()
         cursor = context.get_cursor()
         if not self.uid == -1:
             try:
@@ -1152,8 +1136,7 @@ class Species (DTable):
         context.close_cursor(cursor)
         
 
-    def save (self):
-        context = canary.context.Context()
+    def save (self, context):
         cursor = context.get_cursor()
         if self.uid == -1:
             cursor.execute("""
@@ -1166,7 +1149,7 @@ class Species (DTable):
                 """, (self.study_id, self.concept_id, 
                 self.concept_source_id, self.term, self.get_types(shorthand=True))
                 )
-            self.uid = self.get_new_uid()
+            self.uid = self.get_new_uid(context)
         else:
             try:
                 cursor.execute("""
@@ -1206,11 +1189,10 @@ class Location (DTable):
         out.append('/>')
         return '\n'.join(out)
     
-    def delete (self):
+    def delete (self, context):
         """
         Delete this location from the database.
         """
-        context = canary.context.Context()
         cursor = context.get_cursor()
         if not self.uid == -1:
             try:
@@ -1222,8 +1204,7 @@ class Location (DTable):
                 print traceback.print_exc()
         context.close_cursor(cursor)
                 
-    def save (self):
-        context = canary.context.Context()
+    def save (self, context):
         cursor = context.get_cursor()
         if self.uid == -1:
             cursor.execute("""
@@ -1232,7 +1213,7 @@ class Location (DTable):
                 VALUES 
                 (NULL, %s, %s)
                 """, (self.study_id, self.feature_id))
-            self.uid = self.get_new_uid()
+            self.uid = self.get_new_uid(context)
         else:
             try:
                 cursor.execute("""
@@ -1283,7 +1264,7 @@ class Study (canary.context.Cacheable, DTable):
     CACHE_KEY = 'study'
 
 
-    def __init__ (self, uid=-1, record_id=-1):
+    def __init__ (self, context=None, uid=-1, record_id=-1):
         try:
             if self.record_id >= 0:
                 return
@@ -1378,11 +1359,11 @@ class Study (canary.context.Cacheable, DTable):
         methodology.study_id = self.uid
         self.methodologies.append(methodology)
         
-    def delete_methodology (self, methodology):
+    def delete_methodology (self, context, methodology):
         for meth in self.methodologies:
             if meth.uid == methodology.uid:
                 self.methodologies.remove(meth)
-                meth.delete()
+                meth.delete(context)
 
     def get_methodology (self, id):
         for methodology in self.methodologies:
@@ -1407,11 +1388,11 @@ class Study (canary.context.Cacheable, DTable):
             exposure.study_id = self.uid
             self.exposures.append(exposure)
         
-    def delete_exposure (self, exposure):
+    def delete_exposure (self, context, exposure):
         for exp in self.exposures:
             if exp.concept_id == exposure.concept_id:
                 self.exposures.remove(exp)
-                exp.delete()
+                exp.delete(context)
 
     def get_exposure (self, id):
         """
@@ -1449,11 +1430,11 @@ class Study (canary.context.Cacheable, DTable):
             risk_factor.study_id = self.uid
             self.risk_factors.append(risk_factor)
         
-    def delete_risk_factor (self, risk_factor):
+    def delete_risk_factor (self, context, risk_factor):
         for rf in self.risk_factors:
             if rf.concept_id == risk_factor.concept_id:
                 self.risk_factors.remove(rf)
-                rf.delete()
+                rf.delete(context)
 
     def get_risk_factor (self, id):
         """
@@ -1491,11 +1472,11 @@ class Study (canary.context.Cacheable, DTable):
             outcome.study_id = self.uid
             self.outcomes.append(outcome)
         
-    def delete_outcome (self, outcome):
+    def delete_outcome (self, context, outcome):
         for outc in self.outcomes:
             if outc.concept_id == outcome.concept_id:
                 self.outcomes.remove(outc)
-                outc.delete()
+                outc.delete(context)
 
     def get_outcome (self, id):
         """
@@ -1534,11 +1515,11 @@ class Study (canary.context.Cacheable, DTable):
             species.study_id = self.uid
             self.species.append(species)
         
-    def delete_species (self, species):
+    def delete_species (self, context, species):
         for spec in self.species:
             if spec.concept_id == species.concept_id:
                 self.species.remove(spec)
-                spec.delete()
+                spec.delete(context)
 
     def get_species (self, id):
         """
@@ -1623,14 +1604,12 @@ class Study (canary.context.Cacheable, DTable):
             }
         self.history[new_history['uid']] = new_history
         
-    def load (self):
+    def load (self, context):
         
         # Can't load a new study; it hasn't been saved yet.
         if self.uid == -1:
             return
 
-        context = canary.context.Context()
-        
         # Is it already loaded?  Convenience check for client calls
         # don't need to verify loads from the cache.
         if context.config.use_cache:
@@ -1673,7 +1652,7 @@ class Study (canary.context.Cacheable, DTable):
                 getattr(self, table_name).append(table_class_instance)
         
         for meth in self.methodologies:
-            meth.load_routes()
+            meth.load_routes(context)
             
         cursor.execute("""
             SELECT *
@@ -1693,14 +1672,10 @@ class Study (canary.context.Cacheable, DTable):
                 message=history_record['message'],
                 modified=history_record['modified'])
         
-        if context.config.use_cache:
-            context.cache_set('%s:%s' % (self.CACHE_KEY, self.uid), self)
-
         context.close_cursor(cursor)
 
 
-    def save (self):
-        context = canary.context.Context()
+    def save (self, context):
         cursor = context.get_cursor()
         if self.uid == -1:
             try:
@@ -1732,7 +1707,7 @@ class Study (canary.context.Cacheable, DTable):
                 print 'MySQL exception on study.save(new)'
                 print traceback.print_exc()
                 
-            self.uid = self.get_new_uid()
+            self.uid = self.get_new_uid(context)
 
         else:
             try:
@@ -1762,7 +1737,7 @@ class Study (canary.context.Cacheable, DTable):
         # update all the related table values
         for table_name in self.TABLES.keys():
             for item in getattr(self, table_name):
-                item.save()
+                item.save(context)
         
         # Save new history records; assume only one can be added at a time,
         # new record will necessarily have uid == -1
@@ -1779,7 +1754,7 @@ class Study (canary.context.Cacheable, DTable):
                         %s, NOW())
                         """, (self.uid, new_history_record['curator_user_id'], 
                         new_history_record['message']))
-                    new_history_record_id = self.get_new_uid()
+                    new_history_record_id = self.get_new_uid(context)
                     del(self.history[-1])
                     self.history[new_history_record_id] = new_history_record
                 except:
@@ -1788,18 +1763,15 @@ class Study (canary.context.Cacheable, DTable):
                     
         if context.config.use_cache:
             context.cache_set('%s:%s' % (self.CACHE_KEY, self.uid), self)
-
-        context.close_cursor(cursor)
         
         
-    def delete (self):
-        context = canary.context.Context()
+    def delete (self, context):
         cursor = context.get_cursor()
         try:
             for table_name in self.TABLES.keys():
                 for item in getattr(self, table_name):
                     print 'Deleting %s [%s]' % (table_name, item.uid)
-                    item.delete()
+                    item.delete(context)
                 
             cursor.execute("""
                 DELETE FROM studies
@@ -1811,6 +1783,4 @@ class Study (canary.context.Cacheable, DTable):
 
         except:
             print traceback.print_exc()
-        
-        context.close_cursor(cursor)
        

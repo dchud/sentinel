@@ -11,7 +11,6 @@ from quixote import get_publisher, get_request
 from quixote.errors import TraversalError
 from quixote import form2
 
-import canary.context
 from canary.loader import QueuedRecord
 from canary.qx_defs import MyForm
 from canary.record import SubjectHeading
@@ -62,16 +61,16 @@ class RiskFactorActions:
 
 def find [html] (request):
 
-    queued_record = QueuedRecord(request.queued_record_id)
+    context = get_publisher().context
+    queued_record = QueuedRecord(context, request.queued_record_id)
     
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
     
-    study = Study(queued_record.study_id)
+    study = Study(context, queued_record.study_id)
     study_concepts = getattr(study, str('risk_factors'))
     
-    context = canary.context.Context()
     source_catalog = context.get_source_catalog()
     complete_term_map = source_catalog.get_complete_mapping()
     mapped_metadata = queued_record.get_mapped_metadata(term_map=complete_term_map)
@@ -92,7 +91,7 @@ def find [html] (request):
             if not subject in concept_terms:
                 select_options.append((subject, subject, subject))
     
-    form = MyForm()
+    form = MyForm(context)
     form.add(form2.StringWidget, 'search_term',
         title='Add any risk factor:',
         size='30',
@@ -126,7 +125,7 @@ def find [html] (request):
     else:
         search_term = form['search_term']
         
-    risk_factors = find_risk_factors(search_term)
+    risk_factors = find_risk_factors(context, search_term)
     if len(risk_factors) == 0:
         form.set_error('search_term', 'No risk factors found.')
         
@@ -153,15 +152,16 @@ def find [html] (request):
 
 def add [html] (request):
     
-    queued_record = QueuedRecord(request.queued_record_id)
+    context = get_publisher().context
+    queued_record = QueuedRecord(context, request.queued_record_id)
     
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
     
-    study = Study(queued_record.study_id)
+    study = Study(context, queued_record.study_id)
     
-    form = MyForm()
+    form = MyForm(context)
     form.action_url = 'add'
     form.add(form2.IntWidget, name='concept_source_id', value=None, required=True)
     form.add(form2.IntWidget, name='concept_id', value=None, required=True)
@@ -204,16 +204,16 @@ def add [html] (request):
     
     try:
         study.add_risk_factor(risk_factor)
-        risk_factor.save()
+        risk_factor.save(context)
         study.add_history(curator_user_id=request.session.user.get_id(),
             message='Added risk factor "%s"' % risk_factor.term)
-        study.save()
+        study.save(context)
         form.logger.info(str('Added risk factor %s' % risk_factor.uid))
         add_message('Added risk factor')
         request.redirect(str('../curate_three'))
     except:
-        import sys
-        form.logger.info(str(sys.exc_info()))
+        import traceback
+        print traceback.print_exc()
         add_message('An error occurred')
         return render()
 
@@ -222,16 +222,17 @@ def add [html] (request):
 def delete [html] (risk_factor_id):
     
     request = get_request()
-    queued_record = QueuedRecord(request.queued_record_id)
+    context = get_publisher().context
+    queued_record = QueuedRecord(context, request.queued_record_id)
     
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
     
-    study = Study(queued_record.study_id)
+    study = Study(context, queued_record.study_id)
     risk_factor = study.get_risk_factor(risk_factor_id)
 
-    form = MyForm()
+    form = MyForm(context)
     form.add(form2.CheckboxWidget, 'are_you_sure',
         title='Are you sure you want to delete this risk factor?',
         value=False)
@@ -263,10 +264,10 @@ def delete [html] (risk_factor_id):
     
     if form['are_you_sure']:
         try:
-            study.delete_risk_factor(risk_factor)
+            study.delete_risk_factor(context, risk_factor)
             study.add_history(curator_user_id=request.session.user.get_id(),
                 message='Deleted risk factor "%s"' % risk_factor.term)
-            study.save()
+            study.save(context)
             add_message('RiskFactor deleted')
             form.logger.info(str('Deleted risk factor %s' % risk_factor_id))
         except:

@@ -14,7 +14,7 @@ class Concept (canary.context.Cacheable, DTable):
     
     CACHE_KEY = 'concept'
 
-    def __init__ (self, uid=-1, load_synonyms=False):
+    def __init__ (self, context=None, uid=-1, load_synonyms=False):
         try:
             if self.term:
                 return
@@ -30,11 +30,10 @@ class Concept (canary.context.Cacheable, DTable):
         self.synonyms = []
         
     
-    def load (self, load_synonyms=True):
+    def load (self, context, load_synonyms=True):
         if self.uid == -1:
             return
         
-        context = canary.context.Context()
         # Is it already loaded?  Convenience check for client calls
         # don't need to verify loads from the cache.
         if context.config.use_cache:
@@ -82,17 +81,14 @@ class Concept (canary.context.Cacheable, DTable):
                 if not synonym in self.synonyms:
                     self.synonyms.append(synonym)
 
-        if context.config.use_cache:
-            context.cache_set('%s:%s' % (self.CACHE_KEY, self.uid), self)
         context.close_cursor(cursor)
         
     
-    def save (self, update_all=False):
+    def save (self, context, update_all=False):
         # NOTE: For now, do not allow creation of arbitrary concepts
         if self.uid == -1:
             return
         
-        context = canary.context.Context()
         cursor = context.get_cursor()
         # NOTE: For now, only allow update of preferred_name
         cursor.execute("""
@@ -106,9 +102,8 @@ class Concept (canary.context.Cacheable, DTable):
         context.close_cursor(cursor)
            
     
-    def add_synonym (self, term):
+    def add_synonym (self, context, term):
         
-        context = canary.context.Context()
         cursor = context.get_cursor()
         
         # If a synonym does not yet exist, add it here, starting at id 20,000,000
@@ -133,11 +128,9 @@ class Concept (canary.context.Cacheable, DTable):
         context.close_cursor(cursor)
            
 
-def find_concepts (search_term):
+def find_concepts (context, search_term):
     
-    context = canary.context.Context()
     cursor = context.get_cursor()
-
     concepts = {}
     
     if isinstance(search_term, types.IntType):
@@ -292,11 +285,10 @@ class Category (DTable):
     def get_concepts (self):
         return self.concepts
 
-    def load (self, load_concepts=False):
+    def load (self, context, load_concepts=False):
         if self.uid == -1:
             return
 
-        context = canary.context.Context()
         cursor = context.get_cursor()
         cursor.execute("""
             SELECT * 
@@ -340,14 +332,13 @@ class Category (DTable):
                     concept_id=row['concept_id'])
                 cat_concept.is_broad = row['is_broad']
                 cat_concept.is_default = row['is_default']
-                cat_concept.load()
+                cat_concept.load(context)
                 self.add_concept(cat_concept)
         context.close_cursor(cursor)
         
         
-    def save (self):
+    def save (self, context):
         
-        context = canary.context.Context()
         cursor = context.get_cursor()
         if self.uid == -1:
             cursor.execute("""
@@ -364,7 +355,7 @@ class Category (DTable):
             
             for group in self.groups:
                 group.category_id = self.uid
-                group.save()
+                group.save(context)
         
         else:
             cursor.execute("""
@@ -375,8 +366,7 @@ class Category (DTable):
         context.close_cursor(cursor)
         
 
-def load_categories ():
-    context = canary.context.Context()
+def load_categories (context):
     cursor = context.get_cursor()
     categories = []
     cursor.execute("""
@@ -387,7 +377,7 @@ def load_categories ():
     rows = cursor.fetchall()
     for row in rows:
         category = Category(uid=row[0])
-        category.load()
+        category.load(context)
         categories.append(category)
     
     context.close_cursor(cursor)
@@ -401,8 +391,7 @@ class CategoryGroup (DTable):
         self.category_id = category_id
         self.name = name
         
-    def save (self):
-        context = canary.context.Context()
+    def save (self, context):
         cursor = context.get_cursor()
         if self.uid == -1:
             cursor.execute("""
@@ -432,8 +421,7 @@ class CategoryConcept (DTable):
         self.groups = []
         self.concept = None
         
-    def load (self):
-        context = canary.context.Context()
+    def load (self, context):
         cursor = context.get_cursor()
         if self.uid == -1:
             if not self.concept_id == -1 \
@@ -485,13 +473,11 @@ class CategoryConcept (DTable):
             row = dtuple.DatabaseTuple(desc, row)
             self.groups.append(row['category_group_id'])
         
-        self.concept = Concept(uid=self.concept_id)
-        self.concept.load()
+        self.concept = Concept(context, uid=self.concept_id)
         context.close_cursor(cursor)
         
         
-    def save (self):
-        context = canary.context.Context()
+    def save (self, context):
         cursor = context.get_cursor()
         if self.uid == -1:
             cursor.execute("""

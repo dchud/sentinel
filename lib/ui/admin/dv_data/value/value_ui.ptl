@@ -12,7 +12,6 @@ from quixote import get_publisher
 from quixote.errors import AccessError, PublishError, TraversalError
 from quixote import form2
 
-import canary.context
 from canary.db_model import DBModel, Value
 from canary.qx_defs import MyForm
 from canary.ui.admin.admin_ui import title_bar
@@ -61,8 +60,8 @@ class ValueActions:
 
 class ValueForm (MyForm):
 
-    def __init__ (self):
-        MyForm.__init__(self)
+    def __init__ (self, context):
+        MyForm.__init__(self, context)
         self.add(form2.IntWidget, 'value_group_id', title='Value group id',
             size=3, required=True)
         self.add(form2.IntWidget, 'value_serial_number', title='Serial number',
@@ -74,7 +73,8 @@ class ValueForm (MyForm):
 
 def create [html] (request):
 
-    form = ValueForm()
+    context = get_publisher().context
+    form = ValueForm(context)
 
     def render [html] ():
         header('Create value')
@@ -98,13 +98,12 @@ def create [html] (request):
     value = Value(value_group_id, value_serial_number, value_description)
 
     try:
-        context = canary.context.Context()
         group = context.get_dbmodel().get_group(value_group_id)
         if group == None:
             raise TraversalError('group not found')
-        value.save()
+        value.save(context)
         new_db_model = DBModel()
-        new_db_model.load_from_db()
+        new_db_model.load(context)
         context.set_dbmodel(new_db_model)
         form.logger.info(str('Created new value.'))
         add_message('Created new value.')
@@ -118,8 +117,8 @@ def create [html] (request):
 
 def edit [html] (request, value_id=None):
 
-    form = ValueForm()
-    context = canary.context.Context()
+    context = get_publisher().context
+    form = ValueForm(context)
     
     try:
         value_id = int(value_id)
@@ -158,9 +157,9 @@ def edit [html] (request, value_id=None):
         value.description = form['value_description']
 
     try:
-        value.save()
+        value.save(context)
         new_db_model = DBModel()
-        new_db_model.load_from_db()
+        new_db_model.load(context)
         context.set_dbmodel(new_db_model)
         form.logger.info(str('Updated value %s' % value.value_id))
         add_message('Updated value %s' % value.value_id)
@@ -173,20 +172,20 @@ def edit [html] (request, value_id=None):
 
 class DeleteValueForm (MyForm):
 
-    def __init__ (self):
-        MyForm.__init__(self)
+    def __init__ (self, context):
+        MyForm.__init__(self, context)
         
 
 def delete [html] (request, value_id=None):
         
-    form = MyForm()
+    context = get_publisher().context
+    form = MyForm(context)
     form.add(form2.IntWidget, 'value_uid', title='Value id', required=True)
     form.add(form2.CheckboxWidget, 'are_you_sure',
         title='Are you sure you want to delete this value?',
         value=False)
     form.add_submit('delete', 'delete')
 
-    context = canary.context.Context()
     try:
         value_id = int(value_id)
         db_model = context.get_dbmodel()
@@ -217,10 +216,10 @@ def delete [html] (request, value_id=None):
     are_you_sure = form['are_you_sure']
     if are_you_sure:
         try:
-            value.delete()
+            value.delete(context)
             new_db_model = DBModel()
-            new_db_model.load_from_db()
-            context.set_dbmodel(new_db_model)
+            new_db_model.load(context)
+            context.set_dbmodel(context, new_db_model)
             form.logger.info(str('Deleted value %s' % value.value_id))
             add_message('Deleted value')
         except:

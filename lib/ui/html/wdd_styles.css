@@ -472,6 +472,22 @@ dl {
 	padding: 5px;
 }
 
+.relevance-box {
+    border: 1px solid #324362;
+    background-color: #EEEDC0;
+    padding: 0px;
+    margin-top: .48em;
+    margin-left: .4em;
+    margin-right: .5em;
+    float: left;
+    width: 50px;
+}
+
+.relevance {
+    background-color:  #A6BFF2;
+    height:  5px;
+}
+ 
 #exposures td, #outcomes td, #species td, #summary td {
     /*
     font-size: small;

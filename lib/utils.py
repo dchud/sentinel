@@ -54,8 +54,7 @@ class DTable:
     #        list_attr.append(value)
     
        
-    def get_new_uid (self):
-        context = canary.context.Context()
+    def get_new_uid (self, context):
         cursor = context.get_cursor()
         try:
             cursor.execute('SELECT LAST_INSERT_ID() AS new_uid')

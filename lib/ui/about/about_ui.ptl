@@ -16,7 +16,8 @@ from canary.utils import is_valid_email, send_email
 
 def contact_us [html] (request):
 
-    form = MyForm()
+    context = get_publisher().context
+    form = MyForm(context)
     form.add(form2.StringWidget, 'user_name', title='Your name',
              size=30, required=False)
     form.add(form2.StringWidget, 'user_email', title='Your email address',
@@ -747,11 +748,12 @@ mortality of more susceptible individuals.
 
 def questionnaire [html] (request):
 
+    context = get_publisher().context
+    form = MyForm(context)
     basic_options = [
             ('good', 'Good', 'good'),
             ('needs_imp', 'Needs Improvement', 'needs_imp'),
             ]
-    form = MyForm()
     
     form.add(form2.StringWidget, 'user_email',
         title='Your email address',

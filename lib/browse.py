@@ -4,10 +4,9 @@ import canary.context
 from canary.loader import QueuedRecord
 
 
-def records_by_heading (term):
+def records_by_heading (context, term):
     results = []
     # GROUP BY reference_id because some terms repeat w/diff qualifiers
-    context = canary.context.Context()
     cursor = context.get_cursor()
     cursor.execute("""
         SELECT reference_id
@@ -29,9 +28,8 @@ def records_by_heading (term):
     return results
 
 
-def records_by_heading_index ():
+def records_by_heading_index (context):
 
-    context = canary.context.Context()
     cursor = context.get_cursor()
     cursor.execute("""
         SELECT term, COUNT(term) as termcount, COUNT(DISTINCT reference_id) AS idcount
@@ -50,13 +48,12 @@ def records_by_heading_index ():
 
 
 # NOTE: queued_record.status is hard-coded to 2
-def records_by_journal (issn, term_map={}):
+def records_by_journal (context, issn, term_map={}):
     journal_title = ''
     queued_records = []
     issn_terms = term_map['issn']
     issn_clause = ' OR '.join(['queued_record_metadata.term_id=%s' % term.uid for term in issn_terms])
     
-    context = canary.context.Context()
     cursor = context.get_cursor()
     cursor.execute("""
         SELECT journal_title
@@ -86,7 +83,7 @@ def records_by_journal (issn, term_map={}):
             )
         rows = cursor.fetchall()
         for row in rows:
-            queued_record = QueuedRecord(row[0])
+            queued_record = QueuedRecord(context, row[0])
             queued_records.append(queued_record)
     except:
         import traceback
@@ -96,8 +93,7 @@ def records_by_journal (issn, term_map={}):
     return journal_title, queued_records
 
 
-def records_by_journal_index (term_map={}):
-    context = canary.context.Context()
+def records_by_journal_index (context,term_map={}):
     cursor = context.get_cursor()
     results = []
     issn_terms = term_map['issn']
@@ -124,10 +120,9 @@ def records_by_journal_index (term_map={}):
 
 
 
-def records_by_methodology (methodology_id):
+def records_by_methodology (context, methodology_id):
     queued_records = []
     
-    context = canary.context.Context()
     cursor = context.get_cursor()
     try:
         cursor.execute("""
@@ -142,7 +137,7 @@ def records_by_methodology (methodology_id):
             )
         rows = cursor.fetchall()
         for row in rows:
-            queued_record = QueuedRecord(row[0])
+            queued_record = QueuedRecord(context, row[0])
             queued_records.append(queued_record)
     except:
         import traceback
@@ -152,8 +147,7 @@ def records_by_methodology (methodology_id):
     return queued_records
 
 
-def records_by_methodology_index ():
-    context = canary.context.Context()
+def records_by_methodology_index (context):
     cursor = context.get_cursor()
     cursor.execute("""
         SELECT study_type_id, COUNT(study_type_id) as the_count
@@ -174,8 +168,7 @@ def records_by_methodology_index ():
 
 
 
-def records_by_year (year, term_map={}):
-    context = canary.context.Context()
+def records_by_year (context, year, term_map={}):
     cursor = context.get_cursor()
     queued_records = []
     year_terms = term_map['pubdate']
@@ -198,7 +191,7 @@ def records_by_year (year, term_map={}):
             )
         rows = cursor.fetchall()
         for row in rows:
-            queued_record = QueuedRecord(row[0])
+            queued_record = QueuedRecord(context, row[0])
             queued_records.append(queued_record)
     except:
         import traceback
@@ -208,8 +201,7 @@ def records_by_year (year, term_map={}):
     return queued_records
 
 
-def records_by_year_index (term_map={}):
-    context = canary.context.Context()
+def records_by_year_index (context, term_map={}):
     cursor = context.get_cursor()
     results = []
     year_terms = term_map['pubdate']
