@@ -447,32 +447,39 @@ class Methodology (DTable):
 
     def create_form (self):
         
+        #print 'create_form()'
         form = MyForm()
         
         # all methodology types get a sample size
+        #print 'sample size'
         form.add(IntWidget, 'sample_size',
             title='Sample size (study n)',
             size=10, value=int(self.sample_size),
             required=True)
             
         # all methodology types get one or more routes
+        #print 'route'
         route_options = [(route, text, route) for text, route in ExposureRoute.ROUTE.items()]
         # FIXME: what else to do about leaving out the default/empty?
         route_options.remove((-1, '-', -1))
+        select_size = len(route_options)
         form.add(MultipleSelectWidget, 'exposure_routes',
             title='Routes of exposure (ctrl-click to select or change multiple)',
             value=[r.route for r in self.get_routes()],
             options=route_options,
+            size=select_size,
             sort=False,
             required=True)
         
         # experimental can be is_mesocosm=True
+        #print 'mesocosm'
         if self.get_study_type() == self.TYPES['experimental']:
             form.add(CheckboxWidget, 'is_mesocosm',
                 title='Is mesocosm?',
                 value=self.is_mesocosm)
             
         # methodology types except experimental and descriptive get timing
+        #print 'timing'
         if not self.get_study_type() in [
             self.TYPES['experimental'],
             self.TYPES['descriptive']
@@ -485,6 +492,7 @@ class Methodology (DTable):
                 required=True)
     
         # all the 'c*' methodology types get controls
+        #print 'controls'
         if self.get_study_type() in [
             self.TYPES['cross sectional'],
             self.TYPES['cohort'], 
@@ -498,6 +506,7 @@ class Methodology (DTable):
                 required=True)
         
         # cohort can be is_enclosure=True
+        #print 'enclosure'
         if self.get_study_type() == self.TYPES['cohort']:
             form.add(CheckboxWidget, 'is_enclosure',
                 title='Is enclosure?',
@@ -505,6 +514,7 @@ class Methodology (DTable):
                 
             
         # only cross sectional methodologies get sampling
+        #print 'sampling'
         if self.get_study_type() == self.TYPES['cross sectional']:
             form.add(SingleSelectWidget, 'sampling',
                 title='Sampling',
@@ -514,6 +524,7 @@ class Methodology (DTable):
                 required=True)
                     
         # every methodology type has comments
+        #print 'comments'
         form.add(TextWidget, 'comments', 
             title='Comments',
             rows='4', cols='60',

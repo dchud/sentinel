@@ -363,7 +363,8 @@ def curate_three [html] (request, queued_record_id):
     
     if study.has_exposures:
         """
-        <h4>Exposures</h4>
+    <fieldset>
+        <legend>Exposures</legend>
         """
         render_exposures(study)
         """
@@ -374,11 +375,13 @@ def curate_three [html] (request, queued_record_id):
             <input type='submit' name='find' value='find' />
             </p>
         </form>
+    </fieldset>
         """
         
     if study.has_outcomes:
         """
-        <h4>Outcomes</h4>
+    <fieldset>
+        <legend>Outcomes</legend>
         """
         render_outcomes(study)
         """
@@ -389,27 +392,32 @@ def curate_three [html] (request, queued_record_id):
             <input type='submit' name='find' value='find' />
             </p>
         </form>
+    </fieldset>
         """
         
     """    
-    <h4>Species</h4>
+    <fieldset>
+        <legend>Species</legend>
     """
     render_species(study)
     """
-    <form method='POST' action='species/find'>
-        <p>
-        Add a species:
-        <input type='text' name='search_term' size='30' />
-        <input type='submit' name='find' value='find' />
-        </p>
-    </form>
+        <form method='POST' action='species/find'>
+            <p>
+            Add a species:
+            <input type='text' name='search_term' size='30' />
+            <input type='submit' name='find' value='find' />
+            </p>
+        </form>
+    </fieldset>
     """
 
     """
-    <h4>Locations</h4>
-    <p>
-    This is where you will add locations.
-    </p>
+    <fieldset>
+        <legend>Locations</legend>
+        <p>
+        This is where you will add locations.
+        </p>
+    </fieldset>
     """
 
 

@@ -81,7 +81,8 @@ class MethodologyTypeForm (MyForm):
                 ],
             sort=False,
             required=True)
-        self.add(SubmitWidget, 'continue', value='continue')
+        self.add_submit('continue', 'continue')
+        self.add_submit('cancel', 'cancel')
 
 
 def create [html] (request):
@@ -152,6 +153,7 @@ def create [html] (request):
         
         <div id='exposure-buttons' style='clear: both'>
             <input type='submit' name='continue' value='continue' />
+            <input type='submit' name='cancel' value='cancel' />
         </div>
         
         </form>
@@ -160,9 +162,13 @@ def create [html] (request):
         render_unclaim_block()
         footer()
 
-    #if not form.is_submitted():
-    #    return render()
+    if not form.is_submitted():
+        return render()
         
+    if form.get_submit() == 'cancel':
+        add_message('New methodology cancelled')
+        request.redirect(str('/edit/study/%s/curate_four' % request.queued_record_id))
+    
     if not form['study_type']:
         add_message('Please choose a study type')
 

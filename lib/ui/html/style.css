@@ -109,7 +109,7 @@ a.name:hover {
 }
 
 .gentable th {
-	padding: 5px;
+	padding: 3px;
 	color: #333;
 	background: #eee;
 	border: 1px solid #ccc;
@@ -260,3 +260,10 @@ div.abstract div.label {
     background-color: #f9f7d1;
     text-decoration: underline;
 }
+
+fieldset {
+    border: 1px solid #d3d3d3;
+    margin-top: 5px;
+    padding: 6px;
+}
+
