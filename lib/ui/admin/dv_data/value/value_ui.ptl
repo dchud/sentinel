@@ -12,8 +12,7 @@ from quixote import get_publisher
 from quixote.errors import AccessError, PublishError, TraversalError
 from quixote import form2
 
-from dulcinea.database import get_transaction
-
+import canary.context
 from canary.db_model import DBModel, Value
 from canary.qx_defs import MyForm
 from canary.ui.admin.admin_ui import title_bar
@@ -99,16 +98,14 @@ def create [html] (request):
     value = Value(value_group_id, value_serial_number, value_description)
 
     try:
-        group = get_publisher().get_dbmodel().get_group(value_group_id)
+        context = canary.context.Context()
+        group = context.get_dbmodel().get_group(value_group_id)
         if group == None:
             raise TraversalError('group not found')
-        cursor = get_publisher().get_cursor()
-        value.save(cursor)
+        value.save()
         new_db_model = DBModel()
-        new_db_model.load_from_db(cursor)
-        get_publisher().set_dbmodel(new_db_model)
-        get_transaction().commit()
-        cursor.close()
+        new_db_model.load_from_db()
+        context.set_dbmodel(new_db_model)
         form.logger.info(str('Created new value.'))
         add_message('Created new value.')
         request.redirect(str('/admin/dv_data/group/%s/values' % value_group_id))
@@ -122,10 +119,11 @@ def create [html] (request):
 def edit [html] (request, value_id=None):
 
     form = ValueForm()
+    context = canary.context.Context()
     
     try:
         value_id = int(value_id)
-        db_model = get_publisher().get_dbmodel()
+        db_model = context.get_dbmodel()
         value = db_model.get_value(value_id)
         if value == None:
             raise TraversalError('value not found')
@@ -147,7 +145,6 @@ def edit [html] (request, value_id=None):
     value_group_id = form['value_group_id']
     value_serial_number = form['value_serial_number']
     
-    print 'checking for errors'
     if not value_group_id == value.value_group_id:
         form.set_error('value_group_id', 'Value group id cannot be changed')
         form.get_widget('value_group_id').set_value(value.value_group_id)
@@ -155,24 +152,16 @@ def edit [html] (request, value_id=None):
     if form.has_errors():
         return render()
 
-    print 'updating values'
     value.serial_number = value_serial_number
 
     if not form['value_description'] == None:
         value.description = form['value_description']
 
     try:
-        print 'updating'
-        cursor = get_publisher().get_cursor()
-        value.save(cursor)
-        print 'saved value'
+        value.save()
         new_db_model = DBModel()
-        new_db_model.load_from_db(cursor)
-        print 'reloaded dbmodel'
-        cursor.close()
-        get_publisher().set_dbmodel(new_db_model)
-        get_transaction().commit()
-        print 'committed dbmodel'
+        new_db_model.load_from_db()
+        context.set_dbmodel(new_db_model)
         form.logger.info(str('Updated value %s' % value.value_id))
         add_message('Updated value %s' % value.value_id)
     except:
@@ -189,8 +178,7 @@ class DeleteValueForm (MyForm):
         
 
 def delete [html] (request, value_id=None):
-    
-    
+        
     form = MyForm()
     form.add(form2.IntWidget, 'value_uid', title='Value id', required=True)
     form.add(form2.CheckboxWidget, 'are_you_sure',
@@ -198,9 +186,10 @@ def delete [html] (request, value_id=None):
         value=False)
     form.add_submit('delete', 'delete')
 
+    context = canary.context.Context()
     try:
         value_id = int(value_id)
-        db_model = get_publisher().get_dbmodel()
+        db_model = context.get_dbmodel()
         value = db_model.get_value(value_id)
         if value == None:
             raise TraversalError('value not found')
@@ -228,12 +217,10 @@ def delete [html] (request, value_id=None):
     are_you_sure = form['are_you_sure']
     if are_you_sure:
         try:
-            cursor = get_publisher().get_cursor()
-            value.delete(cursor)
+            value.delete()
             new_db_model = DBModel()
-            new_db_model.load_from_db(cursor)
-            get_publisher().set_dbmodel(new_db_model)
-            cursor.close()
+            new_db_model.load_from_db()
+            context.set_dbmodel(new_db_model)
             form.logger.info(str('Deleted value %s' % value.value_id))
             add_message('Deleted value')
         except:

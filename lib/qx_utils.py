@@ -64,13 +64,3 @@ def load_static_exports (dir, ext='.html'):
             #print 'appended', new_file
 
     return new_exports
-
-
-
-if __name__ == '__main__':
-    list = []
-    htlist = load_static_exports('html')
-    for file in htlist:
-        list.append(file)
-
-    print list

@@ -11,15 +11,16 @@ from quixote import get_publisher, get_request
 from quixote.errors import TraversalError
 from quixote import form2
 
+import canary.context
+from canary.gazeteer import Feature
+from canary.loader import QueuedRecord
+from canary.qx_defs import MyForm
+from canary.study import Location, Study
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found, add_message, has_messages, render_messages
-from canary.ui.edit.study.utils import get_current_study, get_queued_record
 from canary.ui.edit.study.utils import is_same_user, render_queued_record
 from canary.ui.edit.study.utils import render_unclaim_block, claimed_by_other_user
 from canary.ui.edit.study.utils import render_locations, render_pipeline
-from canary.qx_defs import MyForm
-from canary.gazeteer import Feature
-from canary.study import Location
 
 
 def _q_index [html] (request):
@@ -62,19 +63,17 @@ class LocationActions:
 def find [html] (request):
 
     request = get_request()
-    cursor = get_publisher().get_cursor()
-    try:
-        queued_record = get_queued_record(cursor, request.queued_record_id)
-    except:
-        print 'no request.queued_record_id'
-    
+    queued_record = QueuedRecord(request.queued_record_id)
+
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
     
-    study = get_current_study(cursor, queued_record.study_id)
-    gazeteer = get_publisher().get_gazeteer()
-    source_catalog = get_publisher().get_source_catalog()
+    study = Study(queued_record.study_id)
+    
+    context = canary.context.Context()
+    gazeteer = context.get_gazeteer()
+    source_catalog = context.get_source_catalog()
     complete_term_map = source_catalog.get_complete_mapping()
     mapped_metadata = queued_record.get_mapped_metadata(term_map=complete_term_map)
     
@@ -91,7 +90,8 @@ def find [html] (request):
         """
         <h3>Find location</h3>
         """
-        render_pipeline(study.get_article_type(text=True), url_prefix=str('..'), step=3)
+        render_pipeline(study.get_article_type(text=True), 
+            url_prefix=str('..'), step=3)
         render_queued_record(queued_record)
         render_messages()
         form.render()
@@ -102,7 +102,7 @@ def find [html] (request):
         return render()
     
     search_term = form['search_term']
-    locations = gazeteer.search(cursor, search_term)
+    locations = gazeteer.search(search_term)
     if len(locations) == 0:
         form.set_error('search_term', 'No locations found.')
         
@@ -128,17 +128,13 @@ def find [html] (request):
 
 def add [html] (request):
     
-    cursor = get_publisher().get_cursor()
-    try:
-        queued_record = get_queued_record(cursor, request.queued_record_id)
-    except:
-        print 'no request.queued_record_id'
+    queued_record = QueuedRecord(request.queued_record_id)
     
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
     
-    study = get_current_study(cursor, queued_record.study_id)
+    study = Study(queued_record.study_id)
     
     form = MyForm()
     form.action_url = 'add'
@@ -153,7 +149,7 @@ def add [html] (request):
         render_pipeline(study.get_article_type(text=True), url_prefix=str('..'), step=3)
         render_queued_record(queued_record)
         render_messages()
-        render_locations(cursor, study)
+        render_locations(study)
         form.render()
         render_unclaim_block()
         footer()
@@ -163,7 +159,7 @@ def add [html] (request):
     
     try:
         feature = Feature(uid=form['feature_id'])
-        feature.load(cursor)
+        feature.load()
     except:
         import traceback
         traceback.print_exc()
@@ -177,17 +173,16 @@ def add [html] (request):
     
     try:
         study.add_location(location)
-        location.save(cursor)
+        location.save()
         study.add_history(curator_user_id=request.session.user.get_id(),
             message='Added location %s' % location.feature_id)
-        study.save(cursor)
+        study.save()
         form.logger.info(str('Added location %s' % location.feature_id))
         add_message('Added location')
         request.redirect(str('../curate_three'))
     except:
-        import sys
-        for info in sys.exc_info():
-            form.logger.info(str('Exc: %s' % info))
+        import traceback
+        print traceback.print_exc()
         add_message('An error occurred')
         return render()
 
@@ -196,21 +191,16 @@ def add [html] (request):
 def delete [html] (location_id):
     
     request = get_request()
-    cursor = get_publisher().get_cursor()
-    try:
-        queued_record = get_queued_record(cursor, request.queued_record_id)
-    except:
-        print 'no request.queued_record_id'
-        return not_found('location')
-    
+    queued_record = QueuedRecord(request.queued_record_id)
+
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
     
-    study = get_current_study(cursor, queued_record.study_id)
+    study = Study(queued_record.study_id)
     location = study.get_location(location_id)
     feature = Feature(uid=location.feature_id)
-    feature.load(cursor)
+    feature.load()
     
     form = MyForm()
     form.add(form2.CheckboxWidget, 'are_you_sure',
@@ -244,10 +234,10 @@ def delete [html] (location_id):
     
     if form['are_you_sure']:
         try:
-            location.delete(cursor)            
+            location.delete()            
             study.add_history(curator_user_id=request.session.user.get_id(),
                 message='Deleted location %s' % location.feature_id)
-            study.save(cursor)
+            study.save()
             add_message('Location deleted')
             form.logger.info(str('Deleted location %s' % location_id))
         except:
@@ -262,7 +252,8 @@ def delete [html] (location_id):
     
 def render_found_features [html] (study, features, search_term):
     
-    gazeteer = get_publisher().get_gazeteer()
+    context = canary.context.Context()
+    gazeteer = context.get_gazeteer()
     
     if len(features) == 0:
         return

@@ -13,14 +13,13 @@ from quixote import get_publisher
 from quixote.errors import AccessError, TraversalError
 from quixote import form2
 
-from dulcinea.database import get_transaction
-
+import canary.context
+from canary.qx_defs import MyForm
+from canary.source_catalog import SourceCatalog, Source, Term
 from canary.ui.admin.admin_ui import title_bar
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found
 from canary.ui.pages import has_messages, add_message, render_messages
-from canary.qx_defs import MyForm
-from canary.source_catalog import SourceCatalog, Source, Term
 
 
 def _q_index [html] (request):
@@ -136,12 +135,11 @@ def create [html] (request):
         source.sfx_pattern = form['sfx_pattern']
 
     try:
-        cursor = get_publisher().get_cursor()
-        source.save(cursor)
+        context = canary.context.Context()
+        source.save()
         source_catalog = SourceCatalog()
-        source_catalog.load_sources(cursor, True)
-        get_publisher().set_source_catalog(source_catalog)
-        cursor.close()
+        source_catalog.load_sources(True)
+        context.set_source_catalog(source_catalog)
         form.logger.info(str('Created source %s' % source_name))
         add_message('Created source %s' % source_name)
         request.redirect(str('/admin/sources'))
@@ -157,8 +155,8 @@ def edit [html] (request, source_id=None):
 
     form = SourceForm()
 
-    publisher = get_publisher()
-    source_catalog = get_publisher().get_source_catalog()
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
     source = source_catalog.get_source(source_id)
     if source == None:
         return not_found('source')
@@ -221,12 +219,10 @@ def edit [html] (request, source_id=None):
     if form['sfx_pattern']:
         source.sfx_pattern = form['sfx_pattern']
     try:
-        cursor = get_publisher().get_cursor()
-        source.save(cursor)
+        source.save()
         source_catalog = SourceCatalog()
-        source_catalog.load_sources(cursor)
-        get_publisher().set_source_catalog(source_catalog)
-        cursor.close()
+        source_catalog.load_sources()
+        context.set_source_catalog(source_catalog)
         form.logger.info(str('Edited source %s' % source.uid))
         add_message('Edited source %s' % source.name)
         request.redirect(str('/admin/sources'))
@@ -250,8 +246,8 @@ class DeleteSourceForm (MyForm):
 def delete [html] (source_id=None):
 
     form = DeleteSourceForm()
-
-    source_catalog = get_publisher().get_source_catalog()
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
     source = source_catalog.get_source(source_id)
     if source == None:
         return not_found('source')
@@ -276,12 +272,10 @@ def delete [html] (source_id=None):
     are_you_sure = form['are_you_sure']
     if are_you_sure:
         try:
-            cursor = get_publisher().get_cursor()
-            source_catalog.delete_source(cursor, source.uid)
+            source_catalog.delete_source(source.uid)
             new_source_catalog = SourceCatalog()
-            new_source_catalog.load_sources(cursor, True)
-            get_publisher().set_source_catalog(new_source_catalog)
-            cursor.close()
+            new_source_catalog.load_sources(True)
+            context.set_source_catalog(new_source_catalog)
         except:
             form.logger.error(str('Unable to delete source %s' % source.uid))
             PublishError
@@ -297,8 +291,8 @@ def delete [html] (source_id=None):
 
 def terms [html] (request, source_id=None):
 
-    publisher = get_publisher()
-    source_catalog = get_publisher().get_source_catalog()
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
     source = source_catalog.get_source(source_id)
     if source == None:
         return not_found('source')

@@ -1,5 +1,6 @@
 # $Id$
 
+import canary.context
 from canary.loader import QueuedRecord
 from canary.study import Study
 
@@ -21,17 +22,18 @@ class Search:
         self.allow_uncurated = allow_uncurated
         
         
-    def search (self, cursor, term_mapping={}):
+    def search (self, term_mapping={}):
         results = Results()
         if self.field == '' \
             or self.token == '':
             return results
 
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         try:
             if self.field == 'canary id':
                 token = int(self.token)
                 record = QueuedRecord(token)
-                record.load(cursor)
                 results.add_result(record)
             elif self.field == 'keyword':
                 select_clause = """
@@ -60,7 +62,6 @@ class Search:
                 rows = cursor.fetchall()
                 for row in rows:
                     record = QueuedRecord(row[0])
-                    record.load(cursor)
                     results.add_result(record)
 
             else:
@@ -96,13 +97,13 @@ class Search:
                     rows = cursor.fetchall()
                     for row in rows:
                         record = QueuedRecord(row[0])
-                        record.load(cursor)
                         results.add_result(record)
         except:
             print 'Unable to perform search'
             import traceback
             print traceback.print_exc()
         
+        context.close_cursor(cursor)
         return results
 
 

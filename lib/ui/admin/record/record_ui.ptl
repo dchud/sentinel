@@ -10,14 +10,13 @@ from quixote import get_publisher
 from quixote.errors import AccessError, PublishError, TraversalError
 from quixote import form2
 
-from dulcinea.database import get_transaction
-
-from canary.ui.admin.admin_ui import title_bar
-from canary.ui.pageframe import header, footer
-from canary.ui.pages import not_found, add_message, has_messages, render_messages
+import canary.context
 from canary.loader import Queue, QueuedRecord
 from canary.qx_defs import MyForm
 from canary.source_catalog import SourceCatalog, Source
+from canary.ui.admin.admin_ui import title_bar
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found, add_message, has_messages, render_messages
 
 
 def _q_index [html] (request):
@@ -34,6 +33,7 @@ class RecordActions:
         '_q_index',
         'edit',
         'delete',
+        'recache',
         ]
 
     def __init__ (self, record_id):
@@ -48,10 +48,13 @@ class RecordActions:
 
     def _q_lookup [html] (self, request, action):
         try:
+            self.record_id = int(self.record_id)
             if action == 'edit':
                 return edit(request, self.record_id)
-            if action == 'delete':
+            elif action == 'delete':
                 return delete(request, self.record_id)
+            elif action == 'recache':
+                return recache(request)
             else:
                 raise TraversalError
         except:
@@ -60,16 +63,13 @@ class RecordActions:
     
     def edit [html] (self, request):
     
-        cursor = get_publisher().get_cursor()
-        
         queue = Queue()
-        queue.load(cursor)
+        queue.load()
         
         batches = [(b.uid, b.name) for b in queue.batches]
         batches.sort()
     
         record = QueuedRecord(self.record_id)
-        record.load(cursor)
         
         form = MyForm()
         form.add(form2.StringWidget, 'record_user_id', 
@@ -90,9 +90,14 @@ class RecordActions:
             "%s", %s
             </p>
             <p>
+            <a href='/admin/record/%s/recache'>Recache</a> this record.
+            </p>
+            <p>
             <a href='/admin/record/%s/delete'>Delete</a> this record.
             </p>
-            """ % (record.title, record.source, record.uid)
+            """ % (record.title, record.source, 
+                record.uid,
+                record.uid)
             form.render()
             footer()
     
@@ -116,8 +121,7 @@ class RecordActions:
     
         if has_changed:
             try:
-                cursor = get_publisher().get_cursor()
-                record.save(cursor)
+                record.save()
                 form.logger.info(str('Updated record %s' % record.uid))
                 add_message('Updated record %s' % record.uid)
             except:
@@ -126,12 +130,11 @@ class RecordActions:
         else:
             add_message('Did not update record %s' % record.uid)
     
-        cursor.close()
         request.redirect(str('/admin'))
 
 
     def delete [html] (self, request):
-    
+        
         form = MyForm()
         form.add(form2.IntWidget, 'record_uid', title='Record id', required=True)
         form.add(form2.CheckboxWidget, 'are_you_sure',
@@ -139,13 +142,7 @@ class RecordActions:
             value=False)
         form.add_submit('delete', 'delete')
     
-        cursor = get_publisher().get_cursor()
         record = QueuedRecord(self.record_id)
-        try:
-            record.load(cursor, load_metadata=False)
-        except:
-            print traceback.print_exc()
-            return not_found('record')
     
         def render [html] ():
             header('Delete record')
@@ -173,9 +170,7 @@ class RecordActions:
         are_you_sure = form['are_you_sure']
         if are_you_sure:
             try:
-                cursor = get_publisher().get_cursor()
-                record.delete(cursor)
-                cursor.close()
+                record.delete()
             except:
                 form.logger.error(str('Unable to delete record %s' % self.record_id))
                 raise PublishError
@@ -183,8 +178,28 @@ class RecordActions:
             add_message('Deleted record')
             request.redirect(str('/admin'))
         else:
-            add_message('Term not deleted')
+            add_message('Record not deleted')
             request.redirect(str('/admin'))
+
+
+    def recache [html] (self, request):
+        
+        context = canary.context.Context()
+        try:
+            # Delete before we set it, otherwise, we won't properly
+            # load from the db (it will load from the cache, which is
+            # the opposite of what we want!).
+            context.cache_delete('%s:%s' % (QueuedRecord.CACHE_KEY, 
+                self.record_id))
+            record = QueuedRecord(self.record_id)
+            context.cache_set('%s:%s' % (record.CACHE_KEY, record.uid), record)
+            add_message('Record recached')
+            request.redirect(str('/admin'))
+        except:
+            print traceback.print_exc()
+            add_message('Record not recached')
+            request.redirect(str('/admin'))
+
 
 def find [html] (request):
     
@@ -209,11 +224,8 @@ def find [html] (request):
     if form.has_errors():
         return render()
         
-    cursor = get_publisher().get_cursor()
-    
     try:
         record = QueuedRecord(form['record_uid'])
-        record.load(cursor, load_metadata=False)
     except ValueError:
         return not_found('record')
     

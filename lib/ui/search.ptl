@@ -7,6 +7,7 @@ _q_exports = [
 from quixote import get_publisher
 from quixote import form2
 
+import canary.context
 from canary.qx_defs import MyForm
 from canary.search import Search
 from canary.ui.record_ui import render_record_row
@@ -28,8 +29,8 @@ class SearchForm (MyForm):
 def search [html] (request):
 
     form = SearchForm()
-    cursor = get_publisher().get_cursor()
-    source_catalog = get_publisher().get_source_catalog()
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
     complete_term_mapping = source_catalog.get_complete_mapping()
     
     def render [html] ():
@@ -49,7 +50,7 @@ def search [html] (request):
         return render()
     
     search = Search(token=form['query'])
-    results = search.search(cursor, complete_term_mapping).get_results()
+    results = search.search(complete_term_mapping).get_results()
     
     header("Search results")
     """
@@ -78,11 +79,3 @@ def search [html] (request):
         '<p>Nothing found.</p>'
 
     footer()
-
-
-#def _q_access (request):
-#    try:
-#        if request.session == None or request.session.user == None:
-#            raise NotLoggedInError('You must first log in.')
-#    except:
-#        raise NotLoggedInError('You must first log in.')

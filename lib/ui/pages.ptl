@@ -2,17 +2,14 @@
 
 from time import time
 
-from quixote import get_publisher, get_session_manager
+from quixote import get_publisher, get_request, get_session_manager
 from quixote.errors import AccessError, SessionError
 from quixote import form2
 
-from dulcinea.database import get_transaction
-from dulcinea.persistent_session import DulcineaSession
-
-from canary.qx_defs import MyDulcineaUser, NotLoggedInError, MyForm
+import canary.context
+from canary.qx_defs import NotLoggedInError, MyForm
 from canary.ui.pageframe import header, footer
-# CAUSES cycle and ImportError
-#from canary.ui.search import Search
+from canary.user import get_user_by_id
 
 
 def _q_index [html] (request):
@@ -212,9 +209,9 @@ class LoginForm (MyForm):
     def __init__ (self):
         MyForm.__init__(self)
         self.add(form2.StringWidget, 'user_id', title='Your user id',
-                 size=10, required=1)
+                 size=10, required=True)
         self.add(form2.PasswordWidget, 'user_pass', title='Password',
-                 size=10, required=1)
+                 size=10, required=True)
         self.add_hidden('go', None)
         self.add_submit('login', 'login')
 
@@ -251,8 +248,7 @@ def login [html] (request):
 
     user_id = form['user_id']
     user_pass = form['user_pass']
-    user_db = get_publisher().get_user_db()
-    user = user_db.get_user(user_id)
+    user = get_user_by_id(user_id)
     if user == None:
         form.set_error('user_id', 'Invalid user id or password.')
     else:
@@ -262,26 +258,15 @@ def login [html] (request):
     if form.has_errors():
         return render()
 
-    user_db = get_publisher().get_user_db()
-    user = user_db.get_user(user_id)
-    
-    if not user == None:
-        # allow user to have multiple sessions, but deal correctly
-        # with expired session cookies (pages.reaper expires old sessions)
-        session_mgr = get_publisher().session_mgr
-        request.session.set_actual_user(user)
-        get_transaction().commit()
+    session_mgr = get_session_manager()
+    request.session.set_user(user)
         
-        form.logger.info(str('User %s logged in' % user.id))
+    form.logger.info(str('User %s logged in' % user.id))
         
-        if form['go']:
-            return request.redirect(form['go'])
-        else:
-            return request.redirect(str('/user/'))
+    if form['go']:
+        return request.redirect(form['go'])
     else:
-        request.session.user = None
-        get_transaction().commit()
-        return not_found('user')
+        return request.redirect(str('/user/'))
 
 
 def logout [html] (request):
@@ -325,29 +310,17 @@ def add_message (msg):
     to be rendered on next page view.  Initialize request.session.messages
     if necessary.
     """
-    request = get_publisher().get_request()
-    try:
-        if request.session.messages:
-            pass
-    except:
-        request.session.messages = []
-    request.session.messages.append(str(msg))
+    get_request().session.add_message(msg)
 
 def has_messages ():
-    request = get_publisher().get_request()
-    try:
-        if len(request.session.messages) > 0:
-            return True
-        else:
-            return False
-    except:
-        return False
+    return get_request().session.has_messages()
         
 def render_messages [html] ():
     # Show any messages added to the session, then remove upon rendering.
-    request = get_publisher().get_request()
+    session = get_request().session
     try:
-        messages = request.session.messages
+        messages = session.messages.split(str('~~'))
+        messages = [m for m in messages if not m == '']
         if len(messages) > 0:
             """
             <p>
@@ -361,17 +334,19 @@ def render_messages [html] ():
             </ul>
             </p>
             """
-        request.session.messages = []
+            session.clear_messages()
     except:
-        pass
+        import traceback
+        print traceback.print_exc()
 
 
 # FIXME: hide this somehow or at least discourage abuse better?
 # NOTE: run this regularly from a cronjob with wget or equiv
 def reaper [plain] (request):
 
+    context = canary.context.Context()
     # FIXME: Cleaner way of handling realtime config data?
-    db_root = get_publisher().get_root()
+    db_root = context.get_root()
     # 3600 is one hour in seconds
     if db_root.has_key('last_reaper_time') \
         and time() - db_root['last_reaper_time'] < 3600:
@@ -387,5 +362,4 @@ def reaper [plain] (request):
             reap_counter += 1
 
     db_root['last_reaper_time'] = time()
-    get_transaction().commit()
     return 'ok: %s session(s) reaped' % reap_counter

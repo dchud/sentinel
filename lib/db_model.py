@@ -2,16 +2,16 @@
 
 import dtuple
 
+import canary.context
+
+
 class ValueGroup:
     """
     A single group of discrete values from the EAV model.
     """
 
-    def __init__ (self,
-                  group_name,
-                  description,
-                  value_group_id=-1,
-                  allow_multiple=0):
+    def __init__ (self, group_name, description, value_group_id=-1,
+        allow_multiple=0):
         self.value_group_id = value_group_id
         self.group_name = group_name
         self.description = description
@@ -39,10 +39,10 @@ class ValueGroup:
                 return True
         return False
         
-    def delete_value (self, cursor, value):
+    def delete_value (self, value):
         if self.has_value(value.value_id):
             del(self.values[value.serial_number])
-            value.delete(cursor)
+            value.delete()
             
     def get_value (self, value_id):
         for serial_number, value in self.values.items():
@@ -60,7 +60,9 @@ class ValueGroup:
     def is_multiple (self):
         return self.allow_multiple
 
-    def save (self, cursor, update_values=True):
+    def save (self, update_values=True):
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         try:
             if self.value_group_id == -1:
                 cursor.execute("""
@@ -84,12 +86,14 @@ class ValueGroup:
                     """, self.value_group_id)
                 for value_id in self.values:
                     value = self.values[value_id]
-                    value.save(cursor)
+                    value.save()
                     
         except:
             # FIXME: log something here.  how to handle?  define Error.
             pass
             
+        context.close_cursor(cursor)
+        
 
 class Value:
     """
@@ -116,7 +120,9 @@ class Value:
         s.append(" />")
         return "\n".join(s)
 
-    def save (self, cursor):
+    def save (self):
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         try:
             if self.value_id == -1:
                 print 'inserting value'
@@ -136,8 +142,12 @@ class Value:
         except:
             # FIXME: define Errors.
             pass
+        context.close_cursor(cursor)
+        
             
-    def delete (self, cursor):
+    def delete (self):
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         try:
             cursor.execute("""
                 DELETE FROM dv_values
@@ -148,7 +158,7 @@ class Value:
             # FIXME: define Errors
             print 'failed: deleting value'
             pass
-
+        context.close_cursor(cursor)
 
 class DBModel:
     """
@@ -160,10 +170,10 @@ class DBModel:
     def __init__ (self):
         self.value_groups = {}
 
-    def load_from_db (self, cursor, debug=0):
-        if cursor == None:
-            return
-
+    def load_from_db (self, debug=0):
+        context = canary.context.Context()
+        cursor = context.get_cursor()
+        
         # load all value groups
         cursor.execute('SELECT * FROM dv_group')
         fields = [d[0] for d in cursor.description]
@@ -202,22 +212,26 @@ class DBModel:
                 print "adding group:"
                 print group
             self.add_group(group)
-
+        context.close_cursor(cursor)
+        
 
     def get_value (self, value_id):
         for group_id, group in self.value_groups.items():
             if group.has_value(value_id):
                 return group.get_value(value_id)
             
+    
     def add_group (self, group):
         if not group.__class__.__name__ == "ValueGroup":
             return
         self.value_groups[group.value_group_id] = group
 
+
     def get_group (self, group_id):
         if self.value_groups.has_key(group_id):
             return self.value_groups[group_id]
             
+
     def get_groups (self):
         group_ids = self.value_groups.keys()
         group_ids.sort()
@@ -225,15 +239,18 @@ class DBModel:
         for id in group_ids:
             groups.append(self.value_groups[id])
         return groups
-        
+    
+    
     def has_group (self, group_name):
         for group in self.get_groups():
             if group.group_name == group_name:
                 return True
         return False
         
-    def delete_group (self, cursor, group_id):
-        print 'delete group', group_id
+        
+    def delete_group (self, group_id):
+        context = canary.context.Context()
+        cursor = context.get_cursor
         try:
             group_id = int(group_id)
             
@@ -251,7 +268,10 @@ class DBModel:
         except:
             # FIXME: errors.
             pass
-       
+
+        context.close_cursor(cursor)
+        
+        
     def get_value_description (self, group_id, serial_number):
         try:
             group = self.value_groups[group_id]
@@ -260,37 +280,6 @@ class DBModel:
         except:
             return ''
 
+
     def model_size (self):
         return len(self.value_groups)
-
-
-
-# FIXME: a better test plan than embedding connection details here!
-if __name__ == '__main__':
-    import MySQLdb
-    con = MySQLdb.connect(host='localhost',
-                          user='dlc33',
-                          passwd='floogy',
-                          db='canary-dev')
-    c = con.cursor()
-    print 'connected, loading:'
-    dbmodel = DBModel()
-    dbmodel.load_from_db(c, debug=0)
-    c.close()
-    con.close()
-    print 'done.'
-    for group_id in dbmodel.value_groups.keys():
-        group = dbmodel.get_group(group_id)
-        print group
-        for value_id in group.values.keys():
-            value = group.values[value_id]
-            print value
-
-    group = dbmodel.get_group(14)
-    for id in group.values.keys():
-        value = group.values[id]
-        print value.serial_number, value.description
-
-    print dbmodel.get_value_description(3, 0)
-    print dbmodel.get_value_description(4, 2)
-    print dbmodel.get_value_description(12, 1)

@@ -81,7 +81,6 @@ def delete [html] (session_id=None):
     are_you_sure = form['are_you_sure']
     if are_you_sure:
         del(session_manager[session_id])
-        get_transaction().commit()
         form.logger.info(str('Deleted session %s' % session_id))
         header('Admin: Session deleted')
         title_bar('Session deleted')

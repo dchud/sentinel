@@ -14,7 +14,6 @@ from canary.qx_defs import MyForm
 from canary.utils import is_valid_email, send_email
 
 
-
 def contact_us [html] (request):
 
     form = MyForm()
@@ -66,7 +65,7 @@ def contact_us [html] (request):
     if form.has_errors():
         return render()
 
-    config = get_publisher().get_config()
+    config = get_publisher().config
     # FIXME: better To: address
     send_email(user_email,
                config.mail_debug_addr,
@@ -899,7 +898,7 @@ def questionnaire [html] (request):
         
     user_text = '\n\n'.join(['%s: %s' % (q, a) for q, a in answers])
 
-    config = get_publisher().get_config()
+    config = get_publisher().config
     send_email(user_email,
                [config.mail_debug_addr, str('sentinelstudies@yale.edu')],
                subject='Questionnaire from a Canary site visitor',

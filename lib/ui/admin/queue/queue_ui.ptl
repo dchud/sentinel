@@ -16,14 +16,13 @@ from quixote.errors import AccessError, PublishError, TraversalError
 from quixote import form2
 from quixote.html import html_quote
 
-from dulcinea.database import get_transaction
-
-from canary.ui.admin.admin_ui import title_bar
-from canary.ui.pageframe import header, footer
-from canary.ui.pages import not_found, add_message, has_messages, render_messages
+import canary.context
 from canary.loader import Batch, Queue, Parser
 from canary.qx_defs import MyForm
 from canary.source_catalog import SourceCatalog, Source
+from canary.ui.admin.admin_ui import title_bar
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found, add_message, has_messages, render_messages
 
 
 def _q_index [html] (request):
@@ -53,16 +52,17 @@ class QueueActions:
 
     def _q_lookup [html] (self, request, action):
         try:
+            self.batch_id = int(self.batch_id)
             if action == 'edit':
                 return edit(request, self.batch_id)
             elif action == 'add':
-                return add(request, batch_id=self.batch_id)
+                return add(request, self.batch_id)
             elif action == 'receive':
-                return receive(request, batch_id=self.batch_id)
+                return receive(request, self.batch_id)
             elif action == 'delete':
                 return delete(request, self.batch_id)
             elif action == 'dedupe':
-                return dedupe(request, batch_id=self.batch_id)
+                return dedupe(request, self.batch_id)
             else:
                 raise TraversalError
         except:
@@ -73,11 +73,11 @@ class QueueActions:
             
     def edit [html] (self, request):
         
-        cursor = get_publisher().get_cursor()
         batch = Batch(uid=self.batch_id)
-        batch.load(cursor, load_metadata=False)
+        batch.load()
         
-        source_catalog = get_publisher().get_source_catalog()
+        context = canary.context.Context()
+        source_catalog = context.get_source_catalog()
         # Sort terms by their token
         sources = [(id, source.name) for id, source in source_catalog.sources.items()]
         sources.sort()
@@ -120,7 +120,7 @@ class QueueActions:
         
         if has_changed:
             try:
-                batch.save(cursor)
+                batch.save()
                 add_message('Edited batch %s' % self.batch_id)
                 form.logger.info(str('Edited batch %s' % self.batch_id))
             except:
@@ -129,7 +129,6 @@ class QueueActions:
         else:
             add_message('Batch unchanged')
         
-        cursor.close()
         request.redirect(str('/admin/queue/list'))
 
 
@@ -137,17 +136,16 @@ class QueueActions:
 
 def add [html] (request, batch_id=None):
     
-    source_catalog = get_publisher().get_source_catalog()
-
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
     # Sort terms by their token
     sources = [(id, source.name) for id, source in source_catalog.sources.items()]
     sources.sort()
 
     batch_name = ''
     if batch_id:
-        cursor = get_publisher().get_cursor()
         batch = Batch(uid=batch_id)
-        batch.load(cursor, load_metadata=False)
+        batch.load()
         batch_name = batch.name
     
     header('Upload records')
@@ -206,8 +204,8 @@ def add [html] (request, batch_id=None):
 
 def list [html] (request):
 
-    cursor = get_publisher().get_cursor()
-    source_catalog = get_publisher().get_source_catalog()
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
 
     header('List editing queues')
     title_bar('List editing queues')
@@ -226,11 +224,11 @@ def list [html] (request):
     </tr>
     """
     queue = Queue()
-    queue.load(cursor)
+    queue.load()
     sort_list = [(b.name.lower(), b) for b in queue.batches]
     sort_list.sort()
     for n, batch in sort_list:
-        batch_stats = batch.get_statistics(cursor)
+        batch_stats = batch.get_statistics()
 
         source_id = batch.source_id
         source = source_catalog.get_source(source_id)
@@ -260,15 +258,15 @@ def list [html] (request):
                 [<a href='/admin/queue/%s/edit'>edit</a>]
                 [<a href='/admin/queue/%s/add'>add</a>]
                 [<a href='/admin/queue/%s/dedupe'>dedupe</a>]
+                [<a href='/admin/queue/%s/delete'>delete</a>]
             </td>
         </tr>
         """ % (str(batch.date_added)[0:10], 
-            batch.uid, batch.uid, batch.uid)
+            batch.uid, batch.uid, batch.uid, batch.uid)
     """
     </table>
     """
     
-    cursor.close()
     footer()
     
 
@@ -276,11 +274,11 @@ def receive [html] (request, batch_id=None):
 
     result = []
     form = request.form
-    cursor = get_publisher().get_cursor()
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
         
     try:
         source_id = int(form.get('source_id'))
-        source_catalog = get_publisher().get_source_catalog()
         source = source_catalog.get_source(source_id)
     except:
         add_message('Please choose a source.')
@@ -304,33 +302,34 @@ def receive [html] (request, batch_id=None):
     try:
         if batch_id:
             batch = Batch(batch_id)
-            batch.load(cursor, load_metadata=False)
+            batch.load()
         else:
             batch_name = form.get('batch_name', '')
             if batch_name:
                 queue = Queue()
-                queue.load(cursor)
+                queue.load()
                 batch = queue.get_batch_by_name(batch_name)
                 if batch:
-                    batch.load(cursor, load_metadata=False)
+                    batch.load()
                 else:
-                    batch = Batch(file_name=upload.tmp_filename, source_id=source_id)
+                    batch = Batch(file_name=upload.tmp_filename, 
+                        source_id=source_id)
                     batch.name = form.get('batch_name') or ''
-                    batch.save(cursor)
+                    batch.save()
             
         mapped_terms = source_catalog.get_mapped_terms(source_id)
         parser = Parser(source)
         records = parser.parse(upload.tmp_filename, mapped_terms=mapped_terms)
         batch.add_records(records)
-        batch.save(cursor)
+        batch.save()
         
         if form.get('find_duplicates', '') == 'yes':
-            batch.find_duplicates(cursor, source_catalog)
+            batch.find_duplicates(source_catalog)
                 
         if num_records != len(records):
             add_message('Batch saved: Record count mismatch, %s specified, %s found' % (num_records, len(records)))
 
-        cursor.close()
+        
     except:
         print traceback.print_exc()
         add_message('Unable to load batch.')
@@ -354,8 +353,9 @@ def receive [html] (request, batch_id=None):
 
 
 def create [html] (request):
-
-    source_catalog = get_publisher().get_source_catalog()
+    
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
 
     # Sort terms by their token
     sources = [(id, source.name) for id, source in source_catalog.sources.items()]
@@ -380,11 +380,9 @@ def create [html] (request):
         return render()
         
     try:
-        cursor = get_publisher().get_cursor()
         batch = Batch(source_id=form['source_id'])
         batch.name = form['batch_name']
-        batch.save(cursor)
-        cursor.close()
+        batch.save()
         add_message('Created batch %s' % batch.uid)
         form.logger.info(str('Created batch %s' % batch.uid))
     except:
@@ -394,18 +392,75 @@ def create [html] (request):
     request.redirect(str('/admin'))
 
 
-def dedupe [html] (request, batch_id):
-    
-    source_catalog = get_publisher().get_source_catalog()
-    cursor = get_publisher().get_cursor()
-    
+def delete [html] (request, batch_id):
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
+
     try:
         batch = Batch(batch_id)
-        batch.load(cursor)
+        batch.load()
+    except:
+        return not_found('batch')
+       
+    form = MyForm()
+    form.add(form2.CheckboxWidget, 'are_you_sure',
+        title='Are you sure you want to delete this batch?',
+        value=False)
+    form.add_submit('delete', 'delete')
+    
+    def render [html] ():
+        header('Delete batch')
+        title_bar('Delete batch')
+        if has_messages():
+            render_messages()
+        """
+        <p>
+        "%s" (%s)
+        </p>
+        """ % (batch.name, batch.uid)
+        form.render()
+        footer()
+    
+    if not form.is_submitted():
+        return render()
+
+    if form.has_errors():
+        return render()
+    
+    are_you_sure = form['are_you_sure']
+    if are_you_sure:
+        # Make sure they're absolutely certain!
+        if request.get_form_var('are_you_certain', None) == 'YES':
+            form.logger.info(str('Deleting batch %s' % batch.uid))
+            batch.load(show='all', size='all')
+            batch.delete()
+            add_message('Deleted batch')
+        else:
+            # Add a second widget to double-verify they're certain
+            form.add(form2.StringWidget, 'are_you_certain',
+                title='Are you ABSOLUTELY certain?',
+                required=True,
+                hint='Type "YES" exactly to double-verify',
+                value='No.')
+            add_message('Please be ABSOLUTELY certain; you are about to DELETE THIS WHOLE BATCH.')
+            return render()
+    else:
+        add_message('Batch not deleted')
+
+    request.redirect(str('/admin'))
+
+
+def dedupe [html] (request, batch_id):
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
+
+    try:
+        batch = Batch(batch_id)
+        batch.load()
     except:
         return not_found('batch')
         
-    batch.find_duplicates(cursor, source_catalog)
+    batch.find_duplicates(source_catalog)
     add_message('Ran dedupe on batch')
     request.redirect(str('/admin'))
     

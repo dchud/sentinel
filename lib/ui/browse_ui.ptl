@@ -4,11 +4,12 @@ import urllib
 
 from quixote import get_publisher
 
-from canary.qx_defs import NotLoggedInError
 from canary.browse import records_by_year, records_by_year_index
 from canary.browse import records_by_heading, records_by_heading_index
 from canary.browse import records_by_journal, records_by_journal_index
 from canary.browse import records_by_methodology, records_by_methodology_index
+import canary.context
+from canary.qx_defs import NotLoggedInError
 from canary.study import Methodology
 from canary.ui.pages import not_found
 from canary.ui.pageframe import header, footer
@@ -50,13 +51,6 @@ class Browse:
         except:
             return not_found('index')
             
-    #def _q_access (self, request):
-    #    try:
-    #        if request.session == None or request.session.user == None:
-    #            raise NotLoggedInError('You must first log in.')
-    #    except:
-    #        raise NotLoggedInError('You must first log in.')
-
 
 
 class BrowseIndex:
@@ -130,11 +124,10 @@ class YearBrowseIndex (BrowseIndex):
                     <th align='left'>Year</th>
                 </tr>
         """
-        cursor = get_publisher().get_cursor()
-        source_catalog = get_publisher().get_source_catalog()
+        context = canary.context.Context()
+        source_catalog = context.get_source_catalog()
         complete_term_map = source_catalog.get_complete_mapping()
-        records = records_by_year_index(cursor, complete_term_map)
-        cursor.close()
+        records = records_by_year_index(complete_term_map)
         for record in records:
             year_count, year = record
             if not year == 0:
@@ -155,13 +148,12 @@ class YearBrowseIndex (BrowseIndex):
         try:
             if year:
                 year = int(year)
-                cursor = get_publisher().get_cursor()
-                source_catalog = get_publisher().get_source_catalog()
+                context = canary.context.Context()
+                source_catalog = context.get_source_catalog()
                 complete_term_map = source_catalog.get_complete_mapping()
-                records = records_by_year(cursor, year, term_map=complete_term_map)
+                records = records_by_year(year, term_map=complete_term_map)
                 if len(records) == 0:
                     raise Exception('No records found')
-                cursor.close()
                 return self.render_records(year, records)
             else:
                 raise Error
@@ -209,10 +201,7 @@ class HeadingBrowseIndex (BrowseIndex):
                 <th align='left'>Subject heading</th>
             </tr>
         """
-        
-        cursor = get_publisher().get_cursor()
-        headings = records_by_heading_index(cursor)
-        cursor.close()
+        headings = records_by_heading_index()
         for heading in headings:
             term, term_count, id_count = heading
             encoded_heading = urllib.quote_plus(term)
@@ -233,9 +222,7 @@ class HeadingBrowseIndex (BrowseIndex):
         try:
             if name:
                 unencoded_name = urllib.unquote_plus(name)
-                cursor = get_publisher().get_cursor()
-                records = records_by_heading(unencoded_name, cursor)
-                cursor.close()
+                records = records_by_heading(unencoded_name)
                 return self.render_records(unencoded_name, records)
             else:
                 raise Error
@@ -273,11 +260,10 @@ class JournalBrowseIndex (BrowseIndex):
                 </tr>
         """
         
-        cursor = get_publisher().get_cursor()
-        source_catalog = get_publisher().get_source_catalog()
+        context = canary.context.Context()
+        source_catalog = context.get_source_catalog()
         complete_term_map = source_catalog.get_complete_mapping()
-        results = records_by_journal_index(cursor, complete_term_map)
-        cursor.close()
+        results = records_by_journal_index(complete_term_map)
         for result in results:
             count, issn, title, abbr = result
             if str('.') in title:
@@ -300,10 +286,10 @@ class JournalBrowseIndex (BrowseIndex):
     def _q_lookup (self, request, issn=0):
         try:
             if issn:
-                cursor = get_publisher().get_cursor()
-                source_catalog = get_publisher().get_source_catalog()
+                context = canary.context.Context()
+                source_catalog = context.get_source_catalog()
                 complete_term_map = source_catalog.get_complete_mapping()
-                title, records = records_by_journal(cursor, issn, 
+                title, records = records_by_journal(issn, 
                     term_map=complete_term_map)
                 if len(records) == 0:
                     raise Exception('No records found')
@@ -311,7 +297,6 @@ class JournalBrowseIndex (BrowseIndex):
                     title = title[0:title.index(str('.'))]
                 else:
                     title = '-'
-                cursor.close()
     
                 return self.render_records(title, records)
         except:
@@ -352,9 +337,7 @@ class MethodologyBrowseIndex (BrowseIndex):
                     <th align='left'>Methodology</th>
                 </tr>
         """
-        cursor = get_publisher().get_cursor()
-        records = records_by_methodology_index(cursor)
-        cursor.close()
+        records = records_by_methodology_index()
         meths = [(Methodology().get_text_value(Methodology.TYPES, 
                 meth_id), meth_id, count) for meth_id, count in records]
         meths.sort()
@@ -376,11 +359,9 @@ class MethodologyBrowseIndex (BrowseIndex):
         try:
             if name:
                 meth_id = int(name)
-                cursor = get_publisher().get_cursor()
-                records = records_by_methodology(cursor, meth_id)
+                records = records_by_methodology(meth_id)
                 if len(records) == 0:
                     raise Exception('No records found')
-                cursor.close()
                 
                 return self.render_records(Methodology().get_text_value(Methodology.TYPES,
                     meth_id).capitalize(), records)

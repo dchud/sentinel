@@ -3,6 +3,7 @@
 import dtuple
 import types
 
+import canary.context
 from canary.utils import DTable
 
 
@@ -21,10 +22,12 @@ class Concept (DTable):
         self.synonyms = []
         
     
-    def load (self, cursor, load_synonyms=False):
+    def load (self, load_synonyms=False):
         if self.uid == -1:
             return
         
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         cursor.execute("""
             SELECT umls_concepts.preferred_name, 
                 umls_concepts_sources.umls_source_id, 
@@ -59,26 +62,32 @@ class Concept (DTable):
                 synonym = row['term']
                 if not synonym in self.synonyms:
                     self.synonyms.append(synonym)
-                    
+        context.close_cursor(cursor)
+        
     
-    def save (self, cursor, update_all=False):
+    def save (self, update_all=False):
         # NOTE: For now, do not allow creation of arbitrary concepts
         if self.uid == -1:
             return
         
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         # NOTE: For now, only allow update of preferred_name
         cursor.execute("""
             UPDATE umls_concepts
             SET preferred_name = %s
             WHERE umls_concept_id = %s
             """, (self.term, self.uid))
-            
+        context.close_cursor(cursor)
+           
     
-    def add_synonym (self, cursor, term):
+    def add_synonym (self, term):
+        
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         
         # If a synonym does not yet exist, add it here, starting at id 20,000,000
         # (5,000,000+ and 10,000,000+ are already in use from ITIS faux-merge)
-        
         if not term in self.synonyms:
             cursor.execute("""
                 SELECT MAX(umls_term_id) AS max_id
@@ -96,11 +105,14 @@ class Concept (DTable):
                 (umls_term_id, term, umls_concept_id)
                 VALUES (%s, %s, %s)
                 """, (new_max, term, self.uid))
-            
-            
+        context.close_cursor(cursor)
+           
 
-def find_concepts (cursor, search_term):
+def find_concepts (search_term):
     
+    context = canary.context.Context()
+    cursor = context.get_cursor()
+
     concepts = {}
     
     if isinstance(search_term, types.IntType):
@@ -156,6 +168,7 @@ def find_concepts (cursor, search_term):
                 concepts_ranked.insert(0, concept)
         return concepts_ranked
     
+    context.close_cursor(cursor)
     return concepts.values()
 
 
@@ -231,12 +244,11 @@ class Category (DTable):
             and not concept.uid in [c.uid for c in self.concepts]:
             self.concepts.append(concept)
             
-    def remove_concept (self, cursor, concept):
-        print 'Category.remove_concept()'
+    def remove_concept (self, context, concept):
+        cursor = context.get_cursor()
         for c in self.concepts:
             if concept.uid == c.uid:
                 self.concepts.remove(c)
-        print '...executing DELETE on uid = %s' % concept.uid
         try:
             cursor.execute("""
                 DELETE FROM category_concepts
@@ -245,6 +257,8 @@ class Category (DTable):
         except:
             import traceback
             print traceback.print_exc()
+        context.close_cursor(cursor)
+       
 
     def update_concept (self, concept):
         self.remove(concept)
@@ -253,10 +267,12 @@ class Category (DTable):
     def get_concepts (self):
         return self.concepts
 
-    def load (self, cursor, load_concepts=False):
+    def load (self, load_concepts=False):
         if self.uid == -1:
             return
 
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         cursor.execute("""
             SELECT * 
             FROM categories
@@ -299,12 +315,15 @@ class Category (DTable):
                     concept_id=row['concept_id'])
                 cat_concept.is_broad = row['is_broad']
                 cat_concept.is_default = row['is_default']
-                cat_concept.load(cursor)
+                cat_concept.load()
                 self.add_concept(cat_concept)
-                
+        context.close_cursor(cursor)
         
         
-    def save (self, cursor):
+    def save (self):
+        
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         if self.uid == -1:
             cursor.execute("""
                 INSERT INTO categories
@@ -320,7 +339,7 @@ class Category (DTable):
             
             for group in self.groups:
                 group.category_id = self.uid
-                group.save(cursor)
+                group.save()
         
         else:
             cursor.execute("""
@@ -328,10 +347,12 @@ class Category (DTable):
                 SET name = %s, concept_types = %s
                 WHERE uid = %s
                 """, (self.name, self.get_types(shorthand=True), self.uid))
-                
+        context.close_cursor(cursor)
+        
 
-
-def load_categories (cursor):
+def load_categories ():
+    context = canary.context.Context()
+    cursor = context.get_cursor()
     categories = []
     cursor.execute("""
         SELECT uid
@@ -341,9 +362,10 @@ def load_categories (cursor):
     rows = cursor.fetchall()
     for row in rows:
         category = Category(uid=row[0])
-        category.load(cursor)
+        category.load()
         categories.append(category)
     
+    context.close_cursor(cursor)
     return categories
 
 
@@ -354,7 +376,9 @@ class CategoryGroup (DTable):
         self.category_id = category_id
         self.name = name
         
-    def save (self, cursor):
+    def save (self):
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         if self.uid == -1:
             cursor.execute("""
                 INSERT INTO category_groups
@@ -368,7 +392,8 @@ class CategoryGroup (DTable):
                 SET name = %s
                 WHERE uid = %s
                 """, (self.name, self.uid))
-
+        context.close_cursor(cursor)
+        
 
 class CategoryConcept (DTable):
     
@@ -382,7 +407,9 @@ class CategoryConcept (DTable):
         self.groups = []
         self.concept = None
         
-    def load (self, cursor):
+    def load (self):
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         if self.uid == -1:
             if not self.concept_id == -1 \
                 and not self.category_id == -1:
@@ -434,9 +461,13 @@ class CategoryConcept (DTable):
             self.groups.append(row['category_group_id'])
         
         self.concept = Concept(uid=self.concept_id)
-        self.concept.load(cursor)
+        self.concept.load()
+        context.close_cursor(cursor)
         
-    def save (self, cursor):
+        
+    def save (self):
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         if self.uid == -1:
             cursor.execute("""
                 INSERT INTO category_concepts
@@ -453,11 +484,11 @@ class CategoryConcept (DTable):
             row = cursor.fetchone()
             self.uid = row[0]
         else:
-            print 'updating'
             cursor.execute("""
                 UPDATE category_concepts
                 SET is_default = %s,
                 is_broad = %s
                 WHERE uid = %s
                 """, (int(self.is_default), int(self.is_broad), self.uid))
-            print 'updated'
+        context.close_cursor(cursor)
+    

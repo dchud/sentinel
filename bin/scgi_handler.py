@@ -7,17 +7,16 @@ from scgi.quixote_handler import QuixoteHandler, main
 
 enable_ptl()
 
-from canary.qx_defs import MySessionPublisher
+from canary.qx_defs import CanaryPublisher
 
 
+class CanaryHandler (QuixoteHandler):
 
-class MyHandler (QuixoteHandler):
-
-    publisher_class = MySessionPublisher
+    publisher_class = CanaryPublisher
     root_namespace = "canary.ui"
     prefix = ""
 
 
 if __name__ == '__main__':
     enable_ptl()
-    main(MyHandler)
+    main(CanaryHandler)

@@ -14,7 +14,7 @@
 #
 # Since this isn't in any Python distribution yet, we'll use the CVS ID for
 # tracking:
-#   $Id: dtuple.py,v 1.1 2000/04/18 20:17:20 gstein Exp $
+#   $Id$
 #
 
 class TupleDescriptor:

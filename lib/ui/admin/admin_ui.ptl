@@ -8,9 +8,11 @@ from log4py import Logger
 from quixote import get_publisher
 from quixote.errors import AccessError, PublishError, TraversalError
 
+import canary.context
+from canary.source_catalog import SourceCatalog
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import has_messages, add_message, render_messages
-from canary.source_catalog import SourceCatalog
+import canary.user
 
 
 def title_bar [html] (action=''):
@@ -29,7 +31,9 @@ def _q_index [html] (request):
     header('Admin')
     title_bar()
     
-    render_messages()
+    session = request.session
+    if session.has_messages():
+        render_messages()
         
     """
     <table cellspacing='5' class='gentable'>
@@ -85,12 +89,6 @@ def _q_index [html] (request):
         <td><a href='/admin/dv_data/group/create'>Create Group</a></td>
         <td>Edit (pulldown + js)</td>
     </tr>
-    <tr>
-        <th>ZODB</th>
-        <td><a href='/admin/zodb_keys'>List keys</a></td>
-        <td> - </td>
-        <td> - </td>
-    </tr>
     </table>
     """
     footer()
@@ -99,9 +97,9 @@ def _q_index [html] (request):
 def users [html] (request):
     header('Admin: List users')
     title_bar('List Users')
-    user_db = get_publisher().get_user_db()
-    users = user_db.get_users()
-    sorted_users = [(user.email, user.get_id()) for user in users]
+    
+    users = canary.user.get_users()
+    sorted_users = [(user.email, id) for id, user in users.items()]
     sorted_users.sort()
     """
     <table cellspacing='5' class='gentable'>
@@ -113,7 +111,7 @@ def users [html] (request):
     </tr>
     """
     for email, id in sorted_users:
-        user = user_db.get_user(id)
+        user = users[id]
         """
     <tr>
         <td>%s</td>
@@ -135,7 +133,8 @@ def source_map [html] (request):
     header('Admin: Source map')
     title_bar('Source map')
     
-    source_catalog = get_publisher().get_source_catalog()
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
     
     if len(source_catalog.sources) == 0:
         """
@@ -202,8 +201,9 @@ def sources [html] (request):
 
     if has_messages():
         render_messages()
-
-    source_catalog = get_publisher().get_source_catalog()
+    
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
 
     if len(source_catalog.sources) == 0:
         """
@@ -243,12 +243,11 @@ def reload_sources [html] (request):
     title_bar('Reload Sources')
     try:
         source_catalog = SourceCatalog()
-        cursor = get_publisher().get_cursor()
-        source_catalog.load_sources(cursor)
-        cursor.close()
-        get_publisher().set_source_catalog(source_catalog)
+        source_catalog.load_sources()
+        context = canary.context.Context()
+        context.set_source_catalog(source_catalog)
         logger = Logger().get_instance()
-        get_publisher().configure_logger(logger)
+        context.configure_logger(logger)
         logger.info(str('Sources reloaded'))
         """
         <p>
@@ -260,32 +259,18 @@ def reload_sources [html] (request):
     footer()
 
 
-# show_keys is a debugging task which roughly indicates ZODB state
-def zodb_keys [html] (request):
-    header('Admin: List ZODB keys')
-    title_bar('List ZODB keys')
-    zodb = get_publisher().get_root()
-    keys = zodb.keys()
-    keys.sort()
-    """
-    <h3>ZODB keys</h3>
-    <ul>
-    """
-    for key in keys:
-        '<li>%s:\t%s</li>\n' % (key, zodb[key])
-    """
-    </ul>
-
-    <h3>Session keys</h3>
-    <ul>
-    """
-    session_mgr = get_publisher().session_mgr
-    keys = session_mgr.sorted_keys()
-    for key in keys:
-        """
-        <li>%s:\t%s (<a href='/admin/session/%s/delete'>delete</a>)</li>\n
-        """ % (key, session_mgr[key], key)
-    """
-    </ul>
-    """
-    footer()
+##    FIXME: add a function to administer sessions in db
+##
+##    <h3>Session keys</h3>
+##    <ul>
+##    """
+##    session_mgr = get_publisher().session_mgr
+##    keys = session_mgr.sorted_keys()
+##    for key in keys:
+##        """
+##        <li>%s:\t%s (<a href='/admin/session/%s/delete'>delete</a>)</li>\n
+##        """ % (key, session_mgr[key], key)
+##    """
+##    </ul>
+##    """
+##    footer()

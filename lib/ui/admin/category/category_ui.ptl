@@ -17,16 +17,17 @@ from quixote import form2
 from quixote.errors import AccessError, PublishError, TraversalError
 from quixote.html import html_quote
 
+from canary.concept import Category, CategoryConcept, load_categories
+from canary.concept import Concept, find_concepts
+from canary.qx_defs import MyForm
 from canary.ui.admin.admin_ui import title_bar
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found, add_message, has_messages, render_messages
-from canary.qx_defs import MyForm
-from canary.concept import Category, CategoryConcept, load_categories
-from canary.concept import Concept, find_concepts
 
 
 def _q_index [html] (request):
     request.redirect(str('/admin/category/list'))
+
 
 class CategoryActions:
 
@@ -64,9 +65,8 @@ class CategoryActions:
             
 def concepts [html] (request, category_id):
 
-    cursor = get_publisher().get_cursor()
     category = Category(uid=category_id)
-    category.load(cursor, load_concepts=True)
+    category.load(load_concepts=True)
     
     title = 'List concepts for category "%s"'  % category.name 
     header(title)
@@ -137,9 +137,8 @@ def concepts [html] (request, category_id):
     
 def edit [html] (request, category_id):
     
-    cursor = get_publisher().get_cursor()
     category = Category(uid=category_id)
-    category.load(cursor)
+    category.load()
     
     form = MyForm()
     
@@ -193,22 +192,19 @@ def edit [html] (request, category_id):
     category.name = form['category_name']
     
     try:
-        category.save(cursor)
+        category.save()
         add_message('Edited category %s' % category_id)
         form.logger.info(str('Edited category %s' % category_id))
     except:
         add_message('Could not edit category')
         form.logger.info(str('Could not edit category'))
     
-    cursor.close()
     request.redirect(str('/admin/category/list'))
 
 
 
 
 def list [html] (request):
-
-    cursor = get_publisher().get_cursor()
 
     header('List categories')
     title_bar('List categories')
@@ -229,7 +225,7 @@ def list [html] (request):
         <th>Actions</th>
     </tr>
     """
-    categories = load_categories(cursor)
+    categories = load_categories()
     categories = [(c.name, c) for c in categories]
     categories.sort()
     for name, category in categories:
@@ -257,7 +253,6 @@ def list [html] (request):
             </td>
         """ % (category.uid, category.uid)
     
-    cursor.close()
     footer()
     
 
@@ -265,7 +260,7 @@ def list [html] (request):
 def create [html] (request):
 
     concept_types = Category().concept_types
-        
+
     form = MyForm()
     form.add(form2.StringWidget, 'category_name', 
         title='Category name',
@@ -322,10 +317,8 @@ def create [html] (request):
             if not group in [g.name for g in category.groups]:
                 category.add_group(group)
 
-    cursor = get_publisher().get_cursor()
     try:
-        category.save(cursor)
-        cursor.close()
+        category.save()
         add_message('Created category %s' % category.uid)
         form.logger.info(str('Created category %s' % category.uid))
     except:
@@ -362,9 +355,7 @@ def find [html] (request, category_id):
     except:
         pass
         
-    cursor = get_publisher().get_cursor()
-    concepts = find_concepts(cursor, search_term)
-    cursor.close()
+    concepts = find_concepts(search_term)
     
     if len(concepts) == 0:
         add_message('No matching concepts found.')
@@ -373,9 +364,8 @@ def find [html] (request, category_id):
         or has_messages():
         return render()
         
-    cursor = get_publisher().get_cursor()
     category = Category(uid=category_id)
-    category.load(cursor, load_concepts=True)
+    category.load(load_concepts=True)
     
     header('Find concept')
     title_bar('Find concept')
@@ -392,12 +382,11 @@ def add [html] (request, category_id):
     except:
         return not_found('concept')
         
-    cursor = get_publisher().get_cursor()
     category = Category(uid=category_id)
-    category.load(cursor)
+    category.load()
     
     concept = Concept(uid=cid)
-    concept.load(cursor)
+    concept.load()
     
     form = MyForm()
     form.add_hidden('concept_id',
@@ -427,7 +416,7 @@ def add [html] (request, category_id):
         if form['is_default']:
             cat_concept.is_default = True
         print 'saving concept'
-        cat_concept.save(cursor)
+        cat_concept.save()
         print 'saved'
         add_message('Added concept')
         form.logger.info(str('Added concept %s to category %s' % (concept.uid, cid)))
@@ -454,10 +443,8 @@ def edit_concept [html] (request, category_id):
     except:
         return not_found('concept')
 
-    cursor = get_publisher().get_cursor()
-    
     category = Category(uid=category_id)
-    category.load(cursor)
+    category.load()
     
     if cid:
         concept = CategoryConcept(concept_id=cid, category_id=category_id)
@@ -466,7 +453,7 @@ def edit_concept [html] (request, category_id):
     else:
         return not_found('concept')
     
-    concept.load(cursor)
+    concept.load()
     if concept.uid == -1:
         return not_found('concept')
 
@@ -495,7 +482,6 @@ def edit_concept [html] (request, category_id):
         form.get_widget('is_default').set_value(concept.is_default)
         return render()
 
-    print 'setting bools'
     for bool in ['is_broad', 'is_default']:
         if form[bool]:
             setattr(concept, str(bool), True)
@@ -506,16 +492,13 @@ def edit_concept [html] (request, category_id):
         return render()
         
     try:
-        print 'going to save concept'
-        concept.save(cursor)
-        print 'saved concept'
+        concept.save()
         add_message('Edited concept %s' % concept.uid)
         form.logger.info(str('Edited concept %s' % concept.uid))
     except:
         add_message('Could not edit concept')
         form.logger.info(str('Could not edit concept'))
     
-    cursor.close()
     request.redirect(str('/admin/category/%s' % category_id))
 
 
@@ -530,10 +513,8 @@ def remove [html] (request, category_id):
     except:
         return not_found('concept')
 
-    cursor = get_publisher().get_cursor()
-    
     category = Category(uid=category_id)
-    category.load(cursor)
+    category.load()
     
     if cid:
         concept = CategoryConcept(concept_id=cid, category_id=category_id)
@@ -542,7 +523,7 @@ def remove [html] (request, category_id):
     else:
         return not_found('concept')
     
-    concept.load(cursor)
+    concept.load()
     if concept.uid == -1:
         return not_found('concept')
 
@@ -569,7 +550,7 @@ def remove [html] (request, category_id):
     are_you_sure = form['are_you_sure']
     if are_you_sure:
         try:
-            category.remove_concept(cursor, concept)
+            category.remove_concept(concept)
             add_message('Removed concept %s from category %s' % (concept.uid,
                 category_id))
             form.logger.info(str('Removed concept %s from category %s' % (concept.uid,

@@ -14,13 +14,11 @@ _q_exports = [
     'category',
     'dv_data',
     'reload_sources',
-    'zodb_keys',
     ]
 
 import string
 
 from quixote.errors import AccessError, PublishError, TraversalError
-from dulcinea.database import get_transaction
 
 from canary.ui.admin import admin_ui
 from canary.ui.admin import queue
@@ -41,7 +39,6 @@ users = admin_ui.users
 source_map = admin_ui.source_map
 sources = admin_ui.sources
 reload_sources = admin_ui.reload_sources
-zodb_keys = admin_ui.zodb_keys
 
 
 def _q_access (request):

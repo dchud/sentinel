@@ -1,5 +1,6 @@
 # $Id$
 
+import copy
 import email
 import re
 import time
@@ -8,6 +9,7 @@ import types
 
 import dtuple
 
+import canary.context
 from canary.source_catalog import Source, Term, SourceCatalog
 from canary.study import Study
 from canary.utils import DTable
@@ -30,7 +32,9 @@ class Queue:
                 return batch
         return None
 
-    def load (self, cursor):
+    def load (self):
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         cursor.execute("""
             SELECT *
             FROM queued_batches
@@ -45,15 +49,44 @@ class Queue:
             for field in fields:
                 batch.set(field, row[field])
             self.batches.append(batch)
+        context.close_cursor(cursor)
+        
 
+def find_needed_papers ():
+    """ Find queued papers marked with "needs_paper" == 1."""
+    context = canary.context.Context()
+    cursor = context.get_cursor()
+    
+    records = []
+    cursor.execute("""
+        SELECT uid
+        FROM queued_records
+        WHERE needs_paper = 1
+        AND queued_records.status < %s
+        """, QueuedRecord.STATUS_CURATED)
+    rows = cursor.fetchall()
+    for row in rows:
+        rec = QueuedRecord(row[0])
+        records.append(rec)
+    
+    context.close_cursor(cursor)
+    return records
+    
 
-class QueuedRecord (DTable):
+class QueuedRecord (canary.context.Cacheable, DTable):
 
     STATUS_UNCLAIMED = 0
     STATUS_CLAIMED = 1
     STATUS_CURATED = 2
 
-    def __init__ (self, uid=-1):
+    CACHE_KEY = 'record'
+        
+    def __init__ (self, uid=-1, *args, **kwargs):
+        try:
+            if self.queued_batch_id >= 0:
+                return
+        except AttributeError:
+            pass
         self.uid = uid
         self.queued_batch_id = -1
         self.user_id = ''
@@ -64,21 +97,23 @@ class QueuedRecord (DTable):
         self.source = ''
         self.unique_identifier = ''
         self.duplicate_score = 0
+        self.needs_paper = int(False)
 
     def __str__ (self):
         out = []
         out.append('<QueuedRecord uid=%s queued_batch_id=%s' % (self.uid, self.queued_batch_id))
-        out.append('\tstatus=%s study_id=%s' % (self.get_status(text=True), self.study_id))
+        out.append('\tstatus=%s study_id=%s' % (self.get_status(text=True), 
+            self.study_id))
         return '\n'.join(out)
 
 
-    def add_metadata (self, source_id, term, value, extra=''):
+    def add_metadata (self, term, value, extra=''):
         """
         Add a metadata value for a given source metadata field,
         appending to a list or setting the single value depending
         on whether the term allows multiple values.
         """
-        md_key = (source_id, term.uid)
+        md_key = (term.source_id, term.uid)
         if term.is_multivalue:
             if self.metadata.has_key(md_key):
                 if not value in self.metadata[md_key]:
@@ -89,12 +124,12 @@ class QueuedRecord (DTable):
             self.metadata[md_key] = value
             
     
-    def get_metadata (self, source_id, term):
+    def get_metadata (self, term):
         """
         Get the metadata value, of the list of values, for a given sources
         metadata field.
         """
-        md_key = (source_id, term.uid)
+        md_key = (term.source_id, term.uid)
         if self.metadata.has_key(md_key):
             return self.metadata[md_key]
         else:
@@ -120,7 +155,7 @@ class QueuedRecord (DTable):
         for mapped_name, terms in term_info_set:
             if isinstance(terms, types.ListType):
                 for term in terms:
-                    md = self.get_metadata(term.source_id, term)
+                    md = self.get_metadata(term)
                     if md:
                         mapped_metadata[mapped_name] = md
                     else:
@@ -129,7 +164,7 @@ class QueuedRecord (DTable):
             else:
                 # terms is really a single item
                 term = terms
-                md = self.get_metadata(term.source_id, term)
+                md = self.get_metadata(term)
                 if md:
                     mapped_metadata[mapped_name] = md
                 else:
@@ -138,12 +173,15 @@ class QueuedRecord (DTable):
         return mapped_metadata
     
     
-    def check_for_duplicates (self, cursor, term_map={}, 
-        complete_mapping={}, save_changes=True):
+    
+    def check_for_duplicates (self, term_map={}, complete_mapping={}):
         """
         Simple tests to determine if this record is likely to be a
         duplicate of an existing record.
         """
+        
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         score = 0
         potential_dupes = {}
         
@@ -174,20 +212,35 @@ class QueuedRecord (DTable):
                     potential_dupes[rec_id].append(field)
                 except:
                     potential_dupes[rec_id] = [field]
-                if save_changes:
-                    self.duplicate_score += 10
-                    self.save(cursor)
-        
+
+        context.close_cursor(cursor)
         return potential_dupes
         
 
-    def load (self, cursor, load_metadata=True, source=None):
+    def load (self, load_metadata=True):
         """
-        Load a batch's queued record.
+        Load a queued record.
         
         Note that if a source is not specified, every term will be
         looked-up again from the DB (rather than read from memory).
         """
+            
+        context = canary.context.Context()
+        
+        # Is it already loaded?  Convenience check for client calls
+        # don't need to verify loads from the cache.  It's possible it's
+        # already loaded without metadata, in which case: reload.
+        if context.config.use_cache:
+            try:
+                if self.queued_batch_id >= 0 \
+                    and self.metadata:
+                    # Already loaded
+                    return
+            except AttributeError:
+                # Not already loaded, so continue
+                pass
+            
+        cursor = context.get_cursor()
         try:
             # To be safe, specify full table.field names because names overlap
             cursor.execute("""
@@ -196,7 +249,7 @@ class QueuedRecord (DTable):
                 queued_records.user_id, queued_records.study_id,
                 queued_records.title, queued_records.source,
                 queued_records.unique_identifier, queued_records.duplicate_score,
-                queued_batches.source_id
+                queued_records.needs_paper, queued_batches.source_id AS batch_source_id
                 FROM queued_records, queued_batches
                 WHERE queued_records.uid = %s
                 AND queued_batches.uid = queued_records.queued_batch_id
@@ -208,15 +261,13 @@ class QueuedRecord (DTable):
                 raise ValueError('Record not found')
             row = dtuple.DatabaseTuple(desc, rows[0])
             # remove source_id from fields, it's not a proper attribute on self
-            fields.remove('source_id')
+            fields.remove('batch_source_id')
             # but save it for later!
-            source_id = row['source_id']
+            batch_source_id = row['batch_source_id']
             for field in fields:
                 self.set(field, row[field])
-                
-            if not source:
-                source_catalog = SourceCatalog()
-                source_catalog.load_sources(cursor)
+            
+            source_catalog = context.get_source_catalog()
             if load_metadata:
                 # NOTE: the "ORDER BY sequence_position" might be a bad hack,
                 # but it should preserve author name order.  
@@ -225,24 +276,27 @@ class QueuedRecord (DTable):
                     SELECT *
                     FROM queued_record_metadata
                     WHERE queued_record_id = %s
-                    AND source_id = %s
                     ORDER BY sequence_position
-                    """, (self.uid, source_id))
+                    """, self.uid)
                 fields = [d[0] for d in cursor.description]
                 desc = dtuple.TupleDescriptor([[f] for f in fields])
                 rows = cursor.fetchall()
                 for row in rows:
                     row = dtuple.DatabaseTuple(desc, row)
-                    if source:
-                        term = source.terms[row['term_id']]
-                    else:
-                        term = source_catalog.get_term(row['term_id'])
-                    self.add_metadata(source_id, term, row['value'], extra=row['extra'])
+                    term = source_catalog.get_term(row['term_id'])
+                    self.add_metadata(term, row['value'], extra=row['extra'])
         except ValueError:
             print traceback.print_exc()
             raise ValueError('Record not found')
+        
+        if context.config.use_cache:
+            context.cache_set('%s:%s' % (self.CACHE_KEY, self.uid), self)
+        context.close_cursor(cursor)
+        
 
-    def save (self, cursor):
+    def save (self):
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         try:
             if self.uid == -1:
                 #print 'inserting new record:', self
@@ -250,23 +304,23 @@ class QueuedRecord (DTable):
                     INSERT INTO queued_records
                     (uid, 
                     queued_batch_id, status, user_id, study_id,
-                    title, source, unique_identifier, duplicate_score)
+                    title, source, unique_identifier, duplicate_score, needs_paper)
                     VALUES (NULL, 
                     %s, %s, %s, %s,
-                    %s, %s, %s, %s)
+                    %s, %s, %s, %s, %s)
                     """, (self.queued_batch_id, self.status, self.user_id, self.study_id,
-                    self.title, self.source, self.unique_identifier, self.duplicate_score)
+                    self.title, self.source, self.unique_identifier, self.duplicate_score, self.needs_paper)
                     )
-                self.uid = self.get_new_uid(cursor)
+                self.uid = self.get_new_uid()
     
             else:
                 cursor.execute("""
                     UPDATE queued_records
                     SET queued_batch_id = %s, status = %s, user_id = %s, study_id = %s,
-                    title = %s, source = %s, unique_identifier = %s, duplicate_score = %s
+                    title = %s, source = %s, unique_identifier = %s, duplicate_score = %s, needs_paper = %s
                     WHERE uid = %s
                     """, (self.queued_batch_id, self.status, self.user_id, self.study_id,
-                    self.title, self.source, self.unique_identifier, self.duplicate_score,
+                    self.title, self.source, self.unique_identifier, self.duplicate_score, self.needs_paper,
                     self.uid)
                     )
             # FIXME: should this be set from the SQL?
@@ -282,15 +336,24 @@ class QueuedRecord (DTable):
                 if isinstance(val, types.ListType):
                     for value in val:
                         # Automatically save the ordering of each value
-                        self.save_metadata_value(cursor, source_id, term_id, 
+                        self.save_metadata_value(source_id, term_id, 
                             value, sequence_position=val.index(value))
                 else:
-                    self.save_metadata_value(cursor, source_id, term_id, val)
+                    self.save_metadata_value(source_id, term_id, val)
+            if context.config.use_cache:
+                context.cache_set('%s:%s' % (self.CACHE_KEY, self.uid), self)
+
         except:
             print traceback.print_exc()
- 
-    def save_metadata_value (self, cursor, source_id, term_id, value, 
+        context.close_cursor(cursor)
+
+        
+        
+    def save_metadata_value (self, source_id, term_id, value, 
         sequence_position=0, extra=None):
+        
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         # FIXME: extra?
         cursor.execute("""
             INSERT INTO queued_record_metadata
@@ -301,7 +364,8 @@ class QueuedRecord (DTable):
             """, (self.uid, source_id, 
             term_id, value, sequence_position)
             )
-
+        context.close_cursor(cursor)
+       
 
     def get_status (self, text=False):
         try:
@@ -321,14 +385,17 @@ class QueuedRecord (DTable):
                 return ''
 
 
-    def delete (self, cursor):
+    def delete (self):
+        context = canary.context.Context()
+        cursor = context.get_cursor()
+
         try:
             # First, remove the study (connected table records will
             # also be deleted).
             study = Study(self.study_id)
             # If it's not loaded, its linked table records won't be deleted.
-            study.load(cursor)
-            study.delete(cursor)
+            study.load()
+            study.delete()
             
             # Then, remove the metadata
             cursor.execute("""
@@ -341,9 +408,14 @@ class QueuedRecord (DTable):
                 DELETE FROM queued_records
                 WHERE uid = %s
                 """, self.uid)
+
+            if context.config.use_cache:
+                context.cache_delete('record:%s' % self.uid)
         except:
             print traceback.print_exc()
-
+            
+        context.close_cursor(cursor)
+       
 
 class Batch (DTable):
 
@@ -362,26 +434,32 @@ class Batch (DTable):
             self.loaded_records.append(record)
             self.num_records += 1
             
-    def find_duplicates (self, cursor, source_catalog=None, use_loaded=True):
+    def find_duplicates (self, source_catalog=None, use_loaded=True):
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         if source_catalog == None:
             source_catalog = SourceCatalog()
-            source_catalog.load_sources(cursor)
+            source_catalog.load_sources()
         term_map = source_catalog.get_mapped_terms(source_id=self.source_id)
         source = source_catalog.get_source(self.source_id)
         
         if use_loaded:
             for rec in self.loaded_records:
-                rec.load(cursor, source=source)
-                rec.check_for_duplicates(cursor, term_map=term_map)
+                rec.load(source=source)
+                rec.check_for_duplicates(term_map=term_map)
         else:
             for id, rec in self.queued_records.items():
-                rec.check_for_duplicates(cursor, term_map=term_map)
-    
-    def get_statistics (self, cursor):
+                rec.check_for_duplicates(term_map=term_map)
+        context.close_cursor(cursor)
+       
+        
+    def get_statistics (self):
         """
         Return the state of a Batch based on the number of unclaimed,
         claimed, and finished QueuedRecords it contains.
         """
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         stats = {}
         for name, status in [
             ('unclaimed', QueuedRecord.STATUS_UNCLAIMED),
@@ -389,7 +467,7 @@ class Batch (DTable):
             ('curated', QueuedRecord.STATUS_CURATED),
             ]:
             cursor.execute("""
-                SELECT count(*) as unclaimed_count
+                SELECT count(*) as the_count
                 FROM queued_records
                 WHERE queued_batch_id = %s
                 AND status = %s
@@ -399,16 +477,19 @@ class Batch (DTable):
         stats['total'] = stats['unclaimed'] + stats['claimed'] + stats['curated']
         stats['all'] = stats['total']
         stats['unfinished'] = stats['unclaimed'] + stats['claimed']
+        context.close_cursor(cursor)
         return stats
 
 
-    def load (self, cursor, show='unfinished', start=0, size=25, load_metadata=True):
+    def load (self, show='unfinished', start=0, size=25):
         """
         Load a batch and its queued records.
         """
         if self.uid == -1:
             return
             
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         cursor.execute("""
             SELECT * 
             FROM queued_batches
@@ -422,12 +503,18 @@ class Batch (DTable):
             for field in fields:
                 self.set(field, row[field])
         
+        show = str(show)
         if show == 'unfinished':
-            show_clause = ' AND status < %s ' % QueuedRecord().STATUS_CURATED
+            show_clause = ' AND status < %s ' % QueuedRecord.STATUS_CURATED
         elif show == 'unclaimed':
-            show_clause = ' AND status = %s ' % QueuedRecord().STATUS_UNCLAIMED
+            show_clause = ' AND status = %s ' % QueuedRecord.STATUS_UNCLAIMED
         elif show == 'all':
             show_clause = ' AND 1 '
+            
+        if str(size) == 'all':
+            limit_clause = ''
+        else:
+            limit_clause = ' LIMIT %s, %s ' % (int(start), int(size))
             
         cursor.execute("""
             SELECT *
@@ -435,26 +522,25 @@ class Batch (DTable):
             WHERE queued_batch_id = %s
             """ + show_clause + """
             ORDER BY uid
-            LIMIT %s, %s
-            """, (int(self.uid), start, size))
+            """ + limit_clause, (int(self.uid)))
         fields = [d[0] for d in cursor.description]
         desc = dtuple.TupleDescriptor([[f] for f in fields])
         rows = cursor.fetchall()
         for row in rows:
             row = dtuple.DatabaseTuple(desc, row)
-            record = QueuedRecord()
-            for field in fields:
-                #print 'record: setting %s to %s' % (field, row[field])
-                record.set(field, row[field])
-            record.load(cursor, load_metadata)
-            #print 'load: adding rec', record.uid
+            record = QueuedRecord(row['uid'])
             self.queued_records[record.uid] = record
         self.num_records = len(self.queued_records)
-        #print 'loaded %s queued_records for batch %s' % (self.num_records, self.uid)
-
-
-    def save (self, cursor):
+        context.close_cursor(cursor)
         
+
+    def save (self):
+        
+        # Update num_records
+        self.num_records = len(self.queued_records) + len(self.loaded_records)
+        
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         if self.uid == -1:
             cursor.execute("""
                 INSERT INTO queued_batches
@@ -465,11 +551,7 @@ class Batch (DTable):
                 CURDATE())
                 """, (self.file_name, self.source_id, self.num_records, self.name)
                 )
-            cursor.execute("""
-                SELECT LAST_INSERT_ID() AS new_uid
-                """)
-            row = cursor.fetchone()
-            self.uid = row[0]
+            self.uid = self.get_new_uid()
             self.date_added = time.strftime(str('%Y-%m-%d'))
 
         else:
@@ -483,8 +565,26 @@ class Batch (DTable):
         
         for record in self.loaded_records:
             record.queued_batch_id = self.uid
-            record.save(cursor)
-
+            record.save()
+        context.close_cursor(cursor)
+    
+    
+    def delete (self):
+        """ Delete this batch and all of its records 
+        (and all of their respective data)."""
+        context = canary.context.Context()
+        try:
+            for id, rec in self.queued_records.items():
+                rec.delete()
+            
+            cursor = context.get_cursor()
+            cursor.execute("""
+                DELETE FROM queued_batches
+                WHERE uid = %s
+                """, self.uid)
+        except:
+            print traceback.print_exc()
+        context.close_cursor(cursor)
 
 
 class Parser:
@@ -573,9 +673,9 @@ class Parser:
                 and not term.re_multivalue_sep == '':
                 values = value.split(term.re_multivalue_sep)
                 for val in values:
-                    record.add_metadata(self.source.uid, term, val.strip())
+                    record.add_metadata(term, val.strip())
             else:
-                record.add_metadata(self.source.uid, term, value)
+                record.add_metadata(term, value)
                     
 
     

@@ -14,6 +14,7 @@ from quixote import get_publisher, get_request
 from quixote.errors import AccessError, PublishError, TraversalError
 from quixote import form2
 
+import canary.context
 from canary.loader import Batch, QueuedRecord, Queue, Parser
 from canary.qx_defs import MyForm
 from canary.search import PubmedSearch, Search
@@ -62,8 +63,8 @@ class FindRecordForm (MyForm):
 
 def _q_index [html] (request):
     
-    source_catalog = get_publisher().get_source_catalog()
-    cursor = get_publisher().get_cursor()
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
     
     header('Edit: Curator control panel')
     title_bar('Curator control panel')
@@ -88,7 +89,7 @@ def _q_index [html] (request):
         <div id='curator-panel-right'>
             <h4>Load a record from Pubmed/MEDLINE</h4>
     """
-    form = LoadPubmedForm(batch_options=get_pubmed_batch_list(cursor))
+    form = LoadPubmedForm(batch_options=get_pubmed_batch_list())
     form.render()
     """
         </div>
@@ -109,11 +110,12 @@ def _q_index [html] (request):
     </tr>
     """
     queue = Queue()
-    queue.load(cursor)
+    queue.load()
     sort_list = [(b.name.lower(), b) for b in queue.batches]
     sort_list.sort()
     for n, batch in sort_list:
-        batch_stats = batch.get_statistics(cursor)
+        batch.load()
+        batch_stats = batch.get_statistics()
 
         source_id = batch.source_id
         source = source_catalog.get_source(source_id)
@@ -126,7 +128,7 @@ def _q_index [html] (request):
         
         # Avoid division by zero for empty batches
         if batch.num_records > 0:
-            percent_done = float(batch_stats['curated']) / batch.num_records * 100.0
+            percent_done = float(batch_stats['curated']) / batch_stats['total'] * 100.0
         else:
             percent_done = 0
         """
@@ -134,7 +136,7 @@ def _q_index [html] (request):
         """ % (batch_stats['unclaimed'],
             batch_stats['claimed'],
             batch_stats['curated'],
-            batch.num_records,
+            batch_stats['total'],
             str('%2.1f' % percent_done),
             str('%'))
         """
@@ -161,7 +163,6 @@ def _q_index [html] (request):
         </tr>
     """
     for batch in queue.batches:
-        batch.load(cursor)
         for record_id, record in batch.queued_records.items():
             if record.status == record.STATUS_CLAIMED \
                 and record.user_id == request.session.user.get_id():
@@ -232,14 +233,14 @@ def find [html] (request):
     if form.has_errors():
         return render()
     
-    source_catalog = get_publisher().get_source_catalog()
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
     complete_mapping = source_catalog.get_complete_mapping()
     search = Search(field=field, token=token, allow_curated=allow_curated,
         allow_uncurated=True)
     
     try:
-        cursor = get_publisher().get_cursor()
-        results = search.search(cursor, term_mapping=complete_mapping)
+        results = search.search(term_mapping=complete_mapping)
     except:
         form.info(str('Unable to perform search'))
         form.set_error('token', 'Unable to perform search')
@@ -277,13 +278,13 @@ class LoadPubmedForm (MyForm):
         self.add_submit('find', 'find')
 
 
-def get_pubmed_batch_list (cursor):
-
-    source_catalog = get_publisher().get_source_catalog()
+def get_pubmed_batch_list ():
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
     pm_source = source_catalog.get_source_by_name('pubmed-medline')
 
     queue = Queue()
-    queue.load(cursor)
+    queue.load()
     
     # Set up sort-by-name, but only for pubmed batches.
     batch_list = [(b.name.lower(), (b.uid, b.name, b.uid)) \
@@ -302,14 +303,13 @@ def get_pubmed_batch_list (cursor):
     
 
 def pubmed [html] (request):
-
-    cursor = get_publisher().get_cursor()
-    source_catalog = get_publisher().get_source_catalog()
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
     pm_source = source_catalog.get_source_by_name('pubmed-medline')
 
     queue = Queue()
-    queue.load(cursor)
-    batch_list = get_pubmed_batch_list(cursor)
+    queue.load()
+    batch_list = get_pubmed_batch_list()
     
     form = LoadPubmedForm(batch_options=batch_list)
     
@@ -351,16 +351,20 @@ def pubmed [html] (request):
     if form['queue'] \
         and form['queue'] == 'add':
         queue = Queue()
-        queue.load(cursor)
+        queue.load()
         batch = queue.get_batch(form['batch_id'])
         if not batch:
             batch = Batch(source_id=pm_source.uid)
             batch.name = 'pubmed-load-' + strftime(str('%Y-%m'), localtime())
         for rec in recs:
-            rec.check_for_duplicates(cursor, complete_mapping=complete_mapping)
+            if not rec.metadata == {}:
+                dupes = rec.check_for_duplicates(mapped_terms, 
+                    complete_mapping=complete_mapping)
+                if dupes:
+                    rec.duplicate_score = len(dupes)
         batch.add_records(recs)
-        batch.save(cursor)
-        add_message('Added record to batch %s' % batch.name)
+        batch.save()
+        add_message('Added %s record(s) to batch %s' % (len(recs), batch.name))
         request.redirect(str('/edit'))
         
     else:
@@ -377,8 +381,8 @@ def pubmed [html] (request):
             """
             for rec in recs:
                 if not rec.metadata == {}:
-                    dupes = rec.check_for_duplicates(cursor, mapped_terms, 
-                        complete_mapping=complete_mapping, save_changes=False)
+                    dupes = rec.check_for_duplicates(mapped_terms, 
+                        complete_mapping=complete_mapping)
                     mapped_metadata = rec.get_mapped_metadata(term_map=mapped_terms)
                     if dupes:
                         
@@ -407,27 +411,23 @@ def pubmed [html] (request):
                         sort_list.sort()
                         for dupe_rec_id, dupe_fields in sort_list:
                             dupe_rec = QueuedRecord(dupe_rec_id)
-                            try:
-                                dupe_rec.load(cursor, load_metadata=False)
-                                """
-                                    <li>
-                                    #%s (%s)
-                                    [<a href='/record/%s' target='_blank'>public view</a>]
-                                    [<a href='/edit/study/%s/history' target='_blank'>history</a>]
-                                    [<a href='/edit/study/%s/curate_one'>curate</a>]
-                                    <br />
-                                    %s
-                                    <br />
-                                    %s
-                                    </li> 
-                                """ % (dupe_rec_id, dupe_rec.get_status(True),
-                                    dupe_rec_id, 
-                                    dupe_rec_id, 
-                                    dupe_rec_id, 
-                                    dupe_rec.title, dupe_rec.source)
-                            except:
-                                import traceback
-                                print traceback.print_exc()
+                            """
+                                <li>
+                                #%s (%s)
+                                [<a href='/record/%s' target='_blank'>public view</a>]
+                                [<a href='/edit/study/%s/history' target='_blank'>history</a>]
+                                [<a href='/edit/study/%s/curate_one'>curate</a>]
+                                <br />
+                                %s
+                                <br />
+                                %s
+                                </li> 
+                            """ % (dupe_rec_id, dupe_rec.get_status(True),
+                                dupe_rec_id, 
+                                dupe_rec_id, 
+                                dupe_rec_id, 
+                                dupe_rec.title, dupe_rec.source)
+                                
                         """
                             </ul>
                             <br />

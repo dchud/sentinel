@@ -11,15 +11,16 @@ from quixote import get_publisher, get_request
 from quixote.errors import TraversalError
 from quixote import form2
 
+import canary.context
+from canary.loader import QueuedRecord
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found, add_message, has_messages, render_messages
-from canary.ui.edit.study.utils import get_current_study, get_queued_record
 from canary.ui.edit.study.utils import is_same_user, render_queued_record
 from canary.ui.edit.study.utils import render_unclaim_block, claimed_by_other_user
 from canary.ui.edit.study.utils import render_exposures, render_pipeline
 from canary.qx_defs import MyForm
 from canary.record import SubjectHeading
-from canary.study import find_exposures, Exposure
+from canary.study import find_exposures, Exposure, Study
 
 
 
@@ -63,19 +64,18 @@ class ExposureActions:
 def find [html] (request):
 
     request = get_request()
-    cursor = get_publisher().get_cursor()
-    try:
-        queued_record = get_queued_record(cursor, request.queued_record_id)
-    except:
-        print 'no request.queued_record_id'
+    queued_record = QueuedRecord(request.queued_record_id)
+    queued_record.load()
     
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
     
-    study = get_current_study(cursor, queued_record.study_id)
+    study = Study(queued_record.study_id)
     study_concepts = getattr(study, str('exposures'))
-    source_catalog = get_publisher().get_source_catalog()
+    
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
     complete_term_map = source_catalog.get_complete_mapping()
     mapped_metadata = queued_record.get_mapped_metadata(term_map=complete_term_map)
     
@@ -129,7 +129,7 @@ def find [html] (request):
     else:
         search_term = form['search_term']
         
-    exposures = find_exposures(cursor, search_term)
+    exposures = find_exposures(search_term)
     if len(exposures) == 0:
         form.set_error('search_term', 'No exposures found.')
         
@@ -156,17 +156,14 @@ def find [html] (request):
 
 def add [html] (request):
     
-    cursor = get_publisher().get_cursor()
-    try:
-        queued_record = get_queued_record(cursor, request.queued_record_id)
-    except:
-        print 'no request.queued_record_id'
+    queued_record = QueuedRecord(request.queued_record_id)
+    queued_record.load()
     
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
     
-    study = get_current_study(cursor, queued_record.study_id)
+    study = Study(queued_record.study_id)
     
     form = MyForm()
     form.action_url = 'add'
@@ -211,10 +208,10 @@ def add [html] (request):
     
     try:
         study.add_exposure(exposure)
-        exposure.save(cursor)
+        exposure.save()
         study.add_history(curator_user_id=request.session.user.get_id(),
             message='Added exposure "%s"' % exposure.term)
-        study.save(cursor)
+        study.save()
         form.logger.info(str('Added exposure %s' % exposure.uid))
         add_message('Added exposure')
         request.redirect(str('../curate_three'))
@@ -229,18 +226,14 @@ def add [html] (request):
 def delete [html] (exposure_id):
     
     request = get_request()
-    cursor = get_publisher().get_cursor()
-    try:
-        queued_record = get_queued_record(cursor, request.queued_record_id)
-    except:
-        print 'no request.queued_record_id'
-        return not_found('exposure')
+    queued_record = QueuedRecord(request.queued_record_id)
+    queued_record.load()
     
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
     
-    study = get_current_study(cursor, queued_record.study_id)
+    study = Study(queued_record.study_id)
     exposure = study.get_exposure(exposure_id)
 
     form = MyForm()
@@ -275,10 +268,10 @@ def delete [html] (exposure_id):
     
     if form['are_you_sure']:
         try:
-            exposure.delete(cursor)
+            study.delete_exposure(exposure)
             study.add_history(curator_user_id=request.session.user.get_id(),
                 message='Deleted exposure "%s"' % exposure.term)
-            study.save(cursor)
+            study.save()
             add_message('Exposure deleted')
             form.logger.info(str('Deleted exposure %s' % exposure_id))
         except:

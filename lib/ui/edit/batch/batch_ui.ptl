@@ -11,13 +11,14 @@ from log4py import Logger
 from quixote import get_publisher
 from quixote.errors import AccessError, PublishError, TraversalError
 
+import canary.context
 from canary.loader import Batch, Queue, QueuedRecord
 from canary.source_catalog import SourceCatalog
 from canary.study import Study
+from canary.ui.edit.study.utils import get_sfx_link
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found
 from canary.ui.pages import has_messages, add_message, render_messages
-from canary.ui.edit.study.utils import get_sfx_link
 
 
 def title_bar [html] (action=''):
@@ -62,6 +63,7 @@ class BatchActions:
             start = int(request.get_form_var('start', default=0))
             size = int(request.get_form_var('size', default=25))
             show = request.get_form_var('show', default='unfinished')
+            self.batch_id = int(self.batch_id)
             if action == 'view':
                 return view(request, batch_id=self.batch_id, 
                     show=show, start=start, size=size)
@@ -83,15 +85,11 @@ def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
     title_bar('View queued records, batch %s' % batch_id)
     
     try:
-        cursor = get_publisher().get_cursor()
-        source_catalog = get_publisher().get_source_catalog()
-        batch = Batch()
-        batch.uid = int(batch_id)
-        #batch.load(cursor, start=start, size=size)
-        # We avoid loading all metadata here because batches might be big
-        # (i.e. too much metadata to load every time).
-        batch.load(cursor, show=show, start=start, size=size, load_metadata=False)
-        batch_stats = batch.get_statistics(cursor)
+        context = canary.context.Context()
+        source_catalog = context.get_source_catalog()
+        batch = Batch(batch_id)
+        batch.load(show=show, start=start, size=size)
+        batch_stats = batch.get_statistics()
         if not batch.name == '':
             """
             <h4>Batch: '%s'</h4>
@@ -162,6 +160,17 @@ def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
                         </span>
                         """ % record_id
                         
+                        value_str = ''
+                        if record.needs_paper:
+                            value_str = "checked='checked'"
+                        """
+                        <br />
+                        <span style='font-size:x-small;'>
+                        need paper?
+                        <input type='checkbox' name='record_%s_needs_paper' %s>
+                        </span>
+                        """ % (record_id, value_str)
+                        
                     """
                         </td>
                         <td %s>%s</td>
@@ -177,16 +186,16 @@ def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
                     """ % (class_text, 
                         get_sfx_link(batch.source_id, record.unique_identifier))
                     
-                    """
-                            [<a href='/edit/study/%s/history'>history</a>]
-                    """ % record_id
+                    if record.study_id >= 0:
+                        """
+                                [<a href='/edit/study/%s/history'>history</a>]
+                        """ % record_id
                     
                     if status == record.STATUS_UNCLAIMED:
                         """
                             [<a href='/edit/study/%s/curate_one'>curate</a>]
                         """ % record_id
-                    elif status == record.STATUS_CLAIMED \
-                        and show == 'unfinished':
+                    elif status == record.STATUS_CLAIMED:
                         if record.user_id == request.session.user.get_id():
                             """
                             [<a href='/edit/study/%s/curate_one'>curate</a>]
@@ -209,8 +218,8 @@ def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
                         mapped_terms = source_catalog.get_mapped_terms(batch.source_id)
                         complete_mapping = source_catalog.get_complete_mapping()
 
-                        dupes = record.check_for_duplicates(cursor, mapped_terms, 
-                            complete_mapping=complete_mapping, save_changes=False)
+                        dupes = record.check_for_duplicates(mapped_terms, 
+                            complete_mapping=complete_mapping)
                         mapped_metadata = record.get_mapped_metadata(term_map=mapped_terms)
                         
                         """
@@ -223,27 +232,23 @@ def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
                         sort_list.sort()
                         for dupe_rec_id, dupe_fields in sort_list:
                             dupe_rec = QueuedRecord(dupe_rec_id)
-                            try:
-                                dupe_rec.load(cursor, load_metadata=False)
-                                """
-                                    <li>
-                                    #%s (%s)
-                                    [<a href='/record/%s' target='_blank'>public view</a>]
-                                    [<a href='/edit/study/%s/history' target='_blank'>history</a>]
-                                    [<a href='/edit/study/%s/curate_one'>curate</a>]
-                                    <br />
-                                    %s
-                                    <br />
-                                    %s
-                                    </li> 
-                                """ % (dupe_rec_id, dupe_rec.get_status(True),
-                                    dupe_rec_id, 
-                                    dupe_rec_id, 
-                                    dupe_rec_id, 
-                                    dupe_rec.title, dupe_rec.source)
-                            except ValueError:
-                                print 'WARNING: duplicated record %s for record %s not found' % \
-                                    (dupe_rec_id, record_id)
+                            """
+                                <li>
+                                #%s (%s)
+                                [<a href='/record/%s' target='_blank'>public view</a>]
+                                [<a href='/edit/study/%s/history' target='_blank'>history</a>]
+                                [<a href='/edit/study/%s/curate_one'>curate</a>]
+                                <br />
+                                %s
+                                <br />
+                                %s
+                                </li> 
+                            """ % (dupe_rec_id, dupe_rec.get_status(True),
+                                dupe_rec_id, 
+                                dupe_rec_id, 
+                                dupe_rec_id, 
+                                dupe_rec.title, dupe_rec.source)
+
                         """
                                 </ul>
                         """
@@ -287,7 +292,6 @@ def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
             """
             </p>
             """
-        cursor.close()
     except:
         import traceback
         print traceback.print_exc()
@@ -359,27 +363,29 @@ def pager [html] (batch, show, start, size, stats):
 
 
 def update [html] (request, batch_id, start, size):
-
-    cursor = get_publisher().get_cursor()
-    source_catalog = get_publisher().get_source_catalog()
-    user_id = request.session.user.get_id()
+    # NOTE: record updates here can only be if 
+    # (is_irrelevant || is_duplicate) || (needs_paper)
+    # ... and not all.
     
-    header('Edit: Update batch %s' % batch_id)
-    title_bar('Update batch %s' % batch_id)
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
+    user_id = request.session.user.get_id()
     
     if has_messages():
         render_messages()
         
     try:
-        batch = Batch()
-        batch.uid = int(batch_id)
-        batch.load(cursor, start=start, size=size, load_metadata=False)
+        batch = Batch(batch_id)
+        batch.load()
         for rec_id, rec in batch.queued_records.items():
-            is_irrelevant = is_duplicate = False
+            # Set to false by default.
+            is_irrelevant = is_duplicate = needs_paper = False
             
             is_irrelevant = request.get_form_var('record_%s_irrelevant' % rec_id, 
                 default=False)
             is_duplicate = request.get_form_var('record_%s_duplicate' % rec_id,
+                default=False)
+            needs_paper = request.get_form_var('record_%s_needs_paper' % rec_id,
                 default=False)
                 
             if is_irrelevant \
@@ -404,25 +410,33 @@ def update [html] (request, batch_id, start, size):
 
                 study.add_history(curator_user_id=user_id,
                     message='; '.join(history_messages))
-                study.save(cursor)
+                study.save()
                 
                 add_message('Set record %s to %s and curated' % (rec_id, 
                     study.get_article_type(True)))
                 
                 rec.study_id = study.uid
                 rec.status = rec.STATUS_CURATED
-                rec.save(cursor)
-
-        """
-        <p>
-        Return to <a href='/edit/batch/%s/view'>batch %s</a>.
-        </p>
-        """ % (batch_id, batch_id)
+                rec.save()
+            
+            else:
+                if (needs_paper == 'on' and rec.needs_paper) \
+                    or (not needs_paper and not rec.needs_paper):
+                    # Unchanged
+                    pass
+                else:
+                    if needs_paper:
+                        rec.needs_paper = int(True)
+                        add_message('Set record %s "needs paper" to "true"' % rec_id)
+                    else:
+                        rec.needs_paper = int(False)
+                        add_message('Set record %s "needs paper" to "false"' % rec_id)
+                
+                    rec.save()
+        
         request.redirect(str('/edit/batch/%s/view' % batch_id))
         
     except:
         import traceback
         print traceback.print_exc()
         return not_found('batch')
-    
-    footer()

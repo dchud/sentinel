@@ -4,6 +4,8 @@
 from log4py import Logger
 import re
 
+import canary.context
+
 
 class MyLogger (Logger):
     """
@@ -46,28 +48,24 @@ class DTable:
         else:
             setattr(self, str(field), value)
        
-#    def append (self, field, value):
-#        list_attr = getattr(self, str(field))
-#        if not value in list_attr:
-#            list_attr.append(value)
-            
+    #def append (self, field, value):
+    #    list_attr = getattr(self, str(field))
+    #    if not value in list_attr:
+    #        list_attr.append(value)
+    
        
-    def get_new_uid (self, cursor):
+    def get_new_uid (self):
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         try:
             cursor.execute('SELECT LAST_INSERT_ID() AS new_uid')
             row = cursor.fetchone()
             new_uid = int(row[0])
         except:
             new_uid = -1
+        context.close_cursor(cursor)
         return new_uid
         
-
-
-def do_query(cursor, query):
-    if cursor == None:
-        return None
-    cursor.execute(query)
-    return cursor.fetchall()
 
 
 def read_file (file):

@@ -42,6 +42,11 @@ def _q_index [html] (request):
             """
             <li>view <a href='/admin/'>administrators' tasks</a></li>
             """
+        if session.user.is_assistant:
+            """
+            <li>view <a href='/assistant/'>assistants' tasks</a></li>
+            """
+
         """
         </ul>
         """

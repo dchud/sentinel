@@ -6,13 +6,15 @@ import urllib
 from quixote import get_publisher, get_request
 from quixote.errors import TraversalError
 
-from canary.qx_defs import NotLoggedInError
-from canary.ui.pageframe import header, footer
-from canary.ui.pages import not_found
+import canary.context
 from canary.gazeteer import Feature
 from canary.loader import QueuedRecord
 from canary.pubmed import Pubmed
+from canary.qx_defs import NotLoggedInError
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found
 from canary.study import Study
+
 
 _q_exports = [
     '_q_index',
@@ -25,36 +27,25 @@ def _q_index [html] (request):
 
 def _q_lookup (request, record_id):
     try:
-        id = int(record_id)
-        cursor = get_publisher().get_cursor()
-        record = QueuedRecord(id)
-        record.load(cursor)
+        record = QueuedRecord(record_id)
         study = Study(record.study_id)
-        study.load(cursor)
+        
         if not study.get_status(text=True) == 'curated':
             raise ValueError('Record not curated')
         if study.get_article_type(text=True) == 'irrelevant':
             raise ValueError('Irrelevant record')
-        cursor.close()
-        return render_record(record)
+        return render_record(record, study)
     except:
         import traceback
         print traceback.print_exc()
         return not_found('record')
 
 
-#def _q_access (request):
-#    try:
-#        if request.session == None or request.session.user == None:
-#            raise NotLoggedInError('You must first log in.')
-#    except:
-#        raise NotLoggedInError('You must first log in.')
-
-
 def render_tagged_pubmed [plain] (record, mapped_metadata):
     request = get_request()
     request.response.set_content_type('text/plain')
-    source_catalog = get_publisher().get_source_catalog()
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
     output = []
     for source_id, term_id in record.metadata.keys():
         source = source_catalog.get_source(source_id)
@@ -219,12 +210,13 @@ def render_capitalized [plain] (term):
             new_terms.append(t.lower().capitalize())
     return ' '.join(new_terms)
     
-def render_locations [html] (cursor, study):
-    gazeteer = get_publisher().get_gazeteer()
+def render_locations [html] (study):
+    context = canary.context.Context()
+    gazeteer = context.get_gazeteer()
     locs = []
     for location in study.locations:
         feature = Feature(uid=location.feature_id)
-        feature.load(cursor)
+        feature.load()
         if gazeteer.fips_codes.has_key((feature.country_code, feature.adm1)):
             region_name = gazeteer.fips_codes[(feature.country_code, feature.adm1)]
         else:
@@ -632,16 +624,16 @@ def render_summary_concept_row [html] (concepts, concept_name):
     """
 
 
-def render_record [html] (record):
+def render_record [html] (record, study):
     
     try:
-        cursor = get_publisher().get_cursor()
-        source_catalog = get_publisher().get_source_catalog()
+        context = canary.context.Context()
+        source_catalog = context.get_source_catalog()
         complete_term_map = source_catalog.get_complete_mapping()
-        study = Study(uid=record.study_id)
-        study.load(cursor)
         article_type = study.get_article_type(text=True)
     except:
+        import traceback
+        print traceback.print_exc()
         return not_found('record')
 
     view = get_request().get_form_var('view', default='canary')
@@ -728,7 +720,7 @@ def render_record [html] (record):
                     render_summary_concept_row(study.species, 'species')
                     
                 if len(study.locations) > 0:
-                    render_locations(cursor, study)
+                    render_locations(study)
                 
                 """
                 </table>
@@ -762,7 +754,8 @@ def render_record [html] (record):
 
 def render_record_row [html] (record):
     
-    source_catalog = get_publisher().get_source_catalog()
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
     complete_term_mapping = source_catalog.get_complete_mapping()
     mapped_md = record.get_mapped_metadata(term_map=complete_term_mapping)
     author = mapped_md['author']

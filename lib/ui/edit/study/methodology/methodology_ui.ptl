@@ -13,16 +13,16 @@ from quixote import get_publisher, get_request
 from quixote.errors import TraversalError
 from quixote import form2
 
+import canary.context
+from canary.loader import QueuedRecord
+from canary.qx_defs import MyForm
+from canary.study import Methodology, Study
+from canary.utils import is_valid_email, is_valid_password
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found, add_message, has_messages, render_messages
-from canary.ui.edit.study.utils import get_current_study, get_queued_record
 from canary.ui.edit.study.utils import is_same_user, render_queued_record
 from canary.ui.edit.study.utils import render_unclaim_block, claimed_by_other_user
 from canary.ui.edit.study.utils import render_pipeline
-from canary.qx_defs import MyDulcineaUser, MyForm
-from canary.study import Methodology
-from canary.utils import is_valid_email, is_valid_password
-
 
 
 def _q_index [html] (request):
@@ -90,18 +90,13 @@ class MethodologyTypeForm (MyForm):
 
 def create [html] (request):
 
-    request = get_request()
-    cursor = get_publisher().get_cursor()
-    try:
-        queued_record = get_queued_record(cursor, request.queued_record_id)
-    except:
-        print 'no request.queued_record_id'
-    
+    queued_record = QueuedRecord(request.queued_record_id)
+
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
     
-    study = get_current_study(cursor, queued_record.study_id)
+    study = Study(queued_record.study_id)
     article_type = study.get_article_type(text=True)
     form = MethodologyTypeForm()
 
@@ -117,7 +112,7 @@ def create [html] (request):
         <form action='create' method='post'>
         """
         # Got to be sure to render the form_token
-        form.get_widget('_form_id').render()
+        #form.get_widget('_form_id').render()
         
         """
         <h3>Disease model?</h3>
@@ -189,10 +184,12 @@ def create [html] (request):
     methodology.set_study_type(form['study_type'])
         
     try:
-        methodology.save(cursor)
+        study.add_methodology(methodology)
         study.add_history(curator_user_id=request.session.user.get_id(),
             message='Added study type %s' % methodology.get_study_type(text=True))
-        study.save(cursor)
+        study.save()
+        context = canary.context.Context()
+        context.cache_set('%s:%s' % (study.CACHE_KEY, study.uid), study)
         form.logger.info(str('Created methodology %s' % methodology.uid))
         request.redirect(str('%s/detail' % methodology.uid))
     except:
@@ -205,18 +202,13 @@ def create [html] (request):
 def detail [html] (methodology_id):
 
     request = get_request()
-    cursor = get_publisher().get_cursor()
-    try:
-        queued_record = get_queued_record(cursor, request.queued_record_id)
-    except:
-        print 'no request.queued_record_id'
-        return not_found('methodology')
+    queued_record = QueuedRecord(request.queued_record_id)
     
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
     
-    study = get_current_study(cursor, queued_record.study_id)
+    study = Study(queued_record.study_id)
     article_type = study.get_article_type(text=True)
     
     methodology = study.get_methodology(methodology_id)
@@ -250,15 +242,18 @@ def detail [html] (methodology_id):
         return render()
         
     try:
-        methodology.save(cursor)
+        methodology.save()
         form.logger.info(str('Updated methodology %s' % methodology.uid))
+        # Force reload to pick up new methodology
+        context = canary.context.Context()
+        context.cache_delete('%s:%s' % (study.CACHE_KEY, study.uid))
         if form.get_submit() == 'update':
             return render()
         elif form.get_submit() == 'finish':
             request.redirect(str('/edit/study/%s/curate_four' % request.queued_record_id))
     except:
-        import sys
-        form.logger.info(str(sys.exc_info()))
+        import traceback
+        print traceback.print_exc()
         add_message('An error occurred')
         return render()
         
@@ -266,18 +261,13 @@ def detail [html] (methodology_id):
 def edit [html] (methodology_id):
 
     request = get_request()
-    cursor = get_publisher().get_cursor()
-    try:
-        queued_record = get_queued_record(cursor, request.queued_record_id)
-    except:
-        print 'no request.queued_record_id'
-        return not_found('methodology')
+    queued_record = QueuedRecord(request.queued_record_id)
     
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
     
-    study = get_current_study(cursor, queued_record.study_id)
+    study = Study(queued_record.study_id)
     article_type = study.get_article_type(text=True)
     methodology = study.get_methodology(methodology_id)
     
@@ -306,7 +296,10 @@ def edit [html] (methodology_id):
 
     try:
         if form.get_submit() in ['update', 'finish']:
-            methodology.save(cursor)
+            methodology.save()
+            # Force reload to pick up new methodology
+            context = canary.context.Context()
+            context.cache_delete('%s:%s' % (study.CACHE_KEY, study.uid))
             form.logger.info(str('Updated methodology %s' % methodology.uid))
             if form.get_submit() == 'update':
                 return render()
@@ -315,8 +308,8 @@ def edit [html] (methodology_id):
         elif form.get_submit() == 'cancel':
             request.redirect(str('/edit/study/%s/curate_four' % request.queued_record_id))
     except:
-        import sys
-        form.logger.info(str(sys.exc_info()))
+        import traceback
+        print traceback.print_exc()
         add_message('An error occurred')
         return render()
 
@@ -324,18 +317,13 @@ def edit [html] (methodology_id):
 
 def delete [html] (methodology_id):
     request = get_request()
-    cursor = get_publisher().get_cursor()
-    try:
-        queued_record = get_queued_record(cursor, request.queued_record_id)
-    except:
-        print 'no request.queued_record_id'
-        return not_found('methodology')
+    queued_record = QueuedRecord(request.queued_record_id)
     
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
     
-    study = get_current_study(cursor, queued_record.study_id)
+    study = Study(queued_record.study_id)
     article_type = study.get_article_type(text=True)
     methodology = study.get_methodology(methodology_id)
 
@@ -365,10 +353,10 @@ def delete [html] (methodology_id):
     
     if form['are_you_sure']:
         try:
-            methodology.delete(cursor)
+            study.delete_methodology(methodology)
             study.add_history(curator_user_id=request.session.user.get_id(),
                 message='Deleted study type %s' % methodology.get_study_type(text=True))
-            study.save(cursor)
+            study.save()
             add_message('Methodology deleted')
             form.logger.info(str('Deleted methodology %s' % methodology_id))
         except:

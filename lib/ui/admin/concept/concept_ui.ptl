@@ -28,7 +28,6 @@ class ConceptActions:
         ]
 
     def __init__ (self, concept_id):
-        print 'CA.__init__'
         try:
             self.concept_id = int(concept_id)
         except:
@@ -42,7 +41,6 @@ class ConceptActions:
         footer()
 
     def _q_lookup [html] (self, request, action):
-        print 'CA._q_lookup'
         try:
             if action == 'edit':
                 return edit(self.concept_id)
@@ -81,9 +79,7 @@ def find [html] (request):
     except:
         pass
         
-    cursor = get_publisher().get_cursor()
-    concepts = find_concepts(cursor, search_term)
-    cursor.close()
+    concepts = find_concepts(search_term)
     
     if len(concepts) == 0:
         add_message('No matching concepts found.')
@@ -101,9 +97,8 @@ def find [html] (request):
 
 
 def edit [html] (concept_id=None):
-    cursor = get_publisher().get_cursor()
     concept = Concept(uid=concept_id)
-    concept.load(cursor, load_synonyms=True)
+    concept.load(load_synonyms=True)
     synonym_options = [(syn, syn, syn) for syn in concept.synonyms]
     
     form = MyForm()
@@ -144,7 +139,7 @@ def edit [html] (concept_id=None):
         else:
             print 'yes'
             concept.term = new_synonym
-            concept.save(cursor)
+            concept.save()
             form.logger.info(str('Changed term for concept %s' % concept_id))
             add_message('Changed preferred term')
         
@@ -153,9 +148,8 @@ def edit [html] (concept_id=None):
 
 def synonym [html] (concept_id=None):
     
-    cursor = get_publisher().get_cursor()
     concept = Concept(uid=concept_id)
-    concept.load(cursor, load_synonyms=True)
+    concept.load(load_synonyms=True)
     
     form = MyForm()
     form.add(form2.StringWidget, 'new_synonym', 
@@ -199,7 +193,7 @@ def synonym [html] (concept_id=None):
         add_message('No synonym added')
     elif form.get_submit() == 'add':
         print 'yes'
-        concept.add_synonym(cursor, new_synonym)
+        concept.add_synonym(new_synonym)
         form.logger.info(str('Added synonym %s for concept %s' % (new_synonym, concept_id)))
         add_message('Added new synonym')
         
@@ -242,6 +236,3 @@ def render_found_concepts [html] (concepts):
     """
     </table>
     """
-    
-
-    

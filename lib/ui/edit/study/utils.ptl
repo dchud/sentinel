@@ -2,6 +2,7 @@
 
 from quixote import get_publisher, get_request
 
+import canary.context
 from canary.gazeteer import Feature
 from canary.loader import QueuedRecord
 from canary.record import SubjectHeading
@@ -9,32 +10,9 @@ from canary.study import Study
 from canary.ui.pageframe import header, footer
 
 
-def get_queued_record (cursor, id):
-    
-    try:
-        queued_record = QueuedRecord()
-        queued_record.uid = int(id)
-        queued_record.load(cursor)
-        return queued_record
-    except:
-        # FIXME: proper error handling
-        print 'study_ui.get_queued_record(): queued_record unavailable'
-        return None
-
-def get_current_study (cursor, id):
-    
-    try:
-        current_study = Study(int(id))
-        current_study.load(cursor)
-        return current_study
-    except:
-        return None
-
 def render_queued_record [html] (queued_record, abstract=True):
-    source_catalog = get_publisher().get_source_catalog()
-    #source = source_catalog.get_source(queued_record.source_id)
-    # FIXME: this is a hack!
-    source = source_catalog.get_source(queued_record.metadata.keys()[0][0])
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
     complete_term_map = source_catalog.get_complete_mapping()
     mapped_metadata = queued_record.get_mapped_metadata(term_map=complete_term_map)
 
@@ -82,7 +60,8 @@ def is_same_user (queued_record):
         
 
 def get_sfx_link (source_id, unique_identifier):
-    source_catalog = get_publisher().get_source_catalog()
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
     source = source_catalog.get_source(source_id)
     query_string = source.sfx_pattern.replace('[[UI]]', unique_identifier)
     # FIXME!
@@ -178,7 +157,8 @@ def render_subject_selector [html] (record, study, concept_type):
         return
 
     study_concepts = getattr(study, str(concept_type))
-    source_catalog = get_publisher().get_source_catalog()
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
     complete_term_map = source_catalog.get_complete_mapping()
     mapped_metadata = record.get_mapped_metadata(term_map=complete_term_map)
     
@@ -242,7 +222,9 @@ def render_species [html] (study):
         </tr>
         <form action='species/types' method='post'>
     """
-    for spec in study.species:
+    sorted_species = [(s.term, s) for s in study.species]
+    sorted_species.sort()
+    for term, spec in sorted_species:
         """
         <tr>
             <td>%s</td>
@@ -281,8 +263,9 @@ def render_species [html] (study):
     """
 
 
-def render_locations [html] (cursor, study):
-    gazeteer = get_publisher().get_gazeteer()
+def render_locations [html] (study):
+    context = canary.context.Context()
+    gazeteer = context.get_gazeteer()
     """
     <table class='gentable' id='locations'>
         <tr>
@@ -296,7 +279,7 @@ def render_locations [html] (cursor, study):
     """
     for location in study.locations:
         feature = Feature(uid=location.feature_id)
-        feature.load(cursor)
+        feature.load()
         if gazeteer.fips_codes.has_key((feature.country_code, feature.adm1)):
             region_name = gazeteer.fips_codes[(feature.country_code, feature.adm1)]
         else:

@@ -44,5 +44,9 @@ LOG_DIR = "/home/user/sites/canary_project/logs"
 STATIC_HTML_DIR = "/home/user/projects/canary/lib/ui/html"
 STATIC_IMAGE_DIR = "/home/user/projects/canary/lib/ui/images"
 
-ZODB_CONNECTION_STRING = "file:/home/user/sites/canary_project/data/data"
+# Use memcached?
+USE_CACHE = True
+
+# List of memcached servers
+CACHE_SERVER_LIST = ['127.0.0.1:11234']
 

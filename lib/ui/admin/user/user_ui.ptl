@@ -6,16 +6,15 @@ _q_exports = [
     'edit',
     ]
 
-from quixote import get_publisher
+from quixote import get_publisher, get_request
 from quixote.errors import TraversalError
 from quixote import form2
 
-from dulcinea.database import get_transaction
-
+from canary.qx_defs import MyForm
 from canary.ui.admin.admin_ui import title_bar
 from canary.ui.pageframe import header, footer
-from canary.ui.pages import not_found
-from canary.qx_defs import MyDulcineaUser, MyForm
+from canary.ui.pages import not_found, add_message, has_messages, render_messages
+import canary.user
 from canary.utils import is_valid_email, is_valid_password
 
 
@@ -52,6 +51,8 @@ class UserActions:
             else:
                 raise TraversalError
         except:
+            import traceback
+            print traceback.print_exc()
             return not_found('user')
 
 
@@ -59,16 +60,32 @@ class UserForm (MyForm):
 
     def __init__ (self):
         MyForm.__init__(self)
-        self.add(form2.StringWidget, 'user_id', title='User id',
-                 size=10, required=True)
-        self.add(form2.StringWidget, 'user_email', title='User email',
-                 size=30, required=True)
-        self.add(form2.StringWidget, 'user_name', title='User name', size=30)
-        self.add(form2.CheckboxWidget, 'is_editor', title='Editor', value=False)
-        self.add(form2.CheckboxWidget, 'is_admin', title='Administrator', value=False)
-        self.add(form2.CheckboxWidget, 'is_active', title='Active', value=True)
+        self.add(form2.StringWidget, 'user_id', 
+            title='User id',
+            size=10, 
+            required=True)
+        self.add(form2.StringWidget, 'user_email', 
+            title='User email',
+            size=30, 
+            required=True)
+        self.add(form2.StringWidget, 'user_name', 
+            title='User name', 
+            size=30)
+        self.add(form2.CheckboxWidget, 'is_editor', 
+            title='Editor', 
+            value=False)
+        self.add(form2.CheckboxWidget, 'is_admin', 
+            title='Administrator', 
+            value=False)
+        self.add(form2.CheckboxWidget, 'is_assistant', 
+            title='Assistant', 
+            value=False)
+        self.add(form2.CheckboxWidget, 'is_active', 
+            title='Active', 
+            value=True)
         self.add(form2.PasswordWidget, 'user_pass',
-                 title='Set user password', required=False)
+            title='Set user password', 
+            required=False)
         self.add_submit('submit', 'submit')
 
 
@@ -91,10 +108,10 @@ def create [html] (request):
     if user_id:
         if str(' ') in user_id:
             form.set_error('user_id', 'User id cannot contain spaces.')
-        user_db = get_publisher().get_user_db()
-        if not user_db.get_user(user_id) == None:
+        user = canary.user.get_user_by_id(user_id)
+        if not user:
             form.set_error('user_id',
-                           'A user with that id already exists, please choose another.')
+                'A user with that id already exists, please choose another.')
     if not user_email or not is_valid_email(user_email):
         form.set_error('user_email', 'Please enter a valid email address.')
 
@@ -105,7 +122,8 @@ def create [html] (request):
         return render()
 
     # FIXME:  need to trap DulcineaUser.set_id() validation errors?
-    user = MyDulcineaUser(user_id)
+    user = canary.user.User()
+    user.id = user_id
     user.email = user_email
     user.set_password(user_pass)
     if not form['user_name'] == None:
@@ -114,26 +132,23 @@ def create [html] (request):
         user.is_editor = True
     if form['is_admin']:
         user.is_admin = True
+    if form['is_assistant']:
+        user.is_assistant = True
     if form['is_active']:
         user.is_active = True
 
-    user_db = get_publisher().get_user_db()
-    user_db.add_user(user)
-    get_transaction().commit()
+    user.save()
     form.logger.info(str('Created user %s' % user_id))
-
-    header('Admin: User created')
-    title_bar('User %s created' % (user_id))
-    footer()
-
+    add_message('Created user %s' % user_id)
+    
+    get_request().redirect(str('/admin'))
 
 
 def edit [html] (user_id=None):
 
     form = UserForm()
 
-    user_db = get_publisher().get_user_db()
-    user = user_db.get_user(user_id)
+    user = canary.user.get_user_by_id(user_id)
     if user == None:
         raise TraversalError
 
@@ -149,6 +164,7 @@ def edit [html] (user_id=None):
         form.get_widget('user_name').set_value(user.name)
         form.get_widget('is_editor').set_value(user.is_editor)
         form.get_widget('is_admin').set_value(user.is_admin)
+        form.get_widget('is_assistant').set_value(user.is_assistant)
         # FIXME: admin page for updating users en masse?
         try:
             form.get_widget('is_active').set_value(user.is_active)
@@ -172,7 +188,7 @@ def edit [html] (user_id=None):
 
     user.email = user_email
 
-    if not form['user_name'] == None:
+    if form['user_name']:
         user.name = form['user_name']
 
     if form['is_editor']:
@@ -193,11 +209,11 @@ def edit [html] (user_id=None):
     if user_pass:
         user.set_password(user_pass)
 
-    get_transaction().commit()
+    user.save()
+    add_message('Edited user %s' % user_id)
     form.logger.info(str('Edited user %s' % user_id))
-    header('Admin: User updated')
-    title_bar('User %s updated' % (user_id))
-    footer()
+    request = get_request()
+    request.redirect(str('/admin'))
 
 
 
@@ -217,8 +233,7 @@ def delete [html] (user_id=None):
 
     form = DeleteUserForm()
 
-    user_db = get_publisher().get_user_db()
-    user = user_db.get_user(user_id)
+    user = canary.user.get_user_by_id(user_id)
     if user == None:
         return not_found('user')
 
@@ -242,16 +257,13 @@ def delete [html] (user_id=None):
     are_you_sure = form['are_you_sure']
     if are_you_sure:
         try:
-            del(user_db.users[user_id])
-            get_transaction().commit()
+            user.delete()
+            add_message('Deleted user %s' % user_id)
             form.logger.info(str('Deleted user %s' % user_id))
         except:
-            get_transaction().abort()
             form.logger.error(str('Unable to delete user %s' % user_id))
 
-        header('Admin: User deleted')
-        title_bar('User deleted')
     else:
-        header('Admin: User not deleted')
-        title_bar('User not deleted')
-    footer()
+        add_message('Admin: User not deleted')
+
+    get_request().redirect(str('/admin'))

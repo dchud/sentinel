@@ -11,6 +11,7 @@ _q_exports = [
     'login',
     'logout',
     'user',
+    'assistant',
     'reaper',
     ]
 
@@ -20,7 +21,7 @@ from quixote.util import StaticFile
 
 from canary.qx_defs import NotLoggedInError
 from canary.qx_utils import MyStaticFile, load_static_exports
-from canary.ui import about, admin, edit, user, record_ui
+from canary.ui import about, admin, assistant, edit, user, record_ui
 from canary.ui.pages import _q_index, _q_exception_handler, not_found, reaper
 from canary.ui.pages import login, logout
 from canary.ui.browse_ui import Browse

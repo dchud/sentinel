@@ -11,8 +11,6 @@ _q_exports = [
 
 from quixote.errors import AccessError, PublishError, TraversalError
 
-from dulcinea.database import get_transaction
-
 from canary.qx_defs import NotLoggedInError
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found
@@ -28,7 +26,4 @@ def _q_access (request):
         raise NotLoggedInError('Authorized access only.')
     if not (request.session.user.is_editor):
         raise AccessError("You don't have access to this page.")
-
-
-
 

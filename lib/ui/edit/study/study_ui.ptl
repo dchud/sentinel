@@ -18,8 +18,6 @@ from quixote import get_publisher, get_request
 from quixote.errors import AccessError, PublishError, TraversalError
 from quixote import form2
 
-from dulcinea.database import get_transaction
-
 from canary.concept import load_categories, Category
 from canary.loader import QueuedRecord
 from canary.qx_defs import MyForm
@@ -27,7 +25,6 @@ from canary.study import Study, Exposure, RiskFactor, Location, Outcome, Species
 from canary.ui import record_ui
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found, add_message, has_messages, render_messages
-from canary.ui.edit.study.utils import get_current_study, get_queued_record
 from canary.ui.edit.study.utils import is_same_user, render_queued_record
 from canary.ui.edit.study.utils import claimed_by_other_user, render_unclaim_block
 from canary.ui.edit.study.utils import render_exposures, render_risk_factors, render_outcomes
@@ -121,73 +118,68 @@ class StudyActions:
             else:
                 raise TraversalError
         except:
+            import traceback
+            print traceback.print_exc()
             return not_found('study')
 
 
 def history [html] (request, queued_record_id):
     
-    cursor = get_publisher().get_cursor()
-    try:
-        queued_record_id = int(queued_record_id)
-    except:
-        raise(TraversalError)
-    
-    queued_record = get_queued_record(cursor, queued_record_id)
+    queued_record = QueuedRecord(queued_record_id)
     if not queued_record:
         return not_found('study')
-       
-    study = Study(queued_record.study_id)
-    study.load(cursor, get_history=True)
-    
+
     header('Edit: View study history')
     title_bar('View study history')
     
-    """
-    <table cellspacing='5' id='study_history' class='gentable'>
-        <tr>
-            <th>id</th>
-            <th>Curator</th>
-            <th>Message</th>
-            <th>Modified</th>
-        </tr>
-    """
-    
-    # sort by id (should give reverse chronological order)
-    study_history_items = [(id, item) for id, item in study.history.items()]
-    study_history_items.sort()
-    study_history_items.reverse()
-    
-    for id, item in study_history_items:
+    if queued_record.study_id == -1:
         """
-        <tr>
-            <td>%s</td>
-            <td>%s</td>
-            <td>%s</td>
-            <td>%s</td>
-        </tr>
-        """ % (id, item['curator_user_id'], item['message'], item['modified'])
-    
-    """
-    </table>
-    """
-    
+        <p>
+        This record has not yet been curated.
+        </p>
+        """
+    else:
+        study = Study(queued_record.study_id)
+        
+        """
+        <table cellspacing='5' id='study_history' class='gentable'>
+            <tr>
+                <th>id</th>
+                <th>Curator</th>
+                <th>Message</th>
+                <th>Modified</th>
+            </tr>
+        """
+        
+        # sort by id (should give reverse chronological order)
+        study_history_items = [(id, item) for id, item in study.history.items()]
+        study_history_items.sort()
+        study_history_items.reverse()
+        
+        for id, item in study_history_items:
+            """
+            <tr>
+                <td>%s</td>
+                <td>%s</td>
+                <td>%s</td>
+                <td>%s</td>
+            </tr>
+            """ % (id, item['curator_user_id'], item['message'], item['modified'])
+        
+        """
+        </table>
+        """
     footer()
 
 
 def curate_one [html] (request, queued_record_id):
     
     session = request.session
-    cursor = get_publisher().get_cursor()
     
-    try:
-        queued_record_id = int(queued_record_id)
-    except:
-        raise(TraversalError)
+    queued_record = QueuedRecord(queued_record_id)
+    if not queued_record:
+        return not_found('study')
     
-    queued_record = get_queued_record(cursor, queued_record_id)
-    # if it's None, bail
-    # FIXME: best way?  or is that right?
-
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
@@ -196,7 +188,7 @@ def curate_one [html] (request, queued_record_id):
     history_messages = []
 
     if queued_record.study_id >= 0:
-        study = get_current_study(cursor, queued_record.study_id)
+        study = Study(queued_record.study_id)
     else:
         # Assume we need a new one
         study = Study()
@@ -210,7 +202,7 @@ def curate_one [html] (request, queued_record_id):
         
         study.add_history(curator_user_id=session.user.get_id(),
             message='; '.join(history_messages))
-        study.save(cursor)
+        study.save()
         queued_record.study_id = study.uid
         record_updated = True
         history_messages = []
@@ -228,7 +220,7 @@ def curate_one [html] (request, queued_record_id):
         history_messages.append('Set record user id to %s' % session.user.get_id())
 
     if record_updated:
-        queued_record.save(cursor)
+        queued_record.save()
 
     a_type = 'none'
     article_type = 'none'
@@ -291,8 +283,7 @@ def curate_one [html] (request, queued_record_id):
     
     study.add_history(curator_user_id=session.user.get_id(),
         message='; '.join(history_messages))
-    study.save(cursor)
-    cursor.close()
+    study.save()
     
     article_type = study.get_article_type(text=True)
     
@@ -306,16 +297,17 @@ def curate_one [html] (request, queued_record_id):
 def curate_two [html] (request, queued_record_id):
     
     session = request.session
-    cursor = get_publisher().get_cursor()
-    queued_record = get_queued_record(cursor, queued_record_id)
+    queued_record = QueuedRecord(queued_record_id)
+    if not queued_record:
+        return not_found('study')
     
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
     
-    study = get_current_study(cursor, queued_record.study_id)
+    study = Study(queued_record.study_id)
     # Get a copy for comparison
-    study_orig = get_current_study(cursor, queued_record.study_id)
+    study_orig = Study(queued_record.study_id)
     article_type = study.get_article_type(text=True)
     
     # 'irrelevant' studies don't get this layer of classification
@@ -424,8 +416,7 @@ def curate_two [html] (request, queued_record_id):
     if history_messages:
         study.add_history(curator_user_id=session.user.get_id(),
             message='; '.join(history_messages))
-    study.save(cursor)
-    cursor.close()
+    study.save()
     
     form.logger.info(str('saved study %s step two' % study.uid))
     
@@ -435,15 +426,16 @@ def curate_two [html] (request, queued_record_id):
 def curate_three [html] (request, queued_record_id):
 
     session = request.session
-    cursor = get_publisher().get_cursor()
-    categories = load_categories(cursor)
-    queued_record = get_queued_record(cursor, queued_record_id)
+    categories = load_categories()
+    queued_record = QueuedRecord(queued_record_id)
+    if not queued_record:
+        return not_found('study')
 
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
     
-    study = get_current_study(cursor, queued_record.study_id)
+    study = Study(queued_record.study_id)
     article_type = study.get_article_type(text=True)
     
     if article_type in ['irrelevant']:
@@ -576,7 +568,7 @@ def curate_three [html] (request, queued_record_id):
     <fieldset>
         <legend>Locations</legend>
     """
-    render_locations(cursor, study)
+    render_locations(study)
     """
         <form method='POST' action='location/find'>
             <p>
@@ -603,14 +595,15 @@ def curate_three [html] (request, queued_record_id):
 def curate_four [html] (request, queued_record_id):
     
     session = request.session
-    cursor = get_publisher().get_cursor()
-    queued_record = get_queued_record(cursor, queued_record_id)
+    queued_record = QueuedRecord(queued_record_id)
+    if not queued_record:
+        return not_found('study')
 
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
     
-    study = get_current_study(cursor, queued_record.study_id)
+    study = Study(queued_record.study_id)
     article_type = study.get_article_type(text=True)
     
     if article_type in ['irrelevant']:
@@ -654,14 +647,15 @@ def curate_four [html] (request, queued_record_id):
 def summary [html] (request, queued_record_id):
     
     session = request.session
-    cursor = get_publisher().get_cursor()
-    queued_record = get_queued_record(cursor, queued_record_id)
+    queued_record = QueuedRecord(queued_record_id)
+    if not queued_record:
+        return not_found('study')
 
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
 
-    study = get_current_study(cursor, queued_record.study_id)
+    study = Study(queued_record.study_id)
     article_type = study.get_article_type(text=True)
     
     if article_type == 'unknown':
@@ -669,8 +663,7 @@ def summary [html] (request, queued_record_id):
         study.set_article_type('general')
         study.add_history(curator_user_id=session.user.get_id(),
             message='Set article type to general')
-        study.save(cursor)
-        cursor.close()
+        study.save()
         request.redirect(str('summary'))
         
     if article_type == 'curated':
@@ -702,6 +695,7 @@ def summary [html] (request, queued_record_id):
         <h3>Curate: summary</h3>
         """
         render_pipeline(article_type, step=5)
+        print 'render: calling render_queued_record on', queued_record
         render_queued_record(queued_record)
         if has_messages():
             render_messages()
@@ -739,7 +733,7 @@ def summary [html] (request, queued_record_id):
                 render_summary_concept_row(study.species, 'species')
             
             if len(study.locations) > 0:
-                record_ui.render_locations(cursor, study)
+                record_ui.render_locations(study)
             """
             </table>
             """
@@ -770,20 +764,18 @@ def summary [html] (request, queued_record_id):
         if history_messages:
             study.add_history(curator_user_id=session.user.get_id(),
                 message='; '.join(history_messages))
-        study.save(cursor)
-        cursor.close()
+        study.save()
         form.logger.info(str('Updated study %s' % study.uid))
         request.redirect(str('summary'))
     elif form.get_submit() == str('finish'):
         queued_record.status = queued_record.STATUS_CURATED
         queued_record.duplicate_score = 0
-        queued_record.save(cursor)
+        queued_record.save()
         study.set_status(str('curated'))
         history_messages.append('Set record status to curated')
         study.add_history(curator_user_id=session.user.get_id(),
             message='; '.join(history_messages))
-        study.save(cursor)
-        cursor.close()
+        study.save()
         form.logger.info(str('Finished curating study %s' % study.uid))
         request.redirect(str('/edit'))
     else:
@@ -793,11 +785,9 @@ def summary [html] (request, queued_record_id):
 def unclaim [html] (request, queued_record_id):
     
     session = request.session
-    queued_record = QueuedRecord()
-    queued_record.uid = int(queued_record_id)
-    
-    cursor = get_publisher().get_cursor()
-    queued_record.load(cursor)
+    queued_record = QueuedRecord(queued_record_id)
+    if not queued_record:
+        return not_found('study')
     
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if queued_record.user_id != session.user.get_id():
@@ -830,7 +820,7 @@ def unclaim [html] (request, queued_record_id):
         session.queued_record = None
         queued_record.status = queued_record.STATUS_UNCLAIMED
         queued_record.user_id = ''
-        queued_record.save(cursor)
+        queued_record.save()
         header('Edit: Study unclaimed')
         """
         <h3>Edit:  Study unclaimed</h3>
@@ -853,21 +843,21 @@ def unclaim [html] (request, queued_record_id):
         </p>
     """
 
-    cursor.close()
     footer()
     
     
 def category [html] (request, queued_record_id):
     
     session = request.session
-    cursor = get_publisher().get_cursor()
-    queued_record = get_queued_record(cursor, queued_record_id)
+    queued_record = QueuedRecord(queued_record_id)
+    if not queued_record:
+        return not_found('study')
 
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
 
-    study = get_current_study(cursor, queued_record.study_id)
+    study = Study(queued_record.study_id)
     article_type = study.get_article_type(text=True)
     
     category_id = request.get_form_var('category_id', '')
@@ -885,7 +875,7 @@ def category [html] (request, queued_record_id):
         return not_found('category')
     
     category = Category(uid=category_id)
-    category.load(cursor, load_concepts=True)
+    category.load(load_concepts=True)
 
     if request.get_form_var('choose', '') == 'choose':
         concept_class = concept_type.capitalize()
@@ -902,7 +892,7 @@ def category [html] (request, queued_record_id):
                 # NOTE: add_* will not allow duplicates, so calling it here is safe
                 getattr(study, str('add_%s' % concept_type))(index_concept)
                 # FIXME: add_history can't queue up many
-                index_concept.save(cursor)
+                index_concept.save()
             else:
                 # If a concept isn't checked, we might need to delete it if
                 # the curator had previously selected it.
@@ -910,9 +900,9 @@ def category [html] (request, queued_record_id):
                     str('get_%s_from_%s' % (concept_type, concept_type)))(index_concept)
                 if existing_index_concept:
                     # FIXME: add_history can't queue up many
-                    existing_index_concept.delete(cursor)
+                    existing_index_concept.delete()
                     
-        study.save(cursor)
+        study.save()
         request.redirect(str('curate_three'))
         
     broad_concepts = [(c.concept.term, c) for c in category.concepts if c.is_broad]

@@ -1,0 +1,144 @@
+# $Id$
+
+_q_exports = [
+    '_q_index',
+    ]
+
+import urllib
+
+from quixote import get_publisher, get_request
+from quixote import form2
+
+import canary.context
+from canary.loader import find_needed_papers, QueuedRecord
+from canary.qx_defs import MyForm
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import add_message, has_messages, render_messages, not_found
+
+
+def title_bar [html] (action=''):
+    """
+    <h2>
+        <a href='/assistant/'>Assistant</a>
+    """
+    if not action == '':
+        ' : %s' % (action)
+    """
+    </h2>
+    """
+
+
+def full_openurl (metadata={}):
+    ou = {}
+    
+    if metadata.get('author', ''):
+        ou['aulast'] = metadata['author'][0].split(' ')[0]
+        ou['auinit'] = metadata['author'][0].split(' ')[1]
+    
+    if metadata.get('title', ''):
+        ou['atitle'] = metadata['title']
+    
+    if metadata.get('journal', ''):
+        ou['stitle'] = metadata['journal']
+    
+    if metadata.get('volume', ''):
+        ou['volume'] = metadata['volume']
+        
+    if metadata.get('issue', ''):
+        ou['issue'] = metadata['issue']
+        
+    if metadata.get('pages', ''):
+        ou['pages'] = metadata['pages']
+        
+    if metadata.get('issn', ''):
+        ou['issn'] = metadata['issn']
+        
+    # FIXME: hard-coded to MEDLINE :(
+    if metadata.get('unique_identifier', ''):
+        ou['id'] = 'pmid:%s' % metadata['unique_identifier']
+    
+    out = []
+    for key, val in ou.items():
+        out.append('%s=%s' % (key, urllib.quote_plus(val)))
+    
+    return '&'.join(out)
+    
+
+def _q_index [html] (request):
+    
+    context = canary.context.Context()
+    source_catalog = context.get_source_catalog()
+    
+    header('Assistant: Free Coffee in Suite 501')
+    title_bar('Manage Papers')
+    
+    if has_messages():
+        render_messages()
+
+    records = find_needed_papers()
+    sort_field = request.get_form_var('sortby', default='source')
+    if not sort_field in ('uid', 'source', 'title', 'author'):
+        sort_field = 'source'
+        
+    ctm = context.get_source_catalog().get_complete_mapping()
+    for rec in records:
+        rec.metadata = rec.get_mapped_metadata(ctm)
+    sorted_records = [(rec.metadata.get(sort_field, ''), rec) for rec in records]
+    sorted_records.sort()
+    
+    """
+    <h3>Current paper queue</h3>
+    
+    <table cellspacing='5' class='gentable'>
+        <tr>
+            <th><a href='/assistant/?sortby=uid'>Record ID</a></th>
+            <th><a href='/assistant/?sortby=author'>Authors</a></th>
+            <th><a href='/assistant/?sortby=title'>Title</a></th>
+            <th><a href='/assistant/?sortby=source'>Source</a></th>
+            <th>Actions</th>
+        </tr>
+    """
+    
+    for lower_val, rec in sorted_records:
+        """
+        <tr>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>
+                <font size='-1'>
+                [<a rel='alternate' title='OpenURL' href='http://sfx.library.yale.edu/sfx_local?%s'>links</a>]
+                [<a href='update?record_id=%s'>mark found</a>]
+                </font>
+            </td>
+        </tr>
+        """ % (rec.uid, 
+            str(', ').join(rec.metadata['author']),
+            rec.metadata['title'],
+            rec.metadata['source'],
+            full_openurl(rec.metadata),
+            rec.uid)
+    
+    """
+    </table>
+    """
+    footer()
+
+
+
+def update [html] (request):
+    
+    try:
+        record_id = int(request.get_form_var('record_id', default=None))
+        rec = QueuedRecord(record_id)
+        if not rec:
+            raise ValueError, 'Record %s not found' % record_id
+        rec.needs_paper = int(False)
+        rec.save()
+        add_message('Record %s marked as found' % record_id)
+        return request.redirect(str('/assistant'))
+    except:
+        import traceback
+        print traceback.print_exc()
+        return not_found('record')

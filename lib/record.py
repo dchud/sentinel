@@ -3,8 +3,8 @@
 import dtuple
 import re
 
+import canary.context
 
-_q_exports = []
 
 class SubjectHeading:
 
@@ -91,7 +91,9 @@ class Record:
         else:
             return "Yes"
 
-    def load_by_pmid (self, pubmed_id, cursor):
+    def load_by_pmid (self, pubmed_id):
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         cursor.execute("""
             SELECT *
             FROM sentinel_studies
@@ -160,4 +162,5 @@ class Record:
                 if row == None:
                     break
                 self.species.append(row[0])
-
+        
+        context.close_cursor()

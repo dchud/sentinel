@@ -29,6 +29,7 @@ $Id$
 import dtuple
 import time
 
+import canary.context
 from canary.utils import DTable
 
 
@@ -63,13 +64,15 @@ class SourceCatalog:
                 return source
         return None
 
-    def delete_source (self, cursor, id):
+    def delete_source (self, id):
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         try:
             uid = int(id)
             if self.sources.has_key(uid):
                 source = self.sources[uid]
                 for term_id in source.terms.keys():
-                    source.delete_term(cursor, term_id)
+                    source.delete_term(term_id)
                 cursor.execute("""
                                DELETE FROM sources
                                WHERE uid = %s
@@ -78,8 +81,9 @@ class SourceCatalog:
                 # although ui should reload source_catalog after any change.
                 del(self.sources[id])
         except:
-            return
-
+            pass
+        context.close_cursor(cursor)
+        
     def get_term (self, id):
         try:
             uid = int(id)
@@ -150,25 +154,28 @@ class SourceCatalog:
             return {}                
     
 
-    def delete_term (self, cursor, id):
+    def delete_term (self, id):
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         try:
             uid = int(id)
             if self.terms.has_key(uid):
                 term = self.terms[uid]
                 source = self.get_source(term.source_id)
-                source.delete_term(cursor, uid)
+                source.delete_term(uid)
         except:
-            return
-
-    def load_sources (self, cursor, load_terms=True):
+            pass
+        context.close_cursor(cursor)
+       
+    def load_sources (self, load_terms=True):
         sources = {}
-        # this two-step is redundant, but lets us use source's dynamic
-        # field-name-setting load() function.
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         cursor.execute('SELECT uid FROM sources')
         rows = cursor.fetchall()
         for row in rows:
             source = Source(uid=row[0])
-            source.load(cursor, load_terms=load_terms)
+            source.load(load_terms=load_terms)
             self.sources[source.uid] = source
 
             # index the terms by id if they were loaded
@@ -178,7 +185,9 @@ class SourceCatalog:
                     #print 'adding term_uid %s to catalog %s' % (term_uid,
                     #                                            source.terms[term_uid])
                     self.terms[term_uid] = source.terms[term_uid]
-
+        context.close_cursor(cursor)
+        
+        
 
 class CatalogItem (DTable):
 
@@ -243,10 +252,12 @@ class Source (CatalogItem):
         return None
 
 
-    def load (self, cursor, load_terms=True):
+    def load (self, load_terms=True):
         if self.uid == -1:
             return
-
+            
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         cursor.execute("""
                        SELECT *
                        FROM sources
@@ -281,8 +292,12 @@ class Source (CatalogItem):
             self.terms[term.uid] = term
             self.term_tokens[term.token] = term.uid
 
-
-    def save (self, cursor):
+        context.close_cursor(cursor)
+        
+        
+    def save (self):
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         if self.uid == -1:
             cursor.execute("""
                 INSERT INTO sources
@@ -305,9 +320,12 @@ class Source (CatalogItem):
                 )
         # FIXME: should this be set from the SQL?
         self.date_modified = time.strftime(str('%Y-%m-%d'))
+        context.close_cursor(cursor)
+        
 
-
-    def delete_term (self, cursor, id):
+    def delete_term (self, id):
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         if id > -1:
             cursor.execute("""
                            DELETE FROM terms
@@ -316,17 +334,14 @@ class Source (CatalogItem):
             # FIXME: should we bother here? probably, just to be thorough,
             # although ui should reload source_catalog after any change.
             del(self.terms[id])
-
-
+        context.close_cursor(cursor)
+        
 
 class Term (CatalogItem):
 
     def __init__ (self, uid=-1, name='', description='', date_modified=''):
-        CatalogItem.__init__(self,
-                             uid=uid,
-                             name=name,
-                             description=description,
-                             date_modified=date_modified)
+        CatalogItem.__init__(self, uid=uid, name=name, description=description,
+            date_modified=date_modified)
         self.token = ''
         self.vocabulary_uid = -1
         self.source_id = -1
@@ -344,10 +359,12 @@ class Term (CatalogItem):
         out.append('\t/>')
         return '\n'.join(out)
 
-    def load (self, cursor):
+    def load (self):
         if self.uid == -1:
             return
-
+            
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         cursor.execute("""
             SELECT *
             FROM terms
@@ -360,9 +377,12 @@ class Term (CatalogItem):
             row = dtuple.DatabaseTuple(desc, rows[0])
             for field in fields:
                 self.set(field, row[field])
+        context.close_cursor(cursor)
+        
 
-
-    def save (self, cursor):
+    def save (self):
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         if self.uid == -1:
             cursor.execute("""
                 INSERT INTO terms
@@ -392,4 +412,5 @@ class Term (CatalogItem):
                     self.uid)
                 )
         self.date_modified = time.strftime(str('%Y-%m-%d'))
-
+        context.close_cursor(cursor)
+        

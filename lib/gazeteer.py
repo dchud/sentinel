@@ -2,6 +2,7 @@
 
 import dtuple
 
+import canary.context
 from canary.utils import DTable
 
 
@@ -21,7 +22,9 @@ class Feature (DTable):
         self.adm2 = ''
         self.name = ''
         
-    def load (self, cursor):
+    def load (self):
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         cursor.execute("""
             SELECT *
             FROM gazeteer
@@ -34,7 +37,7 @@ class Feature (DTable):
             row = dtuple.DatabaseTuple(desc, row)
             for field in fields:
                 self.set(field, row[field])
-    
+        context.close_cursor(cursor)
 
 
 class Gazeteer:
@@ -47,8 +50,9 @@ class Gazeteer:
         self.feature_codes = {}
         self.fips_codes = {}
         
-    def load (self, cursor):
-        
+    def load (self):
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         cursor.execute("""
             SELECT code, name
             FROM gazeteer_countries
@@ -72,10 +76,13 @@ class Gazeteer:
         rows = cursor.fetchall()
         for row in rows:
             self.fips_codes[(row[0], row[1])] = row[2]
-            
-            
-    def search (self, cursor, feature_name, params={}):
         
+        context.close_cursor(cursor)
+        
+            
+    def search (self, feature_name, params={}):
+        context = canary.context.Context()
+        cursor = context.get_cursor()
         results = []
         search_token = feature_name.strip() + '%'
         
@@ -103,5 +110,6 @@ class Gazeteer:
             if result.name.lower() == feature_name.lower():
                 results_ranked.remove(result)
                 results_ranked.insert(0, result)
-        
+        context.close_cursor(cursor)
         return results_ranked
+        
