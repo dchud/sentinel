@@ -832,6 +832,10 @@ def category [html] (request, queued_record_id):
     category_id = request.get_form_var('category_id', '')
     concept_type = request.get_form_var('concept_type', '')
     
+    if category_id == '-':
+        add_message('Please choose a category.')
+        request.redirect(str('/edit/study/%s/curate_three' % queued_record_id))
+    
     try:
         category = int(category_id)
         if not concept_type in Category().concept_types:
