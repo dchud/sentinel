@@ -221,7 +221,7 @@ def delete [html] (species_id):
     
     request = get_request()
     context = get_publisher().context
-    queued_record = QueuedRecord(contextrequest.queued_record_id)
+    queued_record = QueuedRecord(context, request.queued_record_id)
     
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
