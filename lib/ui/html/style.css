@@ -227,7 +227,7 @@ dl {
 #pipeline ul li a:hover {
 	color: #000;
     text-decoration: underline;
-	/*background-color: #eee;*/
+	background-color: #f9f7d1;
 }
 
 #pipeline ul li#active a {

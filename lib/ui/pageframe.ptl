@@ -115,9 +115,9 @@ def pageframe [html] ():
                 <a href="/">Home</a>
             </div>
             
-            <table border="0" cellspacing="0" cellpadding="0 >  
+            <table border="0" cellspacing="0" cellpadding="0">  
                 <tr valign="top">
-                    <td width="400" valign="top" class="rightspace">
+                    <td align="left" valign="top">
     """
     request = get_publisher().get_request()
     try:
