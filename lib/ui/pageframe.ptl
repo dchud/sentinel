@@ -76,22 +76,26 @@ def pageframe [html] ():
                 <h2 class="graphicHeader">Animals as Sentinels of Human Environmental Health Hazards</h2>
             </td>
             <td bgcolor="#A6BFF2">
-                <p>Standard links on all pages</p>
+                <p>
+                <!--
+                Standard links on all pages
+                -->
+                </p>
             </td>
         </tr>
         
         <tr valign="top">
-            <td bgcolor="#EEEDC0" colspan="2" width="725" height="32" align="left">
-                <p style="margin-top:5px; margin-bottom:5px;">&nbsp; &nbsp; &nbsp; &nbsp;
-                    <span style="font-size:12px; font-weight: normal; margin-left:130px; margin-top:10px;">
-                        <form action='/search' method='post'>
+            <form action='/search' method='post'>
+                <td bgcolor="#EEEDC0" colspan="2" width="725" height="32" align="left">
+                    <p style="margin-top:5px; margin-bottom:5px;">&nbsp; &nbsp; &nbsp; &nbsp;
+                        <span style="font-size:12px; font-weight: normal; margin-left:130px; margin-top:10px;">
                             Enter a keyword 
                             <input type="text" name="query" size="15" tabindex="13">
                             <input type="submit" name="go" value="go">
-                        </form>
-                    </span>
-                </p>
-            </td>
+                        </span>
+                    </p>
+                </td>
+            </form>
         </tr>
         
         <tr>
@@ -252,7 +256,7 @@ def search_box [html] ():
 def contact [html] ():
     """
         <!-- ### SCAN COLUMN CONTACT INFO  ######################################################### -->
-        <img src="/images/pixel.gif" alt="" width="1" height="1" vspace="25">
+        <img src="/images/pixel.gif" alt="" width="1" height="1" vspace="15">
         <br>
         <img src="/images/pixel.gif" alt="" width="1" height="1" hspace="4">
         <br>
@@ -323,8 +327,11 @@ def footer [html] ():
                             <p class="footer">
                                 Copyright  2004, Yale University School of Medicine, New Haven,  
                                 Connecticut, USA.
-                                <br>
+                                <br />
                                 All rights reserved. 
+                                <br />
+                                Please review our <a href='/about/disclaimer'>site disclaimer</a>.
+                                <br />
                                 <a href='/about/contact_us'>Contact us</a> with
                                     comments or suggestions.
                             </p>

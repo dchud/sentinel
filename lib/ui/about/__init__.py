@@ -3,6 +3,7 @@ _q_exports = [
     'study_methodologies',
     'relevance',
     'tour',
+    'disclaimer',
     ]
 
 import sys
@@ -19,6 +20,7 @@ contact_us = about_ui.contact_us
 study_methodologies = about_ui.study_methodologies
 relevance = about_ui.relevance
 tour = about_ui.tour
+disclaimer = about_ui.disclaimer
 
 # FIXME
 #config = get_publisher().get_config()
