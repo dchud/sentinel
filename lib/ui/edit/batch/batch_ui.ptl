@@ -55,26 +55,20 @@ class BatchActions:
             if action == 'view':
                 start = request.get_form_var('start', default=0)
                 size = request.get_form_var('size', default=25)
+                show = request.get_form_var('show', default='unfinished')
                 try:
                     start = int(start)
                     size = int(size)
                 except ValueError:
-                    return view(request, batch_id=self.batch_id)
-                if start != None and size != None:
-                    return view(request, batch_id=self.batch_id, start=start, size=size)
-                elif start != None:
-                    return view(request, batch_id=self.batch_id, start=start)
-                elif size != None:
-                    return view(request, batch_id=self.batch_id, size=size)
-                else:
-                    return view(request, batch_id=self.batch_id)
+                    return view(request, batch_id=self.batch_id, show=show)
+                return view(request, batch_id=self.batch_id, show=show, start=start, size=size)
             else:
                 raise TraversalError
         except:
             return not_found('batch')
 
 
-def view [html] (request, batch_id=None, start=0, size=25):
+def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
     # FIXME: Refactor this, why is it all in a big try/except?
     
     header('Edit: View queued records')
@@ -87,7 +81,8 @@ def view [html] (request, batch_id=None, start=0, size=25):
         #batch.load(cursor, start=start, size=size)
         # We avoid loading all metadata here because batches might be big
         # (i.e. too much metadata to load every time).
-        batch.load(cursor, load_metadata=False)
+        batch.load(cursor, show=show, start=start, size=size, load_metadata=False)
+        batch_stats = batch.get_statistics(cursor)
         if not batch.name == '':
             """
             <h4>Batch: '%s'</h4>
@@ -97,9 +92,24 @@ def view [html] (request, batch_id=None, start=0, size=25):
             <h4>Batch: (unnamed)</h4>
             """
             
-        if len(batch.queued_records) > 0:
-            pager(batch, start, size)
+        if batch_stats['total'] > 0:
             """
+            <p>
+            Show:
+            """
+            for type in ['unfinished', 'unclaimed', 'all']:
+                if type == show:
+                    ' [<b>%s (%s)</b>] ' % (type, batch_stats[type])
+                else:
+                    ' [<a href="view?show=%s">%s (%s)</a>] ' % (type, 
+                        type, batch_stats[type])
+            """
+            <br />
+            """
+            pager(batch, show, start, size, batch_stats)
+            """
+            </p>
+            
             <table cellspacing='5' id='batch_view' class='gentable'>
                 <tr>
                     <th>id</th>
@@ -110,10 +120,13 @@ def view [html] (request, batch_id=None, start=0, size=25):
                     <th>Actions</th>
                 </tr>
             """
-            
-            for record_id, record in batch.queued_records.items()[start:start+size]:
+            for record_id, record in batch.queued_records.items():
                 status = record.get_status()
-                if not status == record.STATUS_CURATED:
+                if status == record.STATUS_UNCLAIMED \
+                    or (status == record.STATUS_CLAIMED \
+                        and not show == 'unclaimed') \
+                    or (status == record.STATUS_CURATED \
+                        and show == 'all'):
                     """
                     <tr>
                         <td>%s</td>
@@ -133,7 +146,8 @@ def view [html] (request, batch_id=None, start=0, size=25):
                         """
                             [<a href='/edit/study/%s/curate_one'>curate</a>]
                         """ % record_id
-                    elif status == record.STATUS_CLAIMED:
+                    elif status == record.STATUS_CLAIMED \
+                        and show == 'unfinished':
                         if record.user_id == request.session.user.get_id():
                             """
                             [<a href='/edit/study/%s/curate_one'>curate</a>]
@@ -143,14 +157,33 @@ def view [html] (request, batch_id=None, start=0, size=25):
                             """
                             [claimed]
                             """
+                    elif status == record.STATUS_CURATED \
+                        and show == 'all':
+                        """
+                            [<a href='/edit/study/%s/curate_one'>edit</a>]
+                        """ % record_id
                 """
                     </td>
                 </tr>
                 """    
             """
             </table>
+            <p>
+            Show:
             """
-            pager(batch, start, size)
+            for type in ['unfinished', 'unclaimed', 'all']:
+                if type == show:
+                    ' [<b>%s (%s)</b>] ' % (type, batch_stats[type])
+                else:
+                    ' [<a href="view?show=%s">%s (%s)</a>] ' % (type, 
+                        type, batch_stats[type])
+            """
+            <br />
+            """
+            pager(batch, show, start, size, batch_stats)
+            """
+            </p>
+            """
         cursor.close()
     except:
         raise PublishError
@@ -158,11 +191,20 @@ def view [html] (request, batch_id=None, start=0, size=25):
     footer()
 
 
-def pager [html] (batch, start, size):
+def pager [html] (batch, show, start, size, stats):
+    
+    if show == 'unfinished':
+        batch_size = stats['unclaimed'] + stats['claimed']
+    elif show == 'unclaimed':
+        batch_size = stats['unclaimed']
+    elif show == 'all':
+        batch_size = stats['total']
+    else:
+        batch_size = 25
     
     # total number of pages, by size, in this list
-    num_pages = len(batch.queued_records) / size
-    remainder = len(batch.queued_records) % size
+    num_pages = batch_size / size
+    remainder = batch_size % size
     if remainder:
         num_pages += 1
 
@@ -171,10 +213,9 @@ def pager [html] (batch, start, size):
     
     # no need to show the pager if there's only one page
     if num_pages > 1:
-        '''
-        <p>
+        """
         Browse: 
-        '''
+        """
         for i in range(0, num_pages):
             start = str((i * size) + 1)
             if remainder \
@@ -184,10 +225,7 @@ def pager [html] (batch, start, size):
                 end = str((i + 1) * size)
             text = start + '-' + end
             if i != cur_page:
-                ' <a href="view?start=%s&size=%s">%s</a> ' % (i * size, size, text)
+                ' [<a href="view?start=%s&size=%s&show=%s">%s</a>] ' % \
+                    (i * size, size, show, text)
             else:
-                ' <b>%s</b> ' % text
-        '''
-        </p>
-        '''
-
+                ' [<b>%s</b>] ' % text

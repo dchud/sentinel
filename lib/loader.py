@@ -299,10 +299,13 @@ class Batch (DTable):
                 """, (self.uid, status)
                 )
             stats[name] = cursor.fetchone()[0]
+        stats['total'] = stats['unclaimed'] + stats['claimed'] + stats['curated']
+        stats['all'] = stats['total']
+        stats['unfinished'] = stats['unclaimed'] + stats['claimed']
         return stats
 
 
-    def load (self, cursor, load_metadata=True):
+    def load (self, cursor, show='unfinished', start=0, size=25, load_metadata=True):
         """
         Load a batch and its queued records.
         """
@@ -322,12 +325,21 @@ class Batch (DTable):
             for field in fields:
                 self.set(field, row[field])
         
+        if show == 'unfinished':
+            show_clause = ' AND status < %s ' % QueuedRecord().STATUS_CURATED
+        elif show == 'unclaimed':
+            show_clause = ' AND status = %s ' % QueuedRecord().STATUS_UNCLAIMED
+        elif show == 'all':
+            show_clause = ' AND 1 '
+            
         cursor.execute("""
             SELECT *
             FROM queued_records
             WHERE queued_batch_id = %s
-            ORDER BY status, uid
-            """, int(self.uid))
+            """ + show_clause + """
+            ORDER BY uid
+            LIMIT %s, %s
+            """, (int(self.uid), start, size))
         fields = [d[0] for d in cursor.description]
         desc = dtuple.TupleDescriptor([[f] for f in fields])
         rows = cursor.fetchall()
