@@ -275,10 +275,7 @@ def render_found_features [html] (study, features, search_term):
     """
     
     for feature in features:
-        if gazeteer.fips_codes.has_key((feature.country_code, feature.adm1)):
-            region_name = gazeteer.fips_codes[(feature.country_code, feature.adm1)]
-        else:
-            region_name = ''
+        region_name = gazeteer.fips_codes.get((feature.country_code, feature.adm1), '')
         """
         <tr>
             <td>%s</td>
@@ -287,10 +284,11 @@ def render_found_features [html] (study, features, search_term):
             <td>%s</td>
             <td>%s</td>
             <td>%s</td>
-        """ % (feature.uid, feature.name, 
-            gazeteer.feature_codes[feature.feature_type],
+        """ % (feature.uid, 
+            feature.name, 
+            gazeteer.feature_codes.get(feature.feature_type, 'Unknown'),
             region_name,
-            gazeteer.country_codes[feature.country_code],
+            gazeteer.country_codes.get(feature.country_code, 'Unknown'),
             '%.2f / %.2f' % (feature.latitude, feature.longitude))
         
         if not study.has_feature(feature):
