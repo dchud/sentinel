@@ -84,7 +84,9 @@ def concepts [html] (request, category_id):
         <th>Actions</th>
     </tr>
     """
-    for cat_concept in category.get_concepts():
+    concepts = [(con.concept.term, con) for con in category.get_concepts()]
+    concepts.sort()
+    for term, cat_concept in concepts:
         """
     <tr>
         <td>%s</td>
@@ -225,7 +227,9 @@ def list [html] (request):
     </tr>
     """
     categories = load_categories(cursor)
-    for category in categories:
+    categories = [(c.name, c) for c in categories]
+    categories.sort()
+    for name, category in categories:
         """
         <tr>
             <td>%s</td>
