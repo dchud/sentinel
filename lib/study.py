@@ -1095,7 +1095,7 @@ class Study (DTable):
         'unknown' : 0,
         'irrelevant' : 1,
         'traditional' : 2,
-        'descriptive' : 3,
+        'general' : 3,
         'review' : 4,
         'outcomes only' : 5,
         'exposures only' : 6,

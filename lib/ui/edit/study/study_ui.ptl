@@ -228,7 +228,7 @@ def curate_one [html] (request, queued_record_id):
     article_type = 'none'
     
     article_type = study.get_article_type(text=True)
-    if article_type in ['irrelevant', 'traditional', 'descriptive', 'review']:
+    if article_type in ['irrelevant', 'traditional', 'general', 'review']:
         a_type = 'is_%s' % article_type
 
     form = MyForm()
@@ -240,7 +240,7 @@ def curate_one [html] (request, queued_record_id):
         options=[
             ('is_irrelevant', 'Irrelevant', 'is_irrelevant'),
             ('is_traditional', 'Traditional', 'is_traditional'),
-            ('is_descriptive', 'Descriptive', 'is_descriptive'),
+            ('is_general', 'General', 'is_general'),
             ('is_review', 'Review', 'is_review'),
             ('none', 'None of these (To be classified)', 'none'),
             ],
@@ -270,8 +270,8 @@ def curate_one [html] (request, queued_record_id):
         study.set_article_type('irrelevant')
     elif form['article_type'] == 'is_traditional':
         study.set_article_type('traditional')
-    elif form['article_type'] == 'is_descriptive':
-        study.set_article_type('descriptive')
+    elif form['article_type'] == 'is_general':
+        study.set_article_type('general')
     elif form['article_type'] == 'is_review':
         study.set_article_type('review')
     elif form['article_type'] == 'none':
@@ -389,7 +389,7 @@ def curate_two [html] (request, queued_record_id):
                 getattr(study, str(bool_item))))
     
     # studies noted as article_type['review'] must stay as 'review'
-    if not article_type in ['traditional', 'descriptive', 'review']:
+    if not article_type in ['traditional', 'general', 'review']:
         
         if study.has_exposures:
             
@@ -404,8 +404,7 @@ def curate_two [html] (request, queued_record_id):
             
         else:
             
-            # NOTE: perhaps this should be 'traditional'?
-            study.set_article_type('descriptive')
+            study.set_article_type('general')
         
         if not study.get_article_type() == study_orig.get_article_type():
             history_messages.append('Set article type to %s' % \
@@ -628,10 +627,10 @@ def summary [html] (request, queued_record_id):
     article_type = study.get_article_type(text=True)
     
     if article_type == 'unknown':
-        add_message('Article type set to "descriptive".')
-        study.set_article_type('descriptive')
+        add_message('Article type set to "general".')
+        study.set_article_type('general')
         study.add_history(curator_user_id=session.user.get_id(),
-            message='Set article type to descriptive')
+            message='Set article type to general')
         study.save(cursor)
         cursor.close()
         request.redirect(str('summary'))
