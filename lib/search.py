@@ -22,7 +22,7 @@ class Search:
         if self.field == '' \
             or self.token == '':
             return results
-        # NOTE: should this be consistent with the concept search screens?
+
         try:
             if self.field == 'record id':
                 token = int(self.token)
