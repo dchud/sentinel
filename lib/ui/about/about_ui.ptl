@@ -1,5 +1,5 @@
 _q_exports = [
-             ]
+    ]
 
 
 from quixote import get_publisher
@@ -7,6 +7,7 @@ from quixote.errors import AccessError, PublishError, TraversalError
 from quixote import form2
 
 from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found
 from canary.qx_defs import MyForm
 from canary.utils import is_valid_email, send_email
 
@@ -88,3 +89,357 @@ def contact_us [html] (request):
     """
     footer()
 
+
+
+def study_methodologies [html] (request):
+    
+    try:
+        meth = request.get_form_var('meth', default='')
+        if not meth in [
+            '', 
+            'experimental', 
+            'descriptive',
+            'aggregate',
+            'cross_sectional',
+            'case_control',
+            'cohort',
+            ]:
+            raise ValueError
+    except:
+        return not_found('meth')
+            
+    title = 'Study methodologies'
+    if not meth == '':
+        title = str(title + ': ')
+        title = title + meth.replace(str('_'), str(' ')).capitalize()
+
+    header(title)
+    """
+    <h2>%s</h2>
+    """ % title
+    
+    study_meth_intro(meth)
+    
+    if not meth == '':
+        eval(str('study_meth_') + meth)()
+    
+    footer()
+    
+    
+    
+
+def study_meth_intro [html] (meth=''):
+    """
+    <p>
+The Canary database curators determine, for each included study, the
+type of study methodology employed by the researchers (using
+<a href="/about/classification_protocol">this classification protocol</a>).
+The possible categories are:
+    </p>
+    
+    <ul>
+        <li><a href='?meth=experimental'>Experimental</a></li>
+        <li>Observational</li>
+            <ul>
+                <li><a href='?meth=descriptive'>Descriptive (Case reports)</a></li>
+                <li>Analytic</li>
+                    <ul>
+                        <li><a href='?meth=aggregate'>Aggregate (Ecologic)</a></li>
+                        <li><a href='?meth=cross_sectional'>Cross-sectional</a></li>
+                        <li><a href='?meth=case_control'>Case Control</a></li>
+                        <li><a href='?meth=cohort'>Cohort</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    
+    <p>
+Fox has outlined criteria for objectively evaluating the relationship
+between an environmental hazard and an observed health effect in an
+observational study of animals (Fox 1991). These include probability, time
+order, strength of association, specificity, and consistency on
+replication, predictive performance, and coherence. The choice of study
+design can have a major effect on the ability of a study to fulfill such
+criteria.
+    </p>
+
+    <p>
+Our preliminary review of the animal sentinel literature has found that
+some potentially useful study designs, such as case-control and cohort, are
+under-utilized in animal sentinel research.
+    </p>
+    """
+    
+
+def study_meth_experimental [html] ():
+    """
+    <h3>Experimental Studies</h3>
+
+    <p>
+Researchers often study environmental toxins in the controlled setting of 
+the laboratory. The Canary Database looks for such studies that use 
+"non-traditional" animal species representative of free-ranging or domestic 
+populations. Sometimes it is difficult to determine whether a laboratory 
+experiment was using animals derived from a truly wild (or free ranging 
+domestic) population rather than one bred strictly for laboratory use. 
+Some experimental studies in the database ventured outside the laboratory 
+to test the effect of slightly less controlled exposures. One team maintained 
+fish in a tank connected with a polluted river compared to controls raised 
+in tap water (Schmidt-Posthaus, Bernet et al. 2001). Such "enclosure" 
+studies blur the distinction between a tightly controlled laboratory 
+experiment, and the uncontrolled exposure situation in an observational 
+cohort study.  Infectious disease studies also use experimental designs, 
+though much less commonly, and usually in conjunction with another study 
+methodology.
+    </p>
+
+    <p>
+Due to the fact that many variables can be tightly controlled, experimental 
+studies can provide invaluable confirmation of an association between an 
+exposure and an outcome. Yet in the overall investigation of an environmental 
+hazard or an unexplained health outcome in a population, the experimental 
+design has limitations. Constructing a controlled environment in the 
+laboratory setting and maintaining a laboratory population of animals can 
+be expensive and time consuming. The laboratory setting may also fail to 
+replicate some of the important forces at work in the environment. For 
+logistic reasons, experimental doses may be higher and follow-up time 
+shorter. Artificial diets and limitations on activity may also make it 
+difficult to extrapolate experimental findings to the real world setting.  
+Perhaps most importantly, an experiment can only test a very limited set 
+of hypotheses. Therefore, experiments would seem most appropriate only 
+after a number of observational studies have consistently provided support 
+for a limited number of hypotheses.
+    </p>
+    """
+    
+    
+def study_meth_descriptive [html] ():
+    """
+    <h3>Descriptive Studies (Case Reports)</h3>
+
+    <p>
+Studies are classified as descriptive case reports if there were no analytic 
+comparisons between groups reported.  This is a common type of study 
+methodology for animal sentinel studies. For example, a toxin study reported 
+on the effect of crude oil on seabirds, but did not compare exposed and 
+unexposed animals (Khan and Ryan 1991). Similarly, a study of Leishmaniasis 
+described cutaneous lesions in two individual rodents without further 
+analysis (Morsy, Bassili et al. 1987).
+    </p>
+
+    <p>
+Descriptive case reports can be quick, relatively easy to perform, and 
+therefore useful for generating hypotheses. They are therefore often the 
+first type of study to undertake in the investigation of a suspected hazard 
+or outbreak of disease in an animal population, where it is necessary to 
+describe the outbreak in terms of time, place, and animals affected.  Such 
+descriptive reports, however, are unable to analyze cause and effect 
+relationships and provide measures of the strength of association of such 
+relationships.
+    </p>
+    """
+    
+    
+def study_meth_aggregate [html] ():
+    """
+    <h3>Aggregate (Ecologic) Studies</h3>
+
+    <p>
+In aggregate (also known as ecologic) studies there are comparison between 
+groups, but exposures were not determined on an individual level. This is a 
+common study design for toxin studies. An example is a study of the effect 
+of sewage on sex hormone levels in fish. Sex steroid levels for river fish 
+living upstream and downstream from a sewage treatment plant were compared. 
+The researchers found depressed testosterone in male fish living below the 
+sewage outflow. However, there was no attempt to measure levels of contaminants 
+in individual fish (Folmar, Denslow et al. 2001). Some aggregate studies 
+were repeated over time, as when pooled samples of organochlorines in eggs 
+and pooled assays of immune function were compared by year for groups of 
+terns in a polluted and unpolluted site (Grasman and Fox 2001).
+    </p>
+
+    <p>
+These aggregate studies, where rates of disease are compared to other factors 
+in different geographic areas, are fairly simple to undertake and have 
+advantages over case reports for examining hypotheses, since comparisons are 
+made between groups with presumably different exposures, yet again they 
+should not be used to draw causal conclusions. Since exposures are not 
+assessed on the level of the individual, there is no way of knowing if the 
+diseased individuals were actually exposed. For example, in the study of 
+terns and organochlorines, the pooling of samples made it impossible to say 
+that a more affected tern also had a higher level of contaminant. Such 
+studies therefore run the risk of the "ecological fallacy" where an association 
+is postulated that may actually not be true, as in the assertion that high 
+levels of a certain contaminant in the environment and high levels of a 
+particular animal deformity mean that the contaminant is responsible for 
+the deformity.
+    </p>
+    """
+    
+    
+def study_meth_cohort [html] ():
+    """
+    <h3>Cohort Studies</h3>
+
+    <p>
+In a cohort study, exposed and unexposed individuals are compared over 
+time in a forward direction to determine whether an outcome occurs. This 
+is in general appears to be a rare methodology for animal sentinel studies. 
+In a study that seemed to cross the line between experimental and observational, 
+researchers used cages to segregate several populations of fish living in 
+different proximities to a wastewater treatment facility, then compared 
+responses in each group (Mitz and Giesy 1985). A study of Japanese encephalitis 
+virus followed a group of originally seronegative "sentinel pigs" to determine 
+which individuals became infected (Detels, Cross et al. 1976).
+    </p>
+
+    <p>
+The forward directional approach of a cohort study is considered to approximate 
+an experimental design. As in experimental studies, only one risk factor at 
+a time can be examined in this way, whereas a number of different outcomes 
+can be assessed. There are obviously challenges to tracking individuals in 
+animal population over time. However, use of enclosures, or marking of 
+sedentary populations using capture recapture techniques have already been 
+employed, and may be worthy of greater exploration.
+    </p>
+    """
+    
+    
+def study_meth_case_control [html] ():
+    """
+    <h3>Case Control Studies</h3>
+
+    <p>
+In a case control study, individuals with a certain condition (cases) are 
+compared with individuals without the condition (controls) in terms of history 
+of previous exposures, thereby moving backward in time. Like cohort studies, 
+this is a rarely used methodology in animal sentinel research. A study of 
+leptospirosis compared a sample of sick dogs with controls who were not 
+noticeably sick, and found greater evidence of previous leptospirosis infection 
+in the sick dogs (Weekes, Everard et al. 1997). Hayes et al used service 
+records to compare historical toxin exposures between military dogs with 
+and without lymphoma (Hayes, Tarone et al. 1995).
+    </p>
+
+    <p>
+Case control studies, where exposures are retrospectively assessed between 
+cases and control subject, provide some advantages over cross-sectional 
+studies in terms of time order. There are obvious difficulties in reconstructing 
+historical exposures for a wild animal, although tissue samples, otolith 
+analysis, and exposure records for an area etc. could provide some clues 
+to previous exposures. As in cross-sectional studies sampling on the basis 
+of outcome, case-control studies can examine several different risk factors 
+at once, although only one disease outcome at a time can be studied. This 
+allows the investigator to adjust for possible confounding variables, and 
+economically explore several hypotheses simultaneously. Candidate hypotheses 
+generated from such studies can then be subjected to experimental confirmation.
+    </p>
+    """
+    
+    
+def study_meth_cross_sectional [html] ():
+    """
+    <h3>Cross-sectional Studies</h3>
+
+    <p>
+In a cross-sectional study, both outcomes and exposures are assessed on 
+the individual level, but at a moment in time, without either forward or 
+backward timing. Cross-sectional studies may be almost as simple and quick 
+to perform as aggregate studies. In an elegant example of this, investigators 
+used paired samples of eggs to correlate dioxin exposure levels to brain 
+development in wild blue herons (Henshel, Martin et al. 1995). Many of 
+the infectious disease studies in the Canary database measure antibodies 
+to infection, and were therefore classified as cross-sectional since the 
+test determined, on the individual level, both the occurrence of exposure 
+to an infectious agent as well as evidence of effect (infection).
+    </p>
+
+    <p>
+Since information on both exposure and effect is available for each subject, 
+cross-sectional data can be analyzed either in terms of outcome or exposure. 
+When they compare groups on the basis of exposure, they resemble a cohort 
+analysis. When they sample groups for analysis based on outcome, the analysis 
+is similar to that of a case-control study. Analyzing on the basis of outcome 
+involves taking a group of affected individuals affected by a particular 
+health outcome, and comparing them with a group that does not have the outcome. 
+Levels of contaminants or evidence of infectious exposure can then be compared 
+between groups. Conversely, analyzing a cross-sectional study in terms of 
+exposure involves comparing the degree of health effects in a group that 
+has a certain exposure, such as a certain elevated level of contaminants, 
+with another group that has a lower level of contaminants.
+    </p>
+
+    <p>
+In human epidemiology, the decision whether to sample and analyze based on 
+outcome or exposure is generally made on the basis of whichever is rarer 
+(Kramer and Boivin 1987).  If an outcome is fairly rare, such as a limb 
+deformity in a frog population, it makes sense to attempt to sample on the 
+basis of outcome, since a sufficient number of cases could be assembled 
+more economically and compared with a number of unaffected individuals than 
+if an entire population had to be sampled. An advantage of this approach 
+is that for a particular outcome, a number of different etiologies can be 
+explored. If on the other hand, an exposure is fairly rare, it makes sense 
+to concentrate on the subjects that have that exposure (as in a cohort 
+design), and look for health effects in this population compared to an 
+equivalent number of individuals that do not have the exposure.
+    </p>
+
+    <p>
+Animal sentinel studies often sample on the basis of exposure rather than 
+outcome. For toxin studies, this often involves comparing individuals in a 
+"polluted area" to individuals in a "reference" (less polluted) area and 
+measuring differences in outcomes between the two groups. For example, a 
+study compared lung histopathology in ring-billed gulls living near a 
+point-source of air pollution with that of gulls living in a geographically 
+removed area with better air quality (Yauk, Smits et al. 2001). Similarly, 
+infectious disease studies often compare rates of infection in animals 
+living in one geographic area to those in another area to determine risk 
+factors for infection, as when raccoons in two distinct areas were compared 
+for rates of leptospirosis (Mitchell, Hungeford et al. 1999).
+    </p>
+
+    <p>
+This assumes that there is little diversity of exposure among individuals 
+in the "polluted site", and that it is necessary to choose "unexposed" 
+individuals from a separate population. In studies of animal populations, 
+where natural selection may be at work even in populations separated by 
+small distances, such an approach runs the risk of "selection bias", i.e. 
+making comparisons between two groups of individuals that are not really 
+comparable.
+    </p>
+
+    <p>
+For example, in their study of fish exposed to sewage and other water 
+pollutants, Karels et al found differences in the population structure 
+between fish who lived near sewage outflow compared to those individuals 
+living in a geographically removed location (Karels, Markkula et al. 2001). 
+Such selection pressures can cause genetic shifts, perhaps toward greater 
+adaptation, for a population exposed to hazards, and make comparisons to 
+another population less valid. For example, deer mice captured from areas 
+of high air pollution level have been found to be more resistant to the 
+effects of ozone compared with deer mice from less polluted areas, indicating 
+that a process of genetic adaptation on a population level had taken place 
+(Dickerson, Hooper et al. 1994). Similarly, it is possible that different 
+animal populations could have different levels of immune function that 
+could affect infection rates.
+    </p>
+
+    <p>
+A key weakness of both ecologic and cross-sectional studies of toxins and 
+health outcomes is that they cannot determine facts about "time order" of 
+exposure and effect, in other words whether one preceded the other. This 
+is less of a problem for infectious disease studies where both the outcome 
+and the exposure are for the same infectious disease. Another disadvantage 
+of cross-sectional studies is that if a toxin or infection has a fatal effect 
+on animals, a cross-sectional study will tend to under-select individuals 
+who have been exposed. This is known as "late-look bias."  Alternatively, 
+the cross-sectional study may over represent exposures that have sub-lethal 
+effects (Neyman bias). This can be a problem in studies of asymptomatic animal 
+reservoirs of infection. It is possible that the only survivors in an infected 
+population are those individuals who experienced a mild infection, thereby 
+again introducing selection bias into the study. In this way, a cross-sectional 
+study could miss a transgenerational effect that initially caused widespread 
+mortality of more susceptible individuals.
+    </p>
+    """

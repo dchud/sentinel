@@ -2,32 +2,11 @@
 
 
 <p>
-During the initial development of the Canary Database, curated studies
-can be searched by:
+Presently, the database search interface uses a general keyword
+search.  This interface will match records where keyword terms
+are found in any of the title, authors, or abstracts of curated
+studies.
 </p>
-
-
-<ul>
-
-    <li>
-    <b>Keyword</b>: matches when all terms are found in any of the
-    title, authors, or abstracts of curated studies.
-    </li>
-
-    <li>
-    <b>Author</b>: matches author names in the form "Lastname FM", where
-    'F' and 'M' are first and middle initials; this is adopted directly
-    from MEDLINE convention.  For best results, search on the last name
-    only.
-    </li>
-
-    <li>
-    <b>Title</b>: matches terms found only in the titles of curated
-    studies.
-    </li>
-
-</ul>
-
 
 <p>
 We are currently developing the database model and indexing
@@ -41,8 +20,7 @@ search feature soon.
 
 <p>
 You can also browse the database by
-        <a href='/browse/year'>year</a>,
-        <a href='/browse/journal'>journal</a>,
-        <a href='/browse/study_type'>study type</a>, or by
-        <a href='/browse/heading'>subject heading</a>.
+    <a href='/browse/year'>year</a>,
+    <a href='/browse/journal'>journal</a>, or by
+    <a href='/browse/methodology'>methodology</a>.
 </p>

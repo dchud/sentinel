@@ -163,14 +163,20 @@ def sidebar [html] ():
             
             <p>Using the Database</p>
             <a href="/about/description">Description</a>
+            <a href="/about/tour">Take a tour</a>
             <a href="/about/how_to_search">How to search</a>
-            <a href="/about/study_types">Study types</a>
+            <a href="/about/relevance_to_human_health">Relevance to human health</a>
+            <a href="/about/study_methodologies">Study methodologies</a>
+            <!--
             <a href="/about/classification_protocol">Classification protocol</a>
+            -->
             <a href="/about/glossary">Glossary</a>
             
             <p>About the project</p>
             <a href="/about/project_mission">Mission</a>
+            <!--
             <a href="/about/examples">Examples of animal sentinels</a>
+            -->
             <a href="/about/related_work">Related work</a>
             
             <p>About us</p>

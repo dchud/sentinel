@@ -28,7 +28,7 @@ class Browse:
         <p>
         You can browse the database by <a href='/browse/year'>year</a>,
         <a href='/browse/journal'>journal</a>,
-        <a href='/browse/methodology'>study type</a>,
+        <a href='/browse/methodology'>study methodology</a>,
         or by <a href='/browse/heading'>subject heading</a>.
         
         """
@@ -341,8 +341,8 @@ class MethodologyBrowseIndex (BrowseIndex):
     The Canary database curators determine, for each included study, the type
     of methodology employed by the researchers (using <a
     href='/about/classification_protocol'>this classification protocol</a>).  For
-    detailed explanations of each, see our <a href='/about/study_types'>study type
-    overview</a>.
+    detailed explanations of each, see our <a 
+    href='/about/study_methodologies'>study methodology overview</a>.
         </p>
     
         <p>

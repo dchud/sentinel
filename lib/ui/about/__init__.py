@@ -1,5 +1,6 @@
 _q_exports = [
     'contact_us',
+    'study_methodologies',
     ]
 
 import sys
@@ -13,6 +14,7 @@ this_module = sys.modules[__name__]
 
 
 contact_us = about_ui.contact_us
+study_methodologies = about_ui.study_methodologies
 
 
 # FIXME
@@ -21,9 +23,8 @@ contact_us = about_ui.contact_us
 html_files = load_static_exports('/home/dlc33/projects/canary/lib/ui/html')
 for file, path in html_files:
     _q_exports.append(file)
-    setattr(this_module, file, MyStaticFile(path,
-                                            mime_type='text/html',
-                                            cache_time=30))
+    setattr(this_module, file, MyStaticFile(path, 
+        mime_type='text/html', cache_time=30))
 
 
 def _q_lookup (request, name=''):
