@@ -2,6 +2,7 @@ _q_exports = [
     '_q_index',
     'find',
     'add',
+    'types',
     ]
 
 from quixote.errors import TraversalError
@@ -12,7 +13,7 @@ from canary.ui.edit.study.species.species_ui import SpeciesActions
 _q_index = species_ui._q_index
 find = species_ui.find
 add = species_ui.add
-
+types = species_ui.types
 
 def _q_lookup (request, species_id):
     try:

@@ -895,6 +895,13 @@ class Species (DTable):
         501: 'ITIS',
         }
     
+    TYPES = [
+        'companion',
+        'livestock',
+        'wildlife',
+        'laboratory',
+        ]
+        
     def __init__ (self):
         self.uid = -1
         self.study_id = -1
@@ -902,15 +909,61 @@ class Species (DTable):
         self.concept_source_id = -1
         self.term = ''
         self.synonyms = []
-    
+        self.__dict__['types'] = []
+        
     def __str__ (self):
         out = []
         out.append('<Species uid=%s study_id=%s' % (self.uid, self.study_id))
         out.append('\tconcept_id=%s (%s)' % (self.concept_id, self.concept_source_id))
         out.append('\tterm=%s' % self.term)
         out.append('\tsynonyms=%s' % '; '.join(self.synonyms))
+        out.append('\ttypes=%s' % '; '.join(self.types))
         out.append('/>')
         return '\n'.join(out)
+        
+    def __setattr__ (self, name, value):
+        # self.types should be a list, but the auto-loader from Study
+        # will try to assign it a string.  Catch here, and assume it
+        # will be the only time a direct assignment to self.types is
+        # called.
+        if name == 'types':
+            if value.__class__ == ''.__class__:
+                self.set_types(value)
+            else:
+                self.__dict__[name] = value
+        else:
+            self.__dict__[name] = value
+            
+    def add_type (self, type):
+        if type in self.TYPES:
+            if not type in self.types:
+                self.types.append(type)
+            
+    def clear_types (self):
+        self.__dict__['types'] = []
+    
+    def set_types (self, types):
+        self.clear_types()
+        if types.__class__ == ''.__class__:
+            type_dict = dict(zip([t[0:2] for t in self.TYPES], self.TYPES))
+            # pass through every two chars in types 
+            for i in range(0, len(types), 2):
+                type = types[i:i+2]
+                species_type = type_dict.get(type, None)
+                if species_type:
+                    self.add_type(species_type)
+                    
+        elif types.__class__ == [].__class__:
+            for type in types:
+                if type in self.TYPES:
+                    self.add_type(type)
+        
+    def get_types (self, shorthand=False):
+        if shorthand:
+            sh = ''.join([type[0:2] for type in self.types])
+            return sh
+        else:
+            return self.types
     
     def delete (self, cursor):
         """
@@ -931,30 +984,26 @@ class Species (DTable):
 
     def save (self, cursor):
         if self.uid == -1:
-            #print 'inserting new species'
             cursor.execute("""
                 INSERT INTO species
                 (uid, study_id, concept_id, 
-                concept_source_id, term)
+                concept_source_id, term, types)
                 VALUES 
                 (NULL, %s, %s, 
-                %s, %s)
+                %s, %s, %s)
                 """, (self.study_id, self.concept_id, 
-                self.concept_source_id, self.term)
+                self.concept_source_id, self.term, self.get_types(shorthand=True))
                 )
-            #print 'inserted new species'
             self.uid = self.get_new_uid(cursor)
-            #print 'set new species uid to %s' % self.uid
         else:
-            #print 'updating species %s' % self.uid
             try:
                 cursor.execute("""
                     UPDATE species
                     SET study_id = %s, concept_id = %s, 
-                    concept_source_id = %s, term = %s
+                    concept_source_id = %s, term = %s, types = %s
                     WHERE uid = %s
                     """, (self.study_id, self.concept_id, 
-                    self.concept_source_id, self.term,
+                    self.concept_source_id, self.term, self.get_types(shorthand=True),
                     self.uid)
                     )
             except:

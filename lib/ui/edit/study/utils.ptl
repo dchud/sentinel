@@ -206,19 +206,49 @@ def render_species [html] (study):
         <tr>
             <th>species</th>
             <th>source</th>
+            <th>companion</th>
+            <th>livestock</th>
+            <th>wildlife</th>
+            <th>laboratory</th>
             <th>actions</th>
         </tr>
+        <form action='species/types' method='post'>
     """
     for spec in study.species:
         """
         <tr>
             <td>%s</td>
             <td>%s</td>
+        """ % (spec.term, spec.UMLS_SOURCES[spec.concept_source_id])
+        
+        for type in spec.TYPES:
+            checked_string = '-'
+            spec_types = spec.get_types()
+            if type in spec_types:
+                checked_string = 'checked="checked"'
+            """
+            <td>
+            <input type='checkbox' name='species_%s_%s' %s />
+            </td>
+            """ % (spec.uid, type, checked_string)
+        
+        """
             <td>[<a href='species/%s/delete'>delete</a>]</td>
         </tr>
-        """ % (spec.term, spec.UMLS_SOURCES[spec.concept_source_id], 
-            spec.uid)
+        """ % spec.uid
+    if study.species:
+        """
+        <tr>
+            <td colspan='2'>&nbsp;</td>
+            <td colspan='4'>
+                Click here to update types:
+                <input type='submit' name='update' value='update' />
+            </td>
+            <td>&nbsp;</td>
+        </tr>
+        """
     """
+        </form>
     </table>
     """
 

@@ -330,7 +330,6 @@ def render_found_species [html] (study, species, search_term):
                 </td>
                 """ % this_spec.uid
             else:
-                print 'Error: unable to find species:', spec
                 """
                 <td>
                     [error]
@@ -344,3 +343,27 @@ def render_found_species [html] (study, species, search_term):
     </table>
     """
     
+    
+def types [html] (request):
+    
+    cursor = get_publisher().get_cursor()
+    try:
+        queued_record = get_queued_record(cursor, request.queued_record_id)
+    except:
+        return not_found('record')
+    
+    if queued_record.status == queued_record.STATUS_CLAIMED:
+        if not is_same_user(queued_record):
+            return claimed_by_other_user()
+            
+    study = get_current_study(cursor, queued_record.study_id)
+    for spec in study.species:
+        spec.clear_types()
+        for type in spec.TYPES:
+            var = request.get_form_var('species_%s_%s' % (spec.uid, type), '')
+            if var:
+                spec.add_type(type)
+        spec.save(cursor)
+        add_message('Updated species %s ("%s")' % (spec.uid, spec.term))
+    
+    request.redirect(str('/edit/study/%s/curate_three' % queued_record.uid))
