@@ -68,8 +68,8 @@ def pageframe [html] ():
     
         <tr valign="top">
             <td bgcolor="#EEEDCO" rowspan="2" width="145" height="124">
-                <img src="/images/bird-logo.gif" alt="Canary Database Logo"
-                    width="145" height="124" valign="bottom"></td>
+                <a href='/'><img src="/images/bird-logo.gif" alt="Canary Database Logo"
+                    width="145" height="124" valign="bottom" border='0'></a></td>
             <td bgcolor="#A6BFF2" height="91">
                 <h1 class="graphicHeader">Canary Database</h1>
                 <h2 class="graphicHeader">Animals as Sentinels of Human Environmental Health Hazards</h2>

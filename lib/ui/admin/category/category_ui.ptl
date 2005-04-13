@@ -428,7 +428,7 @@ def add [html] (request, category_id):
         print 'saving concept'
         cat_concept.save(context)
         print 'saved'
-        add_message('Added concept "%s"' % contept.term))
+        add_message('Added concept "%s"' % concept.term)
         form.logger.info(str('Added concept %s to category %s' % (concept.uid, cid)))
     except:
         add_message('Unable to add concept')

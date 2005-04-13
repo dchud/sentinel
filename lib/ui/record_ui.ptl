@@ -222,7 +222,7 @@ def render_locations [html] (study):
                     <th valign='top'>Locations</th>
                     <td>
     """
-    '; '.join([str(loc) for loc in locs])
+    ' <br /> '.join([str(loc) for loc in locs])
     """
                     </td>
                 </tr>
@@ -638,7 +638,9 @@ def render_summary_concept_row [html] (concepts, concept_name):
                     <th valign='top'>%s</th>
                     <td>
     """ % concept_name.capitalize()
-    '; '.join([str(con.term) for con in concepts])
+    concepts_sorted = [(str(con.term).lower(), str(con.term)) for con in concepts]
+    concepts_sorted.sort()
+    ' <br /> '.join([term for lower, term in concepts_sorted])
     """
                     </td>
                 </tr>
@@ -664,8 +666,8 @@ def render_record [html] (record, study):
     header('Record %s' % record.uid)
     render_metadata_header(mapped_metadata, show_abstract=False)
     """
-    <h4>Article type: %s</h4>
-    """ % article_type
+    <h4>Article type: %s - Canary ID: %s</h4>
+    """ % (article_type.capitalize(), record.uid)
     
     """
     <div id='citation-head'>
@@ -711,6 +713,10 @@ def render_record [html] (record, study):
         
             render_data_points(study)
             
+            if not article_type in ['irrelevant'] \
+                and len(study.methodologies) > 0:
+                render_methodologies(study)
+            
             if len(study.exposures) > 0 \
                 or len(study.risk_factors) > 0 \
                 or len(study.outcomes) > 0 \
@@ -743,10 +749,6 @@ def render_record [html] (record, study):
             </div>
                 """
     
-            if not article_type in ['irrelevant'] \
-                and len(study.methodologies) > 0:
-                render_methodologies(study)
-            
         elif view == 'abstract':
             render_abstract(mapped_metadata)
             
