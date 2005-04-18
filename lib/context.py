@@ -47,12 +47,14 @@ class Cacheable (object):
             try:
                 item = context.cache_get(full_cache_key)
                 if item:
-                    print 'HIT %s' % full_cache_key
+                    #print 'HIT %s' % full_cache_key
                     return item
                 else:
-                    print 'MISS %s' % full_cache_key
+                    #print 'MISS %s' % full_cache_key
+                    pass
             except:
-                print 'ERROR %s\n', traceback.print_exc()
+                #print 'ERROR %s\n', traceback.print_exc()
+                pass
         
         item = object.__new__(cls)
         item.__init__(*args, **kwargs)

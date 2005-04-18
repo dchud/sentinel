@@ -261,7 +261,9 @@ def find [html] (request):
             results.append(QueuedRecord(context, uid))
         searcher.close()
     except:
-        form.info(str('Unable to perform search'))
+        form.logger.info(str('Unable to perform search'))
+        import traceback
+        print traceback.print_exc()
         form.set_error('token', 'Unable to perform search')
         return render()
         

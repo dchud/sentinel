@@ -392,6 +392,10 @@ class QueuedRecord (canary.context.Cacheable, DTable):
                 study = Study(context, self.study_id)
                 study.delete(context)
             
+            # Next, unindex it.
+            search_index = canary.search.SearchIndex(context)
+            search_index.unindex_record(self)
+
             # Then, remove the metadata
             cursor.execute("""
                 DELETE FROM queued_record_metadata
