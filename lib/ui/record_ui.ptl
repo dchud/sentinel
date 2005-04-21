@@ -662,8 +662,13 @@ def render_record [html] (record, study):
     if view == 'export':
         if format == 'pubmed':
             return render_tagged_pubmed(record, mapped_metadata)
-            
-    header('Record %s' % record.uid)
+
+    # We don't really want anyone indexing abstracts from our site
+    if view == 'abstract':
+        header('Record %s' % record.uid, meta_robot='noindex')
+    else:
+        header('Record %s' % record.uid)
+    
     render_metadata_header(mapped_metadata, show_abstract=False)
     """
     <h4>Article type: %s - Canary ID: %s</h4>

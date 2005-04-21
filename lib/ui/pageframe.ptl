@@ -4,8 +4,13 @@ _q_exports = []
 
 from quixote import get_publisher
 
+# Allowed values for meta robot/@content, see:
+#   http://www.robotstxt.org/wc/meta-user.html
+ROBOT_CONTENT_VALUES = ('all', 'none', 'noindex', 'nofollow')
 
-def header [html] (title, show_pageframe=True, show_javascript=False):
+
+def header [html] (title, show_pageframe=True, show_javascript=False,
+    meta_robot=''):
     """
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
@@ -27,7 +32,19 @@ def header [html] (title, show_pageframe=True, show_javascript=False):
         <meta name="Publisher" content="Canary Database" />
         <meta name="Description" content="" />
         <meta name="Keywords" content="" />
-        
+    """
+    
+    # Only echo the robot/content meta header if it has been specified
+    # with acceptable values.
+    if meta_robot:
+        content_values = str(meta_robot).split(str(' '))
+        content_values = [v for v in content_values if v in ROBOT_CONTENT_VALUES]
+        if content_values:
+            """
+        <meta name="robots" content="%s">
+            """ % str(' ').join(content_values)
+    
+    """
         <style type="text/css" media="screen">
             @import url(/wdd_styles.css);
         </style>
