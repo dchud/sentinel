@@ -138,6 +138,19 @@ class QueuedRecord (canary.context.Cacheable, DTable):
             else:
                 return []
             
+
+    def set_metadata (self, term, value):
+        """
+        Override existing metadata values with a new value or values.
+        Don't allow multivalues for non-multivalue terms, though.
+        """
+        md_key = (term.source_id, term.uid)
+        if isinstance(value, types.ListType) \
+            or isinstance(value, types.TupleType):
+            if not term.is_multivalue:
+                raise ValueError, 'Term does not allow multiple values'
+        self.metadata[md_key] = value
+
             
     def get_mapped_metadata (self, term_map={}):
         """
