@@ -536,7 +536,7 @@ class SearchIndex:
         print 'QS:', query_string
         disassembled_query = disassemble_user_query(query_string)
         print 'DQ:', disassembled_query
-        reassembled_query = reassemble_user_query(disassembled_query)
+        reassembled_query = '+(%s)' % reassemble_user_query(disassembled_query)
         print 'RQ:', reassembled_query
         
         if not allow_curated:
