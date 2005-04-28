@@ -47,33 +47,17 @@ def search [html] (request):
         or form.has_errors():
         return render()
     
+    header("Search results")
+    """
+    <h3>Search results</h3>
+    """
+    
     try:
         search_index = SearchIndex(context)
-        
         raw_query = utils.fix_double_quotes(form['q'])
+        hits, searcher = search_index.search(raw_query, 
+            require_visible=True)
         
-        # We need to restrict access to only "public" and "relevant"
-        # studies here.
-        # First, limit to curated studies
-        sane_record_status = '+record-status:%s' % QueuedRecord.STATUS_CURATED
-        # Next, eliminate irrelevant, duplicate.
-        # FIXME: Note that this assumes everything between trad/curated
-        # are valid here!
-        sane_article_type = '+article-type:[%s TO %s]' % \
-            (Study.ARTICLE_TYPES['traditional'], 
-            Study.ARTICLE_TYPES['curated'])
-
-        # Glue it back together
-        sane_query = raw_query + str(' AND +(%s %s)' % (sane_record_status,
-            sane_article_type))
-
-        hits, searcher = search_index.search(sane_query)
-        
-        header("Search results")
-        """
-        <h3>Search results</h3>
-        """
-    
         count = hits.length()
         """
         <p>
@@ -103,5 +87,11 @@ def search [html] (request):
     except:
         import traceback
         print traceback.print_exc()
+        """
+        <p>
+        An error occurred with your search.  It's probably our fault, 
+        though... we're very sorry, please try again!
+        </p>
+        """
 
     footer()

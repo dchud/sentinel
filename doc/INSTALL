@@ -36,6 +36,7 @@ All of the following are REQUIRED:
 - scgi-1.2
 - log4py-1.3+
 - egenix-mx-base-2.0.6+ (mx.DateTime required by qx_defs.Session stuff
+- pyparsing-1.3+
 
 The following are OPTIONAL:
 
@@ -45,6 +46,7 @@ The following are OPTIONAL:
 App configuration:
 -----------------
 
+- Install all REQUIRED dependencies listed above
 - Install mod_scgi into apache as appropriate, and scgi python module
 - Configure mod_scgi access within apache's httpd.conf, something like
   this:

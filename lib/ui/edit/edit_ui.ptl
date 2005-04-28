@@ -250,11 +250,15 @@ def find [html] (request):
         query = '+unique-identifier:%s' % token
     elif field == 'anything':
         query = '+all:"%s*"' % token
-    if not allow_curated:
-        query += ' -record-status:%s' % QueuedRecord.STATUS_CURATED
+    
+    if allow_curated:
+        allow_curated = True
+    else:
+        allow_curated = False
         
     try:
-        hits, searcher = search_index.search(query)
+        hits, searcher = search_index.search(query, 
+            allow_curated=allow_curated, require_visible=False)
         results = []
         for i, doc in hits:
             uid = doc.get(str('uid'))

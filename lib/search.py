@@ -1,5 +1,7 @@
 # $Id$
 
+
+import pyparsing as pyp
 import PyLucene
 from PyLucene import Field, Term, Document
 from PyLucene import QueryParser, IndexSearcher, StandardAnalyzer, FSDirectory
@@ -10,6 +12,166 @@ import canary.loader
 import canary.study
 from canary.utils import render_capitalized
 
+
+# All possible search fields, indexed by all valid forms.
+SEARCH_FIELDS = {
+    'ab':           'abstract',
+    'abstract':     'abstract',
+    'af':           'affiliation', 
+    'affiliation':  'affiliation', 
+    'all':          'all',
+    'au':           'author',
+    'author':       'author',
+    'date':         'pubdate',
+    'exp':          'exposures',
+    'exposures':    'exposures',
+    'gn':           'grantnum',
+    'grantnum':     'grantnum',
+    'has_exposures':        'has_exposures', 
+    'has_exposure_linkage': 'has_exposure_linkage',
+    'has_genomic':          'has_genomic',
+    'has_interspecies':     'has_interspecies',
+    'has_outcomes':         'has_outcomes',
+    'has_outcome_linkage':  'has_outcome_linkage',
+    'has_relationships':    'has_relationships',
+    'is':           'issue', 
+    'issn':         'issn',
+    'issue':        'issue',
+    'jn':           'journal',
+    'journal':      'journal', 
+    'keyword':      'keyword',
+    'kw':           'keyword',
+    'loc':          'location',
+    'location':     'location',
+    'mh':           'subject',
+    'out':          'outcomes',
+    'outcomes':     'outcomes',
+    'pd':           'pubdate', 
+    'page':         'pages',
+    'pages':        'pages',
+    'pg':           'pages', 
+    'registrynum':  'registrynum',
+    'rf':           'risk_factors',
+    'risk_factors': 'risk_factors',
+    'rn':           'registrynum',
+    'sh':           'subject',
+    'spec':         'species',
+    'species':      'species',
+    'subject':      'subject',
+    'ti':           'title', 
+    'title':        'title',
+    'ui':           'unique-identifier',
+    'uid':           'unique-identifier',
+    'unique-identifier':    'unique-identifier',
+    'vol':          'volume',
+    'volume':       'volume',
+    'word':         'keyword',
+    }
+    
+
+def disassemble_user_query(s):
+    """
+    Pre-process user-specified search terms so they may be more easily 
+    converted into lucene-friendly tokens.
+
+    Input can be any arbitrary string received from the UI.
+
+    Output is a single python list, where each element is either a 
+    single string (eg. 'foo'), or a two-tuple where the first item is 
+    the string to search for and the second is an abbreviated field 
+    name (eg. ('foo', 'ti')).
+
+    Note: eventually the query parser will be smart enough to support 
+    concept matching. At present the parser step defers to lucene for 
+    handling of overly-complex query strings, and hands off the output 
+    list for re-joining for lucene (see below).
+
+    Presently the PyParsing library (see documentation inside package) 
+    is used for the parsing step. This step occurs by default in 
+    SearchIndex.preprocess_query(). Preprocessing can be turned off by 
+    specifying "preprocess=False" as a parameter to SearchIndex.search().
+
+    It performs the following tasks:
+
+    * converts any of {'and', 'or', 'not'} to {'AND', 'OR', 'NOT'} in-place
+        o "foo and bar" becomes "foo AND bar"
+        o "foo and or not bar" becomes " 
+
+    * allows field specifications in the form "token [field]" or "token.field."
+        o 'foo [ti]' becomes "('foo', 'ti')"
+        o 'foo.ti.' becomes "('foo', 'ti')"
+        o Note: fields are specified elsewhere 
+    """
+    LPAREN = pyp.Literal('(')
+    RPAREN = pyp.Literal(')')
+    LBRACK = pyp.Literal('[')
+    RBRACK = pyp.Literal(']')
+    SQUOTE = pyp.Literal("'")
+    TILDE = pyp.Literal('~')
+    DOT = pyp.Literal('.')
+    AND = pyp.CaselessLiteral('AND')
+    OR  = pyp.CaselessLiteral('OR')
+    NOT = pyp.CaselessLiteral('NOT')
+    BOOLEANS = AND | OR | NOT
+    PLUS = pyp.Literal('+')
+    MINUS = pyp.Literal('-')
+    
+    # Basic word tokens (allow "'" and ":" in token)
+    WORD = ~BOOLEANS + pyp.Combine(pyp.Optional(PLUS | MINUS) + \
+        pyp.Word(pyp.alphanums + pyp.alphas8bit + "'-:") + \
+        pyp.Optional(TILDE))
+    # Leave double-quoted strings as a single token
+    wTokens = WORD | pyp.dblQuotedString
+    
+    # Fielded values in any of the forms specified above
+    bracketed_field = pyp.Suppress(LBRACK) + WORD + pyp.Suppress(RBRACK)
+    dotted_field = pyp.Suppress(DOT) + WORD + pyp.Suppress(DOT)
+    bracketed_token = pyp.Group(wTokens + \
+        pyp.Suppress(pyp.Optional(pyp.White())) + \
+        bracketed_field)
+    dotted_token = pyp.Group(wTokens + dotted_field)
+    fielded_tokens = bracketed_token | dotted_token
+    
+    tokens = fielded_tokens | wTokens
+    
+    # Boolean phrase (may nest)
+    bPhrase = pyp.Forward()
+    bPhrase << (tokens + BOOLEANS + (tokens | bPhrase))
+    
+    # Parenthetical phrase (may nest)
+    pPhrase = pyp.Forward()
+    query_tokens = tokens ^ BOOLEANS ^ bPhrase ^ pPhrase
+    pPhrase << LPAREN + pyp.OneOrMore(query_tokens) + RPAREN
+    
+    # Adding it all up
+    query = pyp.ZeroOrMore(query_tokens)
+    
+    parse_results = query.parseString(s)
+    return parse_results[:]
+
+
+def reassemble_user_query (l):
+    """
+    Input of the query re-assembly step is the list output of the 
+    parsing step. The list is joined using the following patterns:
+
+    * fielded tokens are replaced with their full "lucene form"
+        o ('foo', 'ti') becomes 'title:foo' 
+
+    Output of the query re-assembly step is a single string intended,
+    in turn, for parsing by lucene's QueryParser. 
+    """
+    out = []
+    for t in l:
+        # Re-arrange fielded tokens
+        if t.__class__ == pyp.ParseResults:
+            field = t[1].lower()
+            if field in SEARCH_FIELDS.keys():
+                t = '%s:%s' % (SEARCH_FIELDS[field], t[0])
+            else:
+                t = t[0]
+        out.append(t)
+    return ' '.join([str(x) for x in out])
 
 class Search:
 
@@ -256,6 +418,23 @@ class SearchIndex:
                     doc.add(PyLucene.Field('all', val,
                         False, True, True))
             
+            # If a page range is given, index the first page, assuming
+            # the delimiter is '-'
+            pages = mapped_metadata.get('pages', None)
+            if pages \
+                and '-' in pages:
+                first_page = pages[0:pages.index('-')]
+                print 'pages:', pages, 'first_page:', first_page
+                doc.add(PyLucene.Field('pages', first_page,
+                    False, True, True))
+                doc.add(PyLucene.Field('all', first_page,
+                    False, True, True))
+            elif pages:
+                print 'pages:', pages
+            else:
+                print 'no pages'
+            
+            
             # 'unique_identifier' must be specially treated because 
             # of the '_'
             val = mapped_metadata.get('unique_identifier', None)
@@ -349,14 +528,38 @@ class SearchIndex:
         reader.close()
 
 
-    def search (self, query_string=''):
+    def search (self, query_string='', require_visible=True,
+        allow_curated=True):
+            
         hits = []
         query_string = str(query_string)
+        print 'QS:', query_string
+        disassembled_query = disassemble_user_query(query_string)
+        print 'DQ:', disassembled_query
+        reassembled_query = reassemble_user_query(disassembled_query)
+        print 'RQ:', reassembled_query
+        
+        if not allow_curated:
+            reassembled_query += \
+                ' -record-status:%s' % canary.loader.QueuedRecord.STATUS_CURATED
+    
+        if require_visible:
+            reassembled_query += ' +article-type:[%s TO %s]' % \
+                (canary.study.Study.ARTICLE_TYPES['traditional'], 
+                canary.study.Study.ARTICLE_TYPES['curated'])
+            reassembled_query += ' +record-status:%s' % \
+                canary.loader.QueuedRecord.STATUS_CURATED
+                
+            
+        print 'FQ:', reassembled_query
+        
         try:
             searcher = PyLucene.IndexSearcher(PyLucene.FSDirectory.getDirectory(
                 self.context.config.search_index_dir, False))
             analyzer = StandardAnalyzer()
-            query = QueryParser.parse(query_string, 'all', analyzer)
+            query_parser = QueryParser('all', analyzer)
+            query_parser.setOperator(QueryParser.DEFAULT_OPERATOR_AND)
+            query = query_parser.parseQuery(reassembled_query)
             print 'Query:', query
             hits = searcher.search(query)
             return hits, searcher

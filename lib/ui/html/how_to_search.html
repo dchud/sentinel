@@ -1,26 +1,509 @@
-<h2>How to Search the Canary Database</h2>
+<h1>How to Search the Canary Database</h1>
 
 
 <p>
-Presently, the database search interface uses a general keyword
-search.  This interface will match records where keyword terms
-are found in any of the title, authors, or abstracts of curated
-studies.
+The Canary Database search interface uses several techniques
+to make searching seem to "just work."  Our goal is that
+anyone familiar with basic Pubmed or Google searching will feel
+right at home, and also that more experienced searchers will be
+able to reuse familiar syntax and techniques.
 </p>
 
 <p>
-We are actively working to improve the database model and indexing
-strategies for the Canary Database.  Because the studies we curate will
+To learn more about how to search, see:
+</p>
+
+<ul>
+<li><a href='#basic'>Basic Searching</a></li>
+<li><a href='#syntax'>Query Syntax</a></li>
+<li><a href='#fields'>Searchable Fields</a></li>
+<li><a href='#related'>Finding Related Records</a></li>
+<li><a href='#coming'>Still Under Development</a></li>
+<li><a href='#tech'>How It Works</a></li>
+</ul>
+
+<p>
+&nbsp;
+</p>
+
+<a name='basic'></a>
+<h3>Basic Searching</h3>
+<p>
+To search the Canary Database, enter any search terms in the
+search box at the top of the screen.  All search terms you
+enter will be required for a record to match.  By default,
+search terms will be matched against all available data.  See
+"<a href='#syntax'>Query Syntax</a>" and "<a href='#fields'>Searchable
+Fields</a>" to learn how to construct complex searches, and
+to search specific fields.
+</p>
+
+<p>
+The Canary Database uses several vocabularies to match different
+names of equivalent concepts.  For example, searches for "dog",
+"dogs", or "canis familiaris" should all match any record that
+has been curated with the species "Dogs".  Similarly, searches
+for either "SARS" or "severe acute respiratory syndrome" should
+both match studies curated with the exposure "SARS Virus" or
+the outcome "Severe Acute Respiratory Syndrome."  See
+"<a href='#tech'>How It Works</a>" for more information about
+the vocabularies we use.
+</p>
+
+<p>
+The search process will rank all matching records according to
+their relevance to your search terms, and the matches will be
+listed in reverse order, with the "most relevant" matches at top.
+A simple indicator of "relevance" is the blue-and-yellow bar
+you will see to the left of every record in a list of search
+results:
+</p>
+
+<div id="search-result"
+    style='background-color:#f9f9f9;margin:1em;padding:1em;border:1px dotted black;'>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td align='left' valign='top'>
+                <div class='relevance-box'>
+                    <div class="relevance" style="width: 85%"><img src='/images/pixel.gif' alt='' width='' height=''></div>
+                </div>
+            <b><a href='/record/149'>Afonso LO, Smith JL, Ikonomou MG, Devlin RH</a></b>
+            <br />
+            Y-chromosomal DNA markers for discrimination of chemical substance and effluent effects on sexual differentiation in salmon.
+            <br />
+            Environ Health Perspect 2002 Sep;110(9):881-7.
+            </td>
+        </tr>
+        <tr>
+            <td align='left' valign='top'>
+                <div class='relevance-box'>
+                    <div class="relevance" style="width: 45%"><img src='/images/pixel.gif' alt='' width='' height=''></div>
+                </div>
+            <b><a href='/record/477'>Frank DS, Mora MA, Sericano JL, Blankenship AL, Kannan K, Giesy JP</a></b>
+            <br />
+            Persistent organochlorine pollutants in eggs of colonial waterbirds from Galveston Bay and East Texas, USA.
+            <br />
+            Environ Toxicol Chem 2001 Mar;20(3):608-17.
+            </td>
+        </tr>
+    </table>
+</div>
+
+<p>
+As described, the "more relevant" record will be above "less relevant"
+records.  The farther the blue part of the bar goes to the right of
+the relevance indicator, the "more relevant" it is.  A completely-blue
+indicator means "very relevant" and the less blue (i.e. more yellow)
+an indicator is, the "less relevant" it is.
+</p>
+
+<p>
+The relevance ranking is computed by the Canary Database search
+algorithm, which boosts the importance of terms that match "Canary
+Data" curated values for exposures, outcomes, risk factors, species,
+and locations higher than all other terms.  Matching author names,
+subject headings, and keywords are also "boosted".  This means that
+if a given record has "Monkeypox" in its abstract, but not as a
+curated outcome, a search for "Monkeypox" will rank that record
+lower than a separate record that has "Monkeypox" both in its
+abstract and its curated outcomes.
+</p>
+
+<p>
+Sometimes two or more records that match the same term will have
+similar, but slightly different relevance rankings.  This can happen
+because the relevance ranking is based on a calculation which
+considers the prevalence of each term in each document, and the
+prevalence of each term in all documents.  Because of this, two
+records that both match "Monkeypox" as an outcome might have slightly
+different relevance ranks if, for example, one record lists three
+outcomes, and the other record lists five outcomes.  In the record
+with three outcomes, "Monkeypox" will "seem more important".
+</p>
+
+<p>
+It is likely that matching records with "very blue" indicators
+near the top of the list will be better matches than those with
+"very yellow" indicators near the bottom of the list.  Even so,
+relevance is a only a rough indicator, and all matching records
+are likely to have something to do with your search terms.
+</p>
+
+<p>
+<a href="#top_of_page">
+    <img src="/images/jump.gif"
+        width="19" height="13" vspace="6" border="0"
+        alt="Top of page.">
+</a>
+</p>
+
+
+<a name='syntax'></a>
+<h3>Query Syntax</h3>
+<p>
+Several standard techniques for searching are available in the
+Canary Database.  Boolean, wildcard, fielded, phrase, and proximity
+searching are all possible.  Many of these techniques can also be
+combined together.  Examples of each follow:
+</p>
+
+<table class='gentable' style='padding-left:1em;' cellspacing='0'>
+    <tr>
+        <th width='10%'>Type</th>
+        <th>Examples</th>
+        <th>Notes</th>
+    </tr>
+    <tr>
+        <th>Booleans</th>
+        <td valign='top'>
+            <p>
+            (mosquitofish or trout) and australia
+            </p>
+            <p>
+            canada not toronto
+            </p>
+            <p>
+            +tularemia -anthrax
+            </p>
+        </td>
+        <td valign='top'>
+            <p>
+            Use parentheses to specify logical grouping/precedence.
+            </p>
+            <p>
+            "and" and "or" combine terms in typical fashion.  "not"
+            requires the following term to not match.
+            </p>
+            <p>
+            Adding "+" to the left of a search term requires that value to
+            match; adding "-" to the left of a search term requires that
+            value to not match.
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <th>Wildcards</th>
+        <td valign='top'>
+            <p>
+            terror*
+            </p>
+            <p>
+            sm?th?
+            </p>
+        </td>
+        <td valign='top'>
+            <p>
+            "*" added to the right of a search term will match zero-to-many
+            characters at the end of the term (right truncation).  In this
+            example, it will match any of "terror", "terrorism", or "terrorist".
+            </p>
+            <p>
+            "?" will match zero or any one character.  In this example,
+            either "Smith" or "Smythe" will match.
+            </p>
+            <p>
+            Note that wildcards do not work at the left of a search term.
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <th>Fields</th>
+        <td valign='top'>
+            <p>
+            smith [au]
+            </p>
+            <p>
+            smith.au.
+            </p>
+            <p>
+            "beluga whale" [spec]
+            </p>
+            <p>
+            species:"beluga whale"
+            </p>
+        </td>
+        <td valign='top'>
+            <p>
+            Several familiar ways to specify a search field are available.
+            </p>
+            <p>
+            value [field] is "Pubmed-style" and works for all fields.
+            </p>
+            <p>
+            value.field. is "BRS-style" and also works for all fields.
+            </p>
+            <p>
+            See the list of <a href='#fields'>Searchable Fields</a>
+            below for complete details.
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <th>Phrase</th>
+        <td valign='top'>
+            <p>
+            "endocrine disruptors"
+            </p>
+            <p>
+            "sars virus" [exp]
+            </p>
+            <p>
+            "sleeping giant state park".loc.
+            </p>
+        </td>
+        <td valign='top'>
+            <p>
+            Use double quotes to search for a specific value with
+            multiple terms separated by spaces.
+            </p>
+            <p>
+            Note that this works with fielded search.  Quotes are
+            optional for single-term values, and can be left out.
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <th>Proximity</th>
+        <td valign='top'>
+            <p>
+            Lappivara~ [au]
+            </p>
+            <p>
+            "ebola chimpanzees"~5
+            </p>
+        </td>
+        <td valign='top'>
+            <p>
+            Using "~" after a single-word search term will match
+            spelling variations (i.e. "edit distance") in that
+            single word.
+            </p>
+            <p>
+            Using "~5" after a multi-word search phrase will match
+            multiple terms found within five words of each other
+            (i.e. "proximity").
+            </p>
+        </td>
+    </tr>
+
+</table>
+
+<p>
+<a href="#top_of_page">
+    <img src="/images/jump.gif"
+        width="19" height="13" vspace="6" border="0"
+        alt="Top of page.">
+</a>
+</p>
+
+
+<a name='fields'></a>
+<h3>Searchable Fields</h3>
+<p>
+Many fields are indexed and available for searching.  To find
+specific values for any particular field, specify the field name
+in a query like this (for an author search):
+</p>
+
+<p>
+<pre>
+    daszak.au.
+    daszak [au]
+    daszak [author]
+    author:daszak
+    "zelikoff jt".au.
+    "zelikoff jt" [AU]
+    author:"zelikoff jt"
+</pre>
+</p>
+
+<p>
+All of the above will search for the specified value in the
+author field.  Note that to search for an author name using
+both last name and initials, best results will be obtained by
+enclosing the last name and initials in double quotes.
+</p>
+
+<p>
+All available search fields are listed below.  For any particular
+field, any of the abbreviated or complete field names may be
+searched, and will yield equivalent results.
+</p>
+
+<table class='gentable' style='padding-left:1em;' cellspacing='0'>
+    <tr>
+        <th>Abbreviation(s)</th>
+        <th>Field Name</th>
+    </tr>
+    <tr>
+        <td>ab, abstract</td>
+        <td>Abstract</td>
+    </tr>
+    <tr>
+        <td>af, affiliation</td>
+        <td>Affiliation</td>
+    </tr>
+    <tr>
+        <td>all</td>
+        <td>All fields (Note: This is the default)</td>
+    </tr>
+    <tr>
+        <td>au, author</td>
+        <td>Author</td>
+    </tr>
+    <tr>
+        <td>exp, exposures</td>
+        <td>Exposures</td>
+    </tr>
+    <tr>
+        <td>gn, grantnum</td>
+        <td>Grantnum</td>
+    </tr>
+    <tr>
+        <td>issn</td>
+        <td>Issn</td>
+    </tr>
+    <tr>
+        <td>is, issue</td>
+        <td>Issue</td>
+    </tr>
+    <tr>
+        <td>jn, journal</td>
+        <td>Journal</td>
+    </tr>
+    <tr>
+        <td>kw, word, keyword</td>
+        <td>Keyword</td>
+    </tr>
+    <tr>
+        <td>loc, location</td>
+        <td>Location</td>
+    </tr>
+    <tr>
+        <td>out, outcomes</td>
+        <td>Outcomes</td>
+    </tr>
+    <tr>
+        <td>pg, page, pages</td>
+        <td>Pages</td>
+    </tr>
+    <tr>
+        <td>pd, date</td>
+        <td>Pubdate</td>
+    </tr>
+    <tr>
+        <td>rn, registrynum</td>
+        <td>Registrynum</td>
+    </tr>
+    <tr>
+        <td>rf</td>
+        <td>Risk factors</td>
+    </tr>
+    <tr>
+        <td>spec, species</td>
+        <td>Species</td>
+    </tr>
+    <tr>
+        <td>mh, sh, subject</td>
+        <td>Subject</td>
+    </tr>
+    <tr>
+        <td>ti, title</td>
+        <td>Title</td>
+    </tr>
+    <tr>
+        <td>ui, uid</td>
+        <td>Unique identifier</td>
+    </tr>
+    <tr>
+        <td>vol, volume</td>
+        <td>Volume</td>
+    </tr>
+</table>
+
+<p>
+<a href="#top_of_page">
+    <img src="/images/jump.gif"
+        width="19" height="13" vspace="6" border="0"
+        alt="Top of page.">
+</a>
+</p>
+
+<a name='related'></a>
+<h3>Finding Related Records</h3>
+<p>
+When you find a record that interests you, click on the "Related"
+tab to find links which search the database for similar records.
+Links will be available to search for more records based on
+study information such author or journal names, and on curated
+data such as species and exposures.
+</p>
+
+<p>
+Currently this is limited to search a single similar value
+(i.e. "more from this author" or "more about this species").  We
+are working to add other ways, included an advanced search screen
+where multiple "similar values to search" may be specified, and
+other algorithmic means to find "studies like this one."
+</p>
+
+<p>
+<a href="#top_of_page">
+    <img src="/images/jump.gif"
+        width="19" height="13" vspace="6" border="0"
+        alt="Top of page.">
+</a>
+</p>
+
+
+<a name='coming'></a>
+<h3>Still Under Development</h3>
+<p>
+We are continually working to improve the database model and indexing
+strategies for the Canary Database.  Because the studies we curate
 include information from a variety of abstracting and indexing sources,
-we are exploring ways to make advanced searching capabilities easy to
-use across these source records.  We expect to offer a flexible advanced
-search feature soon.
+we are exploring additional ways to make advanced searching capabilities
+easy to use across these source records.  We expect to offer a flexible
+advanced search feature soon.
+</p>
+
+<p>
+<a href="#top_of_page">
+    <img src="/images/jump.gif"
+        width="19" height="13" vspace="6" border="0"
+        alt="Top of page.">
+</a>
 </p>
 
 
+<a name='tech'></a>
+<h3>How It Works</h3>
 <p>
-You can also browse the database by
-    <a href='/browse/year'>year</a>,
-    <a href='/browse/journal'>journal</a>, or by
-    <a href='/browse/methodology'>methodology</a>.
+The Canary Database uses
+<a href='http://pylucene.osafoundation.org/'>PyLucene</a>, a Python
+version of the <a href='http://lucene.apache.org/java/docs/'>Lucene</a>
+information retrieval library, in its search interface.  Lucene is very
+flexible and very fast, and it allows us to index and search a wide
+variety of fields in curated studies.
+</p>
+
+<p>
+We use the
+<a href='http://www.nlm.nih.gov/pubs/factsheets/umlsmeta.html'>UMLS
+Metathesaurus</a> to match subject headings and species names from
+<a href='http://www.nlm.nih.gov/mesh/meshhome.html'>MeSH</a> and the
+<a href='http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=Taxonomy'>NCBI
+Taxonomy</a>, and we also cross-reference species names from
+<a href='http://www.itis.usda.gov/'>ITIS</a>.  We use the
+<a href="http://geonames.usgs.gov/gnishome.html">USGS GNIS</a> and
+<a href="http://earth-info.nga.mil/gns/html/index.html">NIMA GNS</a>
+gazeteers to curate study locations with over seven million geographic
+feature names.
+</p>
+
+<p>
+We're very grateful to the developers of Lucene and PyLucene for making
+such an excellent and sophisticated suite of tools available as Free
+Software, and also to the publishers of the vocabularies and related
+tools mentioned above, for their excellent, free-of-charge products.
 </p>
