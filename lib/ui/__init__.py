@@ -24,6 +24,7 @@ from canary.qx_utils import MyStaticFile, load_static_exports
 from canary.ui import about, admin, assistant, edit, user, record_ui
 from canary.ui.pages import _q_index, _q_exception_handler, not_found, reaper
 from canary.ui.pages import login, logout
+from canary.ui.pages import robots
 from canary.ui.browse_ui import Browse
 from canary.ui.search import search
 
@@ -47,6 +48,11 @@ def _q_lookup (request, name=''):
     elif name == 'script.js':
         return StaticFile(config.static_html_dir + '/script.js',
             mime_type='application/x-javascript', cache_time=60)
+    elif name == 'robots.txt':
+        if config.enable_robots_txt:
+            return robots()
+        else:
+            return not_found()
     elif name == 'browse':
         return Browse(request)
     else:

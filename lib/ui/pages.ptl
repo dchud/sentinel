@@ -315,6 +315,21 @@ def logout [html] (request):
     footer()
 
 
+def robots [plain] ():
+
+    request = get_request()  
+    request.response.set_content_type('text/plain')  
+ 
+    config = get_publisher().config  
+    robots_txt = config.robots_txt  
+    for agent, path_list in robots_txt.items():  
+        """User-agent: %s\n""" % agent  
+        for path in path_list:  
+            """Disallow: %s\n""" % path  
+        # A little extra whitespace, please  
+        """\n"""  
+
+
 def add_message (msg):
     """
     Add arbitrary text messages (typically warnings) to the session,

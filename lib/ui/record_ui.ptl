@@ -336,7 +336,7 @@ def render_medline [html] (mapped_metadata):
             
                 <h4>OpenURL:</h4>
                 <p>
-                <a name='id=pmid:%s' rel='alternate' title='OpenURL'> </a>
+                <a rel='Z39.88' href='?id=pmid:%s' title='OpenURL'> </a>
                 </p>
 
                 <h4>PMID: %s</h4>

@@ -88,6 +88,8 @@ class CanaryConfig (quixote.config.Config):
             'search_index_dir',
             'site_status',
             'site_status_note',
+            'enable_robots_txt',
+            'robots_txt',
             ]
 
         for var in my_vars:
