@@ -202,9 +202,18 @@ def render_methodologies [html] (study, show_actions=False):
 
     
 def render_locations [html] (study):
+    # Sort the locations by country, then region, for a nice display
     context = get_publisher().context
     gazeteer = context.get_gazeteer()
     locs = []
+    if not study.locations:
+        return
+        
+    """
+            <tr>
+                <th valign='top'>Locations</th>
+                <td>
+    """
     for location in study.locations:
         feature = Feature(uid=location.feature_id)
         feature.load(context)
@@ -212,20 +221,64 @@ def render_locations [html] (study):
             region_name = gazeteer.fips_codes[(feature.country_code, feature.adm1)]
         else:
             region_name = ''
-        locs.append('%s (%s, %s, %s)' % (feature.name, 
-            gazeteer.feature_codes[feature.feature_type],
-            render_capitalized(region_name), 
-            render_capitalized(gazeteer.country_codes[feature.country_code])))
-        # lat/long = '%.2f / %.2f' % (feature.latitude, feature.longitude),
+        name = feature.name
+        type = gazeteer.feature_codes[feature.feature_type]
+        region_name = render_capitalized(region_name)
+        country_name = render_capitalized(gazeteer.country_codes[feature.country_code])
+        locs.append(
+            ((country_name.lower(), region_name.lower(), name.lower()),
+            (name, type, region_name, country_name))
+            )
+    locs.sort()
+    current_country = current_region = ''
+
     """
-                <tr>
-                    <th valign='top'>Locations</th>
-                    <td>
+    <table class='locationtable' border='0' cellspacing='0'>
     """
-    ' <br /> '.join([str(loc) for loc in locs])
+    for loc in locs:
+        name, type, region_name, country_name = loc[1]
+        """
+        <tr>
+        """
+        if country_name == current_country:
+            if region_name == current_region:
+                """
+            <td valign='top'></td>
+            <td valign='top'></td>
+            <td style='border-bottom: 1px dashed #ddd !important;' valign='top'>%s (%s)</td>
+                """ % (name, type)
+            else:
+                """
+            <td valign='top'></td>
+            <td style='border-bottom: 1px dashed #ddd !important;' valign='top'>%s</td>
+            <td style='border-bottom: 1px dashed #ddd !important;' valign='top'>%s (%s)</td>
+                """ % (region_name, name, type)
+        else:
+            if locs.index(loc) == len(locs) - 1:
+                # Avoid the bottom dashes on the last or only items
+                """
+                <td valign='top'>%s</td>
+                <td valign='top'>%s</td>
+                <td valign='top'>%s (%s)</td>
+                """ % (country_name, region_name, name, type)
+            else:
+                """
+                <td style='border-bottom: 1px dashed #ddd !important;' valign='top'>%s</td>
+                <td style='border-bottom: 1px dashed #ddd !important;' valign='top'>%s</td>
+                <td style='border-bottom: 1px dashed #ddd !important;' valign='top'>%s (%s)</td>
+                """ % (country_name, region_name, name, type)
+        
+        """
+        </tr>
+        """
+        current_country = country_name
+        current_region = region_name
+        
     """
-                    </td>
-                </tr>
+    </table>
+    
+                </td>
+            </tr>
     """
 
 def render_metadata_header [html] (mapped_metadata, show_abstract=False):

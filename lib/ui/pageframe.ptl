@@ -177,10 +177,11 @@ def print_header [html] ():
             Canary Database, Yale School of Medicine
         </p>
         <p class="printHeader1">
-            New Haven, Connecticut 065XX, USA   
-            Tel-203.785.xxxx
+            P.O. Box 102283
+            New Haven, CT 
+            06510-2283
             <br>
-            Home URL: http://canarydb.med.yale.edu/
+            Home URL: http://canarydatabase.org/
         </p>
     </div>
     <!-- ### PRINT HEADER  -- VISIBLE ONLY FOR PRINTING ######################################### -->

@@ -424,15 +424,10 @@ class SearchIndex:
             if pages \
                 and '-' in pages:
                 first_page = pages[0:pages.index('-')]
-                print 'pages:', pages, 'first_page:', first_page
                 doc.add(PyLucene.Field('pages', first_page,
                     False, True, True))
                 doc.add(PyLucene.Field('all', first_page,
                     False, True, True))
-            elif pages:
-                print 'pages:', pages
-            else:
-                print 'no pages'
             
             
             # 'unique_identifier' must be specially treated because 
