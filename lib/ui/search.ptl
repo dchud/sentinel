@@ -112,9 +112,11 @@ def search [html] (request):
                 <area href='/search?q=%s' 
                     shape='rect'
                     coords='%s %s %s %s'
-                    alt='%s' />
+                    alt='%s'
+                    title='%s' />
                     """ % (query_str,
                         year_index*3, 0, (year_index*3)+2, 120,
+                        'limit to year %s' % year,
                         'limit to year %s' % year)
             """
             </map>

@@ -842,11 +842,12 @@ def render_record_row [html] (record, score=None):
                     <td align='left' valign='top'>
     """
     if score:
+        score_str = '%s%s' % (int(score * 100), '%')
         """
-                        <div class='relevance-box'>
-                            <div class="relevance" style="width: %s%s"><img src='/images/pixel.gif' alt='' width='' height=''></div>
+                        <div class='relevance-box' title='%s relevant'>
+                            <div class="relevance" style="width: %s"><img src='/images/pixel.gif' alt='' width='' height=''></div>
                         </div>
-        """ % (int(score * 100), '%')
+        """ % (score_str, score_str)
         
     """
                     <b><a href='/record/%s'>%s</a></b> 
