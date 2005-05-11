@@ -44,6 +44,7 @@ LOG_DIR = "/home/user/sites/canary_project/logs"
 
 STATIC_HTML_DIR = "/home/user/projects/canary/lib/ui/html"
 STATIC_IMAGE_DIR = "/home/user/projects/canary/lib/ui/images"
+TEMP_IMAGE_DIR = "/home/user/projects/canary/temp"
 
 # Use memcached?
 USE_CACHE = True

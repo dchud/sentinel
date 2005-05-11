@@ -553,15 +553,32 @@ margin: 20px 10px 20px 10px;  /*top left bottom right */
 
 
 .head-left th {
-	text-align: left;
+    text-align: left;
     padding-left: 10px;
 }
 
 .head-left td {
-	text-align: left;
+    text-align: left;
     padding-left: 10px;
 }
 
+input, textarea, select {
+    background: #fff;
+    padding: 2px;
+    border: 1px solid #777;
+    letter-spacing: -0.03em;
+}
+
+input[type=submit], input[type=button] {
+    background: #f2f2f2;
+    color: #222;
+    border: 1px outset #324362;
+    padding .1em .5em;
+}
+
+input[type=submit]:hover, input[type=button]:hover {
+    background: #fff;
+}
 
 
 #pipeline {

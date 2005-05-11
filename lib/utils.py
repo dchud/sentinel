@@ -1,8 +1,11 @@
 # misc useful utilities
 # $Id$
 
+import Image, ImageDraw
 from log4py import Logger
+import os
 import re
+import time
 
 import canary.context
 
@@ -137,3 +140,48 @@ def fix_double_quotes (s):
     s = str(s)
     s2 = s.replace('&quot;', '"')
     return s2
+    
+
+def make_sparkline (context, d):
+    """
+    For an arbitrary dictionary, make a simple sparkline with keys
+    on the x-axis and values on the y-axis.
+    """
+    config = context.config
+    max_val = float(max(d.values())) or 1
+    keys = d.keys()
+    keys.sort()
+    vals = []
+    im = Image.new("RGB", ((len(d)+2)*3, 20), 'white')
+    draw = ImageDraw.Draw(im)
+    for key in keys:
+        val = d[key]
+        vals.append(18 - int(15*(val/max_val)))
+        if val > 0:
+            x_center = keys.index(key) * 3
+            y_center = 18 - int(15*(val/max_val))
+            draw.ellipse([x_center-2, y_center-2, x_center+2, y_center+2],
+                outline='#A7C0F2', fill='#ABC6F8')
+    coords = zip([x*3 for x in range(len(d))], vals)
+    draw.line(coords, fill="#888888")
+    del draw
+
+    file_name = '%s.png' % time.time()
+    im.save('%s/%s' % (config.temp_image_dir, file_name))
+    return file_name
+
+
+def clean_temp_image_dir (context):
+    """
+    Walk through the temp_image_dir and eliminate anything
+    older than an hour.  Assumes files are named in time_millis,
+    with dot+three extensions, e.g. '1115775081.08.png'.
+    """
+    config = context.config
+    now = int(time.time())
+    interval = 60 * 60
+    for root, dirs, files in os.walk(config.temp_image_dir):
+        for file in files:
+            file_time = int(file[:file.index('.')])
+            if now - file_time >= interval:
+                os.remove('%s/%s' % (config.temp_image_dir, file))

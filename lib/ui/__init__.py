@@ -24,7 +24,7 @@ from canary.qx_utils import MyStaticFile, load_static_exports
 from canary.ui import about, admin, assistant, edit, user, record_ui
 from canary.ui.pages import _q_index, _q_exception_handler, not_found, reaper
 from canary.ui.pages import login, logout
-from canary.ui.pages import robots
+from canary.ui.pages import robots, TempImage
 from canary.ui.browse_ui import Browse
 from canary.ui.search import search
 
@@ -55,5 +55,7 @@ def _q_lookup (request, name=''):
             return not_found()
     elif name == 'browse':
         return Browse(request)
+    elif name == 'timage':
+        return TempImage()
     else:
         return not_found()

@@ -3,11 +3,13 @@
 from time import time
 
 from quixote import get_publisher, get_request, get_session_manager
-from quixote.errors import AccessError, SessionError
 from quixote import form2
+from quixote.errors import AccessError, SessionError
+from quixote.util import StaticFile
 
 from canary.qx_defs import NotLoggedInError, MyForm
 from canary.ui.pageframe import header, footer
+from canary import utils
 from canary.user import get_user_by_id
 
 
@@ -315,6 +317,26 @@ def logout [html] (request):
     footer()
 
 
+
+class TempImage:
+    
+    _q_exports = ['_q_index']
+    
+    def _q_index (self):
+        return not_found('image')
+        
+    def _q_lookup (self, request, image_id):
+        config = get_publisher().config
+        try:
+            x = StaticFile(config.temp_image_dir + '/%s' % image_id,
+                mime_type='image/png')
+            return x
+        except OSError:
+            import traceback
+            print traceback.print_exc()
+            return not_found('user')
+
+
 def robots [plain] ():
 
     request = get_request()  
@@ -371,21 +393,24 @@ def render_messages [html] ():
 def reaper [plain] (request):
 
     context = get_publisher().context
+    
+    utils.clean_temp_image_dir(context)
+    
     # FIXME: Cleaner way of handling realtime config data?
-    db_root = context.get_root()
-    # 3600 is one hour in seconds
-    if db_root.has_key('last_reaper_time') \
-        and time() - db_root['last_reaper_time'] < 3600:
-        return 'not ok: run too recently'
-
-    reap_counter = 0
-    session_mgr = get_session_manager()
-    for session_id in session_mgr.sorted_keys():
-        existing_session = session_mgr[session_id]
-        # 270000 is 75 hours in seconds, long enough to last a weekend
-        if existing_session.get_access_age() > 270000:
-            del(session_mgr[session_id])
-            reap_counter += 1
-
-    db_root['last_reaper_time'] = time()
-    return 'ok: %s session(s) reaped' % reap_counter
+    ##    db_root = context.get_root()
+    ##    # 3600 is one hour in seconds
+    ##    if db_root.has_key('last_reaper_time') \
+    ##        and time() - db_root['last_reaper_time'] < 3600:
+    ##        return 'not ok: run too recently'
+    ##
+    ##    reap_counter = 0
+    ##    session_mgr = get_session_manager()
+    ##    for session_id in session_mgr.sorted_keys():
+    ##        existing_session = session_mgr[session_id]
+    ##        # 270000 is 75 hours in seconds, long enough to last a weekend
+    ##        if existing_session.get_access_age() > 270000:
+    ##            del(session_mgr[session_id])
+    ##            reap_counter += 1
+    ##
+    ##    db_root['last_reaper_time'] = time()
+    ##    return 'ok: %s session(s) reaped' % reap_counter

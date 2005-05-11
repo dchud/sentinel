@@ -83,6 +83,7 @@ class CanaryConfig (quixote.config.Config):
             'log_dir',
             'static_html_dir',
             'static_image_dir',
+            'temp_image_dir',
             'use_cache',
             'cache_server_list',
             'search_index_dir',

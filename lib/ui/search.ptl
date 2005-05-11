@@ -4,6 +4,8 @@ _q_exports = [
     'search',
     ]
 
+import urllib
+
 from quixote import get_publisher
 from quixote import form2
 
@@ -21,7 +23,7 @@ class SearchForm (MyForm):
     def __init__ (self, context):
         MyForm.__init__(self, context, method='get')
         self.add(form2.StringWidget, 'q',
-            title='Enter one or more keywords',
+            title='Search:',
             size=30,
             required=True)
         self.add_submit('go', 'go')
@@ -48,9 +50,6 @@ def search [html] (request):
         return render()
     
     header("Search results")
-    """
-    <h3>Search results</h3>
-    """
     
     try:
         search_index = SearchIndex(context)
@@ -58,26 +57,75 @@ def search [html] (request):
         hits, searcher = search_index.search(raw_query, 
             require_visible=True)
         
-        count = hits.length()
+        result_set = []
+        for i, doc in hits:
+            uid = doc.get(str('uid'))
+            record = QueuedRecord(context, uid)
+            if record.status == record.STATUS_CURATED:
+                score = hits.score(i)
+                result_set.append((record, score))
+        searcher.close()
+        
+        year_count = {}
+        for i in range(1965, 2006):
+            year_count[i] = 0
+        for rec, score in result_set:
+            mm = rec.get_mapped_metadata(term_map=complete_term_mapping)
+            try:
+                year = int(mm['pubdate'][:4])
+                year_count[year] += 1
+            except:
+                # Somehow the first four digits of pubdate aren't YYYY
+                continue
+        image_file = utils.make_sparkline(context, year_count)
+        
+        form.render()
         """
         <p>
-        Your search: "%s", records found: %s
+        Record(s): <span style='font-weight:bold;'>%s</span>,
+        %s of hits by year:
+            <span style='font-weight:bold;font-size:x-small;'>1965</span>
+            <img border='0' src='/timage/%s' type='image/png' usemap='#sparkmap'/>
+            <span style='font-weight:bold;font-size:x-small;'>2005</span>
         </p>
-        """ % (form['q'], count)
-        
-        if count > 0:
+        """ % (len(result_set), '%', image_file)
+        if len(result_set) > 0:
+            years = year_count.keys()
+            years.sort()
+            """
+            <map name='sparkmap'>
+            """
+            for year in years:
+                count = year_count[year]
+                if count > 0:
+                    year_index = years.index(year)
+                    # Don't allow repeated clicks to grow the query forever
+                    try:
+                        if raw_query.index(str('%s[date]' % year)):
+                            #query_str = urllib.quote_plus(raw_query)
+                            query_str = raw_query
+                    except ValueError:
+                        #query_str = urllib.quote_plus(str('%s%s[date]' % \
+                        #    (raw_query, year)))
+                        query_str = '%s %s[date]' % (raw_query, year)
+                    """
+                <area href='/search?q=%s' 
+                    shape='rect'
+                    coords='%s %s %s %s'
+                    alt='%s' />
+                    """ % (query_str,
+                        year_index*3, 0, (year_index*3)+2, 120,
+                        'limit to year %s' % year)
+            """
+            </map>
+            """
+            
             """
             <div id="search-result">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
             """
-            relevance_map = {}
-            for i, doc in hits:
-                uid = doc.get(str('uid'))
-                record = QueuedRecord(context, uid)
-                if record.status == record.STATUS_CURATED:
-                    score = hits.score(i)
-                    render_record_row(record, score)
-            searcher.close()
+            for rec, score in result_set:
+                render_record_row(rec, score)
             """
                 </table>
             </div>

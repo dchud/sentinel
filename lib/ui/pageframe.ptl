@@ -102,7 +102,7 @@ def pageframe [html] ():
     """ % (config.site_status, config.site_status_note)
     """
         <tr valign="top">
-            <form action='/search' method='post'>
+            <form action='/search' method='get'>
                 <td bgcolor="#EEEDC0" colspan="2" width="725" height="32" align="left">
                     <p>
                         &nbsp; &nbsp; &nbsp; &nbsp;
