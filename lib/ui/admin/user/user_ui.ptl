@@ -110,7 +110,7 @@ def create [html] (request):
         if str(' ') in user_id:
             form.set_error('user_id', 'User id cannot contain spaces.')
         user = canary.user.get_user_by_id(context, user_id)
-        if not user:
+        if user:
             form.set_error('user_id',
                 'A user with that id already exists, please choose another.')
     if not user_email or not is_valid_email(user_email):

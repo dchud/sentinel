@@ -17,8 +17,11 @@ def get_user_by_id (context, id):
     if id == None:
         return None
     user = User(id=id)
-    user.load(context)
-    return user
+    try:
+        user.load(context)
+        return user
+    except:
+        return None
 
 
 def get_user_by_uid (context, uid):
@@ -28,8 +31,11 @@ def get_user_by_uid (context, uid):
     if uid == None:
         return None
     user = User(uid=uid)
-    user.load(context)
-    return user
+    try:
+        user.load(context)
+        return user
+    except:
+        return None
 
 def get_users (context):
     """ Return all users.  """
@@ -119,13 +125,16 @@ class User (DTable):
             if self.uid == -1:
                 insert_phrase = 'INSERT INTO %s' % self.TABLE_NAME
                 cursor.execute(insert_phrase + """
-                    (uid, id, is_active, is_admin, is_editor,
-                    name, passwd, is_assistant, email)
+                    (uid, id, name, passwd, email,
+                    is_active, is_admin, 
+                    is_editor, is_assistant)
                     VALUES 
                     (NULL, %s, %s, %s, %s,
-                    %s, %s, %s, %s)
-                    """, (self.id, self.is_active, self.is_admin, self.is_editor,
-                    self.name, self.passwd, self.is_assistant, self.email)
+                    %s, %s, 
+                    %s, %s)
+                    """, (self.id, self.name, self.passwd, self.email,
+                    int(self.is_active), int(self.is_admin), 
+                    int(self.is_editor), int(self.is_assistant))
                     )
                 self.uid = self.get_new_uid(context)
                 print 'User %s created with uid %s' % (self.id, self.uid)
@@ -133,10 +142,12 @@ class User (DTable):
                 update_phrase = 'UPDATE %s ' % self.TABLE_NAME
                 cursor.execute(update_phrase + """
                     SET id=%s, passwd=%s, name=%s, email=%s, 
-                    is_active=%s, is_admin=%s, is_assistant=%s
+                    is_active=%s, is_admin=%s, 
+                    is_editor=%s, is_assistant=%s
                     WHERE uid = %s
                     """, (self.id, self.passwd, self.name, self.email, 
-                    self.is_active, self.is_admin, self.is_assistant,
+                    int(self.is_active), int(self.is_admin), 
+                    int(self.is_editor), int(self.is_assistant),
                     self.uid)
                     )
                 print 'User %s updated' % self.id
