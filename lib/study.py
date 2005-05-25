@@ -10,8 +10,10 @@ from quixote import form2
 from quixote.html import htmltext
 
 import canary.context
+from canary.gazeteer import Feature
 from canary.qx_defs import MyForm
-from canary.utils import DTable
+from canary.utils import DTable, render_capitalized
+
 
 
 class ExposureRoute (DTable):
@@ -1591,6 +1593,32 @@ class Study (canary.context.Cacheable, DTable):
             if loc.feature_id == feature.uid:
                 return loc
         return None
+        
+    def get_locations_sorted (self, context):
+        """
+        For a set of canary record locations, return them in sort order
+        by lower((country_name, region_name, feature_name)).
+        """
+        gazeteer = context.get_gazeteer()
+        locs = []
+        for location in self.locations:
+            feature = Feature(uid=location.feature_id)
+            feature.load(context)
+            if gazeteer.fips_codes.has_key((feature.country_code, feature.adm1)):
+                region_name = gazeteer.fips_codes[(feature.country_code, feature.adm1)]
+            else:
+                region_name = ''
+            name = feature.name
+            type = gazeteer.feature_codes[feature.feature_type]
+            region_name = render_capitalized(region_name)
+            country_name = render_capitalized(gazeteer.country_codes[feature.country_code])
+            locs.append(
+                ((country_name.lower(), region_name.lower(), name.lower()),
+                (name, type, region_name, country_name))
+                )
+        locs.sort()
+        return locs
+
 
     def add_history (self, uid=-1, curator_user_id='', message='', modified=''):
         """

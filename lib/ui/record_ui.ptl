@@ -13,7 +13,6 @@ from canary.qx_defs import NotLoggedInError
 from canary.study import Study
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found
-from canary.utils import render_capitalized
 
 
 _q_exports = [
@@ -205,7 +204,6 @@ def render_locations [html] (study):
     # Sort the locations by country, then region, for a nice display
     context = get_publisher().context
     gazeteer = context.get_gazeteer()
-    locs = []
     if not study.locations:
         return
         
@@ -214,24 +212,9 @@ def render_locations [html] (study):
                 <th valign='top'>Locations</th>
                 <td>
     """
-    for location in study.locations:
-        feature = Feature(uid=location.feature_id)
-        feature.load(context)
-        if gazeteer.fips_codes.has_key((feature.country_code, feature.adm1)):
-            region_name = gazeteer.fips_codes[(feature.country_code, feature.adm1)]
-        else:
-            region_name = ''
-        name = feature.name
-        type = gazeteer.feature_codes[feature.feature_type]
-        region_name = render_capitalized(region_name)
-        country_name = render_capitalized(gazeteer.country_codes[feature.country_code])
-        locs.append(
-            ((country_name.lower(), region_name.lower(), name.lower()),
-            (name, type, region_name, country_name))
-            )
-    locs.sort()
+    
+    locs = study.get_locations_sorted(context)
     current_country = current_region = ''
-
     """
     <table class='locationtable' border='0' cellspacing='0'>
     """
@@ -501,24 +484,21 @@ def render_related [html] (study, mapped_metadata):
                 </p>
             </td>
             """
+            
     if study.locations:
         """
         <td align='left' valign='top'>
             <h4>Locations</h4>
             <p>
         """
-        for loc in study.locations:
-            feature = Feature(uid=loc.feature_id)
-            feature.load(context)
-            if gazeteer.fips_codes.has_key((feature.country_code, feature.adm1)):
-                region_name = render_capitalized(gazeteer.fips_codes[(feature.country_code, feature.adm1)])
-            else:
-                region_name = ''
-            country_name = render_capitalized(gazeteer.country_codes[feature.country_code])
+        locs = study.get_locations_sorted(context)
+        current_country = current_region = ''
+        for loc in locs:
+            name, type, region_name, country_name = loc[1]
             """
-                <a href='/search?q=location:"%s"+location:"%s"+location:"%s"'>%s (%s, %s)</a> <br />
-            """ % (feature.name, region_name, country_name,
-                feature.name, region_name, country_name)
+                <a href='/search?q=location:"%s"+or+location:"%s"+or+location:"%s"'>%s (%s, %s)</a> <br />
+            """ % (name, region_name, country_name,
+                name, region_name, country_name)
         """
             </p>
         </td>
