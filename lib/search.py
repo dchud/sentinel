@@ -15,6 +15,7 @@ from canary.utils import render_capitalized
 
 # All possible search fields, indexed by all valid forms.
 SEARCH_FIELDS = {
+    '1au':          'first-author',
     'ab':           'abstract',
     'abstract':     'abstract',
     'af':           'affiliation', 
@@ -61,7 +62,7 @@ SEARCH_FIELDS = {
     'ti':           'title', 
     'title':        'title',
     'ui':           'unique-identifier',
-    'uid':           'unique-identifier',
+    'uid':          'unique-identifier',
     'unique-identifier':    'unique-identifier',
     'vol':          'volume',
     'volume':       'volume',
@@ -452,6 +453,18 @@ class SearchIndex:
                         False, True, True)
                     f.setBoost(1.3)
                     doc.add(f)
+            
+            # If at least one author name is available, index the first
+            # author to support first-author searching.  Also, boost it
+            # slightly higher than the other authors.
+            authors = mapped_metadata.get('author', None)
+            if authors:
+                doc.add(PyLucene.Field('first-author', authors[0],
+                    False, True, True))
+                f = PyLucene.Field('all', authors[0],
+                    False, True, True)
+                f.setBoost(1.5)
+                doc.add(f)
 
             
             # All the booleans
@@ -471,12 +484,11 @@ class SearchIndex:
             # slightly bigger boost than keywords/subjects
             for ctype in ('exposures', 'outcomes', 'risk_factors',
                 'species'):
+                # NOTE: I think lucene dislikes '_' in field names ??
+                ctype.replace('_', '-')
                 for val in getattr(study, ctype):
-                    #print 'finding %s concepts for %s' % (ctype, val.term)
                     concept = Concept(self.context, val.concept_id)
                     for syn in concept.synonyms:
-                        #print 'add synonym "%s" for term "%s"' % \
-                        #    (syn, concept.term)
                         doc.add(PyLucene.Field(ctype, unicode(syn, 'latin-1'),
                             False, True, True))
                         f = PyLucene.Field('all', unicode(syn, 'latin-1'),
