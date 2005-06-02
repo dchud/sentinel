@@ -12,6 +12,7 @@ _q_exports = [
 import sys
 
 from quixote import get_publisher
+from quixote.util import StaticFile
 
 from canary.qx_defs import NotLoggedInError
 from canary.qx_utils import MyStaticFile, load_static_exports
@@ -39,5 +40,12 @@ for file, path in html_files:
 
 
 def _q_lookup (request, name=''):
-    return not_found()
+    if name == 'ecohealth-2005-animals.pdf':
+        return StaticFile(config.static_html_dir + '/ecohealth-2005-animals.pdf', 
+            mime_type='application/pdf')
+    elif name == 'ecohealth-2004-outfoxing.pdf':
+        return StaticFile(config.static_html_dir + '/ecohealth-2004-outfoxing.pdf', 
+            mime_type='application/pdf')
+    else:
+        return not_found()
 
