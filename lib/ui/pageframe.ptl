@@ -193,9 +193,14 @@ def sidebar [html] ():
         <!-- ### SCAN COLUMN MENU  ################################################################# -->
         <div id="nav-buttons">
             <p>Browse by</p>
-            <a href="/browse/year">Year</a>
+            <a href="/browse/author">Author</a>
+            <a href="/browse/exposure">Exposure</a>
             <a href="/browse/journal">Journal</a>
             <a href="/browse/methodology">Methodology</a>
+            <a href="/browse/outcome">Outcome</a>
+            <a href="/browse/risk_factor">Risk Factor</a>
+            <a href="/browse/species">Species</a>
+            <a href="/browse/year">Year</a>
             
             <p>Using the Database</p>
             <a href="/about/description">Description</a>

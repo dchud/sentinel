@@ -230,3 +230,130 @@ def records_by_year_index (context, term_map={}):
         results.append((row[0], row[1]))
     context.close_cursor(cursor)
     return results
+
+
+def records_by_author (context, author):
+    cursor = context.get_cursor()
+    queued_records = []
+    source_catalog = context.get_source_catalog()
+    complete_mapping = source_catalog.get_complete_mapping()
+    term_list = complete_mapping['author']
+    term_clause = ' OR '.join(['queued_record_metadata.term_id=%s' % term.uid for term in term_list])
+    
+    try:
+        select_clause = """
+            SELECT queued_records.uid
+            FROM queued_records, queued_record_metadata, studies
+            WHERE queued_records.uid = queued_record_metadata.queued_record_id
+            AND queued_records.uid = studies.record_id
+            AND queued_records.status = 2
+            AND studies.article_type >= 2
+            AND studies.article_type < 8
+            AND (%s)
+            """ % term_clause
+        cursor.execute(select_clause + """
+            AND value LIKE %s
+            """, str(author) + '%'
+            )
+        rows = cursor.fetchall()
+        for row in rows:
+            queued_record = QueuedRecord(context, row[0])
+            queued_records.append(queued_record)
+    except:
+        import traceback
+        print traceback.print_exc()
+        
+    context.close_cursor(cursor)
+    return queued_records
+
+
+def records_by_author_index (context):
+    cursor = context.get_cursor()
+    results = []
+    source_catalog = context.get_source_catalog()
+    complete_mapping = source_catalog.get_complete_mapping()
+    term_list = complete_mapping['author']
+    term_clause = ' OR '.join(['term_id=%s' % term.uid for term in term_list])
+    
+    select_clause = """
+        SELECT COUNT(*) AS the_count, value
+        FROM queued_record_metadata, queued_records, studies
+        WHERE queued_record_metadata.queued_record_id = queued_records.uid
+        AND queued_records.uid = studies.record_id
+        AND queued_records.status = 2
+        AND studies.article_type >= 2
+        AND studies.article_type < 8
+        AND (%s)
+        GROUP BY value
+        ORDER BY value
+        """ % term_clause
+    cursor.execute(select_clause)
+    rows = cursor.fetchall()
+    results.extend([(r[0], r[1]) for r in rows])
+    context.close_cursor(cursor)
+    return results
+
+
+
+
+
+concept_tables = {
+    'exposure': 'exposures',
+    'outcome':  'outcomes',
+    'species':  'species',
+    'risk_factor':  'risk_factors',
+    }
+
+
+def records_by_concept (context, concept, concept_id):
+    cursor = context.get_cursor()
+    queued_records = []
+    table_name = concept_tables[concept]
+    try:
+        select_clause = """
+            SELECT queued_records.uid
+            FROM queued_records, studies, %s
+            WHERE %s.study_id = studies.uid
+            AND studies.record_id = queued_records.uid
+            AND %s.concept_id = %s
+            AND queued_records.status = 2
+            AND studies.article_type >= 2
+            AND studies.article_type < 8
+            """ % (table_name, 
+                table_name,
+                table_name, concept_id)
+        cursor.execute(select_clause)
+        rows = cursor.fetchall()
+        for row in rows:
+            queued_record = QueuedRecord(context, row[0])
+            queued_records.append(queued_record)
+    except:
+        import traceback
+        print traceback.print_exc()
+        
+    context.close_cursor(cursor)
+    return queued_records
+    
+
+def records_by_concept_index (context, concept):
+    cursor = context.get_cursor()
+    results = []
+    table_name = concept_tables[concept]
+    
+    select_clause = """
+        SELECT COUNT(concept_id) AS the_count, concept_id, term
+        FROM %s, studies, queued_records
+        WHERE %s.study_id = studies.uid
+        AND studies.record_id = queued_records.uid
+        AND queued_records.uid = studies.record_id
+        AND queued_records.status = 2
+        AND studies.article_type >= 2
+        AND studies.article_type < 8
+        GROUP BY concept_id
+        ORDER BY term
+        """ % (table_name, table_name)
+    cursor.execute(select_clause)
+    rows = cursor.fetchall()
+    results.extend([(r[0], r[1], r[2]) for r in rows])
+    context.close_cursor(cursor)
+    return results

@@ -1,18 +1,26 @@
 # $Id$
 
+import string
+import traceback
 import urllib
 
-from quixote import get_publisher
+from quixote import get_publisher, get_request
+from quixote.html import htmltext
 
 from canary.browse import records_by_year, records_by_year_index
 from canary.browse import records_by_heading, records_by_heading_index
 from canary.browse import records_by_journal, records_by_journal_index
 from canary.browse import records_by_methodology, records_by_methodology_index
+from canary.browse import records_by_author, records_by_author_index
+from canary.browse import records_by_concept, records_by_concept_index
+from canary.concept import Concept
 from canary.qx_defs import NotLoggedInError
 from canary.study import Methodology
 from canary.ui.pages import not_found
 from canary.ui.pageframe import header, footer
 from canary.ui.record_ui import render_record_row
+from canary import utils
+
 
 class Browse:
 
@@ -29,11 +37,9 @@ class Browse:
         <h2>Browse</h2>
         
         <p>
-        You can browse the database by <a href='/browse/year'>year</a>,
-        <a href='/browse/journal'>journal</a>,
-        <a href='/browse/methodology'>study methodology</a>,
-        or by <a href='/browse/heading'>subject heading</a>.
-        
+        You can browse the database by clicking on the available 
+        indexes under "Browse by" at left.
+        </p>
         """
         footer()
     
@@ -47,7 +53,20 @@ class Browse:
                 return JournalBrowseIndex(request)
             elif name == 'methodology':
                 return MethodologyBrowseIndex(request)
+            elif name == 'author':
+                return AuthorBrowseIndex(request)
+            elif name == 'exposure':
+                return ConceptBrowseIndex(request, 'exposure')
+            elif name == 'outcome':
+                return ConceptBrowseIndex(request, 'outcome')
+            elif name == 'species':
+                return ConceptBrowseIndex(request, 'species')
+            elif name == 'risk_factor':
+                return ConceptBrowseIndex(request, 'risk_factor')
+            else:
+                raise 'NotFoundError'
         except:
+            print traceback.print_exc()
             return not_found('index')
             
 
@@ -58,18 +77,209 @@ class BrowseIndex:
         '_q_index',
         ]
     
+    # Subclasses can be sorted by any of these attributes
+    SORT_FIELDS = ['year']
+    
+    # Subclasses are sorted by default by this attribute
+    SORT_FIELD_DEFAULT = 'year'
+    
+    # Subclasses are sorted by default in this order
+    SORT_BY_DESCENDING = True
+
+    # Supported pager sizes; anything else will be ignored
+    ALLOWED_SIZES = (10, 25, 50, 100)
+
     def __init__ (self):
         self.type = 'superclass'
         
     def _q_index [html] (self, request):
         pass
         
-    def render_records [html] (self, name, records):
-        header('Browse by %s: %s' % (self.type.capitalize(), name))
+    def get_pager_params (self):
+        """
+        Fetch requested or provide default pager parameters, ignoring
+        improper value types.
+        """
+        request = get_request()
+        params = {}
+        
+        try:
+            params['size'] = int(request.get_form_var('size', 10))
+            if not params['size'] in self.ALLOWED_SIZES:
+                raise ValueError
+        except ValueError:
+            params['size'] = 10
+            
+        try:
+            params['start'] = int(request.get_form_var('start', 0))
+        except ValueError:
+            params['start'] = 0
+            
+        try:
+            sort_by = str(request.get_form_var('sort_by', 
+                self.SORT_FIELD_DEFAULT))
+            if sort_by in self.SORT_FIELDS:
+                params['sort_by'] = sort_by
+            else:
+                raise ValueError
+        except ValueError:
+            params['sort_by'] = self.SORT_FIELD_DEFAULT
+        
+        try:
+            sort_desc = int(request.get_form_var('sort_desc', 
+                int(self.SORT_BY_DESCENDING)))
+            if sort_desc in (0, 1):
+                params['sort_desc'] = sort_desc
+            else:
+                raise ValueError
+        except ValueError:
+            params['sort_desc'] = int(self.SORT_BY_DESCENDING)
+            
+        return params
 
+
+    def pager [html] (self, records, params={}):
+        
+        p = params
+        total = len(records)
+       
+        # total number of pages, by size, in this list
+        num_pages = total / p['size']
+        remainder = total % p['size']
+        if remainder:
+            num_pages += 1
+    
+        # currently viewed page, as determined by size, within this list
+        cur_page = p['start'] / p['size']
+        """
+        <p>
+        """
+        # no need to show the pager if there's only one page
+        if num_pages > 1:
+            """
+            Go to: 
+            """
+            for i in range(0, num_pages):
+                start = str((i * p['size']) + 1)
+                if remainder \
+                    and (i+1) == num_pages:
+                    end = str((i * p['size']) + remainder)
+                else:
+                    end = str((i + 1) * p['size'])
+                text = start + '-' + end
+                if i != cur_page:
+                    ' [<a href="?start=%s&size=%s&sort_by=%s&sort_desc=%s">%s</a>] ' % \
+                        (i * p['size'], p['size'], p['sort_by'], p['sort_desc'], text)
+                else:
+                    ' [<b>%s</b>] ' % text
+            
+            """
+            <br />
+
+            Show:
+            """    
+            sizes = [min(self.ALLOWED_SIZES)]
+            if total > max(self.ALLOWED_SIZES):
+                sizes.extend(self.ALLOWED_SIZES[1:])
+            else:
+                # Don't show "group by 100" if there are only 13 records
+                for bigger_size in self.ALLOWED_SIZES[1:]:
+                    if not max(sizes) > total:
+                        sizes.append(bigger_size)
+                
+            for s in sizes:
+                text = s
+                if s == total:
+                    text = 'all'
+                    
+                if p['size'] == s:
+                    ' [<b>%s</b>] ' % text
+                else:
+                    ' [<a href="?size=%s&sort_by=%s&sort_desc=%s">%s</a>] ' % \
+                        (s,  p['sort_by'], p['sort_desc'], text)
+            """
+            per page
+            """
+            
+
+            
+        if len(records) >= 2:
+            """
+            <br />
+            Sort by:
+            """
+            for sort_field in self.SORT_FIELDS:
+                if sort_field == p['sort_by']:
+                    ' [<b>%s</b>] ' % sort_field
+                else:
+                    ' [<a href="?size=%s&sort_by=%s&sort_desc=%s">%s</a>] ' % \
+                        (p['size'], sort_field, p['sort_desc'], sort_field)
+            
+            """
+            &nbsp;-&nbsp;
+            """
+            if p['sort_desc']:
+                ' [<a href="?size=%s&sort_by=%s&sort_desc=0">A-Z</a>] ' % \
+                    (p['size'], p['sort_by'])
+                ' [<b>Z-A</b>] '
+            else:
+                ' [<b>A-Z</b>] '
+                ' [<a href="?size=%s&sort_by=%s&sort_desc=1">Z-A</a>] ' % \
+                    (p['size'], p['sort_by'])
+            
+        """
+        </p>
+        """
+
+
+    
+    def letter_index [html] (self, values, current_value=None, text='',
+        show_numbers=False):
+        # Generate a browse-by-letter index view 
+        lindex = {}
+        for c in range(65, 91):
+            lindex[chr(c)] = 0
+        if show_numbers:
+            for i in range(0,10):
+                lindex[str(i)] = 0
+                
+        for val in [v[0].capitalize() for v in values]:
+            lindex[val] += 1
+        
+        """
+        <p>
+        %s
+        """ % text or 'Starting with:'
+        
+        keys = lindex.keys()
+        keys.sort()
+        for key in keys:
+            if lindex[key]:
+                if key == current_value.upper():
+                    """
+                    [<b>%s</b>]
+                    """ % key
+                else:
+                    """
+                    [<a href='?l=%s'>%s</a>]
+                    """ % (key, key)
+            else:
+                """
+                %s
+                """ % key
+        
+        """
+        </p>
+        """
+
+    def render_records [html] (self, name, records):
+        context = get_publisher().context
+        source_catalog = context.get_source_catalog()
+        complete_term_mapping = source_catalog.get_complete_mapping()
+        
+        header('Browse by %s: %s' % (self.type.capitalize(), name))
         count = len(records)
         if count > 0:
-    
             if count == 1:
                 article_text = 'article'
             else:
@@ -78,17 +288,96 @@ class BrowseIndex:
             """
             <h2><a href='/browse/%s'>Browse by %s</a>: %s (%s %s)</h2>
             """ % (self.type, self.type.capitalize(), name, count, article_text)
-    
-            """
-            <div id="search-result">
-                <table width='100%' border='0' cellspacing='0' cellpadding='0'>
-            """
-            for record in records:
-                render_record_row(record)
-            """
-                </table>
-            </div>
-            """
+            
+            try:
+                year_count = {}
+                for i in range(1965, 2006):
+                    year_count[i] = 0
+                for rec in records:
+                    mm = rec.get_mapped_metadata(term_map=complete_term_mapping)
+                    try:
+                        year = int(mm['pubdate'][:4])
+                        year_count[year] += 1
+                    except:
+                        # Somehow the first four digits of pubdate aren't YYYY
+                        continue
+                image_file = utils.make_sparkline(context, year_count)
+
+                """
+                <p>
+                %s of records by year:
+                    <span style='font-weight:bold;font-size:x-small;'>1965</span>
+                    <img border='0' src='/timage/%s' type='image/png' usemap='#sparkmap'/>
+                    <span style='font-weight:bold;font-size:x-small;'>2005</span>
+                </p>
+                """ % ('%', image_file)
+                
+                years = year_count.keys()
+                years.sort()
+                """
+                <map name='sparkmap'>
+                """
+                for year in years:
+                    count = year_count[year]
+                    if count > 0:
+                        year_index = years.index(year)
+                        query_str = '"%s" [%s] %s [date]' \
+                            % (name, self.type, year)
+                        """
+                    <area href='/search?q=%s' 
+                        shape='rect'
+                        coords='%s %s %s %s'
+                        alt='%s'
+                        title='%s' />
+                        """ % (query_str,
+                            year_index*3, 0, (year_index*3)+2, 120,
+                            'limit to year %s' % year,
+                            'limit to year %s' % year)
+                """
+                </map>
+                """
+                
+                p = self.get_pager_params()
+                self.pager(records, params=p)
+                """
+                <div id="search-result">
+                    <table width='100%' border='0' cellspacing='0' cellpadding='0'>
+                """
+                sort_by = p['sort_by']
+                complete_term_map = source_catalog.get_complete_mapping()
+                records_sorted = []
+                for record in records:
+                    mm = record.get_mapped_metadata(complete_term_map)
+                    if sort_by == 'year':
+                        sort_value = mm[str('pubdate')][:4]
+                    elif sort_by == 'source':
+                        sort_value = mm[str('source')].lower()
+                    elif sort_by == '1au':
+                        authors = mm[str('author')]
+                        if authors:
+                            sort_value = authors[0].lower()
+                        else:
+                            sort_value = ''
+                    else:
+                        pass
+                    records_sorted.append((sort_value, record))
+                        
+                records_sorted.sort()
+                if p['sort_desc']:
+                    records_sorted.reverse()
+                    
+                start = p['start']
+                end = start + p['size']
+                for sort_val, rec in records_sorted[start:end]:
+                    render_record_row(rec)
+                """
+                    </table>
+                </div>
+                """
+                self.pager(records, params=p)
+            except:
+                print traceback.print_exc()
+                return not_found(self.type)
         else:
             return not_found(self.type)
             
@@ -103,6 +392,12 @@ class YearBrowseIndex (BrowseIndex):
         '_q_index',
         ]
         
+    SORT_FIELDS = ['source', '1au']
+    
+    SORT_FIELD_DEFAULT = '1au'
+    
+    SORT_BY_DESCENDING = False
+    
     def __init__ (self, request):
         self.type = 'year'
         
@@ -157,7 +452,6 @@ class YearBrowseIndex (BrowseIndex):
             else:
                 raise Error
         except:
-            import traceback
             print traceback.print_exc()
             return not_found(self.type)
             
@@ -237,7 +531,13 @@ class JournalBrowseIndex (BrowseIndex):
     _q_exports = [
         '_q_index',
         ]
-        
+    
+    SORT_FIELDS = ['year', '1au']
+    
+    SORT_FIELD_DEFAULT = 'year'
+    
+    SORT_BY_DESCENDING = True
+    
     def __init__ (self, request):
         self.type = 'journal'
         
@@ -245,13 +545,27 @@ class JournalBrowseIndex (BrowseIndex):
 
         header('Browse by %s' % self.type.capitalize())
         """
-        <h2>Browse by Journal</h2>
-    
-        <p>
-    Below is a list of the number of articles in the Canary Database by the
-    journal in which the articles appear.
-        </p>
-    
+        <h2><a href='/browse/journal'>Browse by Journal</a></h2>
+        """
+        
+        context = get_publisher().context
+        source_catalog = context.get_source_catalog()
+        complete_term_map = source_catalog.get_complete_mapping()
+        results = records_by_journal_index(context, complete_term_map)
+        values = [r[2] for r in results]
+        try:
+            l = str(request.get_form_var('l', 'A')).upper()
+            if not len(l) == 1 \
+                or not l in string.ascii_uppercase:
+                raise ValueError
+        except ValueError:
+            l = 'A'
+        self.letter_index(values, l, text='Journals by letter:')
+        if l:
+            results = [r for r in results if r[2][0].upper() == l]
+                        
+        
+        """
         <div id="table-list">
             <table cellspacing='3'>
                 <tr>
@@ -260,10 +574,6 @@ class JournalBrowseIndex (BrowseIndex):
                 </tr>
         """
         
-        context = get_publisher().context
-        source_catalog = context.get_source_catalog()
-        complete_term_map = source_catalog.get_complete_mapping()
-        results = records_by_journal_index(context, complete_term_map)
         for result in results:
             count, issn, title, abbr = result
             if str('.') in title:
@@ -308,6 +618,12 @@ class JournalBrowseIndex (BrowseIndex):
 
 class MethodologyBrowseIndex (BrowseIndex):
         
+    SORT_FIELDS = ['year', 'source', '1au']
+
+    SORT_FIELD_DEFAULT = 'year'
+    
+    SORT_BY_DESCENDING = True
+
     def __init__ (self, request):
         self.type = 'methodology'
         
@@ -374,3 +690,181 @@ class MethodologyBrowseIndex (BrowseIndex):
             
     
 
+
+class AuthorBrowseIndex (BrowseIndex):
+    
+    _q_exports = [
+        '_q_index',
+        ]
+    
+    SORT_FIELDS = ['year', 'source', '1au']
+    
+    SORT_FIELD_DEFAULT = 'year'
+    
+    SORT_BY_DESCENDING = True
+    
+    def __init__ (self, request):
+        self.type = 'author'
+        
+    def _q_index [html] (self, request):
+
+        header('Browse by %s' % self.type.capitalize())
+        """
+        <h2><a href='/browse/author'>Browse by Author</a></h2>
+        """
+        
+        context = get_publisher().context
+        results = records_by_author_index(context)
+        values = [r[1] for r in results]
+        try:
+            l = str(request.get_form_var('l', 'A')).upper()
+            # Only accept actual letters.
+            if not len(l) == 1 \
+                or not l in string.ascii_uppercase:
+                raise ValueError
+        except ValueError:
+            l = 'A'
+        self.letter_index(values, l, text='Authors by letter:')
+        if l:
+            results = [r for r in results if r[1][0].upper() == l]
+                        
+        if results:
+            """
+            <div id="table-list">
+                <table cellspacing='3'>
+                    <tr>
+                        <th align='center' width='75'># articles</th>
+                        <th align='left'>Author</th>
+                    </tr>
+            """
+            
+            for result in results:
+                count, author = result
+                """
+                    <tr>
+                        <td style='text-align:center;'>%s</td>
+                        <td style='text-align:left'><a href='/browse/author/%s'>%s</a></td>
+                    </tr>
+                """ % (count, author, author)
+                
+            """
+                </table>
+            </div>
+            """
+        else:
+            """
+            <p>
+            No authors found starting with that letter.
+            </p>
+            """
+        footer()
+        
+
+    def _q_lookup (self, request, author=''):
+        context = get_publisher().context
+        try:
+            if author:
+                records = records_by_author(context, author)
+                if len(records) == 0:
+                    raise Exception('No records found')
+                return self.render_records(author, records)
+        except:
+            import traceback
+            print traceback.print_exc()
+            return not_found(self.type)
+
+
+
+class ConceptBrowseIndex (BrowseIndex):
+    
+    _q_exports = [
+        '_q_index',
+        ]
+    
+    SORT_FIELDS = ['year', 'source', '1au']
+    
+    SORT_FIELD_DEFAULT = 'year'
+    
+    SORT_BY_DESCENDING = True
+    
+    def __init__ (self, request, concept):
+        self.type = concept
+        
+    def _q_index [html] (self, request):
+
+        context = get_publisher().context
+        display_type = self.type.replace(str('_'), str(' ')).capitalize()
+        
+        header('Browse by %s' % display_type)
+        """
+        <h2><a href='/browse/%s'>Browse by %s</a></h2>
+        """ % (self.type, display_type)
+        
+        results = records_by_concept_index(context, self.type)
+        values = [r[2] for r in results]
+        try:
+            l = str(request.get_form_var('l', 'A')).upper()
+            # Only accept actual letters or numbers.
+            if not len(l) == 1 \
+                or not l in string.ascii_uppercase + string.digits:
+                raise ValueError
+        except ValueError:
+            l = 'A'
+        
+        # We don't want to see leading numbers for anything but exposures
+        show_numbers = False
+        if self.type == 'exposure':
+            show_numbers = True
+            
+        self.letter_index(values, l, text='%s by letter:' % self.type, 
+            show_numbers=show_numbers)
+
+        if l:
+            results = [r for r in results if r[2][0].upper() == l]
+                        
+        if results:
+            """
+            <div id="table-list">
+                <table cellspacing='3'>
+                    <tr>
+                        <th align='center' width='75'># articles</th>
+                        <th align='left'>%s</th>
+                    </tr>
+            """ % display_type
+            
+            for result in results:
+                count, concept_id, term = result
+                """
+                    <tr>
+                        <td style='text-align:center;'>%s</td>
+                        <td style='text-align:left'><a href='/browse/%s/%s'>%s</a></td>
+                    </tr>
+                """ % (count, self.type, concept_id, term)
+                
+            """
+                </table>
+            </div>
+            """
+        else:
+            """
+            <p>
+            No %s found starting with that letter.
+            </p>
+            """ % display_type
+        footer()
+        
+
+    def _q_lookup (self, request, concept_id=''):
+        context = get_publisher().context
+        try:
+            concept_id = int(concept_id)
+            if concept_id:
+                records = records_by_concept(context, self.type, concept_id)
+                if len(records) == 0:
+                    raise Exception('No records found')
+                concept = Concept(context, concept_id)
+                return self.render_records(concept.term, records)
+        except:
+            import traceback
+            print traceback.print_exc()
+            return not_found(self.type)

@@ -352,7 +352,7 @@ def pager [html] (batch, show, start, size, stats):
                 end = str((i + 1) * size)
             text = start + '-' + end
             if i != cur_page:
-                ' [<a href="view?start=%s&size=%s&show=%s">%s</a>] ' % \
+                ' [<a href="?start=%s&size=%s&show=%s">%s</a>] ' % \
                     (i * size, size, show, text)
             else:
                 ' [<b>%s</b>] ' % text

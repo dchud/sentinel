@@ -14,8 +14,9 @@ from canary.loader import QueuedRecord
 from canary.qx_defs import MyForm
 from canary.search import Search, SearchIndex
 from canary.study import Study
-from canary.ui.record_ui import render_record_row
+from canary.ui.browse_ui import BrowseIndex
 from canary.ui.pageframe import header, footer
+from canary.ui.record_ui import render_record_row
 from canary import utils
 
 class SearchForm (MyForm):
@@ -24,7 +25,7 @@ class SearchForm (MyForm):
         MyForm.__init__(self, context, method='get')
         self.add(form2.StringWidget, 'q',
             title='Search:',
-            size=30,
+            size=50,
             required=True)
         self.add_submit('go', 'go')
 

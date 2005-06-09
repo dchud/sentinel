@@ -71,13 +71,21 @@ def _q_index [html] (request):
 
     <div class='news'>
         <div class='news-head'>
-            Beta tester questionnaire
+            Project News
         </div>
-        <h3>Attention beta testers!</h3>
+        <h3>Related Articles by Canary Database staff</h3>
         <p>
-        Please fill out <a href='/about/questionnaire'>this questionnaire</a>. 
-        Your continuing support and feedback helps us to improve 
-        the site.
+        Our article, "<a href='/about/ecohealth-2005-animals.pdf'>Animals as
+        Sentinels of Human Environmental Health Hazards: An Evidence-Based
+        Analysis</a>," was recently published as Ecohealth 2(1):26-27,
+        2005.
+        </p>
+        
+        <p>
+        Previously, "<a href='/about/ecohealth-2004-outfoxing.pdf'>Outfoxing a
+        Rash: Clinical Example of Human-Wildlife Interaction</a>," by
+        Canary Database curators Rabinowitz and Gordon, was published as
+        Ecohealth 1(4):404-407, 2004.
         </p>
         
     </div>
@@ -184,12 +192,13 @@ def _q_exception_handler [html] (request=None, exc):
         
     else:
         
-        header('Error')
+        header('Oops!')
         """
-        <h2>An error occured</h2>
+        <h2>Oops!</h2>
         <p>
-        Something went wrong.  Perhaps you requested a page that doesn't
-        exist, or once existed, but has since been eaten by the canary.
+        Sorry, we were unable to understand your request.  Perhaps you 
+        asked for a page that doesn't exist, or perhaps it once existed, 
+        but was eaten by the canary.
         </p>
         """
         footer()
