@@ -468,7 +468,7 @@ def render_related [html] (study, mapped_metadata):
             </td>
     """ % (mapped_metadata['issn'], mapped_metadata['journal'])
     
-    for concept in ('exposures', 'outcomes', 'species'):
+    for concept in ('exposures', 'outcomes', 'species', 'risk_factors'):
         items = getattr(study, str(concept))
         if items:
             """
@@ -496,7 +496,7 @@ def render_related [html] (study, mapped_metadata):
         for loc in locs:
             name, type, region_name, country_name = loc[1]
             """
-                <a href='/search?q=location:"%s"+or+location:"%s"+or+location:"%s"'>%s (%s, %s)</a> <br />
+                <a href='/search?q=location:"%s"+or+(location:"%s"+and+location:"%s")'>%s (%s, %s)</a> <br />
             """ % (name, region_name, country_name,
                 name, region_name, country_name)
         """

@@ -812,8 +812,9 @@ class ConceptBrowseIndex (BrowseIndex):
             l = 'A'
         
         # We don't want to see leading numbers for anything but exposures
+        # and outcomes.
         show_numbers = False
-        if self.type == 'exposure':
+        if self.type in ('exposure', 'outcome'):
             show_numbers = True
             
         self.letter_index(values, l, text='%s by letter:' % self.type, 
