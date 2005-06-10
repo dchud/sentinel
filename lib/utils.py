@@ -142,7 +142,7 @@ def fix_double_quotes (s):
     return s2
     
 
-def make_sparkline (context, d):
+def make_sparkline (context, d, context_years=()):
     """
     For an arbitrary dictionary, make a simple sparkline with keys
     on the x-axis and values on the y-axis.
@@ -154,6 +154,13 @@ def make_sparkline (context, d):
     vals = []
     im = Image.new("RGB", ((len(d)+2)*3, 20), 'white')
     draw = ImageDraw.Draw(im)
+    if context_years:
+        context_min_year, context_max_year = context_years
+        min_year = min(keys)
+        draw.rectangle([((context_min_year-min_year)*3)-3, 0, 
+            ((context_max_year-min_year)*3)+3, 120], 
+            outline='#dddddd', fill='#eeeeee')
+        
     for key in keys:
         val = d[key]
         vals.append(18 - int(15*(val/max_val)))

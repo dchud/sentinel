@@ -301,48 +301,15 @@ class BrowseIndex:
                     except:
                         # Somehow the first four digits of pubdate aren't YYYY
                         continue
-                image_file = utils.make_sparkline(context, year_count)
-
-                """
-                <p>
-                %s of records by year:
-                    <span style='font-weight:bold;font-size:x-small;'>1965</span>
-                    <img border='0' src='/timage/%s' type='image/png' usemap='#sparkmap'/>
-                    <span style='font-weight:bold;font-size:x-small;'>2005</span>
-                </p>
-                """ % ('%', image_file)
-                
+                        
+                        
+                # Process all paging info up front so we can optionally
+                # pass context years for a subset into make_sparkline()
+                        
                 years = year_count.keys()
                 years.sort()
-                """
-                <map name='sparkmap'>
-                """
-                for year in years:
-                    count = year_count[year]
-                    if count > 0:
-                        year_index = years.index(year)
-                        query_str = '"%s" [%s] %s [date]' \
-                            % (name, self.type, year)
-                        """
-                    <area href='/search?q=%s' 
-                        shape='rect'
-                        coords='%s %s %s %s'
-                        alt='%s'
-                        title='%s' />
-                        """ % (query_str,
-                            year_index*3, 0, (year_index*3)+2, 120,
-                            'limit to year %s' % year,
-                            'limit to year %s' % year)
-                """
-                </map>
-                """
-                
                 p = self.get_pager_params()
-                self.pager(records, params=p)
-                """
-                <div id="search-result">
-                    <table width='100%' border='0' cellspacing='0' cellpadding='0'>
-                """
+
                 sort_by = p['sort_by']
                 complete_term_map = source_catalog.get_complete_mapping()
                 records_sorted = []
@@ -368,7 +335,71 @@ class BrowseIndex:
                     
                 start = p['start']
                 end = start + p['size']
-                for sort_val, rec in records_sorted[start:end]:
+                records_sliced = records_sorted[start:end]
+                
+                # Only shade the year-context in the sparkline if it's a 
+                # year sort.
+                if sort_by == p['sort_by']:
+                    try:
+                        start_mm = records_sliced[0][1].get_mapped_metadata(complete_term_map)
+                        min_year = max_year = int(mm[str('pubdate')][:4])
+                        for sort_value, rec in records_sliced[1:]:
+                            mm = rec.get_mapped_metadata(complete_term_map)
+                            year = int(mm[str('pubdate')][:4])
+                            if year < min_year:
+                                min_year = year
+                            if year > max_year:
+                                max_year = year
+                            
+                        image_file = utils.make_sparkline(context, year_count, 
+                            context_years=(min_year, max_year))
+                    except:
+                        traceback.print_exc()
+                        image_file = utils.make_sparkline(context, year_count)
+                else:
+                    image_file = utils.make_sparkline(context, year_count)
+                
+
+                """
+                <p>
+                %s of records by year:
+                    <span style='font-weight:bold;font-size:x-small;'>1965</span>
+                    <img border='0' src='/timage/%s' type='image/png' usemap='#sparkmap'/>
+                    <span style='font-weight:bold;font-size:x-small;'>2005</span>
+                </p>
+                """ % ('%', image_file)
+                
+                """
+                <map name='sparkmap'>
+                """
+                # rect order is: left-x, top-y, right-x, bottom-y
+                for year in years:
+                    count = year_count[year]
+                    if count > 0:
+                        year_index = years.index(year)
+                        query_str = '"%s" [%s] %s [date]' \
+                            % (name, self.type, year)
+                        """
+                    <area href='/search?q=%s' 
+                        shape='rect'
+                        coords='%s %s %s %s'
+                        alt='%s'
+                        title='%s' />
+                        """ % (query_str,
+                            year_index*3, 0, (year_index*3)+2, 120,
+                            'limit to year %s' % year,
+                            'limit to year %s' % year)
+                """
+                </map>
+                """
+                
+                self.pager(records, params=p)
+                
+                """
+                <div id="search-result">
+                    <table width='100%' border='0' cellspacing='0' cellpadding='0'>
+                """
+                for sort_val, rec in records_sliced:
                     render_record_row(rec)
                 """
                     </table>
