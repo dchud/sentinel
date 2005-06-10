@@ -408,11 +408,17 @@ def render_medline [html] (mapped_metadata):
                 <p>
         """
         sort_regnums = mapped_metadata['registrynum']
-        sort_regnums.sort()
-        for regnum in sort_regnums:
+        if sort_regnums.__class__ == [].__class__:
+            sort_regnums.sort()
+            for regnum in sort_regnums:
+                """
+                    %s <br />
+                """ % regnum
+        else:
             """
                 %s <br />
-            """ % regnum
+            """ % sort_regnums
+            
         """
                 </p>
         """
@@ -838,18 +844,6 @@ def render_record_row [html] (record, score=None):
     """ % (record.uid, ', '.join(author), mapped_md['title'], mapped_md['source'])
     
     """
-                    </td>
-                    
-                    <td valign='top' width='20%'>
-                        <!--
-                        <a href='http://sfx.library.yale.edu/links?id=[[PMID]]'>
-                            <img border='0' src='/yale_sfx2_gif'>
-                        </a>
-                        -->
-                        <!--
-                        <a href='http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=PubMed&cmd=Display&dopt=pubmed_pubmed&from_uid=[[PMID]]'>Pubmed related articles</a>
-                        -->
-                        <!--[links]-->
                     </td>
                 </tr>
     """

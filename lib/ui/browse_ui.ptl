@@ -15,7 +15,7 @@ from canary.browse import records_by_author, records_by_author_index
 from canary.browse import records_by_concept, records_by_concept_index
 from canary.concept import Concept
 from canary.qx_defs import NotLoggedInError
-from canary.study import Methodology
+from canary.study import Methodology, Study
 from canary.ui.pages import not_found
 from canary.ui.pageframe import header, footer
 from canary.ui.record_ui import render_record_row
@@ -69,6 +69,117 @@ class Browse:
             print traceback.print_exc()
             return not_found('index')
             
+
+def render_on_this_page [html] (records):
+    context = get_publisher().context
+    source_catalog = context.get_source_catalog()
+    complete_term_mapping = source_catalog.get_complete_mapping()
+    
+    authors = {}
+    exposures = {}
+    outcomes = {}
+    species = {}
+    for sort_value, rec in records:
+        study = Study(context, rec.study_id)
+        mm = rec.get_mapped_metadata(complete_term_mapping)
+        author = mm['author']
+        for a in author:
+            try:
+                authors[a] += 1
+            except KeyError:
+                authors[a] = 1
+        for exp in study.exposures:
+            try:
+                exposures[exp.term] += 1
+            except KeyError:
+                exposures[exp.term] = 1
+        for out in study.outcomes:
+            try:
+                outcomes[out.term] += 1
+            except KeyError:
+                outcomes[out.term] = 1
+        for spec in study.species:
+            try:
+                species[spec.term] += 1
+            except KeyError:
+                species[spec.term] = 1
+        
+    authors_sorted = [(v, k) for k, v in authors.items()]
+    authors_sorted.sort()
+    authors_sorted.reverse()
+    exposures_sorted = [(v, k) for k, v in exposures.items()]
+    exposures_sorted.sort()
+    exposures_sorted.reverse()
+    outcomes_sorted = [(v, k) for k, v in outcomes.items()]
+    outcomes_sorted.sort()
+    outcomes_sorted.reverse()
+    species_sorted = [(v, k) for k, v in species.items()]
+    species_sorted.sort()
+    species_sorted.reverse()
+    
+    """
+    <h3 style='margin-bottom:1.2em;'>On this page:</h3>
+    """
+    
+    if exposures_sorted:
+        """
+        <div style='border:1px solid #AAAAAA;padding:.5em;margin-bottom:1em;'>
+        <h4>Exposures</h4>
+        <p>
+        """
+        for c, exp in exposures_sorted[0:8]:
+            """
+            <a href='/search?q="%s"[exp]'>%s</a> (%s) <br />
+            """ % (exp, exp, c)
+        """
+        </p>
+        </div>
+        """
+        
+    if outcomes_sorted:
+        """
+        <div style='border:1px solid #AAAAAA;padding:.5em;margin-bottom:1em;'>
+        <h4>Outcomes</h4>
+        <p>
+        """
+        for c, out in outcomes_sorted[0:8]:
+            """
+            <a href='/search?q="%s"[out]'>%s</a> (%s) <br />
+            """ % (out, out, c)
+        """
+        </p>
+        </div>
+        """
+        
+    if species_sorted:
+        """
+        <div style='border:1px solid #AAAAAA;padding:.5em;margin-bottom:1em;'>
+        <h4>Species</h4>
+        <p>
+        """
+        for c, spec in species_sorted[0:8]:
+            """
+            <a href='/search?q="%s"[spec]'>%s</a> (%s) <br />
+            """ % (spec, spec, c)
+        """
+        </p>
+        </div>
+        """
+        
+    if authors_sorted:
+        """
+        <div style='border:1px solid #AAAAAA;padding:.5em;margin-bottom:1em;'>
+        <h4>Authors</h4>
+        <p>
+        """
+        for c, auth in authors_sorted[0:8]:
+            """
+            <a href='/search?q="%s"[au]'>%s</a> (%s) <br />
+            """ % (auth, auth, c)
+        """
+        </p>
+        </div>
+        """
 
 
 class BrowseIndex:
@@ -272,6 +383,8 @@ class BrowseIndex:
         </p>
         """
 
+
+
     def render_records [html] (self, name, records):
         context = get_publisher().context
         source_catalog = context.get_source_catalog()
@@ -339,10 +452,10 @@ class BrowseIndex:
                 
                 # Only shade the year-context in the sparkline if it's a 
                 # year sort.
-                if sort_by == p['sort_by']:
+                if p['sort_by'] == 'year':
                     try:
                         start_mm = records_sliced[0][1].get_mapped_metadata(complete_term_map)
-                        min_year = max_year = int(mm[str('pubdate')][:4])
+                        min_year = max_year = int(start_mm[str('pubdate')][:4])
                         for sort_value, rec in records_sliced[1:]:
                             mm = rec.get_mapped_metadata(complete_term_map)
                             year = int(mm[str('pubdate')][:4])
@@ -391,6 +504,11 @@ class BrowseIndex:
                             'limit to year %s' % year)
                 """
                 </map>
+                
+                
+                <table width='100%' border='0' cellspacing='2' cellpadding='2'>
+                <tr>
+                    <td valign='top'>
                 """
                 
                 self.pager(records, params=p)
@@ -406,6 +524,18 @@ class BrowseIndex:
                 </div>
                 """
                 self.pager(records, params=p)
+                """
+                    </td>
+                    
+                    <td width='30%' valign='top'>
+                """
+                render_on_this_page(records_sliced)
+                """
+                    </td>
+                </tr>
+                </table>
+                """
+                
             except:
                 print traceback.print_exc()
                 return not_found(self.type)
@@ -414,6 +544,7 @@ class BrowseIndex:
             
     
         footer()
+
 
 
 

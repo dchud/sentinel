@@ -14,7 +14,7 @@ from canary.loader import QueuedRecord
 from canary.qx_defs import MyForm
 from canary.search import Search, SearchIndex
 from canary.study import Study
-from canary.ui.browse_ui import BrowseIndex
+from canary.ui.browse_ui import BrowseIndex, render_on_this_page
 from canary.ui.pageframe import header, footer
 from canary.ui.record_ui import render_record_row
 from canary import utils
@@ -82,6 +82,10 @@ def search [html] (request):
         
         form.render()
         """
+        <table width='100%s' border='0' cellspacing='0' cellpadding='0'>
+            <tr>
+                <td valign='top'>
+        
         <p>
         Record(s): <span style='font-weight:bold;'>%s</span>,
         %s of hits by year:
@@ -89,7 +93,7 @@ def search [html] (request):
             <img border='0' src='/timage/%s' type='image/png' usemap='#sparkmap'/>
             <span style='font-weight:bold;font-size:x-small;'>2005</span>
         </p>
-        """ % (len(result_set), '%', image_file)
+        """ % ('%', len(result_set), '%', image_file)
         if len(result_set) > 0:
             years = year_count.keys()
             years.sort()
@@ -132,6 +136,16 @@ def search [html] (request):
             """
                 </table>
             </div>
+                
+                </td>
+                
+                <td width='30%' valign='top'>
+            """
+            render_on_this_page([(s, r) for r, s in result_set])
+            """
+                </td>
+            </tr>
+            </table>
             """
         else:
             '<p>Nothing found.</p>'
