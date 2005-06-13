@@ -25,7 +25,7 @@ class SearchForm (MyForm):
         MyForm.__init__(self, context, method='get')
         self.add(form2.StringWidget, 'q',
             title='Search:',
-            size=50,
+            size=60,
             required=True)
         self.add_submit('go', 'go')
 
@@ -141,7 +141,7 @@ def search [html] (request):
                 
                 <td width='30%' valign='top'>
             """
-            render_on_this_page([(s, r) for r, s in result_set])
+            render_on_this_page([(s, r) for r, s in result_set], raw_query)
             """
                 </td>
             </tr>

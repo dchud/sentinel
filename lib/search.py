@@ -48,6 +48,9 @@ SEARCH_FIELDS = {
     'loc':          'location',
     'location':     'location',
     'locations':    'location',
+    'me':           'methodology',
+    'meth':         'methodology',
+    'methodology':  'methodology',
     'mh':           'subject',
     'out':          'outcomes',
     'outcome':      'outcomes',
@@ -522,6 +525,15 @@ class SearchIndex:
                 doc.add(PyLucene.Field('all', unicode(full_name, 'latin-1'),
                     False, True, True))
                 
+            # Finally, the methodologies
+            for meth in study.methodologies:
+                doc.add(PyLucene.Field('methodology', 
+                    meth.get_study_type(text=True),
+                    False, True, True))
+                doc.add(PyLucene.Field('all', 
+                    meth.get_study_type(text=True),
+                    False, True, True))
+            
             writer.addDocument(doc)
             if not had_writer:
                 writer.close()
@@ -547,11 +559,11 @@ class SearchIndex:
             
         hits = []
         query_string = str(query_string)
-        print 'QS:', query_string
+        #print 'QS:', query_string
         disassembled_query = disassemble_user_query(query_string)
-        print 'DQ:', disassembled_query
+        #print 'DQ:', disassembled_query
         reassembled_query = '+(%s)' % reassemble_user_query(disassembled_query)
-        print 'RQ:', reassembled_query
+        #print 'RQ:', reassembled_query
         
         if not allow_curated:
             reassembled_query += \
@@ -565,7 +577,7 @@ class SearchIndex:
                 canary.loader.QueuedRecord.STATUS_CURATED
                 
             
-        print 'FQ:', reassembled_query
+        #print 'FQ:', reassembled_query
         
         try:
             searcher = PyLucene.IndexSearcher(PyLucene.FSDirectory.getDirectory(

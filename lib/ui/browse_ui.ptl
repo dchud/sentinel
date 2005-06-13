@@ -70,11 +70,57 @@ class Browse:
             return not_found('index')
             
 
-def render_on_this_page [html] (records):
+def render_on_this_page_concept [html] (type, concept_sorted, total, query_string=''):
+    """
+    <tr>
+        <td colspan='4' align='left'>
+        <h3 style='font-size:12;margin-top:1em;margin-bottom:.2em;'>%s</h3>
+        </td>
+    </tr>
+    """ % type.capitalize()
+    for count, con in concept_sorted[0:8]:
+        """
+    <tr>
+        """
+        percentage = int((float(count) / total) * 100)
+        count_str = '%s%s' % (percentage, '%')
+        """
+        <td valign='top'>
+            <div class='page-relevance-box' title='%s relevant'>
+                <div class="relevance" style="width: %s"><img src='/images/pixel.gif' alt='' width='' height=''></div>
+            </div>
+        </td>
+        """ % (count_str, count_str)
+        """
+        <td style='margin-right:.3em;' valign='top'>
+            <a style='font-size:11px;' 
+                href='/search?q="%s"[%s]'>%s</a>
+        </td>
+        """ % (con, type, con)
+        query = '"%s"[%s]' % (con, type)
+        or_query = and_query = query_string
+        if not str(query) in str(query_string):
+            or_query = '%s or %s' % (query_string, query)
+            and_query = '%s and %s' % (query_string, query)
+        """
+        <td valign='top'>
+            <a href='/search?q=%s' title='%s'><img src='/images/basic-boolean-and.png' alt='AND' border='0'/></a>
+        </td>
+        <td valign='top'>
+            <a href='/search?q=%s' title='%s'><img src='/images/basic-boolean-or.png' alt='OR' border='0'/></a>
+        </td>
+        """ % (and_query, and_query,
+            or_query, or_query)
+        """
+    </tr>
+        """
+
+def render_on_this_page [html] (records, query_string=''):
     context = get_publisher().context
     source_catalog = context.get_source_catalog()
     complete_term_mapping = source_catalog.get_complete_mapping()
     
+    num_records = len(records)
     authors = {}
     exposures = {}
     outcomes = {}
@@ -104,82 +150,56 @@ def render_on_this_page [html] (records):
             except KeyError:
                 species[spec.term] = 1
         
-    authors_sorted = [(v, k) for k, v in authors.items()]
-    authors_sorted.sort()
-    authors_sorted.reverse()
+    
+    """
+    <div style='border:1px solid #AAAAAA;padding:.5em;margin-bottom:1em;'>
+    
+    <table width='100%' border='0' cellspacing='2' cellpadding='0'>
+        <tr>
+            <td colspan='4' align='left' valign='top'>
+            <h3>On this page:</h3>
+            </td>
+        </tr>
+        <tr>
+            <th align='center'>%</th>
+            <th>-</th>
+            <th>And</th>
+            <th>Or</th>
+        </th>
+    """
+    
     exposures_sorted = [(v, k) for k, v in exposures.items()]
     exposures_sorted.sort()
     exposures_sorted.reverse()
+    if exposures_sorted:
+        render_on_this_page_concept('exposure', exposures_sorted, num_records,
+            query_string)
+
     outcomes_sorted = [(v, k) for k, v in outcomes.items()]
     outcomes_sorted.sort()
     outcomes_sorted.reverse()
+    if outcomes_sorted:
+        render_on_this_page_concept('outcome', outcomes_sorted, num_records,
+            query_string)
+            
     species_sorted = [(v, k) for k, v in species.items()]
     species_sorted.sort()
     species_sorted.reverse()
-    
-    """
-    <h3 style='margin-bottom:1.2em;'>On this page:</h3>
-    """
-    
-    if exposures_sorted:
-        """
-        <div style='border:1px solid #AAAAAA;padding:.5em;margin-bottom:1em;'>
-        <h4>Exposures</h4>
-        <p>
-        """
-        for c, exp in exposures_sorted[0:8]:
-            """
-            <a href='/search?q="%s"[exp]'>%s</a> (%s) <br />
-            """ % (exp, exp, c)
-        """
-        </p>
-        </div>
-        """
-        
-    if outcomes_sorted:
-        """
-        <div style='border:1px solid #AAAAAA;padding:.5em;margin-bottom:1em;'>
-        <h4>Outcomes</h4>
-        <p>
-        """
-        for c, out in outcomes_sorted[0:8]:
-            """
-            <a href='/search?q="%s"[out]'>%s</a> (%s) <br />
-            """ % (out, out, c)
-        """
-        </p>
-        </div>
-        """
-        
     if species_sorted:
-        """
-        <div style='border:1px solid #AAAAAA;padding:.5em;margin-bottom:1em;'>
-        <h4>Species</h4>
-        <p>
-        """
-        for c, spec in species_sorted[0:8]:
-            """
-            <a href='/search?q="%s"[spec]'>%s</a> (%s) <br />
-            """ % (spec, spec, c)
-        """
-        </p>
-        </div>
-        """
-        
+        render_on_this_page_concept('species', species_sorted, num_records,
+            query_string)
+            
+    authors_sorted = [(v, k) for k, v in authors.items()]
+    authors_sorted.sort()
+    authors_sorted.reverse()
     if authors_sorted:
-        """
-        <div style='border:1px solid #AAAAAA;padding:.5em;margin-bottom:1em;'>
-        <h4>Authors</h4>
-        <p>
-        """
-        for c, auth in authors_sorted[0:8]:
-            """
-            <a href='/search?q="%s"[au]'>%s</a> (%s) <br />
-            """ % (auth, auth, c)
-        """
-        </p>
-        </div>
-        """
+        render_on_this_page_concept('author', authors_sorted, num_records,
+            query_string)
+            
+    """
+    </table>
+    """
+        
 
 
 class BrowseIndex:
@@ -529,7 +549,7 @@ class BrowseIndex:
                     
                     <td width='30%' valign='top'>
                 """
-                render_on_this_page(records_sliced)
+                render_on_this_page(records_sliced, '"%s"[%s]' % (name, self.type))
                 """
                     </td>
                 </tr>

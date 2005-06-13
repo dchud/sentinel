@@ -488,6 +488,17 @@ dl {
     height:  5px;
 }
 
+.page-relevance-box {
+    border: 1px solid #5C5D5D;
+    background-color: #EEEDC0;
+    padding: 0px;
+    margin-top: 5px;
+    margin-left: .2em;
+    margin-right: .2em;
+    /*float: left;*/
+    width: 16px;
+}
+
 #exposures td, #outcomes td, #species td, #summary td {
     /*
     font-size: small;
