@@ -104,10 +104,10 @@ def render_on_this_page_concept [html] (type, concept_sorted, total, query_strin
             and_query = '%s and %s' % (query_string, query)
         """
         <td valign='top'>
-            <a href='/search?q=%s' title='%s'><img src='/images/basic-boolean-and.png' alt='AND' border='0'/></a>
+            <a href='/search?q=%s' title='%s'><img src='/images/basic-boolean-and.jpg' alt='AND' border='0'/></a>
         </td>
         <td valign='top'>
-            <a href='/search?q=%s' title='%s'><img src='/images/basic-boolean-or.png' alt='OR' border='0'/></a>
+            <a href='/search?q=%s' title='%s'><img src='/images/basic-boolean-or.jpg' alt='OR' border='0'/></a>
         </td>
         """ % (and_query, and_query,
             or_query, or_query)
