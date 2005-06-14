@@ -72,47 +72,49 @@ class Browse:
 
 def render_on_this_page_concept [html] (type, concept_sorted, total, query_string=''):
     """
-    <tr>
-        <td colspan='4' align='left'>
-        <h3 style='font-size:12;margin-top:1em;margin-bottom:.2em;'>%s</h3>
-        </td>
-    </tr>
+        <tr>
+            <td colspan='4' align='left'>
+            <h3 style='font-size:12;margin-top:.6em;margin-bottom:.2em;'>%s</h3>
+            </td>
+        </tr>
     """ % type.capitalize()
     for count, con in concept_sorted[0:8]:
         """
-    <tr>
+        <tr style='background-color:#fafafa;'>
         """
         percentage = int((float(count) / total) * 100)
         count_str = '%s%s' % (percentage, '%')
         """
-        <td valign='top'>
-            <div class='page-relevance-box' title='%s relevant'>
-                <div class="relevance" style="width: %s"><img src='/images/pixel.gif' alt='' width='' height=''></div>
-            </div>
-        </td>
+            <td valign='top'>
+                <div class='page-relevance-box' title='%s of studies on this page'>
+                    <div class="relevance" style="width: %s"><img src='/images/pixel.gif' alt='' width='' height=''></div>
+                </div>
+            </td>
         """ % (count_str, count_str)
         """
-        <td style='margin-right:.3em;' valign='top'>
-            <a style='font-size:11px;' 
-                href='/search?q="%s"[%s]'>%s</a>
-        </td>
-        """ % (con, type, con)
+            <td style='margin-right:.3em;' valign='top'>
+                <a style='font-size:11px;' 
+                    href='/search?q="%s"[%s]'
+                    title='Search for: "%s" [%s]'>%s</a>
+            </td>
+        """ % (con, type, 
+            con, type, con)
         query = '"%s"[%s]' % (con, type)
         or_query = and_query = query_string
         if not str(query) in str(query_string):
-            or_query = '%s or %s' % (query_string, query)
-            and_query = '%s and %s' % (query_string, query)
+            or_query = '%s OR %s' % (query_string, query)
+            and_query = '%s AND %s' % (query_string, query)
         """
-        <td valign='top'>
-            <a href='/search?q=%s' title='%s'><img src='/images/basic-boolean-and.jpg' alt='AND' border='0'/></a>
-        </td>
-        <td valign='top'>
-            <a href='/search?q=%s' title='%s'><img src='/images/basic-boolean-or.jpg' alt='OR' border='0'/></a>
-        </td>
-        """ % (and_query, and_query,
-            or_query, or_query)
+            <td valign='top'>
+                <a href='/search?q=%s' title='Search for: %s'><img src='/images/basic-boolean-and.jpg' alt='Search for: %s' border='0'/></a>
+            </td>
+            <td valign='top'>
+                <a href='/search?q=%s' title='Search for: %s'><img src='/images/basic-boolean-or.jpg' alt='Search for: %s' border='0'/></a>
+            </td>
+        """ % (and_query, and_query, and_query,
+            or_query, or_query, or_query)
         """
-    </tr>
+        </tr>
         """
 
 def render_on_this_page [html] (records, query_string=''):
@@ -150,22 +152,25 @@ def render_on_this_page [html] (records, query_string=''):
             except KeyError:
                 species[spec.term] = 1
         
+        
     
     """
     <div style='border:1px solid #AAAAAA;padding:.5em;margin-bottom:1em;'>
     
-    <table width='100%' border='0' cellspacing='2' cellpadding='0'>
-        <tr>
-            <td colspan='4' align='left' valign='top'>
-            <h3>On this page:</h3>
-            </td>
+    <h3>Refine/combine:</h3>
+    
+    <div class='label'>
+        <span id='hideable-link'>Show/hide</span>
+    </div>
+           
+    <div class='hideable'>
+    <table width='100%' border='0' cellspacing='1' cellpadding='0'>
+        <tr style='margin-top:.6em;margin-bottom:.2em;background-color:#fafafa;'>
+            <th style='font-size:11px;' align='center'>%</th>
+            <th style='font-size:11px;'>-</th>
+            <th style='font-size:11px;'>and</th>
+            <th style='font-size:11px;'>&nbsp;or</th>
         </tr>
-        <tr>
-            <th align='center'>%</th>
-            <th>-</th>
-            <th>And</th>
-            <th>Or</th>
-        </th>
     """
     
     exposures_sorted = [(v, k) for k, v in exposures.items()]
@@ -198,6 +203,7 @@ def render_on_this_page [html] (records, query_string=''):
             
     """
     </table>
+    </div>
     """
         
 
@@ -285,28 +291,46 @@ class BrowseIndex:
         """
         <p>
         """
-        # no need to show the pager if there's only one page
-        if num_pages > 1:
+        if len(records) >= 2:
             """
-            Go to: 
+            Sort by:
             """
-            for i in range(0, num_pages):
-                start = str((i * p['size']) + 1)
-                if remainder \
-                    and (i+1) == num_pages:
-                    end = str((i * p['size']) + remainder)
+            for sort_field in self.SORT_FIELDS:
+                if sort_field == p['sort_by']:
+                    ' [<b>%s</b>] ' % sort_field
                 else:
-                    end = str((i + 1) * p['size'])
-                text = start + '-' + end
-                if i != cur_page:
-                    ' [<a href="?start=%s&size=%s&sort_by=%s&sort_desc=%s">%s</a>] ' % \
-                        (i * p['size'], p['size'], p['sort_by'], p['sort_desc'], text)
-                else:
-                    ' [<b>%s</b>] ' % text
+                    ' [<a href="?size=%s&sort_by=%s&sort_desc=%s">%s</a>] ' % \
+                        (p['size'], sort_field, p['sort_desc'], sort_field)
             
             """
-            <br />
+            &nbsp;-&nbsp;
+            """
+            if 'year' == p['sort_by']:
+                text_asc = '0-9'
+                text_desc = '9-0'
+            else:
+                text_asc = 'A-Z'
+                text_desc = 'Z-A'
+                
+            if p['sort_desc']:
+                ' [<a href="?size=%s&sort_by=%s&sort_desc=0">%s</a>] ' % \
+                    (p['size'], p['sort_by'], text_asc)
+                ' [<b>%s</b>] ' % text_desc
+            else:
+                ' [<b>%s</b>] ' % text_asc
+                ' [<a href="?size=%s&sort_by=%s&sort_desc=1">%s</a>] ' % \
+                    (p['size'], p['sort_by'], text_desc)
 
+        # no need to show the pager if there's only one page
+        if num_pages > 1:
+
+            # We only need the spacing if there's a "sort by" above it
+            if len(records) >= 2:
+                """
+                <br />
+                """
+                
+            """
             Show:
             """    
             sizes = [min(self.ALLOWED_SIZES)]
@@ -329,34 +353,25 @@ class BrowseIndex:
                     ' [<a href="?size=%s&sort_by=%s&sort_desc=%s">%s</a>] ' % \
                         (s,  p['sort_by'], p['sort_desc'], text)
             """
-            per page
+            per page <br />
             """
             
-
-            
-        if len(records) >= 2:
             """
-            <br />
-            Sort by:
+            Go to: 
             """
-            for sort_field in self.SORT_FIELDS:
-                if sort_field == p['sort_by']:
-                    ' [<b>%s</b>] ' % sort_field
+            for i in range(0, num_pages):
+                start = str((i * p['size']) + 1)
+                if remainder \
+                    and (i+1) == num_pages:
+                    end = str((i * p['size']) + remainder)
                 else:
-                    ' [<a href="?size=%s&sort_by=%s&sort_desc=%s">%s</a>] ' % \
-                        (p['size'], sort_field, p['sort_desc'], sort_field)
-            
-            """
-            &nbsp;-&nbsp;
-            """
-            if p['sort_desc']:
-                ' [<a href="?size=%s&sort_by=%s&sort_desc=0">A-Z</a>] ' % \
-                    (p['size'], p['sort_by'])
-                ' [<b>Z-A</b>] '
-            else:
-                ' [<b>A-Z</b>] '
-                ' [<a href="?size=%s&sort_by=%s&sort_desc=1">Z-A</a>] ' % \
-                    (p['size'], p['sort_by'])
+                    end = str((i + 1) * p['size'])
+                text = start + '-' + end
+                if i != cur_page:
+                    ' [<a href="?start=%s&size=%s&sort_by=%s&sort_desc=%s">%s</a>] ' % \
+                        (i * p['size'], p['size'], p['sort_by'], p['sort_desc'], text)
+                else:
+                    ' [<b>%s</b>] ' % text
             
         """
         </p>
@@ -410,7 +425,8 @@ class BrowseIndex:
         source_catalog = context.get_source_catalog()
         complete_term_mapping = source_catalog.get_complete_mapping()
         
-        header('Browse by %s: %s' % (self.type.capitalize(), name))
+        header('Browse by %s: %s' % (self.type.capitalize(), name),
+            show_javascript=True)
         count = len(records)
         if count > 0:
             if count == 1:
@@ -450,8 +466,8 @@ class BrowseIndex:
                     mm = record.get_mapped_metadata(complete_term_map)
                     if sort_by == 'year':
                         sort_value = mm[str('pubdate')][:4]
-                    elif sort_by == 'source':
-                        sort_value = mm[str('source')].lower()
+                    elif sort_by == 'journal':
+                        sort_value = mm[str('journal')].lower()
                     elif sort_by == '1au':
                         authors = mm[str('author')]
                         if authors:
@@ -574,7 +590,7 @@ class YearBrowseIndex (BrowseIndex):
         '_q_index',
         ]
         
-    SORT_FIELDS = ['source', '1au']
+    SORT_FIELDS = ['journal', '1au']
     
     SORT_FIELD_DEFAULT = '1au'
     
@@ -800,7 +816,7 @@ class JournalBrowseIndex (BrowseIndex):
 
 class MethodologyBrowseIndex (BrowseIndex):
         
-    SORT_FIELDS = ['year', 'source', '1au']
+    SORT_FIELDS = ['year', 'journal', '1au']
 
     SORT_FIELD_DEFAULT = 'year'
     
@@ -879,7 +895,7 @@ class AuthorBrowseIndex (BrowseIndex):
         '_q_index',
         ]
     
-    SORT_FIELDS = ['year', 'source', '1au']
+    SORT_FIELDS = ['year', 'journal', '1au']
     
     SORT_FIELD_DEFAULT = 'year'
     
@@ -963,7 +979,7 @@ class ConceptBrowseIndex (BrowseIndex):
         '_q_index',
         ]
     
-    SORT_FIELDS = ['year', 'source', '1au']
+    SORT_FIELDS = ['year', 'journal', '1au']
     
     SORT_FIELD_DEFAULT = 'year'
     

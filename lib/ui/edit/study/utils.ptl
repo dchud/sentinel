@@ -26,9 +26,9 @@ def render_queued_record [html] (queued_record, abstract=True):
         if not mapped_metadata['abstract'] == '':
             """
         <div class='label'>
-            <span id='abstract-link'>Show/hide abstract</span>
+            <span id='hideable-link'>Show/hide abstract</span>
         </div>
-        <div class='abstract'>
+        <div class='hideable'>
             <p>
                 <b>Abstract:</b> <br />
             """

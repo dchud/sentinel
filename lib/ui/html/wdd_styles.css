@@ -659,10 +659,24 @@ input[type=submit]:hover, input[type=button]:hover {
 div.label {
 	styles
     border: 1px solid #ddd;
+    font-size: 11px;
+    margin-bottom:.8em;
 }
 
-div.abstract div.label {
+div.hideable div.label {
 	overrule a few styles
+}
+
+#hideable-link {
+    border: 1px solid #ccc;
+    padding: 3px;
+    margin: 2px;
+    background-color: #eee;
+}
+
+#hideable-link:hover {
+    background-color: #f9f7d1;
+    text-decoration: underline;
 }
 
 .mission {
@@ -692,18 +706,6 @@ div.abstract div.label {
 .queued_record {
     border: 1px solid #aaa;
     padding: 4px;
-}
-
-#abstract-link {
-    border: 1px solid #ccc;
-    padding: 3px;
-    margin: 2px;
-    background-color: #eee;
-}
-
-#abstract-link:hover {
-    background-color: #f9f7d1;
-    text-decoration: underline;
 }
 
 fieldset {

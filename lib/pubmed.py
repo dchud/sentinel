@@ -3,6 +3,104 @@
 import re
 import urllib
 
+import dtuple
+
+import canary.context
+from canary.utils import DTable
+
+
+class Journal (canary.context.Cacheable, DTable):
+    """
+    A simple structure containing exactly one row of the NLM MEDLINE
+    journal list, stored locally in the db as "medline_journals".
+    
+    http://www.ncbi.nlm.nih.gov/entrez/citmatch_help.html#JournalLists
+    """
+    
+    CACHE_KEY = 'journal'
+    ALT_CACHE_KEY = 'issn'
+
+    def __init__ (self, context=None, uid=-1):
+        try:
+            if self.journal_title:
+                return
+        except AttributeError:
+            pass
+            
+        self.uid = uid
+        self.journal_title = ''
+        self.abbreviation = ''
+        self.issn = ''
+        self.eissn = ''
+        self.iso_abbr = ''
+        self.nlm_id = ''
+    
+    def load_from_issn (self, context, issn):
+        if not issn:
+            return
+        
+        if context.config.use_cache:
+            j = context.cache_get('%s:%s' % (self.ALT_CACHE_KEY, issn))
+            if j \
+                and j.journal_title:
+                for att in ('uid', 'journal_title', 'abbreviation',
+                    'issn', 'eissn', 'iso_abbr', 'nlm_id'):
+                    self.set(att, getattr(j, att))
+                return
+        
+        cursor = context.get_cursor()
+        cursor.execute("""
+            SELECT uid, journal_title, abbreviation, nlm_id
+            FROM medline_journals
+            WHERE issn = %s
+            """, issn)
+        fields = [d[0] for d in cursor.description]
+        desc = dtuple.TupleDescriptor([[f] for f in fields])
+        rows = cursor.fetchall()
+        if rows:
+            row = rows[0]
+            row = dtuple.DatabaseTuple(desc, row)
+            for k, v in row.items():
+                self.set(k, v)
+            self.issn = issn
+            
+            if context.config.use_cache:
+                context.cache_set('%s:%s' % (self.CACHE_KEY, self.uid), self)
+                context.cache_set('%s:%s' % (self.ALT_CACHE_KEY, self.issn), self)
+    
+    def load (self, context):
+        if self.uid == -1:
+            return
+        
+        # Is it already loaded?  Convenience check for client calls
+        # don't need to verify loads from the cache.
+        if context.config.use_cache:
+            try:
+                if self.journal_title:
+                    # Already loaded
+                    return
+            except AttributeError:
+                # Note already loaded, so continue
+                pass
+
+        cursor = context.get_cursor()
+        cursor.execute("""
+            SELECT journal_title, abbreviation, issn, nlm_id
+            FROM medline_journals
+            WHERE uid = %s
+            """, self.uid)
+        fields = [d[0] for d in cursor.description]
+        desc = dtuple.TupleDescriptor([[f] for f in fields])
+        
+        rows = cursor.fetchall()
+        for row in rows:
+            row = dtuple.DatabaseTuple(desc, row)
+            for k, v in row.items():
+                self.set(k, v) 
+                
+        if context.config.use_cache:
+            context.cache_set('%s:%s' % (self.ALT_CACHE_KEY, self.issn), self)
+
 
 xslt = """<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">

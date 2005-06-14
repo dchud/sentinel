@@ -9,6 +9,7 @@ from PyLucene import QueryParser, IndexSearcher, StandardAnalyzer, FSDirectory
 from canary.concept import Concept
 from canary.gazeteer import Feature
 import canary.loader 
+from canary.pubmed import Journal
 import canary.study
 from canary.utils import render_capitalized
 
@@ -428,6 +429,29 @@ class SearchIndex:
                         False, True, True))
                     doc.add(PyLucene.Field('all', val,
                         False, True, True))
+            
+            # Be sure to index all of (abbrev, full title, issn) as "journal"
+            issn = mapped_metadata.get('issn')
+            if issn:
+                j = Journal()
+                j.load_from_issn(self.context, issn)
+                print 'indexing journal:', j.journal_title, 'abbv:', \
+                    j.abbreviation, 'issn:', issn
+                doc.add(PyLucene.Field('journal', issn,
+                    False, True, True))
+                doc.add(PyLucene.Field('all', issn,
+                    False, True, True))
+                if j.abbreviation:
+                    doc.add(PyLucene.Field('journal', j.abbreviation,
+                        False, True, True))
+                    doc.add(PyLucene.Field('all', j.abbreviation,
+                        False, True, True))
+                if j.journal_title:
+                    doc.add(PyLucene.Field('journal', j.journal_title,
+                        False, True, True))
+                    doc.add(PyLucene.Field('all', j.journal_title,
+                        False, True, True))
+                
             
             # If a page range is given, index the first page, assuming
             # the delimiter is '-'
