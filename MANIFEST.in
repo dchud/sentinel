@@ -1,6 +1,7 @@
-global-include *.py *.ptl *.html *.css *.ico *.sh *.png *.gif *.jpg *.js
+global-include *.py *.ptl *.html *.css *.ico *.sh *.png *.gif *.jpg *.js *.pdf *.txt
 include README LICENSE MANIFEST.in CHANGES
 include conf/canary_config.py.sample
 exclude conf/canary_config.py
+recursive-include doc *
 recursive-exclude build *
 recursive-exclude dist *

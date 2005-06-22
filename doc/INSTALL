@@ -27,20 +27,25 @@ Baseline dependencies:
 
 All of the following are REQUIRED:
 
-- Python 2.2+ (to be updated to 2.3)
+- Python 2.3+
 - apache1 or apache2 w/support for DSOs
-- MySQL-3.23 or 4+ (to be updated to 4.1+)
+- MySQL-4.1+ (to be updated to 4.1+)
 - MySQL-python to match MySQL version
 - quixote-0.7a3 (to be updated to 1.2)
   - be sure to add form2 in setup.py
+- Dulcinea-0.1 (not anything later! they are incompatible)
 - scgi-1.2
 - log4py-1.3+
 - egenix-mx-base-2.0.6+ (mx.DateTime required by qx_defs.Session stuff
 - pyparsing-1.3+
+- PyLucene-0.9.7+
+- Python Imaging Library-1.1.5+
 
 The following are OPTIONAL:
 
-- memcached >= 1.11 (running somewhere) and python-memcached >= 1.2
+- memcached >= 1.11 (running somewhere) 
+- python-memcached >= 1.2
+- libevent >= 1.0b (required for memcached
 
 
 App configuration:

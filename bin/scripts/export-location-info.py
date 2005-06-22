@@ -13,8 +13,10 @@ from canary.loader import QueuedRecord
 from canary.study import Study
 
 
+
 if __name__ == '__main__':
     out_file = open('/tmp/export-location-info.txt', 'w')
+    all = {}
     context = canary.context.Context()
     for i in range(4000):
         try:
@@ -37,9 +39,10 @@ if __name__ == '__main__':
                 feature.load(context)
                 out.extend((feature.latitude, feature.longitude,
                     feature.name, feature.feature_type, feature.country_code))
-                out_file.write('\t'.join([str(s) for s in out]) + '\n')
 
         except:
             continue
+
+    out_file.write('\t'.join([str(s) for s in out]) + '\n')
 
     out_file.close()

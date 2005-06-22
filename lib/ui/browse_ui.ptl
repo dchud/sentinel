@@ -103,7 +103,7 @@ def render_on_this_page_concept [html] (type, concept_sorted, total, query_strin
         or_query = and_query = query_string
         if not str(query) in str(query_string):
             or_query = '%s OR %s' % (query_string, query)
-            and_query = '%s AND %s' % (query_string, query)
+            and_query = '%s %s' % (query_string, query)
         """
             <td valign='top'>
                 <a href='/search?q=%s' title='Search for: %s'><img src='/images/basic-boolean-and.jpg' alt='Search for: %s' border='0'/></a>

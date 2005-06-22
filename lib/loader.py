@@ -295,7 +295,7 @@ class QueuedRecord (canary.context.Cacheable, DTable):
                     term = source_catalog.get_term(row['term_id'])
                     self.add_metadata(term, row['value'], extra=row['extra'])
         except ValueError:
-            print traceback.print_exc()
+            #print traceback.print_exc()
             raise ValueError('Record not found')
         
         context.close_cursor(cursor)
