@@ -98,6 +98,8 @@ App configuration:
   - Create mysql database using schema from doc/database-schema.sql
     and set DB_*
   - Create log directory and set LOG_DIR
+  - Create temp directory for canary-generated images and set
+    TEMP_IMAGE_DIR
   - Configure USE_CACHE and CACHE_SERVER_LIST if memcached to be used
     (and turn on your memcached :)
 
@@ -118,3 +120,19 @@ run bin/startup.sh again.
 Initialization of the scgi_handler can be done at boot time via
 installation and configuration of the simple chkconfig script at 
 bin/canary-initscript.sh.
+
+
+Backups/cronjobs
+----------------
+
+Highly recommend to run at minimum a nightly script for data backups
+from mysql, and a separate script to sync the backed up data to a
+remote location.  These are installed and running on the main canary
+server.
+
+A "reaper" script can be run (recommended as hourly) via a web url 
+to clean out old temp images and old user sessions.  This is available
+at CANARY_URL/reaper and not exactly secure. :)
+
+  
+ 
