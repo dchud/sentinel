@@ -1,0 +1,120 @@
+$Id$
+
+Quick installation notes
+------------------------
+
+Canary is a python application written using version one of the Quixote
+web framework.  It uses MySQL as a datastore and for session management.
+The scgi module provides a persistent connector that apache attaches to
+so the site delivers decent response time.
+
+
+Source information
+------------------
+
+The canary library is stored in a subversion repository accessible at
+http://curtis.med.yale.edu/svn/canary.
+
+The canary library uses a python-standard distutils script, so it can
+be installed via "python setup.py install", and a source tarball can be
+created via "python setup.py sdist", etc.  Note though that setup.py
+uses the extra Quixote distutil hook, so the quixote library must be
+present and available to python or canary will not install properly.
+
+
+Baseline dependencies:
+---------------------
+
+All of the following are REQUIRED:
+
+- Python 2.3+
+- apache1 or apache2 w/support for DSOs
+- MySQL-4.1+ (to be updated to 4.1+)
+- MySQL-python to match MySQL version
+- quixote-0.7a3 (to be updated to 1.2)
+  - be sure to add form2 in setup.py
+- Dulcinea-0.1 (not anything later! they are incompatible)
+- scgi-1.2
+- log4py-1.3+
+- egenix-mx-base-2.0.6+ (mx.DateTime required by qx_defs.Session stuff
+- pyparsing-1.3+
+- PyLucene-0.9.7+
+- Python Imaging Library-1.1.5+
+
+The following are OPTIONAL:
+
+- memcached >= 1.11 (running somewhere) 
+- python-memcached >= 1.2
+- libevent >= 1.0b (required for memcached
+
+
+App configuration:
+-----------------
+
+- Install all REQUIRED dependencies listed above
+- Install mod_scgi into apache as appropriate, and scgi python module
+- Configure mod_scgi access within apache's httpd.conf, something like
+  this:
+
+  LoadModule scgi_module modules/mod_scgi.so
+  <VirtualHost *>
+
+      ServerName canarydb.med.yale.edu
+      ServerAlias canarydb
+      ServerAdmin daniel.chudnov_at_yale.edu
+
+      CustomLog /home/dlc33/sites/canarydb.med.yale.edu/logs/canarydb.access.log combined
+      ErrorLog /home/dlc33/sites/canarydb.med.yale.edu/logs/canarydb.error.log
+
+      <Location "/">
+          SetHandler scgi-handler
+          SCGIServer localhost:4001
+          SCGIHandler On
+      </Location>
+
+      # Get images directly from the filesystem.
+      Alias /images "/home/dlc33/sites/canarydb.med.yale.edu/current/lib/ui/images"
+      <Location /images>
+          SCGIHandler Off
+          SetHandler None
+      </Location>
+
+  </VirtualHost>
+
+  - Notes:
+    - mod_scgi has to be enabled
+    - The virtual host is not required, but is helpful
+    - Define a log location; combined is best to use w/awstats
+    - Canary's bin/scgi_handler defaults to port 4001, to change
+      it needs to be updated both there and here
+    - The alias for /images means images don't go through scgi/qx
+
+- Install canary (python setup.py install)
+- Copy conf/canary_config.py.sample to conf/canary_config.py
+  and configure accordingly, notes as follows:
+  - Several canary_config vars "override" default quixote vars;
+    additional canary-specific vars are defined here and in 
+    lib/qx_defs.MyConfig
+  - Create mysql database using schema from doc/database-schema.sql
+    and set DB_*
+  - Create log directory and set LOG_DIR
+  - Configure USE_CACHE and CACHE_SERVER_LIST if memcached to be used
+    (and turn on your memcached :)
+
+
+
+Starting/stopping canary
+------------------------
+
+The bin/startup.sh script initializes the persistent scgi handler
+for canary at bin/scgi_handler.py.  This creates scgi.log (handler
+log) and scgi.pid) (handler process id) in the top-level directory
+For simple restarts (changes in web templates only) bin/restart.py
+will kill all child processes of the handler, forcing template
+recompilation.  For configuration and all other changes, kill
+the parent scgi_handler.py process identified by scgi.pid, then
+run bin/startup.sh again.
+
+Initialization of the scgi_handler can be done at boot time via
+installation and configuration of the simple chkconfig script at 
+bin/canary-initscript.sh.
