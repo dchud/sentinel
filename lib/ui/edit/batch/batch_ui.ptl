@@ -68,7 +68,7 @@ class BatchActions:
                     show=show, start=start, size=size)
             elif action == 'update':
                 return update(request, batch_id=self.batch_id, 
-                    start=start, size=size)
+                    start=start, size=size, show=show)
             else:
                 raise TraversalError
         except:
@@ -266,9 +266,10 @@ def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
                                 <!-- Don't forget the start and size params -->
                                 <input type='hidden' name='start' value='%s' />
                                 <input type='hidden' name='size' value='%s' />
+                                <input type='hidden' name='show' value='%s' />
                             </tr>
                         </tr>
-            """ % (start, size)
+            """ % (start, size, show)
             """
             </table>
             
@@ -358,7 +359,7 @@ def pager [html] (batch, show, start, size, stats):
                 ' [<b>%s</b>] ' % text
 
 
-def update [html] (request, batch_id, start, size):
+def update [html] (request, batch_id, start, size, show):
     # NOTE: record updates here can only be if 
     # (is_irrelevant || is_duplicate) || (needs_paper)
     # ... and not all.
@@ -372,7 +373,7 @@ def update [html] (request, batch_id, start, size):
         
     try:
         batch = Batch(batch_id)
-        batch.load(context)
+        batch.load(context, show=show, start=start, size=size)
         for rec_id, rec in batch.queued_records.items():
             # Set to false by default.
             is_irrelevant = is_duplicate = needs_paper = False
