@@ -136,6 +136,7 @@ def add [html] (request):
     study = Study(context, queued_record.study_id)
     
     form = MyForm(context)
+    form.method = 'get'
     form.action_url = 'add'
     form.add(form2.IntWidget, name='feature_id', value=None, required=True)
     form.add_submit('add', 'add')
