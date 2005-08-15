@@ -344,6 +344,7 @@ padding: 4px 5px 5px 5px; /* top, right, bottom, left */
 	border-bottom-color: #FFFFFF;
 	}
 
+
 #citation-head {
 border: 1px solid #AAAAAA;
 border-width: 1 1 1 1;
@@ -367,8 +368,8 @@ padding: 0 0 0 5px; /* top, right, bottom, left */
 
 #search-result table
 {
-margin: 0px 0px 0px 5px;
-		}
+    margin: 0px 0px 0px 5px;
+}
 
 #table-list table {
     border-left: 1 solid #AAAAAA;
@@ -400,9 +401,8 @@ margin: 0px 0px 0px 5px;
 
 .search-title
 {
-margin: 15px 0 12px 5px; /* top, right, bottom, left */
-padding: 0px 0 0px 0px; /* top, right, bottom, left */
-
+    margin: 15px 0 12px 5px; /* top, right, bottom, left */
+    padding: 0px 0 0px 0px; /* top, right, bottom, left */
 }
 
 
@@ -512,7 +512,7 @@ dl {
 }
 
 .studytable{
-margin: 20px 10px 20px 10px;  /*top left bottom right */
+    margin: 20px 10px 20px 10px;  /*top left bottom right */
 }
 
 .studytable table{
@@ -520,10 +520,10 @@ margin: 20px 10px 20px 10px;  /*top left bottom right */
     line-height: 1.5em;
     color: black;
     text-align: center;
-	width: 90%;
-	border-width: 1px 1px 2px 1px; /*top left bottom right */
-	border-color:#ccc;
-	border-style: solid;
+    width: 90%;
+    border-width: 1px 1px 2px 1px; /*top left bottom right */
+    border-color:#ccc;
+    border-style: solid;
 }
 
 #batch_view {
@@ -531,22 +531,22 @@ margin: 20px 10px 20px 10px;  /*top left bottom right */
 }
 
 .studytable th {
-	color: #333;
-	background: #eee;
-	border-width: 1px 1px 0px 1px ; /*top left bottom right */
-	border-color:#ccc;
-	border-style: solid;
-	padding: 3px 8px 3px 3px; /*top left bottom right */
-	margin: 0;
+    color: #333;
+    background: #eee;
+    border-width: 1px 1px 0px 1px ; /*top left bottom right */
+    border-color:#ccc;
+    border-style: solid;
+    padding: 3px 8px 3px 3px; /*top left bottom right */
+    margin: 0;
 }
 
 .studytable td {
-	text-align: center;
-	background: #fff;
-	border-width: 1px 1px 0px 1px; /*top left bottom right */
-	border-color:#e5e5e5;
-	border-style: solid;
-	padding: 3px 8px 3px 3px; /*top left bottom right */
+    text-align: center;
+    background: #fff;
+    border-width: 1px 1px 0px 1px; /*top left bottom right */
+    border-color:#e5e5e5;
+    border-style: solid;
+    padding: 3px 8px 3px 3px; /*top left bottom right */
 }
 
 .locationtable {
@@ -562,6 +562,16 @@ margin: 20px 10px 20px 10px;  /*top left bottom right */
     padding: 0px 0px 0px .2em !important;
 }
 
+.advsearchtable {
+    border: 1px #e5e5e5 solid;
+}
+
+.advsearchtable td {
+    background: #fff;
+    border-bottom: 1px #f3f3f3 solid;
+    border-right: 1px #f3f3f3 solid;
+    padding: 5px 8px 5px 8px; /*top left bottom right */
+}
 
 .head-left th {
     text-align: left;
@@ -580,11 +590,17 @@ input, textarea, select {
     letter-spacing: -0.03em;
 }
 
+form.quixote {
+    padding: 0;
+    margin-bottom: 0;
+}
+
 input[type=submit], input[type=button] {
     background: #f2f2f2;
     color: #222;
     border: 1px outset #324362;
     padding .1em .5em;
+    margin-bottom: 0;
 }
 
 input[type=submit]:hover, input[type=button]:hover {

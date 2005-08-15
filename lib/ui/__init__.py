@@ -5,6 +5,7 @@ _q_exports = [
     'search',
     'record',
     'canary_png',
+    'advanced_search',
     'about',
     'admin',
     'edit',
@@ -26,7 +27,7 @@ from canary.ui.pages import _q_index, _q_exception_handler, not_found, reaper
 from canary.ui.pages import login, logout
 from canary.ui.pages import robots, TempImage
 from canary.ui.browse_ui import Browse
-from canary.ui.search import search
+from canary.ui.search import search, advanced_search
 
 record = record_ui
 

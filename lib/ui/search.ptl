@@ -19,6 +19,10 @@ from canary.ui.pageframe import header, footer
 from canary.ui.record_ui import render_record_row
 from canary import utils
 
+study_boolvals = ('has_outcomes', 'has_exposures', 'has_relationships', 
+    'has_interspecies', 'has_exposure_linkage', 'has_outcome_linkage', 
+    'has_genomic')
+
 class SearchForm (MyForm):
 
     def __init__ (self, context):
@@ -82,7 +86,7 @@ def search [html] (request):
         
         form.render()
         """
-        <table width='100%s' border='0' cellspacing='0' cellpadding='0'>
+        <table style='margin-top:0;' width='100%s' border='0' cellspacing='0' cellpadding='0'>
             <tr>
                 <td valign='top'>
         
@@ -160,3 +164,222 @@ def search [html] (request):
         """
 
     footer()
+
+
+def advanced_search [html] (request):
+    context = get_publisher().context
+
+    form = MyForm(context)
+    s_input_fields = ('with_all', 'with_exact', 'with_one', 'with_out')
+    for s_input in s_input_fields:
+        form.add(form2.StringWidget, s_input,
+            size='35',
+            required=False)
+    form.add(form2.SingleSelectWidget, 'concept_type',
+        options=[
+            ('-', '-', '-'),
+            ('exposure', 'Exposure', 'exposure'),
+            ('outcome', 'Outcome', 'outcome'),
+            ('risk_factor', 'Risk factor', 'risk_factor'),
+            ('species', 'Species', 'species'),
+            ('location', 'Location', 'location',),
+            ],
+        sort=False,
+        required=False)
+    form.add(form2.SingleSelectWidget, 'biblio_type',
+        options=[
+            ('-', '-', '-'),
+            ('title', 'Title', 'title'),
+            ('author', 'Author', 'author'),
+            ('journal', 'Journal', 'journal'),
+            ('pages', 'Page(s)', 'pages'),
+            ('subject', 'Subject', 'subject'),
+            ],
+        sort=False,
+        required=False)
+    form.add(form2.SingleSelectWidget, 'methodology_type',
+        options=[
+            ('-', '-', '-'),
+            ('aggregate', 'Aggregate', 'aggregate'),
+            ('case_control', 'Case control', 'case_control'),
+            ('cohort', 'Cohort', 'cohort'),
+            ('cross_sectional', 'Cross sectional', 'cross_sectional'),
+            ('descriptive', 'Descriptive', 'descriptive'),
+            ('disease_model', 'Disease model', 'disease_model'),
+            ('experimental', 'Experimental', 'experimental'),
+            ],
+        sort=False,
+        required=False)
+    form.add(form2.StringWidget, 'concept_value',
+        size='35',
+        required=False)
+    for boolval in study_boolvals:
+        form.add(form2.CheckboxWidget, boolval,
+            value=False)
+    form.add_submit('search', 'Search')
+    
+    search_tokens = []
+    if form.is_submitted():
+        if form['with_all']:
+            search_tokens.append(form['with_all'])
+        if form['with_exact']:
+            search_tokens.append('"%s"' % form['with_exact'])
+        if form['with_one']:
+            search_tokens.append('(%s)' % \
+                str(' OR '.join([str(tok) for tok in form['with_one'].split(str(' '))])))
+        if form['with_out']:
+            search_tokens.append(' '.join(['-%s' % t for t in form['with_out'].split(str(' '))]))
+        if form['concept_type'] \
+            and not form['concept_type'] == '-' \
+            and form['concept_value']:
+            search_tokens.append('%s:"%s"' % (form['concept_type'], 
+                form['concept_value']))
+        if form['biblio_type'] \
+            and not form['biblio_type'] == '-' \
+            and form['biblio_value']:
+            search_tokens.append('%s:"%s"' % (form['biblio_type'], 
+                form['biblio_value']))
+        if form['methodology_type'] \
+            and not form['methodology_type'] == '-':
+            search_tokens.append('methodology:"%s"' % form['methodology_type'])
+        for boolval in study_boolvals:
+            if form[boolval]:
+                boolval_str = boolval.replace(str('_'), str('-'))
+                search_tokens.append('%s:1' % boolval_str)
+        
+        target = str('/search?go=go&q=%s' % \
+            ' '.join([str(tok) for tok in search_tokens]))
+        target = target.replace(str('&quot;'), str('"'))
+        print 'target is', str(target)
+        request.redirect(target)
+
+
+    header('Advanced Search')
+    """
+    <h3>Advanced Search</h3>
+    
+    <h4>Find studies:</h4>
+    
+    <table class='advsearchtable' cellpadding='2' cellspacing='0' width='80%'>
+        <tbody>
+            <form method='post' action='/advanced_search'>
+            <tr>
+                <td>
+                    <font size='-1'>with <b>all</b> of the words</font>
+                </td>
+                <td>
+                    <input type='text' name='with_all' size='35' value=''>
+                </td>
+                <td rowspan='7' valign='top'>
+                    <input name='submit' value='Search' type='submit'>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap='nowrap'>
+                    <font size='-1'>with the <b>exact phrase</b></font>
+                </td>
+                <td>
+                    <input type='text' name='with_exact' size='35' value=''>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap='nowrap'>
+                    <font size='-1'>with <b>at least one</b> of the words</font>
+                </td>
+                <td>
+                    <input type='text' name='with_one' size='35' value=''>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap='nowrap'>
+                    <font size='-1'><b>without</b> the words</font>
+                </td>
+                <td>
+                    <input type='text' name='with_out' size='35' value=''>
+                </td>                
+            </tr>
+            <tr style='background:#e5e5e5;'>
+                <td colspan='3'>
+                    &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td nowrap='nowrap'>
+                    <font size='-1'>with <b>article </b> &nbsp;&nbsp;</font>
+                    <select name='biblio_type'>
+                        <option value='-' selected='selected'>-</option>
+                        <option value='title'>Title</option>
+                        <option value='author'>Author</option>
+                        <option value='journal'>Journal</option>
+                        <option value='pages'>Page(s)</option>
+                        <option value='subject'>Subject</option>
+                    </select>
+                </td>
+                <td colspan='2'>
+                    <input type='text' name='biblio_value' size='35' value=''>
+                </td>                
+            </tr>
+            <tr>
+                <td nowrap='nowrap'>
+                    <font size='-1'>with <b>Canary </b> &nbsp;&nbsp;</font>
+                    <select name='concept_type'>
+                        <option value='-' selected='selected'>-</option>
+                        <option value='exposure'>Exposure</option>
+                        <option value='outcome'>Outcome</option>
+                        <option value='risk_factor'>Risk factor</option>
+                        <option value='species'>Species</option>
+                        <option value='location'>Location</option>
+                    </select>
+                </td>
+                <td colspan='2'>
+                    <input type='text' name='concept_value' size='35' value=''>
+                </td>                
+            </tr>
+            <tr>
+                <td nowrap='nowrap'>
+                    <font size='-1'>having <b>study type</b> </font>
+                </td>
+                <td colspan='2'>
+                    <select name='methodology_type'>
+                        <option value='-' selected='selected'>-</option>
+                        <option value='aggregate'>Aggregate</option>
+                        <option value='case_control'>Case Control</option>
+                        <option value='cohort'>Cohort</option>
+                        <option value='cross_sectional'>Cross sectional</option>
+                        <option value='descriptive'>Descriptive</option>
+                        <option value='disease_model'>Disease model</option>
+                        <option value='experimental'>Experimental</option>
+                    </select>
+                </td>                
+            </tr>
+            <tr>
+                <td nowrap='nowrap' valign='top'>
+                    <font size='-1'>providing <b>data about </b></font>
+                </td>
+                <td colspan='2' valign='top'>
+                    <font size='-1'>
+                    <input type='checkbox' name='has_relationships' />
+                    Cause and effect analysis
+                    <br />
+                    <input type='checkbox' name='has_interspecies' />
+                    Interspecies susceptibility
+                    <br />
+                    <input type='checkbox' name='has_exposure_linkage' />
+                    Shared exposures with humans
+                    <br />
+                    <input type='checkbox' name='has_outcome_linkage' />
+                    Shared outcomes with humans
+                    <br />
+                    <input type='checkbox' name='has_genomic' />
+                    Gene sequences
+                    <br />
+                    </font>
+                </td>
+            </tr>
+            </form>
+        </tbody>
+    </table>
+    """
+
+    footer()
+    

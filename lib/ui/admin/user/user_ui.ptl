@@ -203,6 +203,11 @@ def edit [html] (user_id=None):
     else:
         user.is_admin = False
 
+    if form['is_assistant']:
+        user.is_assistant = True
+    else:
+        user.is_assistant = False
+
     if form['is_active']:
         user.is_active = True
     else:

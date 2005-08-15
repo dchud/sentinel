@@ -111,6 +111,8 @@ def pageframe [html] ():
                             <input type="text" name="q" size="20" tabindex="13">
                             <input type="submit" name="go" value="go">
                         </span>
+                        <a style='font-size:9px;' 
+                            href='/advanced_search'>Advanced Search</a>
                     </p>
                 </td>
             </form>
