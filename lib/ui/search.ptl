@@ -232,16 +232,16 @@ def advanced_search [html] (request):
                 str(' OR '.join([str(tok) for tok in form['with_one'].split(str(' '))])))
         if form['with_out']:
             search_tokens.append(' '.join(['-%s' % t for t in form['with_out'].split(str(' '))]))
-        if form['concept_type'] \
-            and not form['concept_type'] == '-' \
-            and form['concept_value']:
-            search_tokens.append('%s:"%s"' % (form['concept_type'], 
-                form['concept_value']))
         if form['biblio_type'] \
             and not form['biblio_type'] == '-' \
             and form['biblio_value']:
             search_tokens.append('%s:"%s"' % (form['biblio_type'], 
                 form['biblio_value']))
+        if form['concept_type'] \
+            and not form['concept_type'] == '-' \
+            and form['concept_value']:
+            search_tokens.extend(['%s:%s' % (form['concept_type'], 
+                val) for val in form['concept_value'].split(str(' '))])
         if form['methodology_type'] \
             and not form['methodology_type'] == '-':
             search_tokens.append('methodology:"%s"' % form['methodology_type'])
