@@ -178,9 +178,9 @@ def advanced_search [html] (request):
     form.add(form2.SingleSelectWidget, 'concept_type',
         options=[
             ('-', '-', '-'),
-            ('exposure', 'Exposure', 'exposure'),
-            ('outcome', 'Outcome', 'outcome'),
-            ('risk_factor', 'Risk factor', 'risk_factor'),
+            ('exposures', 'Exposure', 'exposures'),
+            ('outcomes', 'Outcome', 'outcomes'),
+            ('risk-factors', 'Risk factor', 'risk-factors'),
             ('species', 'Species', 'species'),
             ('location', 'Location', 'location',),
             ],
@@ -196,6 +196,9 @@ def advanced_search [html] (request):
             ('subject', 'Subject', 'subject'),
             ],
         sort=False,
+        required=False)
+    form.add(form2.StringWidget, 'biblio_value',
+        size='35',
         required=False)
     form.add(form2.SingleSelectWidget, 'methodology_type',
         options=[
@@ -324,9 +327,9 @@ def advanced_search [html] (request):
                     <font size='-1'>with <b>Canary </b> &nbsp;&nbsp;</font>
                     <select name='concept_type'>
                         <option value='-' selected='selected'>-</option>
-                        <option value='exposure'>Exposure</option>
-                        <option value='outcome'>Outcome</option>
-                        <option value='risk_factor'>Risk factor</option>
+                        <option value='exposures'>Exposure</option>
+                        <option value='outcomes'>Outcome</option>
+                        <option value='risk-factors'>Risk factor</option>
                         <option value='species'>Species</option>
                         <option value='location'>Location</option>
                     </select>
