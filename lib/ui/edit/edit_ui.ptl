@@ -283,6 +283,7 @@ class LoadPubmedForm (MyForm):
     
     def __init__ (self, context, batch_options=[]):
         MyForm.__init__(self, context)
+        self.method = 'get'
         self.action_url = '/edit/pubmed'
         self.add(form2.IntWidget, 'pmid',
             title='PMID:',
