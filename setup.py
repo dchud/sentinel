@@ -10,7 +10,7 @@ kw = {'name': "canary",
     'description': "Beta version of the Canary Database Project site",
     'author': "Dan Chudnov",
     'author_email': "daniel.chudnov@yale.edu",
-    'package_dir': {'canary': 'lib'},
+    'package_dir': {'canary': 'canary'},
     'packages': [
         'canary',
         'canary.ui',
@@ -40,17 +40,6 @@ kw = {'name': "canary",
         'canary.ui.html',
         'canary.ui.user',
         ],
-    'data_files': [('/home/dlc33/sites/canary_project/images', [
-            'lib/ui/images/favicon.ico',
-            'lib/ui/images/brynn_canaries_alpha_left.png', 
-            'lib/ui/images/yusm_logo.png',
-            'lib/ui/images/algorithm.png',
-            'lib/ui/images/basic-boolean-and.jpg',
-            'lib/ui/images/basic-boolean-or.jpg',
-            'lib/ui/images/pixel.gif',
-            ]
-    ),
-    ],
     'cmdclass': {'build_py': qx_build_py}}
 
 core.setup(**kw)

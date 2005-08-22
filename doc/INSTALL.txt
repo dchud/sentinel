@@ -74,7 +74,7 @@ App configuration:
       </Location>
 
       # Get images directly from the filesystem.
-      Alias /images "/home/dlc33/sites/canarydb.med.yale.edu/current/lib/ui/images"
+      Alias /images "/home/dlc33/sites/canarydb.med.yale.edu/current/canary/ui/images"
       <Location /images>
           SCGIHandler Off
           SetHandler None
@@ -95,7 +95,7 @@ App configuration:
   and configure accordingly, notes as follows:
   - Several canary_config vars "override" default quixote vars;
     additional canary-specific vars are defined here and in 
-    lib/qx_defs.MyConfig
+    canary/qx_defs.MyConfig
   - Create mysql database using schema from doc/database-schema.sql
     and set DB_*
   - Create log directory and set LOG_DIR

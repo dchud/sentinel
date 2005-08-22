@@ -17,6 +17,7 @@ import sys
 import canary.context
 from canary.loader import QueuedRecord
 from canary.search import SearchIndex
+from canary.study import Study
 
 if __name__ == '__main__':
     usage = "usage: %prog [options] TERM1 [TERM2] ..."
@@ -57,6 +58,7 @@ if __name__ == '__main__':
     searcher.close()
         
     output = []
+    locations = []
     for id in hit_list:
         rec = QueuedRecord(context, int(id))
         mm = rec.get_mapped_metadata(ctm)
@@ -65,5 +67,8 @@ if __name__ == '__main__':
         else:
             first_author = '-'
         output.append('\t'.join((str(rec.uid), rec.title, first_author, rec.source)))
+        study = Study(context, rec.study_id)
+        locations.extend(study.get_locations_sorted(context))
         
     print '\n'.join(output)
+    print locations
