@@ -15,6 +15,7 @@ from optparse import OptionParser
 import sys
 
 import canary.context
+from canary.gazeteer import Feature
 from canary.loader import QueuedRecord
 from canary.search import SearchIndex
 from canary.study import Study
@@ -34,6 +35,9 @@ if __name__ == '__main__':
     parser.add_option('-f', '--field', dest='field',
         default='all',
         help='field to search')
+    parser.add_option('-l', '--locations', dest='locations',
+        action='store_true', default=False,
+        help='report location data only?')
 
     (options, args) = parser.parse_args()
 
@@ -48,7 +52,7 @@ if __name__ == '__main__':
         sys.exit(0)
         
     query_str = options.boolean.join([' "%s" [%s] ' % (term, options.field) for term in args])
-    print query_str.strip()
+    #print query_str.strip()
 
     search_index = SearchIndex(context)
     hit_list = []
@@ -58,17 +62,26 @@ if __name__ == '__main__':
     searcher.close()
         
     output = []
-    locations = []
     for id in hit_list:
         rec = QueuedRecord(context, int(id))
-        mm = rec.get_mapped_metadata(ctm)
-        if mm['author']:
-            first_author = mm['author'][0]
+        if options.locations:
+            study = Study(context, rec.study_id)
+            for loc in study.locations:
+                out = []
+                out.extend((id, loc.uid, loc.study_id, loc.feature_id))
+                feature = Feature(uid=loc.feature_id)
+                feature.load(context)
+                out.extend((feature.latitude, feature.longitude,
+                    feature.name, feature.feature_type, feature.country_code))
+                output.append('\t'.join([str(v) for v in out]))
         else:
-            first_author = '-'
-        output.append('\t'.join((str(rec.uid), rec.title, first_author, rec.source)))
-        study = Study(context, rec.study_id)
-        locations.extend(study.get_locations_sorted(context))
+            mm = rec.get_mapped_metadata(ctm)
+            if mm['author']:
+                first_author = mm['author'][0]
+            else:
+                first_author = '-'
+            output.append('\t'.join((str(rec.uid), rec.title, first_author, rec.source)))
         
+    
     print '\n'.join(output)
-    print locations
+    
