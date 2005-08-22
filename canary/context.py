@@ -114,7 +114,7 @@ class Context:
     """
     
     __shared_state = {}
-    
+
     def __init__ (self, config=None):
         self.__dict__ = self.__shared_state
         
@@ -122,14 +122,22 @@ class Context:
         if not self.config:
             self.config = CanaryConfig()
             self.config.read_file('conf/canary_config.py')
-        
+ 
+        # Set up log4py Logger
+        if not self.__dict__.has_key('_logger'):
+            self._logger = log4py.Logger().get_instance('Context')
+            self._logger.set_target(self.config.log_dir + "/sentinel.log")
+            self._logger.set_formatstring(log4py.FMT_DEBUG)
+            self._logger.set_loglevel(log4py.LOGLEVEL_DEBUG)
+            self._logger.set_rotation(log4py.ROTATE_DAILY)
+            self._logger.info('Started logger.')
 
         # Set up a dbpool
         # FIXME:  Why isn't config.db_pool_size loading?  Hardcoded for now...
         # FIXME:  Driver name is hardcoded too.
         if self.config.use_db_pool:
             if not self.__dict__.has_key('_dbpool'):
-                print 'd: loading DBPool'
+                self._logger('loading DBPool')
                 self._dbpool = canary.DBPool.DBPool(MySQLdb,
                     10,                 #config.db_pool_size,
                     self.config.db_host,
@@ -145,17 +153,17 @@ class Context:
                 self._cursor = self._connection.cursor()
 
         if not self.__dict__.has_key('_dbmodel'):
-            print 'd: loading DBModel'
+            self._logger.info( 'loading DBModel' )
             self._dbmodel = canary.db_model.DBModel()
             self._dbmodel.load(self)
         
         if not self.__dict__.has_key('_source_catalog'):
-            print 'd: loading SourceCatalog'
+            self._logger.info( 'loading SourceCatalog' )
             self._source_catalog = canary.source_catalog.SourceCatalog()
             self._source_catalog.load(self, load_terms=True)
         
         if not self.__dict__.has_key('_gazeteer'):
-            print 'd: loading gazeteer codes'
+            self._logger.info('loading gazeteer codes')
             self._gazeteer = canary.gazeteer.Gazeteer()
             self._gazeteer.load(self)
         
@@ -163,6 +171,7 @@ class Context:
         # avoided.  See self.cache_*.
         if self.config.use_cache:
             if not self.__dict__.has_key('_cache'):
+                self._logger.info('setting up cache')
                 self._cache = memcache.Client(self.config.cache_server_list, 
                     debug=0)
         else:
@@ -171,25 +180,19 @@ class Context:
         # Initialize the search index path
         try:
             if not os.path.exists(self.config.search_index_dir):
+                self._logger.info('creating new lucene index: %s' %
+                    self.config.search_index_dir)
                 os.mkdir(self.config.search_index_dir)
                 self._search_index_store = PyLucene.FSDirectory.getDirectory(
                     self.config.search_index_dir, True)
             else:
+                self._logger.info('opening lucene directory: %s' %
+                    self.config.search_index_dir)
                 self._search_index_store = PyLucene.FSDirectory.getDirectory(
                     self.config.search_index_dir, False)
         except:
             import traceback
             print traceback.print_exc()
-
-        # Set up log4py Logger
-        if not self.__dict__.has_key('_logger'):
-            self._logger = log4py.Logger().get_instance('Context')
-            self._logger.set_target(self.config.log_dir + "/sentinel.log")
-            self._logger.set_formatstring(log4py.FMT_DEBUG)
-            self._logger.set_loglevel(log4py.LOGLEVEL_DEBUG)
-            self._logger.set_rotation(log4py.ROTATE_DAILY)
-            self._logger.info('Started logger.')
-
 
     def get_cursor (self):
         """ 
