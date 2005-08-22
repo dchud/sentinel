@@ -9,14 +9,14 @@ class ReportTests(TestCase):
         self.context = Context()
 
     def testContext(self):
-        self.assertTrue(isinstance(self.context,Context))
+        self.assertEquals(isinstance(self.context,Context),True)
 
     def testCuratorActivity(self):
         r = CuratorActivity(self.context)
-        self.assertTrue(isinstance(r,CuratorActivity))
-        self.assertTrue(r.table != None)
-        self.assertTrue(len(r.text()) > 0 )
-        self.assertTrue("<tr>" in r.html())
+        self.assertEquals(isinstance(r,CuratorActivity),True)
+        self.assertNotEquals(r.table,None)
+        self.assertEquals(len(r.text())>0, True)
+        self.assertEquals("<tr>" in r.html(), True)
 
 def suite():
     return makeSuite( ReportTests, 'test' )
