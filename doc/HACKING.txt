@@ -1,0 +1,110 @@
+HACKING
+-------
+
+General notes:
+
+- svn check-ins should be atomic with a ticket, e.g. check in 
+  one changeset at a time to close one or more specific tickets
+  whenever possible
+
+- check-ins that close tickets should have the message "closes #n"
+  or "fixes #n" to close the ticket automatically
+
+- check-ins that reference a ticket should have the message "refs #s"
+  e.g. if something is being done for one ticket in preparation for
+  closing a separate dependent ticket
+  
+- if a tiny bug is found with a previous check-in that closed
+  a ticket, just use "refs #n", rather than creating a new ticket
+
+- check-ins should be finished, and at least tested on sample data, 
+  i.e.  don't check things in just to "put them there until they're 
+  done"
+
+- branches are cheap, use 'em for major changes. :)
+
+- any changes requiring changes to an instance's conf/canary_config.py
+  should be indicated with a default value and comment in 
+  conf/canary_config.py.sample
+
+
+Notes about preferred python style.
+
+- spaces good, tabs EVIL
+
+- indents are four spaces wide
+
+- function defs like this (space before "(", none after):  
+
+    def foo (param1, param2):
+
+- function calls like this (no spaces after "(", before ")":
+
+    foo(myparam1, myparam2)
+
+- line-breaking syntax should always break a line, e.g.:
+
+    for x in range(10): print x,                # bad
+
+    for x in range(10):                         # good
+        print x
+
+- import order is alphabetical by three groups, in order: python core,
+  external dependency, local code, with a single space between
+  each, e.g:
+
+    import os
+    import sys
+
+    import PyLucene
+
+    import canary.context
+    import canary.study
+
+- variable names should be lower_case_with_underscores, and 
+  never StudlyCaps or altStudlyCaps
+
+- lengthy string formatting calls with multiple insertions should
+  try to visually separate the params with the same line-breaks as
+  the format.  e.g.:
+
+    """
+    <tr>
+        <td>%s</td>
+        <td>[<a href='%s'>%s</a>]</td>
+    </tr>
+    """ % (param1, param2, param3)              # bad
+
+    """
+    <tr>
+        <td>%s</td>
+        <td>[<a href='%s'>%s</a>]</td>
+    """ % (param1,                              # good
+        param2, param3)                         
+
+- try to keep indent levels of html elements in PTL consistent
+  even if they vary from python indent levels, e.g.:
+
+    """
+    <tr>
+    """
+    for i in len(foo):
+        if i.blah():
+            """
+        <td>something</td>
+            """
+        else:
+            """
+        <td>something else</td>
+            """
+
+- the most arbitrary preference of all is to use "not" instead of
+  "!=" where reasonable, e.g.:
+
+    if foo != bar:                              # bad
+
+    if not foo == bar:                          # good
+
+
+
+$Id$
