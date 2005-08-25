@@ -98,6 +98,15 @@ Notes about preferred python style.
         <td>something else</td>
             """
 
+- string formatting should use single-quotes where possible, not
+  double-quotes
+
+- simple operators should be separated by a space on either side,
+  e.g.:
+
+    print "foo "+bar                            # bad
+    print "foo " + bar                          # good
+
 - the most arbitrary preference of all is to use "not" instead of
   "!=" where reasonable, e.g.:
 
