@@ -64,6 +64,13 @@ Notes about preferred python style.
 - variable names should be lower_case_with_underscores, and 
   never StudlyCaps or altStudlyCaps
 
+- multi-way conditionals should keep one condition per line, e.g.:
+
+    if foo and bar == 42:                       # bad
+
+    if foo \                                    # good
+        and bar == 42:                      
+
 - lengthy string formatting calls with multiple insertions should
   try to visually separate the params with the same line-breaks as
   the format.  e.g.:
