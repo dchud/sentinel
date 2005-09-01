@@ -106,7 +106,7 @@ def _q_index [html] (request):
     <table cellspacing='5' class='gentable'>
     <tr>
         <th>Batch</th>
-        <th>Name</th>
+        <th>Name/Notes</th>
         <th>Source</th>
         <th>Status (unclaimed/claimed/curated/total (% done))</th>
         <th>Load date</th>
@@ -129,7 +129,7 @@ def _q_index [html] (request):
             <td>%s<br />%s</td>
             <td>%s</td>
         """ % (batch.uid, 
-            batch.name, '('+ batch.notes+')' or '',
+            batch.name, batch.notes or '',
             source.name)
         
         # Avoid division by zero for empty batches
