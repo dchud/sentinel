@@ -126,9 +126,11 @@ def _q_index [html] (request):
         """
         <tr>
             <td>%s</td>
+            <td>%s<br />%s</td>
             <td>%s</td>
-            <td>%s</td>
-        """ % (batch.uid, batch.name, source.name)
+        """ % (batch.uid, 
+            batch.name, '('+ batch.notes+')' or '',
+            source.name)
         
         # Avoid division by zero for empty batches
         if batch.num_records > 0:

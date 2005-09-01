@@ -3,6 +3,7 @@
 _q_exports = []
 
 from quixote import get_publisher
+from quixote.html import htmltext
 
 # Allowed values for meta robot/@content, see:
 #   http://www.robotstxt.org/wc/meta-user.html
@@ -99,7 +100,7 @@ def pageframe [html] ():
                 <h2 class='graphicHeader'>%s</h2>
             </td>
         </tr>
-    """ % (config.site_status, config.site_status_note)
+    """ % (config.site_status, htmltext(config.site_status_note))
     """
         <tr valign="top">
             <form action='/search' method='get'>

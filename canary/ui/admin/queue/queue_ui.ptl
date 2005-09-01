@@ -98,6 +98,12 @@ class QueueActions:
             value=batch.source_id,
             sort=True,
             required=True)
+        form.add(form2.TextWidget, 'batch_notes',
+            title='Notes',
+            rows=4, 
+            cols=60, 
+            wrap='virtual', 
+            required=False)
         form.add_submit('edit', 'edit')
         
         def render [html] ():
@@ -108,6 +114,7 @@ class QueueActions:
         
         if not form.is_submitted():
             form.get_widget('batch_name').set_value(batch.name)
+            form.get_widget('batch_notes').set_value(batch.notes)
             form.get_widget('source_id').set_value(batch.source_id)
             return render()
             
@@ -115,6 +122,14 @@ class QueueActions:
         if not form['batch_name'] == batch.name:
             has_changed = True
             batch.name = form['batch_name']
+        if form['batch_notes']:
+            if not form['batch_notes'] == batch.notes:
+                has_changed = True
+                batch.notes = form['batch_notes']
+        else:
+            if batch.notes:
+                has_changed = True
+                batch.notes = str('')
         if not form['source_id'] == batch.source_id:
             has_changed = True
             batch.source_id = form['source_id']
@@ -269,11 +284,11 @@ def list [html] (request):
     <table cellspacing='5' class='gentable'>
     <tr>
         <th>Batch</th>
-        <th>Name</th>
+        <th>Name/Notes</th>
         <th>Source</th>
         <th>Status (unclaimed/claimed/curated/total (% done))</th>
         <th>Load date</th>
-        <th>Actions</th>
+        <th width='15%'>Actions</th>
     </tr>
     """
     queue = Queue()
@@ -288,9 +303,11 @@ def list [html] (request):
         """
         <tr>
             <td>%s</td>
+            <td>%s<br />%s</td>
             <td>%s</td>
-            <td>%s</td>
-        """ % (batch.uid, batch.name, source.name)
+        """ % (batch.uid, 
+            batch.name, batch.notes or '', 
+            source.name)
         
         # Avoid division by zero for empty batches
         if batch.num_records > 0:
@@ -308,10 +325,10 @@ def list [html] (request):
         """
             <td>%s</td>
             <td>
-                [<a href='/admin/queue/%s/edit'>edit</a>]
-                [<a href='/admin/queue/%s/setmeta'>set meta</a>]
-                [<a href='/admin/queue/%s/add'>add</a>]
-                [<a href='/admin/queue/%s/dedupe'>dedupe</a>]
+                [<a href='/admin/queue/%s/edit'>edit</a>]<br />
+                [<a href='/admin/queue/%s/setmeta'>set meta</a>]<br />
+                [<a href='/admin/queue/%s/add'>add</a>]<br />
+                [<a href='/admin/queue/%s/dedupe'>dedupe</a>]<br />
                 [<a href='/admin/queue/%s/delete'>delete</a>]
             </td>
         </tr>
@@ -422,6 +439,12 @@ def create [html] (request):
         required=True)
     form.add(form2.StringWidget, 'batch_name', title='Batch name',
         size=25, required=True)
+    form.add(form2.TextWidget, 'batch_notes',
+        title='Notes',
+        rows=4,
+        cols=60,
+        wrap='virtual', 
+        required=False)
     form.add_submit('create', 'create')
     
     def render [html] ():
@@ -436,12 +459,14 @@ def create [html] (request):
     try:
         batch = Batch(source_id=form['source_id'])
         batch.name = form['batch_name']
+        if form['batch_notes']:
+            batch.notes = form['batch_notes']
         batch.save(context)
         add_message('Created batch %s' % batch.uid)
         form.logger.info(str('Created batch %s' % batch.uid))
-    except:
+    except Exception, e:
         add_message('Could not create batch')
-        form.logger.info(str('Could not create batch'))
+        form.logger.error(str('Could not create batch: %s' % e))
     
     request.redirect(str('/admin'))
 

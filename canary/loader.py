@@ -438,6 +438,7 @@ class Batch (DTable):
         self.num_records = 0
         self.name = ''
         self.date_added = ''
+        self.notes = ''
         self.queued_records = {}
         self.loaded_records = []
         self.logger = logging.getLogger(str(self.__class__))
@@ -555,12 +556,12 @@ class Batch (DTable):
         if self.uid == -1:
             cursor.execute("""
                 INSERT INTO queued_batches
-                (uid, file_name, source_id, num_records, name, 
+                (uid, file_name, source_id, num_records, name, notes,
                 date_added)
                 VALUES
-                (NULL, %s, %s, %s, %s, 
+                (NULL, %s, %s, %s, %s, %s,
                 CURDATE())
-                """, (self.file_name, self.source_id, self.num_records, self.name)
+                """, (self.file_name, self.source_id, self.num_records, self.name, self.notes)
                 )
             self.uid = self.get_new_uid(context)
             self.date_added = time.strftime(str('%Y-%m-%d'))
@@ -568,9 +569,9 @@ class Batch (DTable):
         else:
             cursor.execute("""
                 UPDATE queued_batches
-                SET file_name = %s, num_records = %s, name = %s, source_id = %s
+                SET file_name = %s, source_id = %s, num_records = %s, name = %s, notes = %s
                 WHERE uid = %s
-                """, (self.file_name, self.num_records, self.name, self.source_id,
+                """, (self.file_name, self.source_id, self.num_records, self.name, self.notes,
                 self.uid)
                 )
         
