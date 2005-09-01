@@ -178,8 +178,6 @@ class SourceCatalog:
             if load_terms:
                 term_ids = source.terms.keys()
                 for term_uid in term_ids:
-                    #print 'adding term_uid %s to catalog %s' % (term_uid,
-                    #                                            source.terms[term_uid])
                     self.terms[term_uid] = source.terms[term_uid]
         context.close_cursor(cursor)
         
@@ -283,7 +281,6 @@ class Source (CatalogItem):
             term = Term()
             for field in fields:
                 term.set(field, row[field])
-            #print 'adding term %s to source %s' % (term.uid, self.uid)
             self.terms[term.uid] = term
             self.term_tokens[term.token] = term.uid
 

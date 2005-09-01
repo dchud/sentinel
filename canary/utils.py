@@ -2,38 +2,11 @@
 # $Id$
 
 import Image, ImageDraw
-from log4py import Logger
 import os
 import re
 import time
 
 import canary.context
-
-
-class MyLogger (Logger):
-    """
-    Convenience wrapper around log4py.Logger to avoid needing to
-    sprinkle str() calls around whenever common logger funcs are called
-    inside of PTL templates.
-    FIXME:  utterly incomplete, and these calls are actually (self, *msgs)
-    """
-
-    # Note:  we are not able to tweak the init params for Logger here.
-    def __init__ (self):
-        Logger.__init__(self)
-
-    def debug (self, msg):
-        Logger.debug(self, str(msg))
-
-    def warn (self, msg):
-        Logger.warn(self, str(msg))
-
-    def error (self, msg):
-        Logger.error(self, str(msg))
-
-    def info (self, msg):
-        Logger.info(self, str(msg))
-
 
 class DTable:
     """

@@ -1,7 +1,8 @@
 # $Id$
 
-import dtuple
+import logging
 
+import dtuple
 
 
 class ValueGroup:
@@ -107,6 +108,7 @@ class Value:
         self.value_group_id = value_group_id
         self.serial_number = serial_number
         self.description = description
+        self.logger = logging.getLogger(str(self.__class__))
 
     def __repr__ (self):
         s = []
@@ -122,14 +124,12 @@ class Value:
         cursor = context.get_cursor()
         try:
             if self.value_id == -1:
-                print 'inserting value'
                 cursor.execute("""
                     INSERT INTO dv_values
                     (dv_id, dv_group_id, serial_number, description)
                     VALUES (NULL, %s, %s, %s)
                     """, (self.value_group_id, self.serial_number, self.description))
             else:
-                print 'updating value'
                 cursor.execute("""
                     UPDATE dv_values
                     SET dv_group_id = %s, serial_number = %s, description = %s
@@ -149,10 +149,8 @@ class Value:
                 DELETE FROM dv_values
                 WHERE dv_id = %s
                 """, self.value_id)
-            print 'deleted value'
         except:
             # FIXME: define Errors
-            print 'failed: deleting value'
             pass
         context.close_cursor(cursor)
 
@@ -198,15 +196,8 @@ class DBModel:
                     int(val_row['serial_number']),
                     val_row['description'],
                     int(val_row['dv_id']))
-                    
-                if debug:
-                    print "adding value:"
-                    print value
                 group.add_value(value)
 
-            if debug:
-                print "adding group:"
-                print group
             self.add_group(group)
         context.close_cursor(cursor)
         
@@ -259,7 +250,6 @@ class DBModel:
                 DELETE FROM dv_group
                 WHERE dv_group_id = %s
                 """, group_id)
-                
         except:
             # FIXME: errors.
             pass

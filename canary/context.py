@@ -1,10 +1,11 @@
 # $Id$
 
+import logging
+import logging.handlers
 import os
 import pprint
 import traceback
 
-import log4py
 import memcache
 import MySQLdb
 import PyLucene
@@ -47,15 +48,14 @@ class Cacheable (object):
             try:
                 item = context.cache_get(full_cache_key)
                 if item:
-                    #print 'HIT %s' % full_cache_key
+                    context.logger.debug('HIT %s', full_cache_key)
                     return item
                 else:
-                    #print 'MISS %s' % full_cache_key
+                    context.logger.debug('MISS %s', full_cache_key)
                     pass
-            except:
-                #print 'ERROR %s\n', traceback.print_exc()
-                pass
-        
+            except Exception, e:
+                context.logger.error('ERROR %s', e)
+                
         item = object.__new__(cls)
         item.__init__(*args, **kwargs)
         item.load(context)
@@ -80,6 +80,8 @@ class CanaryConfig (quixote.config.Config):
             'db_name',
             'use_db_pool',
             'db_pool_size',
+            'log_level',
+            'log_format',
             'log_dir',
             'static_html_dir',
             'static_image_dir',
@@ -96,8 +98,6 @@ class CanaryConfig (quixote.config.Config):
         for var in my_vars:
             quixote.config.Config.config_vars.append(var)
             
-            
-            
 
 
 class Context:
@@ -113,31 +113,27 @@ class Context:
     at instantiation.  Perhaps this will slow it down significantly?
     """
     
-    __shared_state = {}
+    #__shared_state = {}
 
     def __init__ (self, config=None):
-        self.__dict__ = self.__shared_state
+        #self.__dict__ = self.__shared_state
         
         self.config = config
         if not self.config:
             self.config = CanaryConfig()
             self.config.read_file('conf/canary_config.py')
  
-        # Set up log4py Logger
-        if not self.__dict__.has_key('_logger'):
-            self._logger = log4py.Logger().get_instance('Context')
-            self._logger.set_target(self.config.log_dir + "/sentinel.log")
-            self._logger.set_formatstring(log4py.FMT_DEBUG)
-            self._logger.set_loglevel(log4py.LOGLEVEL_DEBUG)
-            self._logger.set_rotation(log4py.ROTATE_DAILY)
-            self._logger.info('Started logger.')
+        # Get a logger to use
+        self.init_logging()
+        self.logger = logging.getLogger(str(self.__class__))
+        self.logger.debug('Started logger')
 
         # Set up a dbpool
         # FIXME:  Why isn't config.db_pool_size loading?  Hardcoded for now...
         # FIXME:  Driver name is hardcoded too.
         if self.config.use_db_pool:
             if not self.__dict__.has_key('_dbpool'):
-                self._logger('loading DBPool')
+                self.logger.info('Loading DBPool')
                 self._dbpool = canary.DBPool.DBPool(MySQLdb,
                     10,                 #config.db_pool_size,
                     self.config.db_host,
@@ -146,6 +142,7 @@ class Context:
                     self.config.db_name)
         else:
             if not self.__dict__.has_key('_connection'):
+                self.logger.info('Getting db connection')
                 self._connection = MySQLdb.connect(db=self.config.db_name,
                     host=self.config.db_host, user=self.config.db_user,
                     passwd=self.config.db_passwd)
@@ -153,17 +150,17 @@ class Context:
                 self._cursor = self._connection.cursor()
 
         if not self.__dict__.has_key('_dbmodel'):
-            self._logger.info( 'loading DBModel' )
+            self.logger.info('loading DBModel')
             self._dbmodel = canary.db_model.DBModel()
             self._dbmodel.load(self)
         
         if not self.__dict__.has_key('_source_catalog'):
-            self._logger.info( 'loading SourceCatalog' )
+            self.logger.info('loading SourceCatalog')
             self._source_catalog = canary.source_catalog.SourceCatalog()
             self._source_catalog.load(self, load_terms=True)
         
         if not self.__dict__.has_key('_gazeteer'):
-            self._logger.info('loading gazeteer codes')
+            self.logger.info('loading gazeteer codes')
             self._gazeteer = canary.gazeteer.Gazeteer()
             self._gazeteer.load(self)
         
@@ -171,7 +168,7 @@ class Context:
         # avoided.  See self.cache_*.
         if self.config.use_cache:
             if not self.__dict__.has_key('_cache'):
-                self._logger.info('setting up cache')
+                self.logger.info('Connecting to cache')
                 self._cache = memcache.Client(self.config.cache_server_list, 
                     debug=0)
         else:
@@ -180,20 +177,20 @@ class Context:
         # Initialize the search index path
         try:
             if not os.path.exists(self.config.search_index_dir):
-                self._logger.info('creating new lucene index: %s' %
+                self.logger.info('Creating new lucene index: %s',
                     self.config.search_index_dir)
                 os.mkdir(self.config.search_index_dir)
                 self._search_index_store = PyLucene.FSDirectory.getDirectory(
                     self.config.search_index_dir, True)
             else:
-                self._logger.info('opening lucene directory: %s' %
+                self.logger.info('opening lucene directory: %s',
                     self.config.search_index_dir)
                 self._search_index_store = PyLucene.FSDirectory.getDirectory(
                     self.config.search_index_dir, False)
-        except:
-            import traceback
-            print traceback.print_exc()
-
+        except Exception, e:
+            self.logger.error('Unable to initialize search index')
+            self.logger.error(traceback.format_stack())
+            
     def get_cursor (self):
         """ 
         Will behave differently, depending on whether config.use_db_pool
@@ -251,34 +248,49 @@ class Context:
         
     def cache_get (self, key):
         if self.config.use_cache:
-            print 'GET:', key
+            self.logger.debug('GET: %s', key)
             return self._cache.get(key)
     
     def cache_get_multi (self, keys):
         if self.config.use_cache:
-            print 'GET_MULTI:', keys
+            self.logger.debug('GET_MULTI: %s', keys)
             return self._cache.get_multi(keys)
         
     def cache_set (self, key, val, time=0):
         if self.config.use_cache:
-            print 'SET:', key
+            self.logger.debug('SET: %s', key)
             return self._cache.set(key, val, time)
         
     def cache_replace (self, key, value, time=0):
         if self.config.use_cache:
-            print 'REPLACE:', key
+            self.logger.debug('REPLACE: %s', key)
             return self._cache.replace(key, value, time)
         
     def cache_delete (self, key, time=0):
         if self.config.use_cache:
-            print 'DELETE:', key
+            self.logger.debug('DELETE: %s', key)
             return self._cache.delete(key, time)
 
-    def configure_logger (self, logger):
-        logger.set_target(self.config.log_dir + "/sentinel.log")
-        logger.set_formatstring(self._logger.get_formatstring())
-        logger.set_loglevel(self._logger.get_loglevel())
-        logger.set_rotation(self._logger.get_rotation())
+    def init_logging (self):
+        """
+        Set up the base logger for all other logs to use.
+        This should really only get called once in the lifetime of a
+        process.
+        """
+
+        # setup the rotating file handler
+        # (loc, mode, maxBytes, backupCount)
+        handler = logging.handlers.TimedRotatingFileHandler(
+            self.config.log_dir + '/sentinel.log', when='D', interval=1)
+
+        # set the format for log entries
+        formatter = logging.Formatter(self.config.log_format)
+        handler.setFormatter(formatter)
+
+        # configure the base logger
+        logger = logging.getLogger('canary')
+        logger.setLevel(self.config.log_level)
+        logger.addHandler(handler)
 
     def get_search_index_writer (self, clobber=False):
         search_index_store = PyLucene.FSDirectory.getDirectory(

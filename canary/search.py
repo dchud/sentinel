@@ -1,36 +1,36 @@
 # $Id$
 
+import logging
+import traceback
 
 import pyparsing as pyp
 import PyLucene
-from PyLucene import Field, Term, Document
-from PyLucene import QueryParser, IndexSearcher, StandardAnalyzer, FSDirectory
 
 from canary.concept import Concept
 from canary.gazeteer import Feature
 import canary.loader 
 from canary.pubmed import Journal
-import canary.study
+from canary.study import Study
 from canary.utils import render_capitalized
 
 
 # All possible search fields, indexed by all valid forms.
 SEARCH_FIELDS = {
-    '1au':          'first-author',
-    'ab':           'abstract',
-    'abstract':     'abstract',
-    'af':           'affiliation', 
-    'affiliation':  'affiliation', 
-    'all':          'all',
-    'au':           'author',
-    'author':       'author',
-    'authors':      'author',
-    'date':         'pubdate',
-    'exp':          'exposures',
-    'exposure':     'exposures',
-    'exposures':    'exposures',
-    'gn':           'grantnum',
-    'grantnum':     'grantnum',
+    '1au':                  'first-author',
+    'ab':                   'abstract',
+    'abstract':             'abstract',
+    'af':                   'affiliation', 
+    'affiliation':          'affiliation', 
+    'all':                  'all',
+    'au':                   'author',
+    'author':               'author',
+    'authors':              'author',
+    'date':                 'pubdate',
+    'exp':                  'exposures',
+    'exposure':             'exposures',
+    'exposures':            'exposures',
+    'gn':                   'grantnum',
+    'grantnum':             'grantnum',
     'has-exposures':        'has-exposures', 
     'has-exposure_linkage': 'has-exposure-linkage',
     'has-genomic':          'has-genomic',
@@ -38,46 +38,46 @@ SEARCH_FIELDS = {
     'has-outcomes':         'has-outcomes',
     'has-outcome_linkage':  'has-outcome-linkage',
     'has-relationships':    'has-relationships',
-    'is':           'issue', 
-    'issn':         'issn',
-    'issue':        'issue',
-    'jn':           'journal',
-    'journal':      'journal', 
-    'keyword':      'keyword',
-    'keywords':     'keyword',
-    'kw':           'keyword',
-    'loc':          'location',
-    'location':     'location',
-    'locations':    'location',
-    'me':           'methodology',
-    'meth':         'methodology',
-    'methodology':  'methodology',
-    'mh':           'subject',
-    'out':          'outcomes',
-    'outcome':      'outcomes',
-    'outcomes':     'outcomes',
-    'pd':           'pubdate', 
-    'page':         'pages',
-    'pages':        'pages',
-    'pg':           'pages', 
-    'registrynum':  'registrynum',
-    'rf':           'risk-factors',
-    'risk-factor':  'risk-factors',
-    'risk-factors': 'risk-factors',
-    'rn':           'registrynum',
-    'sh':           'subject',
-    'spec':         'species',
-    'species':      'species',
-    'subject':      'subject',
-    'subjects':     'subject',
-    'ti':           'title', 
-    'title':        'title',
-    'ui':           'unique-identifier',
-    'uid':          'unique-identifier',
+    'is':                   'issue', 
+    'issn':                 'issn',
+    'issue':                'issue',
+    'jn':                   'journal',
+    'journal':              'journal', 
+    'keyword':              'keyword',
+    'keywords':             'keyword',
+    'kw':                   'keyword',
+    'loc':                  'location',
+    'location':             'location',
+    'locations':            'location',
+    'me':                   'methodology',
+    'meth':                 'methodology',
+    'methodology':          'methodology',
+    'mh':                   'subject',
+    'out':                  'outcomes',
+    'outcome':              'outcomes',
+    'outcomes':             'outcomes',
+    'pd':                   'pubdate', 
+    'page':                 'pages',
+    'pages':                'pages',
+    'pg':                   'pages', 
+    'registrynum':          'registrynum',
+    'rf':                   'risk-factors',
+    'risk-factor':          'risk-factors',
+    'risk-factors':         'risk-factors',
+    'rn':                   'registrynum',
+    'sh':                   'subject',
+    'spec':                 'species',
+    'species':              'species',
+    'subject':              'subject',
+    'subjects':             'subject',
+    'ti':                   'title', 
+    'title':                'title',
+    'ui':                   'unique-identifier',
+    'uid':                  'unique-identifier',
     'unique-identifier':    'unique-identifier',
-    'vol':          'volume',
-    'volume':       'volume',
-    'word':         'keyword',
+    'vol':                  'volume',
+    'volume':               'volume',
+    'word':                 'keyword',
     }
     
 
@@ -201,6 +201,7 @@ class Search:
         self.token = token.strip()
         self.allow_curated = allow_curated
         self.allow_uncurated = allow_uncurated
+        self.logger = logging.getLogger(str(self.__class__))
         
         
     def search (self, context, term_mapping={}):
@@ -213,7 +214,7 @@ class Search:
         try:
             if self.field == 'canary id':
                 token = int(self.token)
-                record = QueuedRecord(context, token)
+                record = canary.loader.QueuedRecord(context, token)
                 results.add_result(record)
             elif self.field == 'keyword':
                 select_clause = """
@@ -231,7 +232,7 @@ class Search:
                         select_clause += ' AND queued_records.status = %s ' % \
                             canary.loader.QueuedRecord.STATUS_CURATED
                         select_clause += ' AND studies.article_type > %s ' % \
-                            canary.study.Study.ARTICLE_TYPES['irrelevant']
+                            Study.ARTICLE_TYPES['irrelevant']
                 else:
                     # Should be uncurated articles only
                     select_clause += ' AND queued_records.status != %s' % \
@@ -273,7 +274,7 @@ class Search:
                             select_clause += ' AND queued_records.status = %s' % \
                                 canary.loader.QueuedRecord.STATUS_CURATED
                             select_clause += ' AND studies.article_type > %s ' % \
-                                canary.study.Study.ARTICLE_TYPES['irrelevant']
+                                Study.ARTICLE_TYPES['irrelevant']
                     else:
                         # Should be uncurated articles only
                         select_clause += ' AND queued_records.status != %s' % \
@@ -284,10 +285,9 @@ class Search:
                     for row in rows:
                         record = canary.loader.QueuedRecord(context, row[0])
                         results.add_result(record)
-        except:
-            print 'Unable to perform search'
-            import traceback
-            print traceback.print_exc()
+        except Exception, e:
+            self.logger.error('Unable to perform search:', e)
+            self.logger.error(traceback.format_stack())
         
         context.close_cursor(cursor)
         return results
@@ -316,7 +316,8 @@ class PubmedSearch:
     def __init__ (self):
         self.efetch_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=[[UI]]&mode=text&report=medline&tool=canarydb&email=sentinelstudies@yale.edu'
         self.esearch_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=[[TERMS]]&tool=canarydb&email=sentinelstudies@yale.edu'
-    
+        self.logger = logging.getLogger(str(self.__class__))
+
 
     def fetch (self, ui):
         """
@@ -368,9 +369,9 @@ class PubmedSearch:
                     events.expandNode(node)
                     id = self._get_text(node)
                     id_list.append(id)
-        except:
-            import traceback
-            print traceback.print_exc()
+        except Exception, e:
+            self.logger.error('Unable to search Pubmed:', e)
+            self.logger.error(traceback.format_stack())
             return []
             
         if len(id_list) > 0:
@@ -384,6 +385,7 @@ class SearchIndex:
     
     def __init__ (self, context=None):
         self.context = context
+        self.logger = logging.getLogger(str(self.__class__))
         
         
     def index_record (self, record, writer=None):
@@ -395,9 +397,9 @@ class SearchIndex:
             else:
                 had_writer = True
             
-            study = canary.study.Study(self.context, record.study_id)
+            study = Study(self.context, record.study_id)
             
-            #print 'starting document'
+            self.logger.debug('starting document')
             doc = PyLucene.Document()
             
             # First, we need to create a unique key so we can later delete
@@ -435,8 +437,8 @@ class SearchIndex:
             if issn:
                 j = Journal()
                 j.load_from_issn(self.context, issn)
-                print 'indexing journal:', j.journal_title, 'abbv:', \
-                    j.abbreviation, 'issn:', issn
+                self.logger.debug('indexing journal: %s, abbv:%s, issn:%s' % \
+                    (j.journal_title, j.abbreviation, issn))
                 doc.add(PyLucene.Field('journal', issn,
                     False, True, True))
                 doc.add(PyLucene.Field('all', issn,
@@ -561,9 +563,9 @@ class SearchIndex:
             writer.addDocument(doc)
             if not had_writer:
                 writer.close()
-        except:
-            import traceback
-            print traceback.print_exc()
+        except Exception, e:
+            self.logger.error('Failed to index record: %s', e)
+            self.logger.error(traceback.format_stack())
         
 
     def unindex_record (self, record):
@@ -573,7 +575,7 @@ class SearchIndex:
         got indexed multiple times.
         """
         reader = self.context.get_search_index_reader()
-        term = Term('uid', str(record.uid))
+        term = PyLucene.Term('uid', str(record.uid))
         reader.deleteDocuments(term)
         reader.close()
 
@@ -583,11 +585,11 @@ class SearchIndex:
             
         hits = []
         query_string = str(query_string)
-        #print 'QS:', query_string
+        self.logger.debug('Raw query: %s', query_string)
         disassembled_query = disassemble_user_query(query_string)
-        #print 'DQ:', disassembled_query
+        self.logger.debug('Disassembled query: %s', disassembled_query)
         reassembled_query = '+(%s)' % reassemble_user_query(disassembled_query)
-        #print 'RQ:', reassembled_query
+        self.logger.debug('Reassembled query: %s', reassembled_query)
         
         if not allow_curated:
             reassembled_query += \
@@ -595,28 +597,74 @@ class SearchIndex:
     
         if require_visible:
             reassembled_query += ' +article-type:[%s TO %s]' % \
-                (canary.study.Study.ARTICLE_TYPES['traditional'], 
-                canary.study.Study.ARTICLE_TYPES['curated'])
+                (Study.ARTICLE_TYPES['traditional'], 
+                Study.ARTICLE_TYPES['curated'])
             reassembled_query += ' +record-status:%s' % \
                 canary.loader.QueuedRecord.STATUS_CURATED
-                
-            
-        #print 'FQ:', reassembled_query
-        
+                    
         try:
             searcher = PyLucene.IndexSearcher(PyLucene.FSDirectory.getDirectory(
                 self.context.config.search_index_dir, False))
-            analyzer = StandardAnalyzer()
-            query_parser = QueryParser('all', analyzer)
-            query_parser.setOperator(QueryParser.DEFAULT_OPERATOR_AND)
+            analyzer = PyLucene.StandardAnalyzer()
+            query_parser = PyLucene.QueryParser('all', analyzer)
+            query_parser.setOperator(PyLucene.QueryParser.DEFAULT_OPERATOR_AND)
             query = query_parser.parseQuery(reassembled_query)
-            print 'Query:', query
+            self.logger.info('Search query: %s', query)
             hits = searcher.search(query)
             return hits, searcher
-        except:
-            import traceback
-            print traceback.print_exc()
-            return hits, searcher
+        except Exception, e:
+            self.logger.error('Search failed: %s', e)
+            #self.logger.error(traceback.format_stack())
+            if hits \
+                and searcher:
+                return hits, searcher
+            else:
+                return [], None
 
-        
     
+
+class RecordSearcher:
+    """Conduct an index search and get QueuedRecord objects back
+
+    searcher = RecordSearcher(context)
+    records = searcher.search("canary")
+    """
+
+    def __init__(self, context):
+        self.context = context
+        self.searcher = SearchIndex(context)
+
+    def search(self, query, curated_only=False):
+        """pass in a pylucene query and get back a list of QueuedRecord
+        objects.
+        """
+        records = []
+        hits, searcher = self.searcher.search(query)
+        for i, doc in hits:
+            uid = doc.get(str('uid'))
+            record = canary.loader.QueuedRecord(self.context, int(uid))
+            if curated_only \
+                and record.status != record.STATUS_CURATED:
+                continue
+            records.append(record)
+        return records
+
+
+class StudySearcher:
+    """Conduct a lucene search and get back a list of relevant studies.
+
+    searcher = StudySearcher(context)
+    studies = searcher.search("canary")
+    """
+
+    def __init__(self,context):
+        self.context = context
+        self.searcher = RecordSearcher(context)
+
+    def search(self,query):
+        """perform a lucene search for studies
+        """
+        studies = []
+        for record in self.searcher.search(query, curated_only=True):
+            studies.append(Study(self.context, record.study_id))
+        return studies

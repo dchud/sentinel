@@ -58,8 +58,6 @@ class CategoryActions:
             else:
                 raise TraversalError
         except:
-            import traceback
-            print traceback.print_exc()
             return not_found('category')
             
             
@@ -198,7 +196,7 @@ def edit [html] (request, category_id):
     try:
         category.save(context)
         add_message('Edited category %s' % category_id)
-        form.logger.info(str('Edited category %s' % category_id))
+        form.logger.info(str('Edited category %s', category_id))
     except:
         add_message('Could not edit category')
         form.logger.info(str('Could not edit category'))
@@ -327,7 +325,7 @@ def create [html] (request):
     try:
         category.save(context)
         add_message('Created category %s' % category.uid)
-        form.logger.info(str('Created category %s' % category.uid))
+        form.logger.info(str('Created category %s', category.uid))
     except:
         add_message('Could not create category')
         form.logger.info(str('Could not create category'))
@@ -425,15 +423,12 @@ def add [html] (request, category_id):
             cat_concept.is_broad = True
         if form['is_default']:
             cat_concept.is_default = True
-        print 'saving concept'
         cat_concept.save(context)
-        print 'saved'
         add_message('Added concept "%s"' % concept.term)
-        form.logger.info(str('Added concept %s to category %s' % (concept.uid, cid)))
+        form.logger.info(str('Added concept %s to category %s', concept.uid, cid))
     except:
         add_message('Unable to add concept')
-        form.logger.info(str('Unable to add concept %s to category %s' % (concept.uid,
-            cid)))
+        form.logger.info(str('Unable to add concept %s to category %s', concept.uid, cid))
             
     request.redirect(str('/admin/category/%s' % category_id))
     
@@ -504,7 +499,7 @@ def edit_concept [html] (request, category_id):
     try:
         concept.save(context)
         add_message('Edited concept %s' % concept.uid)
-        form.logger.info(str('Edited concept %s' % concept.uid))
+        form.logger.info(str('Edited concept %s', concept.uid))
     except:
         add_message('Could not edit concept')
         form.logger.info(str('Could not edit concept'))
@@ -562,18 +557,13 @@ def remove [html] (request, category_id):
             category.remove_concept(concept)
             add_message('Removed concept %s from category %s' % (concept.uid,
                 category_id))
-            form.logger.info(str('Removed concept %s from category %s' % (concept.uid,
-                category_id)))
+            form.logger.info(str('Removed concept %s from category %s', concept.uid, category_id))
         except:
-            print 'problem with remove_concept'
             add_message('Did not remove concept')
-            form.logger.error(str('Did not remove concept %s from category %s' % (concept.uid,
-                category_id)))
+            form.logger.error(str('Did not remove concept %s from category %s', concept.uid, category_id))
     else:
-        print 'not sure.'
         add_message('Did not remove concept')
-        form.logger.error(str('Did not remove concept %s from category %s' % (concept.uid,
-            category_id)))
+        form.logger.error(str('Did not remove concept %s from category %s', concept.uid, category_id))
     
     request.redirect(str('/admin/category/%s' % category_id))
     

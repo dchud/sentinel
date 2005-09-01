@@ -66,7 +66,7 @@ def _q_index [html] (request):
     context = get_publisher().context
     source_catalog = context.get_source_catalog()
     
-    header('Edit: Curator control panel')
+    header('Edit: Curator control panel', show_javascript=True)
     title_bar('Curator control panel')
     
     if has_messages():
@@ -76,8 +76,12 @@ def _q_index [html] (request):
     <fieldset>
         <legend>Find/load records</legend>
         
-        <div id='curator-panel-left'>
-            <h4>Find existing record</h4>
+        <h4>
+            <span class='hidey' onclick="javascript:showItem('curator-panel-find');hideItem('curator-panel-pubmed');">Find existing record</span>
+            |
+            <span class='hidey' onclick="javascript:showItem('curator-panel-pubmed');hideItem('curator-panel-find');">Load a record from Pubmed</span>
+        </h4>
+        <div id='curator-panel-find'>
     """
     form = FindRecordForm(context)
     form.render()
@@ -86,8 +90,7 @@ def _q_index [html] (request):
     """
     
     """
-        <div id='curator-panel-right'>
-            <h4>Load a record from Pubmed/MEDLINE</h4>
+        <div id='curator-panel-pubmed' style='display:none;'>
     """
     form = LoadPubmedForm(context, 
         batch_options=get_pubmed_batch_list(context))
@@ -264,10 +267,9 @@ def find [html] (request):
             uid = doc.get(str('uid'))
             results.append(QueuedRecord(context, uid))
         searcher.close()
-    except:
+    except Exception, e:
         form.logger.info(str('Unable to perform search'))
-        import traceback
-        print traceback.print_exc()
+        form.logger.error(e)
         form.set_error('token', 'Unable to perform search')
         return render()
         

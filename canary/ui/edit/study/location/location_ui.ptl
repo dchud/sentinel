@@ -161,8 +161,6 @@ def add [html] (request):
         feature = Feature(uid=form['feature_id'])
         feature.load(context)
     except:
-        import traceback
-        traceback.print_exc()
         form.set_error('feature_id', 'Invalid feature id.')
     
     location = Location()
@@ -181,8 +179,6 @@ def add [html] (request):
         add_message('Added location')
         request.redirect(str('../curate_three'))
     except:
-        import traceback
-        print traceback.print_exc()
         add_message('An error occurred')
         return render()
 
@@ -306,7 +302,6 @@ def render_found_features [html] (study, features, search_term):
                 </td>
                 """ % this_feature.uid
             else:
-                print 'Error: unable to find feature:', feature
                 """
                 <td>
                     [error]

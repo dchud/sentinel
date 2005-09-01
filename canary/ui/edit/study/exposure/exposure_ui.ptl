@@ -325,7 +325,6 @@ def render_found_exposures [html] (study, exposures, search_term):
                 </td>
                 """ % this_exposure.uid
             else:
-                print 'Error: unable to find exposure:', exposure
                 """
                 <td>
                     [error]

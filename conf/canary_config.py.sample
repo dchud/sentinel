@@ -3,9 +3,20 @@
 # in your browser.  (The default settings shipped in Quixote's config.py
 # module are for security rather than ease of testing/development.)
 
-ACCESS_LOG = "/home/user/sites/canary_project/logs/access.log"
-DEBUG_LOG = "/home/user/sites/canary_project/logs/debug.log"
-ERROR_LOG = "/home/user/sites/canary_project/logs/error.log"
+# Logging setup
+import logging
+
+# Set the logging level
+LOG_LEVEL = logging.DEBUG
+
+# Log format
+LOG_FORMAT = '%(asctime)s %(name)s:%(lineno)s %(levelname)-8s %(message)s'
+
+# Where do the logs go?
+LOG_DIR = "/home/user/sites/canary_project/logs"
+ACCESS_LOG = LOG_DIR + '/access.log'
+DEBUG_LOG = LOG_DIR + '/debug.log'
+ERROR_LOG = LOG_DIR + '/error.log'
 
 ERROR_EMAIL = None
 
@@ -40,7 +51,6 @@ DB_PASSWD = "dbpass"
 USE_DB_POOL = False
 DB_POOL_SIZE = 5
 
-LOG_DIR = "/home/user/sites/canary_project/logs"
 
 STATIC_HTML_DIR = "/home/user/projects/canary/canary/ui/html"
 STATIC_IMAGE_DIR = "/home/user/projects/canary/canary/ui/images"
@@ -66,3 +76,4 @@ ENABLE_ROBOTS_TXT = False
 ROBOTS_TXT = {'SomeAgent': ['/path1', '/path2'],  
     'AnotherAgent': ['/']  
     }  
+

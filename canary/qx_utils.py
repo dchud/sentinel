@@ -61,6 +61,5 @@ def load_static_exports (dir, ext='.html'):
                 new_file = new_file[:-5]
             # FIXME: hardcoded path separator
             new_exports.append((new_file, dir + '/' + file))
-            #print 'appended', new_file
 
     return new_exports

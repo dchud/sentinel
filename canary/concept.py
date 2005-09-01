@@ -1,10 +1,12 @@
 # $Id$
 
-import dtuple
+import logging
+import traceback
 import types
 
 import canary.context
 from canary.utils import DTable
+import dtuple
 
 
 class Concept (canary.context.Cacheable, DTable):
@@ -208,6 +210,7 @@ class Category (DTable):
         self.types = []
         self.groups = []
         self.concepts = []
+        self.logger = logging.getLogger(str(self.__class__))
         
     def add_type (self, type):
         if type in self.concept_types \
@@ -272,11 +275,10 @@ class Category (DTable):
                 DELETE FROM category_concepts
                 WHERE uid = %s
                 """, concept.uid)
-        except:
-            import traceback
-            print traceback.print_exc()
+        except Exception, e:
+            self.logger.error('Could not remove concept %s (%s)', concept.uid, e)
         context.close_cursor(cursor)
-       
+        
 
     def update_concept (self, concept):
         self.remove(concept)
@@ -420,6 +422,7 @@ class CategoryConcept (DTable):
         self.term = term
         self.groups = []
         self.concept = None
+        self.logger = logging.getLogger(str(self.__class__))
         
     def load (self, context):
         cursor = context.get_cursor()
@@ -441,10 +444,10 @@ class CategoryConcept (DTable):
                     self.is_broad = row['is_broad']
                     self.is_default = row['is_default']
                 else:
-                    print 'no matched rows'
+                    self.logger.debug('No matched rows')
                     return
             else:
-                print 'not enough info'
+                self.logger.debug('Not enough info')
                 return
         else:
             cursor.execute("""

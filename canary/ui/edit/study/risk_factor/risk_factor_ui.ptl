@@ -209,12 +209,11 @@ def add [html] (request):
         study.add_history(curator_user_id=request.session.user.get_id(),
             message='Added risk factor "%s"' % risk_factor.term)
         study.save(context)
-        form.logger.info(str('Added risk factor %s' % risk_factor.uid))
+        form.logger.info(str('Added risk factor %s', risk_factor.uid))
         add_message('Added risk factor')
         request.redirect(str('../curate_three'))
-    except:
-        import traceback
-        print traceback.print_exc()
+    except Exception, e:
+        form.logger.error(e)
         add_message('An error occurred')
         return render()
 
@@ -324,7 +323,6 @@ def render_found_risk_factors [html] (study, risk_factors, search_term):
                 </td>
                 """ % this_risk_factor.uid
             else:
-                print 'Error: unable to find risk factor:', risk_factor
                 """
                 <td>
                     [error]

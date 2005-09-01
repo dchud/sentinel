@@ -7,6 +7,7 @@ _q_exports = [
     'receive',
     ]
 
+import logging
 import os
 import stat
 import traceback
@@ -42,6 +43,7 @@ class QueueActions:
 
     def __init__ (self, batch_id):
         self.batch_id = batch_id
+        self.logger = logging.getLogger(str(self.__class__))
         
     def _q_index [html] (self, request):
         header('Admin: Term summary')
@@ -67,9 +69,8 @@ class QueueActions:
                 return setmeta(request, self.batch_id)
             else:
                 raise TraversalError
-        except:
-            import traceback
-            print traceback.print_exc()
+        except Exception, e:
+            self.logger.info('Invalid action %s (%s)', action, e)
             return not_found('queue')
             
             
@@ -125,10 +126,10 @@ class QueueActions:
             try:
                 batch.save(context)
                 add_message('Edited batch %s' % self.batch_id)
-                form.logger.info(str('Edited batch %s' % self.batch_id))
+                self.logger.info(str('Edited batch %s' % self.batch_id))
             except:
                 add_message('Could not edit batch')
-                form.logger.info(str('Could not edit batch'))
+                self.logger.info(str('Could not edit batch'))
         else:
             add_message('Batch unchanged')
         
@@ -179,8 +180,8 @@ class QueueActions:
                 form.logger.info(str('Updated %s records' % count))
         except:
             add_message('Unable to set metadata')
-            form.logger.info(str('Unable to set metadata'))
-            print traceback.print_exc()
+            self.logger.info(str('Unable to set metadata'))
+            self.logger.info(traceback.format_stack())
         
         request.redirect(str('/admin/queue/list'))
 
@@ -382,9 +383,9 @@ def receive [html] (request, batch_id=None):
         if num_records != len(records):
             add_message('Batch saved: Record count mismatch, %s specified, %s found' % (num_records, len(records)))
 
-        
-    except:
-        print traceback.print_exc()
+    except Exception, e:
+        logger = logging.getLogger(str('ui.admin.queue.queue_ui'))
+        logger.error('Unable to load batch: %s', e)
         add_message('Unable to load batch.')
 
     if has_messages():

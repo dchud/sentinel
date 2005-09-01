@@ -77,7 +77,6 @@ def records_by_journal (context, issn, term_map={}):
             AND studies.article_type < 8
             AND (%s)
             """ % issn_clause
-        #print 'sql:', select_clause
         cursor.execute(select_clause + """
             AND queued_record_metadata.value = %s
             """, issn
@@ -86,9 +85,8 @@ def records_by_journal (context, issn, term_map={}):
         for row in rows:
             queued_record = QueuedRecord(context, row[0])
             queued_records.append(queued_record)
-    except:
-        import traceback
-        print traceback.print_exc()
+    except Exception, e:
+        context.logger.error('Records by journal: %s', e)
     
     context.close_cursor(cursor)
     return journal_title, queued_records
@@ -142,9 +140,8 @@ def records_by_methodology (context, methodology_id):
         for row in rows:
             queued_record = QueuedRecord(context, row[0])
             queued_records.append(queued_record)
-    except:
-        import traceback
-        print traceback.print_exc()
+    except Exception, e:
+        context.logger.error('Records by methodology: %s', e)
         
     context.close_cursor(cursor)
     return queued_records
@@ -189,7 +186,6 @@ def records_by_year (context, year, term_map={}):
             AND studies.article_type < 8
             AND (%s)
             """ % year_clause
-        #print 'sql:', select_clause
         cursor.execute(select_clause + """
             AND SUBSTRING(queued_record_metadata.value, 1, 4) LIKE %s
             """, str(year) + '%'
@@ -198,9 +194,8 @@ def records_by_year (context, year, term_map={}):
         for row in rows:
             queued_record = QueuedRecord(context, row[0])
             queued_records.append(queued_record)
-    except:
-        import traceback
-        print traceback.print_exc()
+    except Exception, e:
+        context.logger.error('Records by year: %s', e)
         
     context.close_cursor(cursor)
     return queued_records
@@ -259,9 +254,8 @@ def records_by_author (context, author):
         for row in rows:
             queued_record = QueuedRecord(context, row[0])
             queued_records.append(queued_record)
-    except:
-        import traceback
-        print traceback.print_exc()
+    except Exception, e:
+        context.logger.error('Records by author: %s', e)
         
     context.close_cursor(cursor)
     return queued_records
@@ -327,9 +321,8 @@ def records_by_concept (context, concept, concept_id):
         for row in rows:
             queued_record = QueuedRecord(context, row[0])
             queued_records.append(queued_record)
-    except:
-        import traceback
-        print traceback.print_exc()
+    except Exception, e:
+        context.logger.error('Records by concept: %s', e)
         
     context.close_cursor(cursor)
     return queued_records

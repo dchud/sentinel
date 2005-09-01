@@ -34,7 +34,8 @@ Notes about preferred python style.
 
 - indents are four spaces wide
 
-- function defs like this (space before "(", none after):  
+- function defs like this (space before "(", none after; 
+  space after every comma):  
 
     def foo (param1, param2):
 

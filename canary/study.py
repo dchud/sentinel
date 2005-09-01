@@ -1,7 +1,7 @@
 # $Id$
 
 import copy
-import dtuple
+import logging
 import time
 import traceback
 import types
@@ -13,6 +13,7 @@ import canary.context
 from canary.gazeteer import Feature
 from canary.qx_defs import MyForm
 from canary.utils import DTable, render_capitalized
+import dtuple
 
 
 
@@ -33,7 +34,7 @@ class ExposureRoute (DTable):
         self.study_id = -1
         self.methodology_id = -1
         self.route = self.ROUTE['-']
-
+        
     def __str__ (self):
         out = []
         out.append('<Route uid=%s study_id=%s' % (self.uid, self.study_id))
@@ -80,18 +81,14 @@ class ExposureRoute (DTable):
                     DELETE FROM exposure_routes
                     WHERE uid = %s
                     """, self.uid)
-            except:
-                import sys
-                print 'MySQL exception:'
-                for info in sys.exc_info():
-                    print 'exception:', info
+            except Exception, e:
+                context.logger.error('ExposureRoute: %s (%s)', self.uid, e)
         context.close_cursor(cursor)
         
         
     def save (self, context):
         cursor = context.get_cursor()
         if self.uid == -1:
-            #print 'inserting new exposure_route'
             cursor.execute("""
                 INSERT INTO exposure_routes
                 (uid, study_id, methodology_id, route)
@@ -99,13 +96,10 @@ class ExposureRoute (DTable):
                 (NULL, %s, %s, %s)
                 """, (self.study_id, self.methodology_id, self.route)
                 )
-            #print 'inserted new exposure_route'
             self.uid = self.get_new_uid(context)
-            #print 'set new exposure_route uid to %s' % self.uid
         else:
             # Assume all calls to save() are after all routes have been removed
             # already by "DELETE FROM exposure_routes" in methodology.save()
-            #print 'updating exposure_route %s' % self.uid
             try:
                 cursor.execute("""
                     INSERT INTO exposure_routes
@@ -114,12 +108,8 @@ class ExposureRoute (DTable):
                     (%s, %s, %s, %s)
                     """, (self.uid, self.study_id, self.methodology_id, self.route)
                 )
-            except:
-                import sys
-                print 'MySQL exception:'
-                for info in sys.exc_info():
-                    print 'exception:', info
-            #print 'updated route %s' % self.uid
+            except Exception, e:
+                context.logger.error('ExposureRoute: %s (%s)', self.uid, e)
         # FIXME: should this be set from the SQL?
         self.date_modified = time.strftime(str('%Y-%m-%d'))
         context.close_cursor(cursor)
@@ -180,7 +170,7 @@ class Methodology (DTable):
         self.comments = ''
         self.date_modified = None
         self.date_entered = None
-
+        
 
     def __str__ (self):
         out = []
@@ -357,11 +347,8 @@ class Methodology (DTable):
                     DELETE FROM exposure_routes
                     where methodology_id = %s
                     """, self.uid)
-            except:
-                import sys
-                print 'MySQL exception:'
-                for info in sys.exc_info():
-                    print 'exception:', info
+            except Exception, e:
+                context.logger.error('Methodology: %s (%s)', self.uid, e)
         context.close_cursor(cursor)
         
     
@@ -386,7 +373,6 @@ class Methodology (DTable):
     def save (self, context):
         cursor = context.get_cursor()
         if self.uid == -1:
-            #print 'inserting new methodology'
             cursor.execute("""
                 INSERT INTO methodologies
                 (uid, study_id, study_type_id, 
@@ -405,11 +391,8 @@ class Methodology (DTable):
                 self.sampling, self.controls, self.comments,
                 int(self.is_mesocosm), int(self.is_enclosure))
                 )
-            #print 'inserted new methodology'
             self.uid = self.get_new_uid(context)
-            #print 'set new methodology uid to %s' % self.uid
         else:
-            #print 'updating methodology %s' % self.uid
             try:
                 cursor.execute("""
                     UPDATE methodologies
@@ -425,12 +408,8 @@ class Methodology (DTable):
                     int(self.is_mesocosm), int(self.is_enclosure),
                     self.uid)
                     )
-            except:
-                import sys
-                print 'MySQL exception:'
-                for info in sys.exc_info():
-                    print 'exception:', info
-            #print 'updated methodology %s' % self.uid
+            except Exception, e:
+                context.logger.error('Methodology: %s (%s)', self.uid, e)
         # FIXME: should this be set from the SQL?
         self.date_modified = time.strftime(str('%Y-%m-%d'))
         
@@ -441,7 +420,6 @@ class Methodology (DTable):
             """, self.uid)
             
         for route in self.exposure_routes:
-            #print 'saving route', route
             route.save(context)
             
         context.close_cursor(cursor)
@@ -450,18 +428,15 @@ class Methodology (DTable):
 
     def create_form (self, context):
         
-        #print 'create_form()'
         form = MyForm(context)
         
         # all methodology types get a sample size
-        #print 'sample size'
         form.add(form2.StringWidget, 'sample_size',
             title='Sample size (study n)',
             size=10, value=self.sample_size,
             required=False)
             
         # all methodology types get one or more routes
-        #print 'route'
         route_options = [(route, text, route) for text, route in ExposureRoute.ROUTE.items()]
         # FIXME: what else to do about leaving out the default/empty?
         route_options.remove((-1, '-', -1))
@@ -475,14 +450,12 @@ class Methodology (DTable):
             required=True)
         
         # experimental can be is_mesocosm=True
-        #print 'mesocosm'
         if self.get_study_type() == self.TYPES['experimental']:
             form.add(form2.CheckboxWidget, 'is_mesocosm',
                 title='Is mesocosm?',
                 value=self.is_mesocosm)
             
         # methodology types except experimental get timing
-        #print 'timing'
         if not self.get_study_type() == self.TYPES['experimental']:
             form.add(form2.SingleSelectWidget, 'timing',
                 title='Timing',
@@ -492,7 +465,6 @@ class Methodology (DTable):
                 required=True)
     
         # all the 'c*' methodology types get controls
-        #print 'controls'
         if self.get_study_type() in [
             self.TYPES['cross sectional'],
             self.TYPES['cohort'], 
@@ -506,7 +478,6 @@ class Methodology (DTable):
                 required=True)
         
         # cohort can be is_enclosure=True
-        #print 'enclosure'
         if self.get_study_type() == self.TYPES['cohort']:
             form.add(form2.CheckboxWidget, 'is_enclosure',
                 title='Is enclosure?',
@@ -514,7 +485,6 @@ class Methodology (DTable):
                 
             
         # only cross sectional methodologies get sampling
-        #print 'sampling'
         if self.get_study_type() == self.TYPES['cross sectional']:
             form.add(form2.SingleSelectWidget, 'sampling',
                 title='Sampling',
@@ -524,7 +494,6 @@ class Methodology (DTable):
                 required=True)
                     
         # every methodology type has comments
-        #print 'comments'
         form.add(form2.TextWidget, 'comments', 
             title='Comments',
             rows='4', cols='60',
@@ -566,7 +535,6 @@ class Methodology (DTable):
             if form['timing'] == self.TIMING['-']:
                 form.set_error('timing', 'You must specifiy the timing.')
             else:
-                print 'setting timing to %s' % form['timing']
                 self.set_timing(form['timing'])
         
         # all 'c*' methodology types get controls
@@ -578,7 +546,6 @@ class Methodology (DTable):
             if form['controls'] == self.CONTROLS['-']:
                 form.set_error('controls', 'You must specify the controls.')
             else:
-                print 'setting controls to %s' % form['controls']
                 self.set_controls(form['controls'])
             
         # cohort can be is_enclosure=True
@@ -593,12 +560,10 @@ class Methodology (DTable):
             if form['sampling'] == self.SAMPLING['-']:
                 form.set_error('sampling', 'You must specify the sampling.')
             else:
-                print 'setting sampling to %s' % form['sampling']
                 self.set_sampling(form['sampling'])
 
         # every methodology type can have comments
         if form['comments']:
-            print 'setting comments'
             self.comments = form['comments']
 
 
@@ -667,7 +632,7 @@ class Exposure (DTable):
         self.concept_source_id = -1
         self.term = ''
         self.synonyms = []
-    
+        
     def __str__ (self):
         out = []
         out.append('<Exposure uid=%s study_id=%s' % (self.uid, self.study_id))
@@ -687,14 +652,13 @@ class Exposure (DTable):
                     DELETE FROM exposures
                     WHERE uid = %s
                     """, self.uid)
-            except:
-                print traceback.print_exc()
+            except Exception, e:
+                context.logger.error('Exposure: %s (%s)', self.uid, e)
         context.close_cursor(cursor)
         
     def save (self, context):
         cursor = context.get_cursor()
         if self.uid == -1:
-            #print 'inserting new exposure'
             cursor.execute("""
                 INSERT INTO exposures
                 (uid, study_id, concept_id, 
@@ -705,11 +669,8 @@ class Exposure (DTable):
                 """, (self.study_id, self.concept_id, 
                 self.concept_source_id, self.term)
                 )
-            #print 'inserted new exposure'
             self.uid = self.get_new_uid(context)
-            #print 'set new exposure uid to %s' % self.uid
         else:
-            #print 'updating exposure %s' % self.uid
             try:
                 cursor.execute("""
                     UPDATE exposures
@@ -720,12 +681,8 @@ class Exposure (DTable):
                     self.concept_source_id, self.term,
                     self.uid)
                     )
-            except:
-                import sys
-                print 'MySQL exception:'
-                for info in sys.exc_info():
-                    print 'exception:', info
-            #print 'updated exposure %s' % self.uid
+            except Exception, e:
+                context.logger.error('Exposure: %s (%s)', self.uid, e)
         # FIXME: should this be set from the SQL?
         self.date_modified = time.strftime(str('%Y-%m-%d'))
         context.close_cursor(cursor)
@@ -816,17 +773,13 @@ class Outcome (DTable):
                     DELETE FROM outcomes
                     WHERE uid = %s
                     """, self.uid)
-            except:
-                import sys
-                print 'MySQL exception:'
-                for info in sys.exc_info():
-                    print 'exception:', info
+            except Exception, e:
+                context.logger.error('Outcome: %s (%s)', self.uid, e)
         context.close_cursor(cursor)
         
     def save (self, context):
         cursor = context.get_cursor()
         if self.uid == -1:
-            #print 'inserting new outcome'
             cursor.execute("""
                 INSERT INTO outcomes
                 (uid, study_id, concept_id, 
@@ -837,11 +790,8 @@ class Outcome (DTable):
                 """, (self.study_id, self.concept_id, 
                 self.concept_source_id, self.term)
                 )
-            #print 'inserted new outcome'
             self.uid = self.get_new_uid(context)
-            #print 'set new outcome uid to %s' % self.uid
         else:
-            #print 'updating outcome %s' % self.uid
             try:
                 cursor.execute("""
                     UPDATE outcomes
@@ -852,12 +802,8 @@ class Outcome (DTable):
                     self.concept_source_id, self.term,
                     self.uid)
                     )
-            except:
-                import sys
-                print 'MySQL exception:'
-                for info in sys.exc_info():
-                    print 'exception:', info
-            #print 'updated outcome %s' % self.uid
+            except Exception, e:
+                context.logger.error('Outcome: %s (%s)', self.uid, e)
         # FIXME: should this be set from the SQL?
         self.date_modified = time.strftime(str('%Y-%m-%d'))
         context.close_cursor(cursor)
@@ -927,7 +873,7 @@ class RiskFactor (DTable):
         self.concept_source_id = -1
         self.term = ''
         self.synonyms = []
-    
+        
     def __str__ (self):
         out = []
         out.append('<RiskFactor uid=%s study_id=%s' % (self.uid, self.study_id))
@@ -947,17 +893,13 @@ class RiskFactor (DTable):
                     DELETE FROM risk_factors
                     WHERE uid = %s
                     """, self.uid)
-            except:
-                import sys
-                print 'MySQL exception:'
-                for info in sys.exc_info():
-                    print 'exception:', info
+            except Exception, e:
+                context.logger.error('RiskFactor: %s (%s)', self.uid, e)
         context.close_cursor(cursor)
         
     def save (self, context):
         cursor = context.get_cursor()
         if self.uid == -1:
-            #print 'inserting new risk factor'
             cursor.execute("""
                 INSERT INTO risk_factors
                 (uid, study_id, concept_id, 
@@ -968,11 +910,8 @@ class RiskFactor (DTable):
                 """, (self.study_id, self.concept_id, 
                 self.concept_source_id, self.term)
                 )
-            #print 'inserted new risk factor'
             self.uid = self.get_new_uid(context)
-            #print 'set new risk factor uid to %s' % self.uid
         else:
-            #print 'updating risk factor us' % self.uid
             try:
                 cursor.execute("""
                     UPDATE risk_factors
@@ -983,12 +922,8 @@ class RiskFactor (DTable):
                     self.concept_source_id, self.term,
                     self.uid)
                     )
-            except:
-                import sys
-                print 'MySQL exception:'
-                for info in sys.exc_info():
-                    print 'exception:', info
-            #print 'updated risk factor %s' % self.uid
+            except Exception, e:
+                context.logger.error('RiskFactor: %s (%s)', self.uid, e)
         # FIXME: should this be set from the SQL?
         self.date_modified = time.strftime(str('%Y-%m-%d'))
         context.close_cursor(cursor)
@@ -1130,11 +1065,8 @@ class Species (DTable):
                     DELETE FROM species
                     WHERE uid = %s
                     """, self.uid)
-            except:
-                import sys
-                print 'MySQL exception:'
-                for info in sys.exc_info():
-                    print 'exception:', info
+            except Exception, e:
+                context.logger.error('Species: %s (%s)', self.uid, e)
         context.close_cursor(cursor)
         
 
@@ -1163,12 +1095,8 @@ class Species (DTable):
                     self.concept_source_id, self.term, self.get_types(shorthand=True),
                     self.uid)
                     )
-            except:
-                import sys
-                print 'MySQL exception:'
-                for info in sys.exc_info():
-                    print 'exception:', info
-            #print 'updated species %s' % self.uid
+            except Exception, e:
+                context.logger.error('Species: %s (%s)', self.uid, e)
         # FIXME: should this be set from the SQL?
         self.date_modified = time.strftime(str('%Y-%m-%d'))
         context.close_cursor(cursor)
@@ -1202,8 +1130,8 @@ class Location (DTable):
                     DELETE FROM locations
                     WHERE uid = %s
                     """, self.uid)
-            except:
-                print traceback.print_exc()
+            except Exception, e:
+                context.logger.error('Location: %s (%s)', self.uid, e)
         context.close_cursor(cursor)
                 
     def save (self, context):
@@ -1225,8 +1153,8 @@ class Location (DTable):
                     """, (self.study_id, self.feature_id,
                     self.uid)
                     )
-            except:
-                print traceback.print_exc()
+            except Exception, e:
+                context.logger.error('Location: %s (%s)', self.uid, e)
         context.close_cursor(cursor)
         
         
@@ -1264,7 +1192,6 @@ class Study (canary.context.Cacheable, DTable):
         }
 
     CACHE_KEY = 'study'
-
 
     def __init__ (self, context=None, uid=-1, record_id=-1):
         try:
@@ -1736,16 +1663,13 @@ class Study (canary.context.Cacheable, DTable):
                     int(self.has_exposure_linkage), int(self.has_outcome_linkage),
                     int(self.has_genomic), self.comments)
                     )
-            except:
-                # FIXME: proper exceptions
-                print 'MySQL exception on study.save(new)'
-                print traceback.print_exc()
+            except Exception, e:
+                context.logger.error('Save study: %s (%s)', self.uid, e)
                 
             self.uid = self.get_new_uid(context)
 
         else:
             try:
-                #print 'updating study:', self.__str__()
                 cursor.execute("""
                     UPDATE studies
                     SET record_id = %s, status = %s, article_type = %s, curator_user_id = %s,
@@ -1762,9 +1686,8 @@ class Study (canary.context.Cacheable, DTable):
                     int(self.has_genomic), self.comments,
                     self.uid)
                     )
-            except:
-                print 'MySQL exception on study.save()'
-                print 'exception:', traceback.print_exc()
+            except Exception, e:
+                context.logger.error('Update study: %s', e)
         # FIXME: should this be set from the SQL?
         self.date_modified = time.strftime(str('%Y-%m-%d'))
         
@@ -1791,9 +1714,8 @@ class Study (canary.context.Cacheable, DTable):
                     new_history_record_id = self.get_new_uid(context)
                     del(self.history[-1])
                     self.history[new_history_record_id] = new_history_record
-                except:
-                    print 'MySQL exception on study.update / study_history.insert'
-                    print 'exception:', traceback.print_exc()
+                except Exception, e:
+                    context.logger.error('Save study history: %s (%s)', self.uid, e)
                     
         if context.config.use_cache:
             context.cache_set('%s:%s' % (self.CACHE_KEY, self.uid), self)
@@ -1804,7 +1726,6 @@ class Study (canary.context.Cacheable, DTable):
         try:
             for table_name in self.TABLES.keys():
                 for item in getattr(self, table_name):
-                    print 'Deleting %s [%s]' % (table_name, item.uid)
                     item.delete(context)
                 
             cursor.execute("""
@@ -1815,6 +1736,6 @@ class Study (canary.context.Cacheable, DTable):
             if context.config.use_cache:
                 context.cache_delete('%s:%s' % (self.CACHE_KEY, self.uid))
 
-        except:
-            print traceback.print_exc()
+        except Exception, e:
+            context.logger.error('Delete study: %s', e)
        

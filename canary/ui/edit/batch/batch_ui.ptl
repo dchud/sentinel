@@ -6,8 +6,6 @@ _q_exports = [
     'update',
     ]
 
-from log4py import Logger
-
 from quixote import get_publisher
 from quixote.errors import AccessError, PublishError, TraversalError
 
@@ -72,8 +70,6 @@ class BatchActions:
             else:
                 raise TraversalError
         except:
-            import traceback
-            print traceback.print_exc()
             return not_found('batch')
 
 
@@ -290,8 +286,6 @@ def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
             </p>
             """
     except:
-        import traceback
-        print traceback.print_exc()
         raise PublishError
 
     footer()
@@ -434,6 +428,4 @@ def update [html] (request, batch_id, start, size, show):
         request.redirect(str('/edit/batch/%s/view' % batch_id))
         
     except:
-        import traceback
-        print traceback.print_exc()
         return not_found('batch')

@@ -191,9 +191,8 @@ def create [html] (request):
         context.cache_set('%s:%s' % (study.CACHE_KEY, study.uid), study)
         form.logger.info(str('Created methodology %s' % methodology.uid))
         request.redirect(str('%s/detail' % methodology.uid))
-    except:
-        import traceback
-        form.logger.info(str(traceback.print_exc()))
+    except Exception, e:
+        form.logger.error(e)
         add_message('An error occurred')
         return render()
 
@@ -251,9 +250,8 @@ def detail [html] (methodology_id):
             return render()
         elif form.get_submit() == 'finish':
             request.redirect(str('/edit/study/%s/curate_four' % request.queued_record_id))
-    except:
-        import traceback
-        print traceback.print_exc()
+    except Exception, e:
+        form.logger.error(e)
         add_message('An error occurred')
         return render()
         
@@ -307,9 +305,8 @@ def edit [html] (methodology_id):
                 request.redirect(str('/edit/study/%s/curate_four' % request.queued_record_id))
         elif form.get_submit() == 'cancel':
             request.redirect(str('/edit/study/%s/curate_four' % request.queued_record_id))
-    except:
-        import traceback
-        print traceback.print_exc()
+    except Exception, e:
+        form.logger.error(e)
         add_message('An error occurred')
         return render()
 
@@ -360,11 +357,10 @@ def delete [html] (methodology_id):
             study.save(context)
             add_message('Methodology deleted')
             form.logger.info(str('Deleted methodology %s' % methodology_id))
-        except:
-            import traceback
-            print traceback.print_exc() 
+        except Exception, e:
             add_message('Unable to delete methodology')
-            form.logger.error(str('Unable to delete methodology %s' % methodology_id))
+            form.logger.error(str('Unable to delete methodology %s', methodology_id))
+            form.logger.error(e)
     else:
         add_message('Methodology not deleted')
 

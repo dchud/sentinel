@@ -36,8 +36,6 @@ def _q_lookup (request, record_id):
             raise ValueError('Irrelevant record')
         return render_record(record, study)
     except:
-        import traceback
-        print traceback.print_exc()
         return not_found('record')
 
 
@@ -105,38 +103,29 @@ def render_data_points [html] (study):
     """
         <div class='studytable'>
             <table cellspacing='0'>
-    """
-    
-    try:
-        """
                 <tr>
+    """
+    for key, short, full in data_points:
         """
-        for key, short, full in data_points:
-            """
                     <th><acronym title='%s'>%s</acronym></th>
-            """ % (full, short)
-        """
+        """ % (full, short)
+    """
                 </tr>
             
                 <tr>
-        """
-        for key, short, full in data_points:
-            if getattr(study, str(key)):
-                """
-                    <td>Yes</td>
-                """
-            else:
-                """
-                    <td>No</td>
-                """
-        """
-                </tr>
-        """
-    except:
-        import traceback
-        print traceback.print_exc()
-    
     """
+    for key, short, full in data_points:
+        if getattr(study, str(key)):
+            """
+                    <td>Yes</td>
+            """
+        else:
+            """
+                    <td>No</td>
+            """
+    """
+                </tr>
+            
             </table>
         </div>
     """
@@ -370,9 +359,12 @@ def render_medline [html] (mapped_metadata):
     """
             <td align='left' valign='top'>
             
-                <h4>OpenURL:</h4>
+                <h4>COinS:</h4>
                 <p>
-                <a rel='Z39.88' href='?id=pmid:%s' title='OpenURL'> </a>
+                <span class="Z3988" 
+                    title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info:ofi/fmt:kev:mtx:journal&amp;rft_id=info:pmid/%s&amp;url_ctx_fmt=ori:fmt:kev:mtx:ctx">
+                    <!-- COinS -->
+                </span>
                 </p>
 
                 <h4>PMID: %s</h4>

@@ -188,10 +188,8 @@ def synonym [html] (concept_id=None):
         return render()
         
     if form.get_submit() == 'cancel':
-        print 'no'
         add_message('No synonym added')
     elif form.get_submit() == 'add':
-        print 'yes'
         concept.add_synonym(new_synonym)
         form.logger.info(str('Added synonym %s for concept %s' % (new_synonym, concept_id)))
         add_message('Added new synonym')

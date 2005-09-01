@@ -174,7 +174,6 @@ def edit [html] (group_id):
     except:
         return not_found('value group')
         
-    print 'got group'
     def render [html] ():
         header('Edit value group')
         title_bar('Edit value group: %s' % group.group_name)

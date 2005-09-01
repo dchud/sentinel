@@ -60,7 +60,6 @@ def delete [html] (session_id=None):
     session_manager = get_session_manager()
     session = session_manager[session_id]
     if session == None:
-        print 'session not found'
         return not_found('session')
 
     def render [html] ():

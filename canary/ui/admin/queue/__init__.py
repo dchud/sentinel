@@ -30,6 +30,4 @@ def _q_lookup (request, batch_id):
         else:
             raise TraversalError
     except:
-        import traceback
-        print traceback.print_exc()
         return not_found('queue')

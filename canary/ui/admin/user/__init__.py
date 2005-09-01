@@ -1,13 +1,16 @@
 # $Id$
 
-_q_exports = ['_q_index',
-              'create',
-              ]
+_q_exports = [
+    '_q_index',
+    'create',
+    ]
 
+from quixote import get_publisher
 from quixote.errors import TraversalError
 
 from canary.ui.admin.user import user_ui
 from canary.ui.admin.user.user_ui import UserActions
+from canary.ui.pages import not_found
 
 _q_index = user_ui._q_index
 create = user_ui.create
@@ -19,5 +22,5 @@ def _q_lookup (request, user_id):
             return UserActions(user_id)
         else:
             raise TraversalError
-    except:
+    except Exception, e:
         return not_found('user')

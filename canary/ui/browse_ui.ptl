@@ -1,5 +1,6 @@
 # $Id$
 
+import logging
 import string
 import traceback
 import urllib
@@ -66,7 +67,6 @@ class Browse:
             else:
                 raise 'NotFoundError'
         except:
-            print traceback.print_exc()
             return not_found('index')
             
 
@@ -228,6 +228,7 @@ class BrowseIndex:
 
     def __init__ (self):
         self.type = 'superclass'
+        self.logger = logging.getLogger(str(self.__class__))
         
     def _q_index [html] (self, request):
         pass
@@ -502,8 +503,8 @@ class BrowseIndex:
                             
                         image_file = utils.make_sparkline(context, year_count, 
                             context_years=(min_year, max_year))
-                    except:
-                        traceback.print_exc()
+                    except Exception, e:
+                        self.logger.error('Could not specify context years: %s', e)
                         image_file = utils.make_sparkline(context, year_count)
                 else:
                     image_file = utils.make_sparkline(context, year_count)
@@ -573,12 +574,10 @@ class BrowseIndex:
                 """
                 
             except:
-                print traceback.print_exc()
                 return not_found(self.type)
         else:
             return not_found(self.type)
             
-    
         footer()
 
 
@@ -598,6 +597,7 @@ class YearBrowseIndex (BrowseIndex):
     
     def __init__ (self, request):
         self.type = 'year'
+        self.logger = logging.getLogger(str(self.__class__))
         
     def _q_index [html] (self, request):
         header('Browse by Year')
@@ -650,7 +650,6 @@ class YearBrowseIndex (BrowseIndex):
             else:
                 raise Error
         except:
-            print traceback.print_exc()
             return not_found(self.type)
             
 
@@ -808,8 +807,6 @@ class JournalBrowseIndex (BrowseIndex):
     
                 return self.render_records(title, records)
         except:
-            import traceback
-            print traceback.print_exc()
             return not_found(self.type)
             
 
@@ -967,8 +964,6 @@ class AuthorBrowseIndex (BrowseIndex):
                     raise Exception('No records found')
                 return self.render_records(author, records)
         except:
-            import traceback
-            print traceback.print_exc()
             return not_found(self.type)
 
 
@@ -1064,6 +1059,4 @@ class ConceptBrowseIndex (BrowseIndex):
                 concept = Concept(context, concept_id)
                 return self.render_records(concept.term, records)
         except:
-            import traceback
-            print traceback.print_exc()
             return not_found(self.type)

@@ -4,6 +4,8 @@ _q_exports = [
     'search',
     ]
 
+import logging
+import traceback
 import urllib
 
 from quixote import get_publisher
@@ -19,9 +21,11 @@ from canary.ui.pageframe import header, footer
 from canary.ui.record_ui import render_record_row
 from canary import utils
 
+
 study_boolvals = ('has_outcomes', 'has_exposures', 'has_relationships', 
     'has_interspecies', 'has_exposure_linkage', 'has_outcome_linkage', 
     'has_genomic')
+
 
 class SearchForm (MyForm):
 
@@ -32,7 +36,6 @@ class SearchForm (MyForm):
             size=60,
             required=True)
         self.add_submit('go', 'go')
-
 
 
 def search [html] (request):
@@ -153,9 +156,9 @@ def search [html] (request):
             """
         else:
             '<p>Nothing found.</p>'
-    except:
-        import traceback
-        print traceback.print_exc()
+    except Exception, e:
+        form.logger.error('Search error: %s', e)
+        form.logger.error(traceback.format_exc())
         """
         <p>
         An error occurred with your search.  It's probably our fault, 
@@ -253,7 +256,6 @@ def advanced_search [html] (request):
         target = str('/search?go=go&q=%s' % \
             ' '.join([str(tok) for tok in search_tokens]))
         target = target.replace(str('&quot;'), str('"'))
-        print 'target is', str(target)
         request.redirect(target)
 
 

@@ -325,7 +325,6 @@ def render_found_outcomes [html] (study, outcomes, search_term):
                 </td>
                 """ % this_outcome.uid
             else:
-                print 'Error: unable to find outcome:', outcome
                 """
                 <td>
                     [error]

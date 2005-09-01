@@ -2,6 +2,7 @@
 
 import copy
 import email
+import logging
 import re
 import time
 import traceback
@@ -20,6 +21,7 @@ class Queue:
 
     def __init__ (self):
         self.batches = []
+        self.logger = logging.getLogger(str(self.__class__))
         
     def get_batch (self, batch_id):
         for batch in self.batches:
@@ -295,7 +297,6 @@ class QueuedRecord (canary.context.Cacheable, DTable):
                     term = source_catalog.get_term(row['term_id'])
                     self.add_metadata(term, row['value'], extra=row['extra'])
         except ValueError:
-            #print traceback.print_exc()
             raise ValueError('Record not found')
         
         context.close_cursor(cursor)
@@ -305,7 +306,6 @@ class QueuedRecord (canary.context.Cacheable, DTable):
         cursor = context.get_cursor()
         try:
             if self.uid == -1:
-                #print 'inserting new record:', self
                 cursor.execute("""
                     INSERT INTO queued_records
                     (uid, 
@@ -354,8 +354,8 @@ class QueuedRecord (canary.context.Cacheable, DTable):
             search_index.unindex_record(self)
             search_index.index_record(self)
 
-        except:
-            print traceback.print_exc()
+        except Exception, e:
+            context.logger.error('Save queued record: %s (%s)', self.uid, e)
         context.close_cursor(cursor)
 
         
@@ -380,10 +380,10 @@ class QueuedRecord (canary.context.Cacheable, DTable):
     def get_status (self, text=False):
         try:
             status = int(self.status)
-        except:
-            print 'error w/cast'
+        except ValueError:
+            pass
         if not text:
-            return status
+            return self.status
         else:
             if status == self.STATUS_UNCLAIMED:
                 return 'unclaimed'
@@ -423,8 +423,8 @@ class QueuedRecord (canary.context.Cacheable, DTable):
 
             if context.config.use_cache:
                 context.cache_delete('record:%s' % self.uid)
-        except:
-            print traceback.print_exc()
+        except Exception, e:
+            context.logger.error('Delete queued record %s (%s)', self.uid, e)
             
         context.close_cursor(cursor)
        
@@ -440,6 +440,7 @@ class Batch (DTable):
         self.date_added = ''
         self.queued_records = {}
         self.loaded_records = []
+        self.logger = logging.getLogger(str(self.__class__))
 
     def add_records (self, records):
         for record in records:
@@ -591,8 +592,8 @@ class Batch (DTable):
                 DELETE FROM queued_batches
                 WHERE uid = %s
                 """, self.uid)
-        except:
-            print traceback.print_exc()
+        except Exception, e:
+            self.logger.error(e)
         context.close_cursor(cursor)
 
 
@@ -602,6 +603,7 @@ class Parser:
         self.re_result_sep = re.compile(source.re_result_sep)
         self.re_term_token = re.compile(source.re_term_token)
         self.source = source
+        self.logger = logging.getLogger(str(self.__class__))
 
 
     def parse (self, file_name='', mapped_terms={}, is_email=True, data=[]):
@@ -616,9 +618,8 @@ class Parser:
                 else:
                     lines = file.read().split('\n')
                 file.close()
-            except:
-                print 'unable to load file, or msg'
-                print traceback.print_exc()
+            except Exception, e:
+                self.logger.error(e)
                 return []
         
         records = []
@@ -658,8 +659,8 @@ class Parser:
                         else:
                             # blank line
                             pass
-            except:
-                print traceback.print_exc()
+            except Exception, e:
+                self.logger.error(e)
                 continue
             
         # Note: we don't catch the last record in the loop above,
@@ -686,7 +687,3 @@ class Parser:
             else:
                 record.add_metadata(term, value)
                     
-
-    
-    
-

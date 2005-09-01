@@ -3,8 +3,7 @@
 _q_exports = [
     ]
 
-from log4py import Logger
-
+import logging
 from quixote import get_publisher
 from quixote.errors import AccessError, PublishError, TraversalError
 
@@ -247,8 +246,7 @@ def reload_sources [html] (request):
         source_catalog = SourceCatalog()
         source_catalog.load(context)
         context.set_source_catalog(source_catalog)
-        logger = Logger().get_instance()
-        context.configure_logger(logger)
+        logger = logging.getLogger('reload_sources')
         logger.info(str('Sources reloaded'))
         """
         <p>

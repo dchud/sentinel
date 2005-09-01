@@ -4,6 +4,8 @@ _q_exports = [
     '_q_index',
     ]
 
+import logging
+import traceback
 import urllib
 
 from quixote import get_publisher, get_request
@@ -14,6 +16,7 @@ from canary.qx_defs import MyForm
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import add_message, has_messages, render_messages, not_found
 
+logger = logging.getLogger('ui.assistant.assistant_ui')
 
 def title_bar [html] (action=''):
     """
@@ -142,7 +145,7 @@ def update [html] (request):
         rec.save(context)
         add_message('Record %s marked as found' % record_id)
         return request.redirect(str('/assistant'))
-    except:
-        import traceback
-        print traceback.print_exc()
+    except Exception, e:
+        logger.error('Error updating record: %s', e)
+        logger.error(traceback.format_stack())
         return not_found('record')

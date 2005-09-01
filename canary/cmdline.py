@@ -1,3 +1,5 @@
+# $Id$
+
 import optparse
 import os
 
@@ -14,7 +16,8 @@ class CommandLine:
     def __init__(self):
         self.parser = optparse.OptionParser('usage: %prog [options]')
         self.parser.add_option('-c', '--config', 
-            dest='config', help='path to configuration file')
+            dest='config', default='conf/canary_config.py',
+            help='path to configuration file')
         self._ran = False
 
     def __getattr__(self,name):
@@ -40,7 +43,7 @@ class CommandLine:
         options,args = cmdline.parse_args()
         """
         if not self._ran:
-            self.options,self.args = self.parser.parse_args()
+            self.options, self.args = self.parser.parse_args()
             self._ran = True
         return self.options, self.args
 

@@ -6,6 +6,8 @@ _q_exports = [
     'edit',
     ]
 
+import logging
+
 from quixote import get_publisher, get_request
 from quixote.errors import TraversalError
 from quixote import form2
@@ -34,6 +36,7 @@ class UserActions:
 
     def __init__ (self, user_id):
         self.user_id = user_id
+        self.logger = logging.getLogger(str(self.__class__))
 
     def _q_index [html] (self, request):
         header('blah')
@@ -51,8 +54,6 @@ class UserActions:
             else:
                 raise TraversalError
         except:
-            import traceback
-            print traceback.print_exc()
             return not_found('user')
 
 
@@ -218,7 +219,7 @@ def edit [html] (user_id=None):
 
     user.save(context)
     add_message('Edited user %s' % user_id)
-    form.logger.info(str('Edited user %s' % user_id))
+    form.logger.info(str('Edited user %s', user_id))
     request = get_request()
     request.redirect(str('/admin'))
 
@@ -267,9 +268,9 @@ def delete [html] (user_id=None):
         try:
             user.delete(context)
             add_message('Deleted user %s' % user_id)
-            form.logger.info(str('Deleted user %s' % user_id))
+            form.logger.info(str('Deleted user %s', user_id))
         except:
-            form.logger.error(str('Unable to delete user %s' % user_id))
+            form.logger.error(str('Unable to delete user %s', user_id))
 
     else:
         add_message('Admin: User not deleted')

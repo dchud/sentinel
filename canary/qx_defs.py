@@ -1,11 +1,12 @@
 # $Id$
 
+from cPickle import load, dump
+import logging
 import os
 import shelve
 from time import time
-from cPickle import load, dump
+import traceback
 
-import log4py
 from mx.DateTime import localtime, mktime
 
 from quixote import get_publisher
@@ -16,8 +17,6 @@ from quixote.session import Session, SessionManager
 
 import canary.context
 import canary.user
-from canary.utils import MyLogger
-
 
 # Sql* classes adapted from Titus Brown's examples at:
 #
@@ -60,7 +59,6 @@ class SqlQuixoteSession (object, Session):
         Set the user!  The change in user will be detected by Quixote
         through the 'is_dirty' function and saved accordingly.
         """
-        #print 'set user:', user.id
         if not self.user or user.id != self.user.id:
             self._dirty = 1
         self.user = user
@@ -88,36 +86,32 @@ class SqlTableMap:
     Intercept dictionary requests and channel them to the SQL database.
     """
 
-    def __init__ (self):
+    def __init__ (self, context):
         """
         WAS: Store the database connection.
         """
         self.uncommitted = {}
+        self.context = context
 
     def get_conn (self):
         """
         Return the database connection after doing a rollback.
         """
-        context = self.get_context()
-        conn = context.connection
+        conn = self.context.connection
         #try:    
         #    conn.rollback()
         #except NotSupportedError:
         #    pass
         return conn
-
-    def get_context (self):
-        return canary.context.Context()
         
     def keys (self):
         """
         Get a list of the session IDs in the database.
         """
-        context = self.get_context()
-        cursor = context.get_cursor()
+        cursor = self.context.get_cursor()
         #context.execute("SELECT uid FROM sessions")
         cursor.execute("SELECT session_id FROM sessions")
-        context.close_cursor(cursor)
+        self.context.close_cursor(cursor)
 
         return [id for (id,) in cursor.fetchall()]
 
@@ -125,14 +119,13 @@ class SqlTableMap:
         """
         Load all of the sessions in the database.
         """
-        context = self.get_context()
-        cursor = context.get_cursor()
+        cursor = self.context.get_cursor()
         cursor.execute("""
             SELECT session_id, user_id, remote_addr, creation_time, 
                 access_time, messages, form_tokens
             FROM sessions
             """)
-        context.close_cursor(cursor)
+        self.context.close_cursor(cursor)
         return [self._create_from_db(session_id, user_id, addr, c, a, msg, tokens) \
             for (session_id, user_id, addr, c, a, msg, tokens) in cursor.fetchall() ]
 
@@ -150,8 +143,7 @@ class SqlTableMap:
         """
         Get the given item from the database.
         """
-        context = self.get_context()
-        cursor = context.get_cursor()
+        cursor = self.context.get_cursor()
         cursor.execute("""
             SELECT session_id, user_id, remote_addr, creation_time, 
                 access_time, messages, form_tokens
@@ -162,10 +154,10 @@ class SqlTableMap:
         assert cursor.rowcount <= 1
         if cursor.rowcount == 1:
             (session_id, user_id, addr, c, a, msg, tokens) = cursor.fetchone()
-            context.close_cursor(cursor)
+            self.context.close_cursor(cursor)
             return self._create_from_db(session_id, user_id, addr, c, a, msg, tokens)
         else:
-            context.close_cursor(cursor)
+            self.context.close_cursor(cursor)
             return default
             
     def __getitem__ (self, session_id):
@@ -197,17 +189,15 @@ class SqlTableMap:
             if self.uncommitted.has_key(session_id):
                 del self.uncommitted[session_id]
 
-            #print 'Deleting session'
             #conn = self.get_conn()
             #cursor = self.get_conn().cursor()
             #cursor = conn.cursor()
-            context = self.get_context()
-            cursor = context.get_cursor()
+            cursor = self.context.get_cursor()
             cursor.execute("""
                 DELETE FROM sessions 
                 WHERE session_id=%(session_id)s
                 """, {'session_id': session_id})
-            context.close_cursor(cursor)
+            self.context.close_cursor(cursor)
             #conn.commit()
 
     def _save_to_db (self, session):
@@ -217,8 +207,7 @@ class SqlTableMap:
 
         #conn = self.get_conn()
         #cursor = conn.cursor()
-        context = self.get_context()
-        cursor = context.get_cursor()
+        cursor = self.context.get_cursor()
 
         # ORIGINAL: save a db-thrash by checking for update possibility
         # instead of the following, which always does an extra delete-
@@ -258,7 +247,7 @@ class SqlTableMap:
                str(session.messages),
                str('~~'.join(session._form_tokens))))
 
-        context.close_cursor(cursor)
+        self.context.close_cursor(cursor)
         #conn.commit()
 
     def _create_from_db (self, session_id, user_id, addr, create_time, 
@@ -269,10 +258,9 @@ class SqlTableMap:
         This goes through the new-style object function __new__ rather than
         through the __init__ function.
         """
-        context = self.get_context()
         session = SqlQuixoteSession.__new__(SqlQuixoteSession)
         session.id = session_id
-        session.user = canary.user.get_user_by_id(context, user_id)
+        session.user = canary.user.get_user_by_id(self.context, user_id)
         # FIXME: one '_' to be removed for qx-1.0
         #session.__remote_address = addr
         #session.__creation_time = create_time.ticks()
@@ -284,7 +272,6 @@ class SqlTableMap:
             session.__creation_time = create_time.ticks()
             session.__access_time = access_time.ticks()
         session.__remote_address = addr 
-        
         
         session.messages = messages
         session._form_tokens = tokens.split('~~')
@@ -304,15 +291,17 @@ class SqlSessionManager (SessionManager):
     A session manager that uses the SqlTableMap to map sessions into an
     SQL database.
     """
-    def __init__(self):
-        SessionManager.__init__(self, SqlQuixoteSession, SqlTableMap())
+    def __init__ (self, context):
+        SessionManager.__init__(self, SqlQuixoteSession, SqlTableMap(context))
+        self.context = context
 
-    def abort_changes(self, session):
+    def abort_changes (self, session):
         if session:
             self.sessions._abort_uncommitted(session)
 
-    def commit_changes(self, session):
-        if session and session.has_info():
+    def commit_changes (self, session):
+        if session \
+            and session.has_info():
             self.sessions._save_to_db(session)
 
 
@@ -320,18 +309,18 @@ class SqlSessionManager (SessionManager):
 class CanaryPublisher (SessionPublisher):
 
     def __init__ (self, *args, **kwargs):
-
+        self.logger = logging.getLogger(str(self.__class__))
         try:
             self.context = kwargs['context']
-            print 'Found context'
+            self.logger.info('Found context')
         except KeyError:
             self.context = canary.context.Context()
-            print 'Started context'
+            self.logger.info('Started new context')
             
         self.config = self.context.config
         
         SessionPublisher.__init__(self, root_namespace='canary.ui', 
-            session_mgr=SqlSessionManager(), config=self.config)
+            session_mgr=SqlSessionManager(self.context), config=self.config)
 
         self.setup_logs()
 
@@ -346,8 +335,7 @@ class NotLoggedInError (AccessError):
     status_code = 403
     title = "Access denied"
     description = "Authorized access only."
-
-
+    
 
 
 class MyForm (Form):
@@ -356,10 +344,5 @@ class MyForm (Form):
     """
     def __init__ (self, context, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
-        try:
-            self.logger = log4py.Logger().get_instance(self)
-            context.configure_logger(self.logger)
-        except:
-            import traceback
-            print traceback.print_exc()
-            
+        self.logger = logging.getLogger(str(self.__class__))
+        

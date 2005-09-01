@@ -4,6 +4,7 @@ _q_exports = [
     '_q_index',
     ]
 
+import logging
 import traceback
 
 from quixote import get_publisher
@@ -37,6 +38,7 @@ class RecordActions:
 
     def __init__ (self, record_id):
         self.record_id = record_id
+        self.logger = logging.getLogger(str(self.__class__))
 
     def _q_index [html] (self, request):
         header('Admin: Record summary')
@@ -196,8 +198,8 @@ class RecordActions:
             record = QueuedRecord(context, self.record_id)
             add_message('Record recached')
             request.redirect(str('/admin'))
-        except:
-            print traceback.print_exc()
+        except Exception, e:
+            self.logger.error('Could not recache record_id %s (%s)', self.record_id, e)
             add_message('Record not recached')
             request.redirect(str('/admin'))
 

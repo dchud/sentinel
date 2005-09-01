@@ -12,8 +12,6 @@ _q_exports = [
     'unclaim',
     ]
 
-from log4py import Logger
-
 from quixote import get_publisher, get_request
 from quixote.errors import AccessError, PublishError, TraversalError
 from quixote import form2
@@ -118,8 +116,6 @@ class StudyActions:
             else:
                 raise TraversalError
         except:
-            import traceback
-            print traceback.print_exc()
             return not_found('study')
 
 

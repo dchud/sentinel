@@ -1,7 +1,13 @@
+# $Id$
+
+import logging
 import sha
 
 from canary import dtuple
 from canary.utils import DTable
+
+logger = logging.getLogger('canary.user')
+
 
 
 # Copied from dulcinea.user
@@ -20,7 +26,8 @@ def get_user_by_id (context, id):
     try:
         user.load(context)
         return user
-    except:
+    except Exception, e:
+        context.logger.error('Could not load user %s (%s)', id, e)
         return None
 
 
@@ -34,7 +41,8 @@ def get_user_by_uid (context, uid):
     try:
         user.load(context)
         return user
-    except:
+    except Exception, e:
+        context.logger.error('Could not load user %s (%s)', uid, e)
         return None
 
 def get_users (context):
@@ -74,6 +82,7 @@ class User (DTable):
         self.email = email
         # FIXME: signups not yet implemented
         #self.token = ''
+        self.logger = logging.getLogger(str(self.__class__))
 
     def __str__ (self):
         return self.id or "*no id*"
@@ -137,7 +146,7 @@ class User (DTable):
                     int(self.is_editor), int(self.is_assistant))
                     )
                 self.uid = self.get_new_uid(context)
-                print 'User %s created with uid %s' % (self.id, self.uid)
+                self.logger.info('User %s created with uid %s', self.id, self.uid)
             else:
                 update_phrase = 'UPDATE %s ' % self.TABLE_NAME
                 cursor.execute(update_phrase + """
@@ -150,13 +159,9 @@ class User (DTable):
                     int(self.is_editor), int(self.is_assistant),
                     self.uid)
                     )
-                print 'User %s updated' % self.id
-            #if context.config.use_cache:
-            #    full_cache_key = '%s:%s' % (self.CACHE_KEY, self.id)
-            #    context.cache_set(full_cache_key, self)
-        except:
-            import traceback
-            print traceback.print_exc()
+                self.logger.info('User %s updated', self.id)
+        except Exception, e:
+            self.logger.error(e)
         context.close_cursor(cursor)
 
 
@@ -170,8 +175,7 @@ class User (DTable):
                     DELETE FROM users 
                     WHERE uid = %s
                     """, self.uid)
-        except:
-            import traceback
-            print traceback.print_exc()
+        except Exception, e:
+            self.logger.error(e)
             
         context.close_cursor(cursor)

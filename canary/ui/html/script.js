@@ -67,3 +67,15 @@
             }
         }
     }
+
+    function hideItem(id)
+    {
+        var item = document.getElementById(id);
+        item.style.display='none';
+    }
+
+    function showItem(id)
+    {
+        var item = document.getElementById(id);
+        item.style.display='block';
+    }
