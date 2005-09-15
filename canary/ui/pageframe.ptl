@@ -221,6 +221,7 @@ def sidebar [html] ():
             <!--
             <a href="/about/examples">Examples of animal sentinels</a>
             -->
+            <a href="/about/project_history">History</a>
             <a href="/about/related_work">Related work</a>
             
             <p>About us</p>
