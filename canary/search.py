@@ -630,11 +630,11 @@ class RecordSearcher:
     records = searcher.search("canary")
     """
 
-    def __init__(self, context):
+    def __init__ (self, context):
         self.context = context
         self.searcher = SearchIndex(context)
 
-    def search(self, query, curated_only=False):
+    def search (self, query, curated_only=False):
         """pass in a pylucene query and get back a list of QueuedRecord
         objects.
         """
@@ -657,11 +657,11 @@ class StudySearcher:
     studies = searcher.search("canary")
     """
 
-    def __init__(self,context):
+    def __init__ (self, context):
         self.context = context
         self.searcher = RecordSearcher(context)
 
-    def search(self,query):
+    def search (self, query):
         """perform a lucene search for studies
         """
         studies = []

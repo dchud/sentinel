@@ -157,7 +157,7 @@ def render_on_this_page [html] (records, query_string=''):
     """
     <div style='border:1px solid #AAAAAA;padding:.5em;margin-bottom:1em;'>
     
-    <h3>Refine/combine:</h3>
+    <h3>Find similar:</h3>
     
     <div class='label'>
         <span id='hideable-link'>Show/hide</span>

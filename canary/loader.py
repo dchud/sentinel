@@ -10,7 +10,7 @@ import types
 
 import dtuple
 
-import canary.context
+from canary.context import Cacheable
 import canary.search
 from canary.source_catalog import Source, Term, SourceCatalog
 from canary.study import Study
@@ -74,7 +74,7 @@ def find_needed_papers (context):
     return records
     
 
-class QueuedRecord (canary.context.Cacheable, DTable):
+class QueuedRecord (Cacheable, DTable):
 
     STATUS_UNCLAIMED = 0
     STATUS_CLAIMED = 1

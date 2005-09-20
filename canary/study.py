@@ -1546,6 +1546,22 @@ class Study (canary.context.Cacheable, DTable):
         locs.sort()
         return locs
 
+    def get_lat_longs (self, context, dms=False):
+        """
+        For a set of canary record locations, return their latitudes
+        and longitudes as two lists.
+        """
+        lats = longs = []
+        for location in self.locations:
+            feature = Feature(uid=location.feature_id)
+            feature.load(context)
+            if dms:
+                lats.append(feature.dms_latitude)
+                longs.append(feature.dms_longitude)
+            else:
+                lats.append(feature.latitude)
+                longs.append(feature.longitude)
+        return lats, longs
 
     def add_history (self, uid=-1, curator_user_id='', message='', modified=''):
         """
