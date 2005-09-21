@@ -16,6 +16,8 @@ _q_exports = [
     'reaper',
     ]
 
+import cStringIO
+
 from quixote.errors import PublishError
 from quixote.publish import get_publisher
 from quixote.util import StaticFile
@@ -28,6 +30,7 @@ from canary.ui.pages import login, logout
 from canary.ui.pages import robots, TempImage
 from canary.ui.browse_ui import Browse
 from canary.ui.search import search, advanced_search
+
 
 record = record_ui
 

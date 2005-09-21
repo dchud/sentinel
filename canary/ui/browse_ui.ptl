@@ -501,14 +501,20 @@ class BrowseIndex:
                             if year > max_year:
                                 max_year = year
                             
-                        image_file = utils.make_sparkline(context, year_count, 
+                        sparkline_image_file = utils.make_sparkline(context, year_count, 
                             context_years=(min_year, max_year))
                     except Exception, e:
                         self.logger.error('Could not specify context years: %s', e)
-                        image_file = utils.make_sparkline(context, year_count)
+                        sparkline_image_file = utils.make_sparkline(context, year_count)
                 else:
-                    image_file = utils.make_sparkline(context, year_count)
+                    sparkline_image_file = utils.make_sparkline(context, year_count)
                 
+                try:
+                    studies = [Study(context, rec.study_id) for sort_value, rec in records_sliced]
+                    e_image_file = utils.make_sideways_e(context, studies)
+                    context.logger.debug('e_image_file: %s', e_image_file)
+                except:
+                    context.logger.error(traceback.print_exc())
 
                 """
                 <p>
@@ -516,8 +522,11 @@ class BrowseIndex:
                     <span style='font-weight:bold;font-size:x-small;'>1965</span>
                     <img border='0' src='/timage/%s' type='image/png' usemap='#sparkmap'/>
                     <span style='font-weight:bold;font-size:x-small;'>2005</span>
+                    &nbsp;
+                    Linkages:
+                    <img border='0' src='/timage/%s' type='image/png' usemap='#emap'/>
                 </p>
-                """ % ('%', image_file)
+                """ % ('%', sparkline_image_file, e_image_file)
                 
                 """
                 <map name='sparkmap'>
@@ -542,6 +551,26 @@ class BrowseIndex:
                 """
                 </map>
                 
+                <map name='emap'>
+                """
+                bar_width = 4
+                for att in utils.linkages:
+                    token = att.replace(str('_'), str('-'))
+                    query_str = '"%s" [%s] has-%s' % (name, self.type, token)
+                    xoffset = 2 + (utils.linkages.index(att)*9)
+                    """
+                    <area href='/search?q=%s:1'
+                        shape='rect'
+                        coords='%s %s %s %s'
+                        alt='%s'
+                        title='%s' />
+                    """ % (query_str,
+                        xoffset, 0, xoffset+bar_width, 20,
+                        'limit to studies with %s = True' % token, 
+                        'limit to studies with %s = True' % token)
+                
+                """
+                </map>
                 
                 <table width='100%' border='0' cellspacing='2' cellpadding='2'>
                 <tr>
@@ -574,6 +603,7 @@ class BrowseIndex:
                 """
                 
             except:
+                context.logger.error(traceback.print_exc())
                 return not_found(self.type)
         else:
             return not_found(self.type)

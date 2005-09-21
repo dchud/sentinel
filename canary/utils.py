@@ -1,12 +1,20 @@
 # misc useful utilities
 # $Id$
 
+from cStringIO import StringIO
 import Image, ImageDraw
 import os
 import re
 import time
 
 import canary.context
+
+linkages = ['relationships',
+    'interspecies',
+    'exposure_linkage',
+    'outcome_linkage',
+    'genomic']
+        
 
 class DTable:
     """
@@ -146,9 +154,70 @@ def make_sparkline (context, d, context_years=()):
     draw.line(coords, fill="#888888")
     del draw
 
-    file_name = '%s.png' % time.time()
-    im.save('%s/%s' % (config.temp_image_dir, file_name))
-    return file_name
+    image_name = '%s.png' % time.time()
+    image_data_encoded = StringIO()
+    im.save(image_data_encoded, 'png')
+    # Verify the cache set was successful
+    cache_result = context.cache_set('image:%s' % image_name, 
+        image_data_encoded.getvalue())
+    # If cache set failed, save to file
+    if not cache_result:
+        im.save('%s/%s' % (context.config.temp_image_dir, image_name))
+    return image_name
+
+
+def make_sideways_e (context, studies):
+    """
+    For an arbitrary set of studies, make a sideways E
+    showing the proportion of the records that have the 
+    five standard record linkages.
+    """
+    #border_color = '#324362'
+    border_color = '#888888'
+    fg_color = '#A6BFF2'
+    bg_color = '#EEEDC0'
+
+    width= 45
+    height = 20
+    bar_width = 4
+
+    count = len(studies)
+    d = {}
+    for att in linkages:
+        d[att] = 0
+        
+    for study in studies:
+        for att in linkages:
+            if getattr(study, 'has_%s' % att):
+                d[att] += 1
+
+    im = Image.new("RGB", (width, height), 'white')
+    draw = ImageDraw.Draw(im)
+    draw.line(((0, height-1), (width, height-1)), fill=border_color)
+    for linkage in linkages:
+        xoffset = 2  + (linkages.index(linkage) * 9)
+        draw.rectangle(((xoffset, height-1), (xoffset+bar_width, 0)),
+            outline=border_color, fill=bg_color)
+        if count \
+            and d[linkage]:
+            bar_height = int((height-1) * (float(d[linkage]) / count))
+            draw.rectangle((
+                (xoffset+1, 18),
+                (xoffset+bar_width-1, (18-bar_height+1))
+                ),
+                fill=fg_color)
+
+    del draw
+    image_name = '%s-e.png' % time.time()
+    image_data_encoded = StringIO()
+    im.save(image_data_encoded, 'png') 
+    # Verify the cache set was successful
+    cache_result = context.cache_set('image:%s' % image_name, 
+        image_data_encoded.getvalue())
+    # If cache set failed, save to file
+    if not cache_result:
+        im.save('%s/%s' % (context.config.temp_image_dir, image_name))
+    return image_name
 
 
 def clean_temp_image_dir (context):

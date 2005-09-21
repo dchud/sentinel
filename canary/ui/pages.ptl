@@ -1,8 +1,11 @@
 # $Id$
 
+from cStringIO import StringIO
 import logging
 import string
 from time import time
+
+import Image
 
 from quixote import get_publisher, get_request, get_session_manager
 from quixote import form2
@@ -321,24 +324,39 @@ def logout [html] (request):
 
 
 class TempImage:
+    """
+    Renders a temporarily-stashed image from its string representation
+    in the memory cache if the cache is available.  If the cache is
+    unavailable, fetch the file from the filesystem.
+    """
     
     _q_exports = ['_q_index']
     
-    def __init__ (self):
-        self.logger = logging.getLogger(str(self.__class__))
-        
     def _q_index (self):
         return not_found('image')
         
     def _q_lookup (self, request, image_id):
-        config = get_publisher().config
+        context = get_publisher().context
         try:
-            x = StaticFile(config.temp_image_dir + '/%s' % image_id,
-                mime_type='image/png')
-            return x
+            request.response.set_content_type('image/png')
+            image_string = context.cache_get('image:%s' % image_id)
+            # Verify that the cache get succeeded
+            if image_string:
+                im = Image.open(StringIO(image_string))
+                im_data_encoded = StringIO()
+                im.save(im_data_encoded, "png") 
+                data = im_data_encoded.getvalue()
+                return data
+            else:
+                # If it failed, return the file itself.
+                # Note: this assumes that the cache set failed as well,
+                # so the image save process saved the file.
+                x = StaticFile(context.config.temp_image_dir +
+                    '/%s' % image_id, mime_type='image/png')
+                return x
         except OSError, e:
             self.logger.error(e)
-            return not_found('user')
+            return not_found('image')
 
 
 def robots [plain] ():

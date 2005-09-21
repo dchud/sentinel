@@ -85,8 +85,11 @@ def search [html] (request):
             except:
                 # Somehow the first four digits of pubdate aren't YYYY
                 continue
-        image_file = utils.make_sparkline(context, year_count)
+        sparkline_image_file = utils.make_sparkline(context, year_count)
         
+        studies = [Study(context, rec.study_id) for rec, score in result_set]
+        e_image_file = utils.make_sideways_e(context, studies)
+
         form.render()
         """
         <table style='margin-top:0;' width='100%s' border='0' cellspacing='0' cellpadding='0'>
@@ -94,13 +97,18 @@ def search [html] (request):
                 <td valign='top'>
         
         <p>
-        Record(s): <span style='font-weight:bold;'>%s</span>,
+        Record(s): <span style='font-weight:bold;'>%s</span>
+        <br/>
         %s of hits by year:
             <span style='font-weight:bold;font-size:x-small;'>1965</span>
             <img border='0' src='/timage/%s' type='image/png' usemap='#sparkmap'/>
             <span style='font-weight:bold;font-size:x-small;'>2005</span>
+            &nbsp;
+            Linkages:
+            <img border='0' src='/timage/%s' type='image/png' usemap='#emap'/>
         </p>
-        """ % ('%', len(result_set), '%', image_file)
+        """ % ('%', len(result_set), '%', sparkline_image_file, e_image_file)
+        
         if len(result_set) > 0:
             years = year_count.keys()
             years.sort()
@@ -132,9 +140,34 @@ def search [html] (request):
                         'limit to year %s' % year)
             """
             </map>
+            
+            <map name='emap'>
             """
+            bar_width = 4
+            for att in utils.linkages:
+                token = att.replace(str('_'), str('-'))
+                try:
+                    if raw_query.index(str('%s' % token)):
+                        query_str = raw_query
+                except ValueError:
+                    query_str = '%s has-%s:1' % (raw_query, token)
+                    
+                xoffset = 2 + (utils.linkages.index(att)*9)
+                """
+                <area href='/search?q=%s'
+                    shape='rect'
+                    coords='%s %s %s %s'
+                    alt='%s'
+                    title='%s' />
+                """ % (query_str,
+                    xoffset, 0, xoffset+bar_width, 20,
+                    'limit to studies with %s = True' % token, 
+                    'limit to studies with %s = True' % token)
             
             """
+            </map>
+            
+            
             <div id="search-result">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
             """
