@@ -37,7 +37,6 @@ SEARCH_FIELDS = {
     'has-outcomes':         'has-outcomes',
     'has-outcome-linkage':  'has-outcome-linkage',
     'has-relationships':    'has-relationships',
-<<<<<<< .working
     'is':                   'issue', 
     'issn':                 'issn',
     'issue':                'issue',
