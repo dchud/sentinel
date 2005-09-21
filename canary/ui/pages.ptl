@@ -332,6 +332,9 @@ class TempImage:
     
     _q_exports = ['_q_index']
     
+    def __init__ (self):
+        self.logger = logging.getLogger(str(self.__class__)) 
+        
     def _q_index (self):
         return not_found('image')
         

@@ -13,6 +13,7 @@ from canary.qx_defs import NotLoggedInError
 from canary.study import Study
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found
+from canary import utils
 
 
 _q_exports = [
@@ -84,26 +85,30 @@ def render_indexing_row [html] (anchor_name, field, value):
     """ % ('25%', anchor_name, field, field, value)
 
 
+data_points = [
+    #('has_exposures', 'Exposures', 'Animal environmental exposures'),
+    #('has_outcomes', 'Outcomes', 'Animal health outcomes'),
+    ('has_relationships', 'Cause and Effect Analysis', 
+        'Does the study include data on animal exposure/outcome relationships?'),
+    ('has_interspecies', 'Interspecies susceptibility data', 
+        'Does the study include data on differing susceptibilities among species?'),
+    ('has_exposure_linkage', 'Shared exposures with humans', 
+        'Does the study include data on shared animal and human exposures?'),
+    ('has_outcome_linkage', 'Shared outcomes with humans', 
+        'Does the study include data linking animal exposure/outcome and human health outcomes?'),
+    ('has_genomic', 'Gene sequence data', 
+        'Does the study include linkages to gene sequence data?'),
+    ]
+    
 def render_data_points [html] (study):
-    data_points = [
-        #('has_exposures', 'Exposures', 'Animal environmental exposures'),
-        #('has_outcomes', 'Outcomes', 'Animal health outcomes'),
-        ('has_relationships', 'Cause and Effect Analysis', 
-            'Does the study include data on animal exposure/outcome relationships?'),
-        ('has_interspecies', 'Interspecies susceptibility data', 
-            'Does the study include data on differing susceptibilities among species?'),
-        ('has_exposure_linkage', 'Shared exposures with humans', 
-            'Does the study include data on shared animal and human exposures?'),
-        ('has_outcome_linkage', 'Shared outcomes with humans', 
-            'Does the study include data linking animal exposure/outcome and human health outcomes?'),
-        ('has_genomic', 'Gene sequence data', 
-            'Does the study include linkages to gene sequence data?'),
-        ]
-        
+    context = get_publisher().context
+    
+    e_image_name = utils.make_sideways_e(context, [study])
     """
         <div class='studytable'>
             <table cellspacing='0'>
                 <tr>
+                    <th><acronym title='Linkages between human and animal health'>Linkages</acronym></th>
     """
     for key, short, full in data_points:
         """
@@ -113,7 +118,8 @@ def render_data_points [html] (study):
                 </tr>
             
                 <tr>
-    """
+                    <td><img src='/timage/%s' alt='Small linkage graph' /></td>
+    """ % e_image_name
     for key, short, full in data_points:
         if getattr(study, str(key)):
             """

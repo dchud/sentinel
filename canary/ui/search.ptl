@@ -18,7 +18,7 @@ from canary.search import Search, SearchIndex
 from canary.study import Study
 from canary.ui.browse_ui import BrowseIndex, render_on_this_page
 from canary.ui.pageframe import header, footer
-from canary.ui.record_ui import render_record_row
+from canary.ui.record_ui import render_record_row, data_points
 from canary import utils
 
 
@@ -104,7 +104,7 @@ def search [html] (request):
             <img border='0' src='/timage/%s' type='image/png' usemap='#sparkmap'/>
             <span style='font-weight:bold;font-size:x-small;'>2005</span>
             &nbsp;
-            Linkages:
+            <acronym title='Linkages between human and animal health'>Linkages</acronym>:
             <img border='0' src='/timage/%s' type='image/png' usemap='#emap'/>
         </p>
         """ % ('%', len(result_set), '%', sparkline_image_file, e_image_file)
@@ -146,6 +146,7 @@ def search [html] (request):
             bar_width = 4
             for att in utils.linkages:
                 token = att.replace(str('_'), str('-'))
+                hint_text = data_points[utils.linkages.index(att)][1].lower()
                 try:
                     if raw_query.index(str('%s' % token)):
                         query_str = raw_query
@@ -161,8 +162,8 @@ def search [html] (request):
                     title='%s' />
                 """ % (query_str,
                     xoffset, 0, xoffset+bar_width, 20,
-                    'limit to studies with %s = True' % token, 
-                    'limit to studies with %s = True' % token)
+                    'limit to studies with %s' % hint_text, 
+                    'limit to studies with %s' % hint_text)
             
             """
             </map>

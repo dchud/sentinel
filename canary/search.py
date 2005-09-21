@@ -521,11 +521,12 @@ class SearchIndex:
             for ctype in ('exposures', 'outcomes', 'risk_factors',
                 'species'):
                 # NOTE: I think lucene dislikes '_' in field names ??
-                ctype.replace('_', '-')
+                ctype_search = ctype.replace('_', '-')
                 for val in getattr(study, ctype):
                     concept = Concept(self.context, val.concept_id)
                     for syn in concept.synonyms:
-                        doc.add(PyLucene.Field(ctype, unicode(syn, 'latin-1'),
+                        doc.add(PyLucene.Field(ctype_search, 
+                            unicode(syn, 'latin-1'),
                             False, True, True))
                         f = PyLucene.Field('all', unicode(syn, 'latin-1'),
                             False, True, True)

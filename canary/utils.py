@@ -157,9 +157,16 @@ def make_sparkline (context, d, context_years=()):
     image_name = '%s.png' % time.time()
     image_data_encoded = StringIO()
     im.save(image_data_encoded, 'png')
-    # Verify the cache set was successful
+    # NOTE: Add to cache, but only for 30 seconds (names are time-based, 
+    # so we really only need a few milliseconds, but just to be safe).
+    # Theoretically, these could be name-bound to the query url, then
+    # we'd really be doing caching... instead we cache each time only
+    # for responding to a single user request and dispose of the image
+    # immediately.
+    # 
+    # Also, verify the cache set was successful.
     cache_result = context.cache_set('image:%s' % image_name, 
-        image_data_encoded.getvalue())
+        image_data_encoded.getvalue(), 30)
     # If cache set failed, save to file
     if not cache_result:
         im.save('%s/%s' % (context.config.temp_image_dir, image_name))
@@ -211,9 +218,16 @@ def make_sideways_e (context, studies):
     image_name = '%s-e.png' % time.time()
     image_data_encoded = StringIO()
     im.save(image_data_encoded, 'png') 
-    # Verify the cache set was successful
+    # NOTE: Add to cache, but only for 30 seconds (names are time-based, 
+    # so we really only need a few milliseconds, but just to be safe).
+    # Theoretically, these could be name-bound to the query url, then
+    # we'd really be doing caching... instead we cache each time only
+    # for responding to a single user request and dispose of the image
+    # immediately.
+    # 
+    # Also, verify the cache set was successful.
     cache_result = context.cache_set('image:%s' % image_name, 
-        image_data_encoded.getvalue())
+        image_data_encoded.getvalue(), 30)
     # If cache set failed, save to file
     if not cache_result:
         im.save('%s/%s' % (context.config.temp_image_dir, image_name))

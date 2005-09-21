@@ -19,7 +19,7 @@ from canary.qx_defs import NotLoggedInError
 from canary.study import Methodology, Study
 from canary.ui.pages import not_found
 from canary.ui.pageframe import header, footer
-from canary.ui.record_ui import render_record_row
+from canary.ui.record_ui import render_record_row, data_points
 from canary import utils
 
 
@@ -426,7 +426,9 @@ class BrowseIndex:
         source_catalog = context.get_source_catalog()
         complete_term_mapping = source_catalog.get_complete_mapping()
         
-        header('Browse by %s: %s' % (self.type.capitalize(), name),
+        type_display = self.type.replace(str('_'), str(' '))
+        type_search = self.type.replace(str('_'), str('-'))
+        header('Browse by %s: %s' % (type_display.capitalize(), name),
             show_javascript=True)
         count = len(records)
         if count > 0:
@@ -437,7 +439,8 @@ class BrowseIndex:
     
             """
             <h2><a href='/browse/%s'>Browse by %s</a>: %s (%s %s)</h2>
-            """ % (self.type, self.type.capitalize(), name, count, article_text)
+            """ % (self.type, type_display.capitalize(), name,
+                count, article_text)
             
             try:
                 year_count = {}
@@ -510,7 +513,7 @@ class BrowseIndex:
                     sparkline_image_file = utils.make_sparkline(context, year_count)
                 
                 try:
-                    studies = [Study(context, rec.study_id) for sort_value, rec in records_sliced]
+                    studies = [Study(context, rec.study_id) for sort_value, rec in records_sorted]
                     e_image_file = utils.make_sideways_e(context, studies)
                     context.logger.debug('e_image_file: %s', e_image_file)
                 except:
@@ -520,11 +523,13 @@ class BrowseIndex:
                 <p>
                 %s of records by year:
                     <span style='font-weight:bold;font-size:x-small;'>1965</span>
-                    <img border='0' src='/timage/%s' type='image/png' usemap='#sparkmap'/>
+                    <img border='0' src='/timage/%s' type='image/png' 
+                        alt='Small chart of records by year' usemap='#sparkmap'/>
                     <span style='font-weight:bold;font-size:x-small;'>2005</span>
                     &nbsp;
-                    Linkages:
-                    <img border='0' src='/timage/%s' type='image/png' usemap='#emap'/>
+                    <acronym title='Linkages between human and animal health'>Linkages</acronym>:
+                    <img border='0' src='/timage/%s' type='image/png' 
+                        alt='Small chart of number of records by linkage type' usemap='#emap'/>
                 </p>
                 """ % ('%', sparkline_image_file, e_image_file)
                 
@@ -537,7 +542,7 @@ class BrowseIndex:
                     if count > 0:
                         year_index = years.index(year)
                         query_str = '"%s" [%s] %s [date]' \
-                            % (name, self.type, year)
+                            % (name, type_search, year)
                         """
                     <area href='/search?q=%s' 
                         shape='rect'
@@ -556,7 +561,10 @@ class BrowseIndex:
                 bar_width = 4
                 for att in utils.linkages:
                     token = att.replace(str('_'), str('-'))
-                    query_str = '"%s" [%s] has-%s' % (name, self.type, token)
+                    # FIXME: a HACK I tell you.  Clean this up!
+                    hint_text = data_points[utils.linkages.index(att)][1].lower()
+                    query_str = '"%s" [%s] has-%s' % (name, 
+                        type_search, token)
                     xoffset = 2 + (utils.linkages.index(att)*9)
                     """
                     <area href='/search?q=%s:1'
@@ -566,8 +574,8 @@ class BrowseIndex:
                         title='%s' />
                     """ % (query_str,
                         xoffset, 0, xoffset+bar_width, 20,
-                        'limit to studies with %s = True' % token, 
-                        'limit to studies with %s = True' % token)
+                        'limit to studies with %s' % hint_text, 
+                        'limit to studies with %s' % hint_text)
                 
                 """
                 </map>
@@ -595,7 +603,8 @@ class BrowseIndex:
                     
                     <td width='30%' valign='top'>
                 """
-                render_on_this_page(records_sliced, '"%s"[%s]' % (name, self.type))
+                render_on_this_page(records_sliced, '"%s"[%s]' % (name, 
+                    type_search))
                 """
                     </td>
                 </tr>
@@ -1016,12 +1025,12 @@ class ConceptBrowseIndex (BrowseIndex):
     def _q_index [html] (self, request):
 
         context = get_publisher().context
-        display_type = self.type.replace(str('_'), str(' ')).capitalize()
+        type_display = self.type.replace(str('_'), str(' ')).capitalize()
         
-        header('Browse by %s' % display_type)
+        header('Browse by %s' % type_display)
         """
         <h2><a href='/browse/%s'>Browse by %s</a></h2>
-        """ % (self.type, display_type)
+        """ % (self.type, type_display)
         
         results = records_by_concept_index(context, self.type)
         values = [r[2] for r in results]
@@ -1054,7 +1063,7 @@ class ConceptBrowseIndex (BrowseIndex):
                         <th align='center' width='75'># articles</th>
                         <th align='left'>%s</th>
                     </tr>
-            """ % display_type
+            """ % type_display
             
             for result in results:
                 count, concept_id, term = result
@@ -1074,7 +1083,7 @@ class ConceptBrowseIndex (BrowseIndex):
             <p>
             No %s found starting with that letter.
             </p>
-            """ % display_type
+            """ % type_display
         footer()
         
 
