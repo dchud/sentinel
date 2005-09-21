@@ -1,10 +1,12 @@
+# $Id$
+
 import unittest
 import test
 import sys
 
 def suite():
     suite = unittest.TestSuite()
-    suite.addTest(test.report.suite())
+    suite.addTest(test.stats.suite())
     suite.addTest(test.search.suite())
     return suite
 

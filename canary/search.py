@@ -6,13 +6,12 @@ import traceback
 import pyparsing as pyp
 import PyLucene
 
+import canary.loader
 from canary.concept import Concept
 from canary.gazeteer import Feature
-import canary.loader 
 from canary.pubmed import Journal
 from canary.study import Study
 from canary.utils import render_capitalized
-
 
 # All possible search fields, indexed by all valid forms.
 SEARCH_FIELDS = {
@@ -38,6 +37,7 @@ SEARCH_FIELDS = {
     'has-outcomes':         'has-outcomes',
     'has-outcome-linkage':  'has-outcome-linkage',
     'has-relationships':    'has-relationships',
+<<<<<<< .working
     'is':                   'issue', 
     'issn':                 'issn',
     'issue':                'issue',
@@ -79,7 +79,7 @@ SEARCH_FIELDS = {
     'volume':               'volume',
     'word':                 'keyword',
     }
-    
+
 
 def disassemble_user_query(s):
     """
@@ -245,7 +245,7 @@ class Search:
                     )
                 rows = cursor.fetchall()
                 for row in rows:
-                    record = canary.loader.QueuedRecord(context, row[0])
+                    record = ueuedRecord(context, row[0])
                     results.add_result(record)
 
             else:
@@ -586,9 +586,9 @@ class SearchIndex:
             
         hits = []
         query_string = str(query_string)
-        self.logger.debug('Raw query: %s', query_string)
+        self.logger.info('Performing search: %s' % query_string)
         disassembled_query = disassemble_user_query(query_string)
-        self.logger.debug('Disassembled query: %s', disassembled_query)
+        self.logger.debug('Disassembled query: %s' % str(disassembled_query))
         reassembled_query = '+(%s)' % reassemble_user_query(disassembled_query)
         self.logger.debug('Reassembled query: %s', reassembled_query)
         
@@ -622,7 +622,6 @@ class SearchIndex:
             else:
                 return [], None
 
-    
 
 class RecordSearcher:
     """Conduct an index search and get QueuedRecord objects back

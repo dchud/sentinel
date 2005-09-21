@@ -1,2 +1,4 @@
-from report import *
+# $Id$
+
+from stats import *
 from search import *
