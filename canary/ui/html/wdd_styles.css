@@ -50,7 +50,7 @@
 		}
 
 	h2 {
-		font-size: 13px;
+		font-size: 14px;
 		margin-top: 0px;
 		color: #000066;
 		margin-bottom: 0em;
@@ -59,7 +59,7 @@
 
 
 	h3 {
-		font-size: 14px;
+		font-size: 13px;
 		color: #000066;
 		font-weight: bold;
 		margin-top: 0em;
@@ -98,18 +98,15 @@
 		margin-bottom: .8em;
 		}
 
-		.rightspace p
+	.rightspace p
 		{
-
-	margin-right: 10px;
+		margin-right: 10px;
 		}
 
-		.rightspace h3
+	.rightspace h3
 		{
-
-	margin-right: 10px;
+		margin-right: 10px;
 		}
-
 
 	#print_banner  {
 		display: none;
@@ -294,6 +291,15 @@
 	border-style: solid;
 	background-color: #FFC;
 	}
+
+.pullquote {
+	border: 1px #036 solid;
+	background-color: #f7f7f7;
+	padding: 1em;
+	margin: 1em;
+	font-size: large;
+	line-height:1.5em;
+}
 
 #top-menu-int td {
 	color: #FFC;
