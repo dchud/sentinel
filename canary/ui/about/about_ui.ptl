@@ -178,7 +178,8 @@ def tour [html] (request):
     pages = (
         ('one', 'Canary Database Curation'),
         ('two', 'Animal-Human Health Linkages'),
-        ('three', 'Other Features'),
+        ('three', 'Searching'),
+        ('four', 'Other Features'),
     )
 
     try:
@@ -204,6 +205,8 @@ def tour [html] (request):
         tour_two()
     elif page == 'three':
         tour_three()
+    elif page == 'four':
+        tour_four()
 
     tour_menu(page, pages)
 
@@ -321,9 +324,50 @@ def tour_two [html] ():
     or locations.
     </p>
     """
-
+    
 
 def tour_three [html] ():
+    
+    """
+    <p>
+    There are many ways to discover data in the Canary Database.
+    The search interface maps subject and species synonyms automatically,
+    and supports <a href='/search'>simple</a>, 
+    <a href='/advanced_search'>advanced</a>, and do-it-yourself 
+    <a href='/about/how_to_search#syntax'>search syntax</a> with an array of
+    <a href='/about/how_to_search#fields'>fields</a> you may specify.
+    All search result screens, as well as the browsing screens at left,
+    support a set of quick visual tools which summarize the records
+    you see and help you to quickly refine views.
+    </p>
+    
+    <img src='/images/tour-search.png' alt='sample search results'>
+    
+    <p>
+    <b>Visual indicators</b> of study distribution by year and the
+    number of studies that describe data about specific linkages
+    between human and animal health are always available.  Both give
+    a quick indication of what the studies you see are about, and
+    when they were published.  And you can click on them to refine
+    your view!
+    </p>
+    
+    <p>
+    <b>Find similar links</b> show the most frequent exposures, outcomes,
+    species, and author names for any search result or browsing view
+    of Canary Database records.  Use these to quickly refine your search 
+    strategy without using any complex search syntax.
+    </p>
+    
+    <p>
+    Or, if you really like complex search syntax, we do that too!
+    We support BRS/Ovid, Pubmed, and Lucene style fielded searching
+    with a wide range of fields to choose from.  Read all about it
+    on our <a href='/about/how_to_search'>How to Search</a> page.
+    </p>
+    """
+    
+def tour_four [html] ():
 
     """
     <p>
@@ -345,31 +389,27 @@ def tour_three [html] ():
         <li>Links to Pubmed records and related articles</li>
         <li>Export records to your bibliographic reference 
             manager</li>
-    </ul>
-
-    <p>
-    <b>Coming soon (Fall 2004-Winter 2005)</b>
-    </p>
-
-    <ul>
         <li>Advanced search allowing users to find curated
             articles about combinations of exposures, outcomes,
             species, and locations</li>
-        <li>Better similar record searching, using advanced
-            search interface</li>
-        <li>Dynamic charts indicating simple patterns in curated
-            records</li>
+        <li>Better similar record searching</li>
+        <li>Advanced search interface</li>
         <li>Per-institution reference linking (ask your friendly
             librarian about this!)</li>
     </ul>
 
     <p>
-    <b>Future developments (Spring 2005-)</b>
+    <b>Future developments (Winter 2005-2006)</b>
     </p>
 
     <ul>
+        <li>Save searches, group studies with tags or folders,
+            and share either with colleages</li>
+        <li>Subscribe to searches and new records using RSS</li>
         <li>Advanced related record searching</li>
         <li>Map interface based on indexed locations</li>
+        <li>More dynamic charts indicating simple patterns in curated
+            records</li>
         <li>Dynamic data visualizations indicating complex
             patterns in curated records</li>
     </ul>
