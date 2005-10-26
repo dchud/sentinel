@@ -26,76 +26,75 @@ class StatsTests(TestCase):
         self.collector = StatCollector(self.context)
 
     def test_curators(self):
-        handler = ArticleTypes()
+        handler = ArticleTypeHandler()
         self.collector.add_handler(handler)
         self.collector.process(self.records)
         self.assertEquals(len(handler.stats.keys()) > 0, True)
 
     def test_article_types(self):
-        handler = ArticleTypes()
+        handler = ArticleTypeHandler()
         self.collector.add_handler(handler)
         self.collector.process(self.records)
         self.assertEquals(len(handler.stats.keys()), 9)
 
     def test_methodology_samplings(self):
-        handler = MethodologySamplings()
+        handler = MethodologySamplingHandler()
         self.collector.add_handler(handler)
         self.collector.process(self.records)
         self.assertEquals(len(handler.stats.keys()), 5)
 
     def test_methology_types(self):
-        handler = MethodologyTypes()
+        handler = MethodologyTypeHandler()
         self.collector.add_handler(handler)
         self.collector.process(self.records)
         self.assertEquals(len(handler.stats.keys()), 7)
 
     def test_methology_timings(self):
-        handler = MethodologyTimings()
+        handler = MethodologyTimingHandler()
         self.collector.add_handler(handler)
         self.collector.process(self.records)
         self.assertEquals(len(handler.stats.keys()), 6)
 
     def test_methology_controls(self):
-        handler = MethodologyControls()
+        handler = MethodologyControlHandler()
         self.collector.add_handler(handler)
         self.collector.process(self.records)
         self.assertEquals(len(handler.stats.keys()), 4)
 
     def test_exposure_routes(self):
-        handler = ExposureRoutes()
+        handler = ExposureRouteHandler()
         self.collector.add_handler(handler)
         self.collector.process(self.records)
         self.assertEquals(len(handler.stats.keys()), 6)
 
     def test_exposures(self):
-        handler = Exposures()
+        handler = ExposureHandler()
         self.collector.add_handler(handler)
         self.collector.process(self.records)
         self.assertEquals(len(handler.stats.keys()), 3)
 
     def test_risk_factors(self):
-        handler = RiskFactors()
+        handler = RiskFactorHandler()
         self.collector.add_handler(handler)
         self.collector.process(self.records)
         self.assertEquals(len(handler.stats.keys()), 3)
 
     def test_outcomes(self):
-        handler = Outcomes()
+        handler = OutcomeHandler()
         self.collector.add_handler(handler)
         self.collector.process(self.records)
         self.assertEquals(len(handler.stats.keys()), 3)
 
     def test_species(self):
-        handler = SpeciesStats()
+        handler = SpeciesHandler()
         self.collector.add_handler(handler)
         self.collector.process(self.records)
         self.assertEquals(len(handler.stats.keys()), 3)
 
     def test_locations(self):
-        handler = Locations()
+        handler = LocationHandler()
         self.collector.add_handler(handler)
         self.collector.process(self.records)
-        print handler.stats
 
 def suite():
     return makeSuite( StatsTests, 'test' )
