@@ -2,3 +2,4 @@
 
 from stats import *
 from search import *
+from parser import *

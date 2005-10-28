@@ -1,6 +1,6 @@
 # $Id$
 
-from unittest import TestCase, makeSuite
+from unittest import TestCase
 
 from canary.context import Context
 from canary.stats import *
@@ -96,5 +96,3 @@ class StatsTests(TestCase):
         self.collector.add_handler(handler)
         self.collector.process(self.records)
 
-def suite():
-    return makeSuite( StatsTests, 'test' )

@@ -1,15 +1,15 @@
 # $Id$
 
-import unittest
-import test
-import sys
+from unittest import TestSuite, TextTestRunner, makeSuite
+from test import StatsTests, SearchTests, ParserTests
 
 def suite():
-    suite = unittest.TestSuite()
-    suite.addTest(test.stats.suite())
-    suite.addTest(test.search.suite())
+    suite = TestSuite()
+    suite.addTest(makeSuite(StatsTests, 'test'))
+    suite.addTest(makeSuite(SearchTests, 'test'))
+    suite.addTest(makeSuite(ParserTests, 'test'))
     return suite
 
 if __name__ == '__main__':
-    runner = unittest.TextTestRunner(verbosity=2)
+    runner = TextTestRunner(verbosity=2)
     runner.run(suite())

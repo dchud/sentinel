@@ -1,0 +1,292 @@
+PMID- 14681475
+OWN - NLM
+STAT- MEDLINE
+DA  - 20031218
+DCOM- 20040120
+LR  - 20050202
+PUBM- Print
+IS  - 1362-4962
+VI  - 32
+IP  - Database issue
+DP  - 2004 Jan 1
+TI  - ERGDB: Estrogen Responsive Genes Database.
+PG  - D533-6
+AB  - ERGDB is an integrated knowledge database dedicated to genes responsive to
+      estrogen. Genes included in ERGDB are those whose expression levels are
+      experimentally proven to be either up-regulated or down-regulated by
+      estrogen. Genes included are identified based on publications from the
+      PubMed database and each record has been manually examined, evaluated and
+      selected for inclusion by biologists. ERGDB aims to be a unified gateway
+      to store, search, retrieve and update information about estrogen
+      responsive genes. Each record contains links to relevant databases, such
+      as GenBank, LocusLink, Refseq, PubMed and ATCC. The unique feature of
+      ERGDB is that it contains information on the dependence of gene reactions
+      on experimental conditions. In addition to basic information about the
+      genes, information for each record includes gene functional description,
+      experimental methods used, tissue or cell type, gene reaction, estrogen
+      exposure time and the summary of putative estrogen response elements if
+      the gene's promoter sequence was available. Through a web interface at
+      http://sdmc.i2r.a-star.edu.sg/ergdb/ cgi-bin/explore.pl users can either
+      browse or query ERGDB. Access is free for academic and non-profit users.
+AD  - Knowledge Extraction Laboratory Institute for Infocomm Research,
+      Singapore.
+FAU - Tang, Suisheng
+AU  - Tang S
+FAU - Han, Hao
+AU  - Han H
+FAU - Bajic, Vladimir B
+AU  - Bajic VB
+LA  - eng
+PT  - Journal Article
+PL  - England
+TA  - Nucleic Acids Res
+JID - 0411011
+RN  - 0 (Estrogens)
+SB  - IM
+MH  - Animals
+MH  - *Databases, Factual
+MH  - Databases, Genetic
+MH  - Estrogens/*pharmacology
+MH  - Gene Expression Regulation/*drug effects
+MH  - Genomics
+MH  - Humans
+MH  - Information Storage and Retrieval
+MH  - Internet
+MH  - Organ Specificity
+MH  - Promoter Regions (Genetics)/genetics
+MH  - Research Design
+EDAT- 2003/12/19 05:00
+MHDA- 2004/01/21 05:00
+AID - 10.1093/nar/gkh083 [doi]
+AID - 32/suppl_1/D533 [pii]
+PST - ppublish
+SO  - Nucleic Acids Res 2004 Jan 1;32(Database issue):D533-6.
+
+PMID- 14669199
+OWN - NLM
+STAT- MEDLINE
+DA  - 20031211
+DCOM- 20040113
+LR  - 20041117
+PUBM- Print
+IS  - 0003-9993
+VI  - 84
+IP  - 12
+DP  - 2003 Dec
+TI  - Contemporary issues in mild traumatic brain injury.
+PG  - 1885-94
+AB  - OBJECTIVES: To determine (1) minimum criteria in adults for clinical
+      diagnosis of mild traumatic brain injury (TBI) and (2) whether persistent
+      postconcussive syndrome exists as a nosologic entity. DATA SOURCES: PubMed
+      search by MEDLINE of head injuries from January 1977 to July 2002. STUDY
+      SELECTION: All reviews and studies of mild TBI with special reference to
+      those on persistent postconcussive syndrome having a general trauma cohort
+      as a control comparison. DATA EXTRACTION: Review of design and other
+      methodologic issues. Studies dependent on superior strength of evidence
+      (as defined by the American Academy of Neurology) concerning the biologic
+      nature of persistent postconcussive syndrome. DATA SYNTHESIS: A period of
+      altered awareness with amnesia brought on by a direct craniofacial blow is
+      the starting point in determining whether diffuse mild TBI has occurred.
+      An amnestic scale is more helpful than Glasgow Coma Scale score in grading
+      mild injury and in formulating minimum inclusion criteria for mild TBI.
+      Neuropsychologic test results coupled with self-reported symptoms should
+      not be taken as the primary source of evidence for mild TBI. Prolonged
+      cognitive impairment after injury is not unique to brain trauma.
+      CONCLUSIONS: Persistent postconcussive syndrome after mild brain trauma,
+      uncomplicated by focal injury, is biologically inseparable from other
+      examples of the posttraumatic syndrome. To account for the persistent
+      cognitive and behavioral sequelae of posttraumatic states, including
+      persistent postconcussive syndrome, we need further studies on the
+      emerging concept of limbic neuronal attrition occurring as a maladaptive
+      response to pain and stress.
+AD  - Department of Neurology, Burnaby Hospital, Burnaby, British Columbia,
+      Canada. bassonrees@telus.net
+FAU - Rees, Peter M
+AU  - Rees PM
+LA  - eng
+PT  - Journal Article
+PT  - Review
+PT  - Review, Tutorial
+PL  - United States
+TA  - Arch Phys Med Rehabil
+JID - 2985158R
+SB  - AIM
+SB  - IM
+CIN - Arch Phys Med Rehabil. 2004 May;85(5):862; author reply 862. PMID:
+      15129414
+MH  - Amnesia, Retrograde/etiology
+MH  - Biomechanics
+MH  - Brain Injuries/*diagnosis/physiopathology
+MH  - Glasgow Coma Scale
+MH  - Humans
+MH  - Magnetic Resonance Imaging
+MH  - Neuropsychological Tests
+MH  - Post-Concussion Syndrome/etiology
+MH  - Tomography, X-Ray Computed
+RF  - 105
+EDAT- 2003/12/12 05:00
+MHDA- 2004/01/14 05:00
+AID - S0003999303008852 [pii]
+PST - ppublish
+SO  - Arch Phys Med Rehabil 2003 Dec;84(12):1885-94.
+
+PMID- 14514169
+OWN - NLM
+STAT- MEDLINE
+DA  - 20030929
+DCOM- 20031229
+LR  - 20041117
+PUBM- Print
+IS  - 1210-7778
+VI  - 11
+IP  - 3
+DP  - 2003 Sep
+TI  - Exploiting research information: comments about the different databases in
+      health care (DIMDI, OVID CD-ROM).
+PG  - 155-9
+AB  - The rapid growth of medical knowledge creates a demand for new ways of
+      providing information. Health professionals are dealing with a variety of
+      cases, and as they have no time to visit the library, they need filtered
+      information instantly. Medical knowledge databases and data sets are
+      increasingly available in electronic form, particularly on the World Wide
+      Web. The premise of this medium is that it offers a "world of knowledge at
+      your fingertips". The reality, however, is somewhat different, as
+      information systems are not well integrated into clinical practice, they
+      prove difficult to find specific information in, and contain content of
+      varying quality. The continued evaluation of the medium in the future,
+      should be beneficial as evidence-based resources available, and these
+      resources are integrated into electronic medical record systems. The DIMDI
+      and OVID CD-ROM databases are presented as vehicles of research in
+      Bio-Medical Sciences.
+AD  - General Hospital-Kat-Medical library, 2, Nikis Street, 14561 Kiffisia,
+      Athens, Greece. kat5@enternet.gr
+FAU - Lappas, E
+AU  - Lappas E
+LA  - eng
+PT  - Journal Article
+PL  - Czech Republic
+TA  - Cent Eur J Public Health
+JID - 9417324
+SB  - IM
+MH  - CD-ROM
+MH  - Comparative Study
+MH  - *Databases, Bibliographic
+MH  - *Evidence-Based Medicine
+MH  - Germany
+MH  - Health Promotion
+MH  - Humans
+MH  - Information Storage and Retrieval
+MH  - Internet
+MH  - Librarians
+MH  - MEDLINE
+MH  - *Public Health Informatics
+MH  - Systems Integration
+EDAT- 2003/09/30 05:00
+MHDA- 2003/12/31 05:00
+PST - ppublish
+SO  - Cent Eur J Public Health 2003 Sep;11(3):155-9.
+
+PMID- 12959167
+OWN - NLM
+STAT- MEDLINE
+DA  - 20030908
+DCOM- 20030924
+LR  - 20041117
+PUBM- Print
+IS  - 0022-0337
+VI  - 67
+IP  - 8
+DP  - 2003 Aug
+TI  - The cochrane oral health group trials register: electronic searching and
+      beyond.
+PG  - 925-30
+AD  - Cochrane Oral Health Group, University Dental Hospital of Manchester,
+      United Kingdom. Sylvia.R.Bickley@man.ac.uk
+FAU - Bickley, Sylvia R
+AU  - Bickley SR
+FAU - Glenny, Anne-Marie
+AU  - Glenny AM
+LA  - eng
+PT  - Journal Article
+PL  - United States
+TA  - J Dent Educ
+JID - 8000150
+SB  - D
+SB  - IM
+MH  - Controlled Clinical Trials
+MH  - Databases
+MH  - *Evidence-Based Medicine
+MH  - Humans
+MH  - Information Services/*organization & administration
+MH  - Information Storage and Retrieval
+MH  - MEDLINE
+MH  - *Oral Health
+MH  - *Randomized Controlled Trials
+MH  - *Registries
+EDAT- 2003/09/10 05:00
+MHDA- 2003/09/25 05:00
+PST - ppublish
+SO  - J Dent Educ 2003 Aug;67(8):925-30.
+
+PMID- 12892029
+OWN - NLM
+STAT- MEDLINE
+DA  - 20030801
+DCOM- 20031028
+PUBM- Print
+IS  - 1079-2082
+VI  - 60
+IP  - 14
+DP  - 2003 Jul 15
+TI  - Impact of emerging technologies on medication errors and adverse drug
+      events.
+PG  - 1447-58
+AB  - Published evidence on the effects of computerized physician order entry
+      (CPOE), automated dispensing machines (ADMs), bar coding, and computerized
+      medication administration records (CMARs) on medication errors and adverse
+      drug events (ADEs) were reviewed. Emerging technologies have been
+      recommended as potential mechanisms for reducing medication errors.
+      Critical evaluations of the impact of these new technologies on medication
+      errors and other adverse outcomes are lacking. PubMed was searched to
+      identify all peer-reviewed publications linking four technologies (CPOE,
+      ADMs, bar coding, and CMARs) with reductions in medication errors and ADEs
+      and secondary endpoints. All controlled studies that assessed the impact
+      of the technologies were evaluated. The appropriateness of the use of
+      these technologies was also examined. Few studies were identified that
+      evaluated the technologies' impact on these endpoints. Of the evaluated
+      technologies, CPOE was the most studied; however, investigations were
+      limited to selected medical centers. The appropriateness of use of the
+      technologies was evaluated even more infrequently. A literature review
+      revealed a paucity of controlled, generalizable studies confirming the
+      benefits of technologies intended to reduce medication errors and ADEs.
+      Very little evidence on the appropriateness of the use of these
+      technologies was found.
+AD  - Department of Clinical Pharmacy, School of Pharmacy, University of
+      California, San Francisco, USA.
+FAU - Oren, Eyal
+AU  - Oren E
+FAU - Shaffer, Ellen R
+AU  - Shaffer ER
+FAU - Guglielmo, B Joseph
+AU  - Guglielmo BJ
+LA  - eng
+PT  - Journal Article
+PT  - Review
+PT  - Review, Tutorial
+PL  - United States
+TA  - Am J Health Syst Pharm
+JID - 9503023
+RN  - 0 (Pharmaceutical Preparations)
+SB  - IM
+MH  - Automatic Data Processing/*trends
+MH  - Comparative Study
+MH  - Drug Therapy, Computer-Assisted/*trends
+MH  - Medical Records Systems, Computerized/*trends
+MH  - Medication Errors/*trends
+MH  - Medication Systems, Hospital/*trends
+MH  - Pharmaceutical Preparations/*adverse effects
+RF  - 59
+EDAT- 2003/08/02 05:00
+MHDA- 2003/10/29 05:00
+PST - ppublish
+SO  - Am J Health Syst Pharm 2003 Jul 15;60(14):1447-58.

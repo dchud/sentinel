@@ -1,6 +1,6 @@
 # $Id$
 
-from unittest import TestCase, makeSuite
+from unittest import TestCase
 from canary.context import Context
 from canary.search import SearchIndex, RecordSearcher, StudySearcher
 
@@ -37,5 +37,3 @@ class SearchTests (TestCase):
         except Exception, e:
             self.fail('Error searching: %s' % e)
 
-def suite():
-    return makeSuite(SearchTests, 'test')
