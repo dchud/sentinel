@@ -1,0 +1,157 @@
+# $Id$
+
+_q_exports = [
+    '_q_index',
+    'query',
+    ]
+
+from datetime import datetime, timedelta
+import logging
+import time
+import traceback
+import urllib
+
+from quixote import get_publisher, get_request
+from quixote import form2
+
+from canary.loader import QueuedRecord
+from canary.qx_defs import MyForm
+from canary.search import RecordSearcher
+from canary import stats
+from canary.study import Study
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import add_message, has_messages, render_messages, not_found
+from canary import utils
+
+logger = logging.getLogger('ui.stats.stats_ui')
+
+
+def title_bar [html] (action=''):
+    """
+    <h2>
+        <a href='/stats/'>Stats</a>
+    """
+    if not action == '':
+        ' : %s' % (action)
+    """
+    </h2>
+    """
+
+
+class StatsQueryForm (MyForm):
+    
+    def __init__ (self, context):
+        MyForm.__init__(self, context)
+        self.method = 'get'
+        self.action_url = '/stats/query'
+        self.add(form2.SingleSelectWidget, 'handler_type',
+            title='Query which field?',
+            options=[
+                ('ArticleType', 'Article type', 'ArticleType'),
+                ('Curator', 'Curator', 'Curator'),
+                ('Exposure', 'Exposure', 'Exposure'),
+                #('Location', 'Location', 'Location'),
+                ('Outcome', 'Outcome', 'Outcome'),
+                ('RiskFactor', 'Risk Factor', 'RiskFactor'),
+                ('Species', 'Species', 'Species'),
+                ('ExposureRoute', 'Exposure Route', 'ExposureRoute'),
+                ('MethodologyControl', 'Methodology Control', 'MethodologyControl'),
+                ('MethodologySampling', 'Methodology Sampling', 'MethodologySampling'),
+                ('MethodologyTiming', 'Methodology Timing', 'MethodologyTiming'),
+                ('MethodologyType', 'Methodology Type', 'MethodologyType'),
+                ],
+            sort=False,
+            required=True)
+        self.add(form2.IntWidget, 'num_days',
+            title='How many days?',
+            hint='#days counting back from today',
+            required=True)
+        self.add(form2.IntWidget, 'min_value',
+            title='Minimum count',
+            hint='Only show terms that have at least this many studies',
+            required=False)
+        self.add(form2.SingleSelectWidget, 'sort_by',
+            title='Sort by',
+            options=[
+                ('-', '-', '-'),
+                ('key', 'Term', 'key'),
+                ('value', 'Count', 'value'),
+                ],
+            sort=False,
+            required=True)
+        self.add_submit('Query', 'query')
+    
+
+def _q_index [html] (request):
+    
+    context = get_publisher().context
+    
+    header('Statistics: For All Your Analysis Needs')
+    title_bar('Database Statistics')
+    
+    if has_messages():
+        render_messages()
+
+    
+    """
+    <h3>Available queries</h3>
+    """
+    
+    form = StatsQueryForm(context)
+    form.render()
+
+    footer()
+
+
+def query [html] (request):
+    context = get_publisher().context
+    config = context.config
+    
+    header('Statistics:')
+    title_bar('Database Statistics')
+    
+    if has_messages():
+        render_messages()
+
+    form = StatsQueryForm(context)
+    if not form.is_submitted() \
+        or form.has_errors():
+        """
+        <h3>Available queries</h3>
+        """
+        form.render()
+
+    handler_type = form['handler_type']
+    num_days = form['num_days']
+    sort_by = form['sort_by']
+    min_value = 0
+    if form['min_value']:
+        min_value = form['min_value']
+    
+    collector = stats.StatCollector(context)
+    handler = getattr(stats, str('%sHandler' % handler_type))()
+    collector.add_handlers(handler)
+    searcher = RecordSearcher(context)
+    records = searcher.search('record-status:%i' % QueuedRecord.STATUS_CURATED)
+    
+    today = datetime.now()
+    interval_records = [rec for rec in records 
+        if today - Study(context, rec.study_id).date_modified <= timedelta(num_days)]
+    collector.process(interval_records)
+
+    data = [(k, v) for k, v in collector.handlers[0].stats.items()
+        if v > 0]
+    print 'data[:3]:', data[:3]
+    file_name = utils.make_stats_graph(context, data,
+        x_label=handler_type, y_label='# Curated and Public Studies',
+        sort_by=sort_by, min_value=min_value)
+    
+    """
+    <img src='/timage/%s' alt='Your query' />
+    """ % file_name
+    
+    if form.is_submitted() \
+        and not form.has_errors():
+        form.render()
+    
+    footer()
