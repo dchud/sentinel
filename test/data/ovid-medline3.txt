@@ -1,0 +1,333 @@
+From autorun@ovid.com Thu Aug 14 06:06:08 2003
+Received: via tmail-2000(13) (invoked by user dlc33) for dlc33+Mailbox; Thu, 14 Aug 2003 06:06:07 -0400 (EDT)
+Return-Path: <autorun@ovid.com>
+Received: from CONVERSION-DAEMON.email.med.yale.edu by email.med.yale.edu
+ (PMDF V6.1-1 #40995) id <0HJL0PE01TE6VT@email.med.yale.edu>; Thu,
+ 14 Aug 2003 06:06:06 -0400 (EDT)
+Received: from mr2.its.yale.edu (mr2.its.yale.edu [130.132.50.8])
+ by email.med.yale.edu (PMDF V6.1-1 #40995)
+ with ESMTP id <0HJL0WNA4TE6KQ@email.med.yale.edu>; Thu,
+ 14 Aug 2003 06:06:06 -0400 (EDT)
+Received: from ovid.com (oviddb2.ovid.com [199.98.88.92])
+	by mr2.its.yale.edu (8.11.6p2/8.11.6) with ESMTP id h7EA6q113394; Thu,
+ 14 Aug 2003 06:06:52 -0400 (EDT)
+Received: (from autorun@localhost)	by ovid.com (8.9.3/8.9.3) id EAA29144; Thu,
+ 14 Aug 2003 04:06:46 -0600 (MDT)
+Date: Thu, 14 Aug 2003 04:06:46 -0600 (MDT)
+From: Ovid AutoAlert <autorun@ovid.com>
+Subject: Ovid Citationsmedline searches for toxins and sentinels	AutoAlert:
+ medline searches for toxins and sentinels  Database: MEDLINE <1996 to August
+ Week 1 2003>
+To: dlc33@email.med.yale.edu, bmt5@email.med.yale.edu, pmr9@email.med.yale.edu,
+ mw233@email.med.yale.edu
+Message-id: <200308141006.EAA29144@ovid.com>
+Content-type: text
+X-YaleITSMailFilter: Version 1.0c (attachment(s) not renamed)
+X-Spam-Status: No, hits=-2.1 required=5.0
+	tests=SPAM_PHRASE_00_01,SUBJECT_MONTH,SUBJECT_MONTH_2,
+	      SUBJ_HAS_SPACES
+	version=2.41
+X-Spam-Level: 
+
+<1>
+UI  - 12747010
+MI  - 22632544
+RO  - NLM
+AU  - Krishnamurthi K
+AU  - Devi F
+AU  - Chakrabarti T
+IN  - Environmental Biotechnology Division, National Environmental
+      Engineering Research Institute, Nehru Marg, Nagpur-440 020, India.
+TI  - Genotoxic effects of PAH containing sludge extracts in Chinese
+      hamster ovary cell cultures.
+SO  - Biomedical & Environmental Sciences. 2003 Mar;16(1):68-82
+AS  - Biomed Environ Sci. 2003 Mar;16(1):68-82
+JC  - ahx, 8909524, 8909524
+SB  - IM
+CP  - United States
+MH  - Animal
+MH  - *Apoptosis/de [Drug Effects]
+MH  - Blotting, Western
+MH  - CHO Cells
+MH  - *Chromosome Aberrations/ci [Chemically Induced]
+MH  - DNA Damage
+MH  - Hamsters
+MH  - Mass Fragmentography
+MH  - Mutagens/ip [Isolation & Purification]
+MH  - *Mutagens/to [Toxicity]
+MH  - Polycyclic Hydrocarbons, Aromatic/ip [Isolation &
+      Purification]
+MH  - *Polycyclic Hydrocarbons, Aromatic/to [Toxicity]
+MH  - Protein p53/bi [Biosynthesis]
+MH  - *Sewage/ch [Chemistry]
+AB  - OBJECTIVE: Many studies have been conducted in order to
+      evaluate the genotoxicity of chemicals and waste materials, which
+      utilized in vivo test protocols. The use of animals for routine
+      toxicity testing is now questioned by a growing segment of society.
+      METHODS: Keeping the above fact in mind, we have conducted in the
+      present study the genotoxicity evaluation of oily sludge samples
+      generated from a petroleum refinery and petrochemical industry and
+      ETP sludge from petroleum refinery using DNA damage, chromosomal
+      aberration, p53 protein induction and apoptosis in short term in
+      vitro mammalian Chinese Hamster Ovary cell cultures. RESULTS: It is
+      evident from the results that the oily sludge compounds derived from
+      petroleum refinery and petrochemical industry could cause DNA
+      damage, chromosomal aberration, p53 protein accumulation and
+      apoptotic cell death on exposure to oily sludge extracts in the
+      presence of metabolic activation system (S-9 mix), however, ETP
+      sludge extract could not cause significant genotoxicity in
+      comparison to oily sludge extract and negative control. CONCLUSION:
+      The effect may be attributed to polycyclic aromatic hydrocarbons
+      present in the samples as evidenced from GC-MS.
+RN  - 0 (Mutagens)
+RN  - 0 (Polycyclic Hydrocarbons, Aromatic)
+RN  - 0 (Protein p53)
+IS  - 0895-3988
+PT  - Journal Article
+LG  - English
+ED  - 20030804
+UP  - 20030805
+
+<2>
+UI  - 12798095
+MI  - 22684815
+RO  - NLM
+AU  - Hennies M
+AU  - Wiesmann M
+AU  - Allner B
+AU  - Sauerwein H
+IN  - Institut fur Physiologie, Biochemie und Hygiene der Tiere,
+      Katzenburgweg 7-9, 53115 Bonn, Germany. hennies@uni-bonn.de
+TI  - Vitellogenin in carp (Cyprinus carpio) and perch (Perca
+      fluviatilis): purification, characterization and development of an
+      ELISA for the detection of estrogenic effects.
+SO  - Science of the Total Environment. 2003 Jun 20;309(1-3):93-103
+AS  - Sci Total Environ. 2003 Jun 20;309(1-3):93-103
+JC  - uj0, 0330500
+SB  - IM
+CP  - Netherlands
+MH  - Animal
+MH  - Antibodies/an [Analysis]
+MH  - Biological Markers/an [Analysis]
+MH  - *Carps/ph [Physiology]
+MH  - Chromatography
+MH  - *Environmental Exposure
+MH  - *Enzyme-Linked Immunosorbent Assay/mt [Methods]
+MH  - Enzyme-Linked Immunosorbent Assay/ve [Veterinary]
+MH  - *Estrogens/ae [Adverse Effects]
+MH  - Female
+MH  - Male
+MH  - *Perches/ph [Physiology]
+MH  - Reproducibility of Results
+MH  - Sensitivity and Specificity
+MH  - *Vitellogenin/an [Analysis]
+AB  - Vitellogenin (VTG), a phospholipoglycoprotein precursor of egg
+      yolk is synthesized and secreted in the liver in response to
+      circulating estrogens in female fish. Thus, the presence of VTG in
+      male fish is a useful biomarker to identify estrogenic activity of
+      natural or anthropogenic substances in sewage effluents. We report
+      the purification of carp (Cyprinus carpio) and perch (Perca
+      fluviatilis) VTG with the subsequent development and
+      characterization of a specific ELISA for VTG measurement. VTG was
+      purified by combination of ion exchange chromatography and size
+      exclusion chromatography. The purified proteins were used as antigen
+      for antibody production, as standard and tracer in the assay. Carp
+      VTG was stable and showed a characteristic double band after Western
+      blotting of the purified protein and in serum samples, respectively.
+      In perch samples, several bands with lower molecular weight were
+      present and appeared to be degradation products of VTG. The
+      development of the carp VTG ELISA led to a sensitive and valid test
+      system with inter-assay coefficients of variation between 3.0 and
+      12.3%. In contrast to carp, the described ELISA for perch VTG showed
+      a much higher inter-assay variation up to 24%, possibly attributable
+      to fast protein degradation. In conclusion, the described two-step
+      chromatography is a simple purification method for VTG.
+      Immunological and electrophoretical test systems are valid methods
+      to determine VTG in some species like carp, but for other species
+      like perch in which VTG is not stable, these methods are not
+      applicable.
+RN  - 0 (Antibodies)
+RN  - 0 (Biological Markers)
+RN  - 0 (Estrogens)
+RN  - 0 (Vitellogenin)
+IS  - 0048-9697
+PT  - Journal Article
+LG  - English
+ED  - 20030805
+UP  - 20030806
+
+<3>
+UI  - 12798098
+MI  - 22684818
+RO  - NLM
+AU  - Van den Belt K
+AU  - Verheyen R
+AU  - Witters H
+IN  - Environmental Toxicology, Flemish Institute for Technological
+      Research-Vito, Boeretang 200, Mol B-2400, Belgium.
+TI  - Effects of 17alpha-ethynylestradiol in a partial life-cycle
+      test with zebrafish (Danio rerio): effects on growth, gonads and
+      female reproductive success.
+SO  - Science of the Total Environment. 2003 Jun 20;309(1-3):127-37
+AS  - Sci Total Environ. 2003 Jun 20;309(1-3):127-37
+JC  - uj0, 0330500
+SB  - IM
+CP  - Netherlands
+MH  - Animal
+MH  - Dose-Response Relationship, Drug
+MH  - *Environmental Exposure
+MH  - *Estrogens, Synthetic/ae [Adverse Effects]
+MH  - *Ethinyl Estradiol/ae [Adverse Effects]
+MH  - Female
+MH  - *Fertilization/de [Drug Effects]
+MH  - Gonads/de [Drug Effects]
+MH  - *Gonads/gd [Growth & Development]
+MH  - Life Cycle Stages
+MH  - Male
+MH  - Population Dynamics
+MH  - *Sex Maturation/de [Drug Effects]
+MH  - Vitellogenin/an [Analysis]
+MH  - *Zebrafish/gd [Growth & Development]
+MH  - Zebrafish/ph [Physiology]
+AB  - In this study, the impact of an exposure of zebrafish embryos
+      (Danio rerio) until 3 months post fertilization to
+      17alpha-ethynylestradiol (EE2: 0; 0,1; 1; 10; 25 ng/l) was evaluated
+      for growth and development, gonad development and body vitellogenin
+      (VTG) content. After a recovery period of 5 months, the female
+      reproductive success was evaluated. The results demonstrated a
+      significant reduction in total body length, body weight, whole body
+      Ca and P content and an increase in morphological abnormalities for
+      fish exposed to 25 ng/l EE2 as a function of exposure time. An
+      increase in total body VTG content was observed for fish exposed for
+      a period of 3 months down to levels of 1 ng/l EE2. At the age of 3
+      months, a dose-dependent increase of the number of fish with no
+      macroscopic recognizable gonads was observed (up to 100% at 25 ng/l
+      EE2). After a recovery period on clean tap water for 5 months, all
+      fish had developed either ovaries or testis with a gonadosomatic
+      index not different from control fish and the sex ratio was similar
+      in EE2 treatment groups and controls. Nevertheless, a reduced number
+      of spawning females and a reduced egg production were found for the
+      female fish exposed to 10 or 25 ng/l EE2 for 3 months and which were
+      allowed to recover for 5 months. Although the underlying mechanism
+      could not be elucidated, these findings did indicate that the
+      reproduction potential of fish populations might be disturbed by a
+      long-term exposure to EE2 (> or =10 ng/l) from fertilization until
+      sexual maturity.
+RN  - 0 (Estrogens, Synthetic)
+RN  - 0 (Vitellogenin)
+RN  - 57-63-6 (Ethinyl Estradiol)
+IS  - 0048-9697
+PT  - Journal Article
+LG  - English
+ED  - 20030805
+UP  - 20030806
+
+<4>
+UI  - 12697219
+MI  - 22584639
+RO  - NLM
+AU  - Park YS
+AU  - Verdonschot PF
+AU  - Chon TS
+AU  - Lek S
+IN  - CESAC, UMR 5576, CNRS--Universite Paul Sabatier, 118 Route de
+      Narbonne, Toulouse, Cedex 31062, France. park@cict.fr
+TI  - Patterning and predicting aquatic macroinvertebrate
+      diversities using artificial neural network.
+SO  - Water Research. 2003 Apr;37(8):1749-58
+AS  - Water Res. 2003 Apr;37(8):1749-58
+JC  - dv7, 0105072
+SB  - IM
+CP  - England
+MH  - Animal
+MH  - Ecosystem
+MH  - Environmental Monitoring
+MH  - Forecasting
+MH  - *Invertebrates
+MH  - Netherlands
+MH  - *Neural Networks (Computer)
+MH  - Population Dynamics
+MH  - Support, Non-U.S. Gov't
+MH  - *Water Pollutants/ae [Adverse Effects]
+AB  - A counterpropagation neural network (CPN) was applied to
+      predict species richness (SR) and Shannon diversity index (SH) of
+      benthic macroinvertebrate communities using 34 environmental
+      variables. The data were collected at 664 sites at 23 different
+      water types such as springs, streams, rivers, canals, ditches,
+      lakes, and pools in The Netherlands. By training the CPN, the
+      sampling sites were classified into five groups and the
+      classification was mainly related to pollution status and habitat
+      type of the sampling sites. By visualizing environmental variables
+      and diversity indices on the map of the trained model, the
+      relationships between variables were evaluated. The trained CPN
+      serves as a 'look-up table' for finding the corresponding values
+      between environmental variables and community indices. The output of
+      the model fitted SH and SR well showing a high accuracy of the
+      prediction (r>0.90 and 0.67 for learning and testing process,
+      respectively) for both SH and SR. Finally, the results of this
+      study, which uses the capability of the CPN for patterning and
+      predicting ecological data, suggest that the CPN can be effectively
+      used as a tool for assessing ecological status and predicting water
+      quality of target ecosystems.
+RN  - 0 (Water Pollutants)
+IS  - 0043-1354
+PT  - Journal Article
+LG  - English
+ED  - 20030805
+UP  - 20030806
+
+<5>
+UI  - 12793672
+MI  - 22677823
+RO  - NLM
+AU  - Girgin S
+AU  - Kazanci N
+AU  - Dugel M
+IN  - Gazi University Gazi Education Faculty Biology Section
+      Teknikokullar, Ankara-Turkey. sonmezgirgin@ttnet.net.tr
+TI  - Ordination and classification of macroinvertebrates and
+      environmental data of a stream in Turkey.
+SO  - Water Science & Technology. 2003;47(7-8):133-9
+AS  - Water Sci Technol. 2003;47(7-8):133-9
+JC  - dv8, 9879497
+SB  - IM
+CP  - England
+MH  - Animal
+MH  - *Environmental Monitoring/mt [Methods]
+MH  - Hydrogen-Ion Concentration
+MH  - *Industrial Waste
+MH  - *Invertebrates/cl [Classification]
+MH  - Metals, Heavy/ae [Adverse Effects]
+MH  - Organic Chemicals
+MH  - Population Dynamics
+MH  - Turkey
+MH  - Water/ch [Chemistry]
+MH  - *Water Pollutants/ae [Adverse Effects]
+AB  - Macroinvertebrate communities and environmental variables were
+      assessed in an Ankara Stream receiving high organic and industrial
+      wastes. Environmental data were used to explain biological variation
+      using multivariate techniques provided by the program CANOCO. The
+      ordination method CCA (Canonical Correspondence Analysis) was
+      applied to evaluate the relationships between environmental
+      variables and distribution of macroinvertebrate genera. Data sets
+      were classified by TWINSPAN (Two Way Indicator Species Analysis). In
+      this investigation, macroinvertebrate communities have been shown by
+      CCA ordination to be related to TOM (total organic matter), ammonia,
+      cadmium, pH, lead, dissolved oxygen, conductivity (EC), phosphate,
+      boron, nitrite and hardness, with TOM, ammonia, cadmium and pH
+      emerging as the most significant environmental variables. Epeorus
+      was a TWINSPAN indicator for the slightly polluted upstream site 1.
+      Physa was a TWINSPAN indicator for the polluted downstream sites.
+RN  - 0 (Industrial Waste)
+RN  - 0 (Metals, Heavy)
+RN  - 0 (Organic Chemicals)
+RN  - 0 (Water Pollutants)
+RN  - 7732-18-5 (Water)
+IS  - 0273-1223
+PT  - Journal Article
+LG  - English
+ED  - 20030805
+UP  - 20030806
+
+
+

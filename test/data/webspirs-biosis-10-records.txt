@@ -1,0 +1,698 @@
+From webspirs@silverplatter.com Fri Sep 26 12:37:23 2003
+Received: via tmail-2000(13) (invoked by user dlc33) for dlc33+Mailbox; Fri, 26 Sep 2003 12:37:23 -0400 (EDT)
+Return-Path: <webspirs@silverplatter.com>
+Received: from CONVERSION-DAEMON.email.med.yale.edu by email.med.yale.edu
+ (PMDF V6.1-1 #40995) id <0HLT0RG01Y67ZX@email.med.yale.edu> for
+ dlc33@email.med.yale.edu (ORCPT dlc33@email.med.yale.edu); Fri,
+ 26 Sep 2003 12:37:20 -0400 (EDT)
+Received: from mr3.its.yale.edu (mr3.its.yale.edu [130.132.50.9])
+ by email.med.yale.edu (PMDF V6.1-1 #40995)
+ with ESMTP id <0HLT0QU21Y66DA@email.med.yale.edu> for dlc33@email.med.yale.edu
+ (ORCPT dlc33@email.med.yale.edu); Fri, 26 Sep 2003 12:37:19 -0400 (EDT)
+Received: from iss.silverplatter.com (iss.silverplatter.com [192.80.71.4])
+	by mr3.its.yale.edu (8.11.6p2-20030917/8.11.6) with ESMTP id h8QGbtC06845	for
+ <daniel.chudnov@yale.edu>; Fri, 26 Sep 2003 12:37:55 -0400 (EDT)
+Received: from webspirs8.silverplatter.com
+ (webspirs8.silverplatter.com [192.80.71.8])
+	by iss.silverplatter.com (8.11.7+Sun/8.10.2) with ESMTP id h8QGbne19232	for
+ <daniel.chudnov@yale.edu>; Fri, 26 Sep 2003 12:37:49 -0400 (EDT)
+Date: Fri, 26 Sep 2003 12:37:48 -0400 (EDT)
+From: webspirs@silverplatter.com
+Subject: biosis9_26
+To: daniel.chudnov@yale.edu
+Message-id: <2652974.1064594269146.JavaMail.javamailuser@localhost>
+MIME-version: 1.0
+X-Mailer: EmailMsg
+Content-type: text/plain; charset=us-ascii
+Content-transfer-encoding: 7bit
+X-YaleITSMailFilter: Version 1.1d (attachment(s) not renamed)
+
+Search History
+#3 sentinel(3326 records)
+ Searches and results below from:  multiple databases
+#2 sentinel(368 records)
+ Searches and results below from:  multiple databases
+#1 sentinel(1018 records)
+
+
+The search: sentinel in the database(s) BIOSIS Previews 2003: 41, BIOSIS
+  Previews 2003: 40, BIOSIS Previews 2003/07-2003/09: 27-39, BIOSIS Previews
+  2003/04-2003/06: 14-26, BIOSIS Previews 2003/01-2003/03: 1-13, BIOSIS Previews
+  2002/10-2002/12: 40-52, BIOSIS Previews 2002/07-2002/09: 27-39, BIOSIS Previews
+  2002/04-2002/06: 14-26, BIOSIS Previews 2002/01-2002/03: 1-13, BIOSIS Previews
+  2001/10-2001/12: 40-52, BIOSIS Previews 2001/07-2001/09: 27-39, BIOSIS Previews
+  2001/04-2001/06: 14-26, BIOSIS Previews 2001/01-2001/03: 1-13, BIOSIS Previews
+  2000/11-2000/12: 44-52, BIOSIS Previews 2000/07-2000/10: 27-43, BIOSIS Previews
+  2000/04-2000/06: 14-26, BIOSIS Previews 2000/01-2000/03: 1-13, Biosis Previews
+  1999/07-1999/12, Biosis Previews 1999/01-1999/06, Biosis Previews 1998/07
+  -1998/12, Biosis Previews 1998/01-1998/06, Biosis Previews 1997/07-1997/12,
+  Biosis Previews 1997/01-1997/06, Biosis Previews 1996/07-1996/12, Biosis
+  Previews 1996/01-1996/06, Biosis Previews 1995/07-1995/12, Biosis Previews
+  1995/01-1995/06, Biosis Previews 1994/07-1994/12, Biosis Previews 1994/01
+  -1994/06, Biosis Previews 1993/07-1993/12, Biosis Previews 1993/01-1993/06,
+  BIOSIS Previews 1992 Part 2, BIOSIS Previews 1992 Part 1, BIOSIS Previews 1991
+  Part 2, BIOSIS Previews 1991 Part 1, BIOSIS Previews 1990 Part 2, BIOSIS
+  Previews 1990 Part 1, BIOSIS Previews 1989 Part 2, BIOSIS Previews 1989 Part 1,
+  BIOSIS Previews 1988 Part 2, BIOSIS Previews 1988 Part 1, BIOSIS Previews 1987
+  Part 2, BIOSIS Previews 1987 Part 1, BIOSIS Previews 1986 Part 2, BIOSIS
+  Previews 1986 Part 1, BIOSIS Previews 1985 Part 2, BIOSIS Previews 1985 Part 1,
+  BIOSIS Previews 1984, BIOSIS Previews 1983, BIOSIS Previews 1982, BIOSIS
+  Previews 1981, BIOSIS Previews 1980, BIOSIS Previews 1979, BIOSIS Previews
+  1978, BIOSIS Previews 1977, BIOSIS Previews 1975-1976, BIOSIS Previews 1972
+  -1974, BIOSIS Previews 1969-1971 returned 3326 records
+
+
+Record 1 of 3326 in BIOSIS Previews 2003: 41
+
+TI: The development of optimal pathological assessment of sentinel lymph nodes
+  for melanoma.
+AU: Cook-Martin-G {a}; Green-Margaret-A; Anderson-Brian; Eggermont-Alexander-M
+  -M; Ruiter-Dirk-J; Spatz-Alain; Kissin-Mark-W; Powell-Barry-W-E-M
+AD: {a} Department of Histopathology, Royal Surrey County Hospital, Egerton
+  Road, Guildford, Surrey, GU2 7XX, UK, UK
+SO: Journal-of-Pathology. [print] July 2003 2003; 200 (3): 314-319.
+PY: 2003
+DT: Article-
+IS: 0022-3417
+LA: English
+AB: 1158 sentinel lymph nodes (SLNs), excised from patients with primary
+  cutaneous melanoma, were assessed pathologically using histology with
+  immunohistochemistry (IHC) on all nodes, and RT-PCR for Mart-1 and tyrosinase
+  on 55 nodes. RT-PCR was compared with the histology and IHC assessed on the
+  same nodes. The evaluation of progressively more detailed protocols for
+  histology and IHC modulated by the RT-PCR results led to a procedure that
+  consistently detects metastases in 34% of patients submitted to SLN biopsy for
+  cutaneous melanomas with a vertical growth phase and a mean thickness of 2.02
+  mm (range 0.25, with regression, to 19 mm). As this technique is virtually free
+  of false positives and produces only a marginally lower detection rate than RT
+  -PCR, which was subject to false positives of 7% in our study, it is suggested
+  that this extended protocol should be the basis on which further evaluation of
+  the place of RT-PCR in SLN assessment takes place. The evolved protocol
+  described here has been adopted by the EORTC as the standard procedure for
+  pathological handling of sentinel lymph nodes for melanoma when SLN status is a
+  criterion in their clinical trials or studies.
+AI: Y
+MC: Clinical-Chemistry (Allied-Medical-Sciences); Dermatology- (Human-Medicine,
+  Medical-Sciences); Methods-and-Techniques; Oncology- (Human-Medicine, Medical
+  -Sciences)
+ST: Hominidae-: Primates-, Mammalia-, Vertebrata-, Chordata-, Animalia-
+OR: human- (Hominidae-): patient-
+TN: Animals-; Chordates-; Humans-; Mammals-; Primates-; Vertebrates-
+PS: sentinel-lymph-nodes: blood-and-lymphatics
+CB: Mart-1; gp100- [HMB45-]; melan-A; tyrosinase- [EC-1.14.18.1]
+DS: primary-cutaneous-melanoma: integumentary-system-disease, neoplastic-disease
+RN: 463312-97-2: GP100; 9002-10-2: TYROSINASE; 9002-10-2: EC 1.14.18.1
+MQ: histology-: histology-and-cytology-techniques, laboratory-techniques;
+  immunohistochemistry-: immunologic-techniques, laboratory-techniques; optimal
+  -pathological-assessment: clinical-techniques, diagnostic-techniques; reverse
+  -transcriptase-polymerase-chain-reaction: genetic-techniques, laboratory
+  -techniques; sentinel-lymph-node-biopsy: clinical-techniques, diagnostic
+  -techniques
+ALT: Melanoma-(MeSH); Skin-Neoplasms-(MeSH)
+AN: 200300439399
+UD: 20030924
+
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=0022
+  -3417&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:BV&pid=AN=200300439399&genre=articl
+  e&atitle=The%20development%20of%20optimal%20pathological%20assessment%20of%20sen
+  tinel%20lymph%20nodes%20for%20melanoma.&title=Journal-of-Pathology&issn=0022
+  -3417&date=2003&volume=200&issue=3&spage=314&aulast=
+
+Record 2 of 3326 in BIOSIS Previews 2003: 40
+
+TI: Prostate lymphoscintigraphy for sentinel lymph node identification in
+  canines: Reproducibility, uptake, and biokinetics depending on different
+  injection strategies.
+AU: Wawroschek-Friedhelm {a}; Wengenmair-Hermann; Senekowitsch-Schmidtke
+  -Reingard; Hamm-Michael; Henke-Julia; Schoenberger-Tanja; Hauser-Andrea;
+  Erhardt-Wolf; Harzmann-Rolf
+AD: {a} Department of Urology, Central Hospital Augsburg, Academic Hospital of
+  the Ludwig Maximilians Universitaet Muenchen, Stenglinstrasse 2, 86156,
+  Augsburg, Germany; E-Mail: F.Wawroschek@web.de, Germany
+SO: Urological-Research. [print] July 2003 2003; 31 (3): 152-158.
+PY: 2003
+DT: Article-
+IS: 0300-5623
+LA: English
+AB: At present there are neither clinical nor experimental data available on the
+  influence of technical details on the quality and reproducibility of prostate
+  lymphoscintigraphy. Six adult fox hounds received repeated transrectal
+  ultrasound guided intraprostatic injections of a technetium 99m labeled
+  nanocolloid to prove the influence of different techniques of injection (one
+  central injection in both prostate lobes vs two peripheral injections in both
+  lobes) on tracer accumulation in sentinel lymph nodes (SLN) and other organs.
+  The reproducibility of the favored technique was examined and in a last step it
+  was subject to scrutiny following a reduction of the injected volume to 1% of
+  the prostate volume. The number of scintigraphically visualized SLN varied
+  between four and seven. They were located in the region of the internal and
+  external iliac vessels, presacrally, paravesically, and directly
+  paraprostatically. In five of six cases, the localization was reproducible both
+  with the central application of an identical volume as well as with the volume
+  reduced central injection. Tracer accumulation of SLNs and other organs varied
+  enormously. We expect that with the combination of both injection techniques,
+  even with the reduced injection volume, an optimized prostate
+  lymphoscintigraphy will be the outcome.
+AI: Y
+MC: Blood-and-Lymphatics (Transport-and-Circulation); Reproductive-System
+  (Reproduction-); Urinary-System (Chemical-Coordination-and-Homeostasis)
+ST: Canidae-: Carnivora-, Mammalia-, Vertebrata-, Chordata-, Animalia-
+OR: fox-hound (Canidae-): adult-
+TN: Animals-; Carnivores-; Chordates-; Mammals-; Nonhuman-Mammals; Nonhuman
+  -Vertebrates; Vertebrates-
+PS: iliac-vessel: circulatory-system; prostate-: reproductive-system; sentinel
+  -lymph-node: blood-and-lymphatics, immune-system
+DS: prostate-cancer: neoplastic-disease, reproductive-system-disease/male,
+  urologic-disease
+MQ: lymphoscintigraphy-: clinical-techniques, diagnostic-techniques
+MI: biokinetic-; injection-strategy; reproducibility-
+ALT: Prostatic-Neoplasms-(MeSH)
+AN: 200300435657
+UD: 20030917
+
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=0300
+  -5623&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:BV&pid=AN=200300435657&genre=articl
+  e&atitle=Prostate%20lymphoscintigraphy%20for%20sentinel%20lymph%20node%20identif
+  ication%20in%20canines%3a%20Reproducibility%2c%20uptake%2c%20and%20biokinetics%2
+  0depending%20on%20different%20injection%20strategies.&title=Urological
+  -Research&issn=0300-5623&date=2003&volume=31&issue=3&spage=152&aulast=
+
+Record 3 of 3326 in BIOSIS Previews 2003: 40
+
+TI: Surgical treatment of melanoma.
+AU: Eedy-D-J {a}
+AD: {a} Department of Dermatology, Craigavon Area Hospital Group Trust, 68
+  Lurgan Road, Portadown, BT63 5QQ, UK; E-Mail: David@DJEEDY.com, UK
+SO: British-Journal-of-Dermatology. [print] July 2003 2003; 149 (1): 2-12.
+PY: 2003
+DT: Literature-Review
+IS: 0007-0963
+LA: English
+MC: Dermatology- (Human-Medicine, Medical-Sciences); Oncology- (Human-Medicine,
+  Medical-Sciences)
+ST: Hominidae-: Primates-, Mammalia-, Vertebrata-, Chordata-, Animalia-
+OR: human- (Hominidae-): patient-
+TN: Animals-; Chordates-; Humans-; Mammals-; Primates-; Vertebrates-
+PS: dermis-: integumentary-system; lymph-node: blood-and-lymphatics, immune
+  -system
+DS: brain-metastasis: etiology-, neoplastic-disease, nervous-system-disease;
+  lymph-node-metastasis: blood-and-lymphatic-disease, etiology-, neoplastic
+  -disease; melanoma-: neoplastic-disease, surgery-; primary-cutaneous-melanoma:
+  integumentary-system-disease, neoplastic-disease, surgery-
+MQ: Moh's-micrographic-surgery: clinical-techniques, therapeutic-and
+  -prophylactic-techniques; chest-X-ray: clinical-techniques, diagnostic
+  -techniques; computed-tomography: clinical-techniques, diagnostic-techniques,
+  imaging-and-microscopy-techniques, laboratory-techniques; magnetic-resonance
+  -imaging: clinical-techniques, diagnostic-techniques, imaging-and-microscopy
+  -techniques, laboratory-techniques; organ-transplantation: clinical-techniques,
+  therapeutic-and-prophylactic-techniques; sentinel-lymph-node-biopsy: clinical
+  -techniques, diagnostic-techniques; surgery-: clinical-techniques
+MI: disease-recurrence; excision-margin
+ALT: Brain-Neoplasms-(MeSH); Neoplasm-Metastasis-(MeSH); Lymphatic-Metastasis
+  -(MeSH); Melanoma-(MeSH); Melanoma-(MeSH); Skin-Neoplasms-(MeSH)
+AN: 200300434568
+UD: 20030917
+
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=0007
+  -0963&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:BV&pid=AN=200300434568&genre=articl
+  e&atitle=Surgical%20treatment%20of%20melanoma.&title=British-Journal-of
+  -Dermatology&issn=0007-0963&date=2003&volume=149&issue=1&spage=2&aulast=
+
+Record 4 of 3326 in BIOSIS Previews 2003: 40
+
+TI: Detection of micrometastatic breast cancer by means of real time
+  quantitative RT-PCR and immunostaining in perioperative blood samples and
+  sentinel nodes.
+AU: Schroder-Carolien-P; Ruiters-Marcel-H-J; De-Jong-Steven; Tiebosch-Anton-T-M
+  -G; Wesseling-Jelle; Veenstra-Rense; de-Vries-Jaap; Hoekstra-Harold-J; de-Leij
+  -Lou-F-M-H; De-Vries-Elisabeth-G-E {a}
+AD: {a} Department of Medical Oncology, University Hospital Groningen, 9700 RB,
+  P.O. Box 30.001, Groningen, Netherlands; E-Mail: e.g.e.de.vries@int.azg.nl,
+  Netherlands
+SO: International-Journal-of-Cancer. [print] 10 September 2003 2003; 106 (4):
+  611-618.
+PY: 2003
+DT: Article-
+IS: 0020-7136
+LA: English
+AB: The aim of our study was to detect micrometastatic breast cancer by
+  epithelial glycoprotein-2 (EGP-2) and cytokeratin 19 (CK19), using
+  immunostaining and real time quantitative reverse transcriptase-polymerase
+  chain reaction (qRT-PCR). Fifty-eight breast cancer patients, 52 primary
+  tumors, 75 sentinel nodes (SN) and 149 peripheral blood (PB) samples (from
+  before, during and 4 days after operation) were examined. Immunostaining was
+  performed with antibodies directed against EGP-2 and CK19. Detection limits
+  were one Michigan Cancer Foundation-7 (MCF-7) breast cancer cell line
+  cell/2.106 leukocytes (immunostaining) and one MCF-7 cell/106 leukocytes qRT
+  -PCR. Control noncancer lymph nodes (n=10) showed nonspecific CK19 staining,
+  but were qRT-PCR negative; control healthy volunteer PB (n=11) was always
+  negative. Primary tumor samples, all positive with immunostaining, showed a
+  wide variation of EGP-2 (>104 fold) and CK19 mRNA expression (>103 fold). SN
+  (n=19) from 16 patients were tumor-positive with routine haematoxylin-eosin
+  (H&E) and/or immunostaining. SN tumor presence was positively correlated to qRT
+  -PCR expression, but 3 tumor-positive SN were false negative with qRT-PCR.
+  Three SN were qRT-PCR positive, while tumor negative with H&E and/or
+  immunostaining. No immunostaining positive PB was observed, but 19 patients
+  (33%) had one or more qRT-PCR positive PB samples. We concluded that primary
+  tumors have varying expressions of EGP-2 and CK19 mRNA. Both markers can be
+  used in qRT-PCR to obtain adequate sensitivity for single tumor cell detection.
+  In SN, immunostaining appears more sensitive/specific than H&E or qRT-PCR for
+  tumor detection. No immunostaining positivity was found in PB, while 33% of
+  patients had qRT-PCR positive PB. The clinical value of these findings will
+  have to be clarified.
+AI: Y
+MC: Gynecology- (Human-Medicine, Medical-Sciences); Methods-and-Techniques;
+  Oncology- (Human-Medicine, Medical-Sciences)
+ST: Hominidae-: Primates-, Mammalia-, Vertebrata-, Chordata-, Animalia-
+OR: MCF-7-cell-line (Hominidae-): human-breast-cancer-cells; human- (Hominidae
+  -): adult-, aged-, aged/80-and-over, female-, middle-age, patient-
+TN: Animals-; Chordates-; Humans-; Mammals-; Primates-; Vertebrates-
+PS: blood-: blood-and-lymphatics; breast-: reproductive-system; sentinel-node:
+  blood-and-lymphatics, immune-system
+CB: cytokeratin-19: biomarker-, expression-; epithelial-glycoprotein-2:
+  biomarker-, expression-
+DS: micrometastatic-breast-cancer: diagnosis-, neoplastic-disease, reproductive
+  -system-disease/female
+MQ: immunostaining-: immunologic-techniques, laboratory-techniques; real-time
+  -quantitative-RT-PCR: genetic-techniques, laboratory-techniques
+AN: 200300434351
+UD: 20030917
+
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=0020
+  -7136&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:BV&pid=AN=200300434351&genre=articl
+  e&atitle=Detection%20of%20micrometastatic%20breast%20cancer%20by%20means%20of%20
+  real%20time%20quantitative%20RT
+  -PCR%20and%20immunostaining%20in%20perioperative%20blood%20samples%20and%20senti
+  nel%20nodes.&title=International-Journal-of-Cancer&issn=0020
+  -7136&date=2003&volume=106&issue=4&spage=611&aulast=
+
+Record 5 of 3326 in BIOSIS Previews 2003: 40
+
+TI: Axillary 3D CT imaging with lymphoscintigraphy is useful for sentinel node
+  biopsy in breast cancer.
+AU: Minato-Masako {a}; Hirose-Chieko; Sasa-Mitsunori; Nishitani-Hiromu; Hori
+  -Ayuko; Morimoto-Tadaoki
+AD: {a} Department of Radiology, National Higashi-Tokushima Hospital, 1-1
+  Ohmukai-kita, Ootera, Itano, Itano, Tokushima, 779-0193, Japan; E-Mail:
+  mminato@clin.med.tokushima-u.ac.jp, Japan
+SO: Anticancer-Research. [print] May-June 2003 2003; 23 (3C): 2935-2940.
+PY: 2003
+DT: Article-
+IS: 0250-7005
+LA: English
+AB: Background: This study examined whether 3D CT imaging with
+  lymphoscintigraphy (LSG) is useful when performing sentinel node biopsy (SNB)
+  in a community hospital where radioisotope with gamma-probe (RI method) is
+  unavailable. Materials and Methods: From June to November 2002, 35 T1/T2
+  clinically node-negative breast cancer patients underwent LSG in a university
+  nuclear medicine department. Skin areas above LSG hot spots were marked,
+  helical CT scanning was performed and axillary 3D images were created in our
+  hospital. The SLN predicted from the 3D images were examined for agreement with
+  the dye method. Results: SLNs were detected with dye in 32 out of 35 patients
+  (91.4%). In 31 of those 32 (96.9%), the SLN predicted from 3D CT images was the
+  same. Even in the 3 dye-negative patients, CT imaging predicted the SLN. SNB
+  including sampling was successful in 34 patients (97.1%). Conclusion: 3D CT
+  imaging with LSG enables SNB even if the RI method is impossible.
+AI: Y
+MC: Gynecology- (Human-Medicine, Medical-Sciences); Oncology- (Human-Medicine,
+  Medical-Sciences)
+ST: Hominidae-: Primates-, Mammalia-, Vertebrata-, Chordata-, Animalia-
+OR: human- (Hominidae-): adult-, aged-, female-, middle-age, patient-
+TN: Animals-; Chordates-; Humans-; Mammals-; Primates-; Vertebrates-
+DS: breast-cancer: diagnosis-, neoplastic-disease, reproductive-system
+  -disease/female
+MQ: axillary-three-dimensional-CT-imaging: clinical-techniques;
+  lymphoscintigraphy-: clinical-techniques, diagnostic-techniques; sentinel-node
+  -biopsy: clinical-techniques, diagnostic-techniques
+ALT: Breast-Neoplasms-(MeSH)
+AN: 200300434205
+UD: 20030917
+
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=0250
+  -7005&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:BV&pid=AN=200300434205&genre=articl
+  e&atitle=Axillary%203D%20CT%20imaging%20with%20lymphoscintigraphy%20is%20useful%
+  20for%20sentinel%20node%20biopsy%20in%20breast%20cancer.&title=Anticancer
+  -Research&issn=0250-7005&date=2003&volume=23&issue=3C&spage=2935&aulast=
+
+Record 6 of 3326 in BIOSIS Previews 2003: 40
+
+TI: Community participation eliminates yaws in Ecuador.
+AU: Anselmi-Mariella {a}; Moreira-Juan-Martin; Caicedo-Cinthia; Guderian-Ronald;
+  Tognoni-Gianni
+AD: {a} CECOMET, P.O. Box 08-01-065, Esmeraldas, Ecuador; E-Mail:
+  apostol1@ecua.net.ec, guderian@verizon.net, tognoni@marionegri.it, Ecuador
+SO: Tropical-Medicine-and-International-Health. [print] July 2003 2003; 8 (7):
+  634-638.
+PY: 2003
+DT: Article-
+IS: 1360-2276
+LA: English
+AB: Yaws is no longer a national and international health priority for
+  intervention, but there is still a negative perception of the disease in the
+  few affected communities. A survey in 1988 in the northern region of Ecuador
+  documented a prevalence of 16.5% of clinical cases and 96.3% of serological
+  cases. A continuous, long-term community-based surveillance programme was
+  therefore put in place focusing on yaws as one of the sentinel diseases. The
+  results of this intervention are reported here. In 1993, a second survey showed
+  a reduction in the prevalence of clinical cases to 1.4% and of serological
+  cases to 4.7%. Between 1993 and 1998, no other clinical cases were detected and
+  the serological prevalence in 1998 was 3.5%, corresponding with clinical cases
+  of primary or congenital syphilis, latent yaws under follow-up, and individuals
+  with low serological titres indicating a 'serological scar'. These data
+  indicate that yaws has been eliminated. Another important outcome of the
+  intervention is the increased self-confidence in the communities that health
+  problems can be tackled.
+AI: Y
+MC: Dermatology- (Human-Medicine, Medical-Sciences); Epidemiology- (Population
+  -Studies); Infection-
+ST: Hominidae-: Primates-, Mammalia-, Vertebrata-, Chordata-, Animalia-
+OR: human- (Hominidae-): host-
+TN: Animals-; Chordates-; Humans-; Mammals-; Primates-; Vertebrates-
+GE: Ecuador- (South-America, Neotropical-region)
+DS: yaws-: bacterial-disease, infectious-disease, integumentary-system-disease
+MI: community-participation; international-health-priority
+ALT: Yaws-(MeSH)
+AN: 200300428609
+UD: 20030917
+
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=1360
+  -2276&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:BV&pid=AN=200300428609&genre=articl
+  e&atitle=Community%20participation%20eliminates%20yaws%20in%20Ecuador.&title=Tro
+  pical-Medicine-and-International-Health&issn=1360
+  -2276&date=2003&volume=8&issue=7&spage=634&aulast=
+
+Record 7 of 3326 in BIOSIS Previews 2003: 40
+
+TI: Preclinical studies of (99mTc)DTPA-mannosyl-dextran.
+AU: Hoh-Carl-K {a}; Wallace-Anne-M; Vera-David-R
+AD: {a} Department of Radiology, University of California, San Diego, La Jolla,
+  CA, 92093, USA; E-Mail: ckhoh@ucsd.edu, USA
+SO: Nuclear-Medicine-and-Biology. [print] July 2003 2003; 30 (5): 457-464.
+PY: 2003
+DT: Article-
+IS: 0969-8051
+LA: English
+AB: We report the preclinical testing of a synthetic receptor-binding
+  macromolecule, (99mTc)DTPA-mannosyl-dextran (36 kDa, 8 DTPA and 55 mannosyl
+  units per dextran, KD = 0.12 nM), for sentinel node detection. Nonclinical
+  safety studies included cardiac pharmacology safety studies, acute toxicology
+  and pathology studies at 50 and 500 times the scaled human dose in both rats
+  and rabbits after foot pad administration, and perivascular irritation studies
+  in rabbits following intra-muscular administration at 100 and 1000 times the
+  scaled human dose. Biodistribution studies in rabbits at 15 m, 1 h, and 3 h
+  indicated that (99mTc)DTPA-mannosyl-dextran cleared the hind foot pad with a
+  biological half-life of 2.21 +- 0.27 h. Other than mild hepatocyte hypertrophy
+  in rabbits, no abnormalities in toxicology or pathology were found. Intravenous
+  administration had no effect on survival, any clinical observations,
+  electrocardiograms, or blood pressures. Intramuscular injection had no effect
+  on survival, clinical observations, injection site observations, or injection
+  site histopathology. The estimated absorbed radiation dose to the affected
+  breast was 0.15 mGy/MBq and the effective dose was 1.06 X 10-2 mSv/MBq. This
+  preclinical study demonstrates that (99mTc)DTPA-mannosyl-dextran has no
+  toxicities and has an acceptable biodistribution and radiation dose.
+AI: Y
+MC: Radiology- (Medical-Sciences)
+ST: Canidae-: Carnivora-, Mammalia-, Vertebrata-, Chordata-, Animalia-;
+  Leporidae-: Lagomorpha-, Mammalia-, Vertebrata-, Chordata-, Animalia-; Muridae
+  -: Rodentia-, Mammalia-, Vertebrata-, Chordata-, Animalia-
+OR: dog- (Canidae-): animal-model, female-, male-; rabbit- (Leporidae-): animal
+  -model, breed-New-Zealand-White, female-, male-; rat- (Muridae-): animal-model
+TN: Animals-; Carnivores-; Chordates-; Lagomorphs-; Mammals-; Nonhuman-Mammals;
+  Nonhuman-Vertebrates; Rodents-; Vertebrates-
+PS: blood-: blood-and-lymphatics; breast-: reproductive-system; hepatocyte-:
+  digestive-system, hypertrophy-; sentinel-node: blood-and-lymphatics, immune
+  -system
+CB: [technetium-99m] diethylenetriamine-pentaacetic-acid-mannosyl-dextran
+  [[technetium-99m]DTPA-mannosyl-dextran]: diagnostic-drug; dextran-; mannosyl-
+DS: breast-cancer: neoplastic-disease, reproductive-system-disease/female
+RN: 9004-54-0: DEXTRAN
+MQ: electrocardiogram-: clinical-techniques, diagnostic-techniques; preclinical
+  -studies: clinical-techniques
+ALT: Breast-Neoplasms-(MeSH)
+AN: 200300426992
+UD: 20030917
+
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=0969
+  -8051&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:BV&pid=AN=200300426992&genre=articl
+  e&atitle=Preclinical%20studies%20of%20%2899mTc%29DTPA-mannosyl
+  -dextran.&title=Nuclear-Medicine-and-Biology&issn=0969
+  -8051&date=2003&volume=30&issue=5&spage=457&aulast=
+
+Record 8 of 3326 in BIOSIS Previews 2003: 40
+
+TI: Regional differences in HIV trends in The Gambia: Results from sentinel
+  surveillance among pregnant women.
+AU: Schim-van-der-Loeff-Maarten-F {a}; Sarge-Njie-Ramu; Ceesay-Saihou; Awasana
+  -Akum-Aveika; Jaye-Pa; Sam-Omar; Jaiteh-Kebba-O; Cubitt-David; Milligan-Paul;
+  Whittle-Hilton-C
+AD: {a} London School of Hygiene and Tropical Medicine, Keppel Street, London,
+  WC1E 7HT, UK; E-Mail: maarten.schim@lshtm.ac.uk, UK
+SO: AIDS-Hagerstown. [print] 15 August 2003 2003; 17 (12): 1841-1846.
+PY: 2003
+DT: Article-
+IS: 0269-9370
+LA: English
+AB: Objective: To monitor HIV-1 and HIV-2 trends in The Gambia, West Africa.
+  Methods: In 1993-1995 a nationwide survey among 29 670 pregnant women attending
+  eight antenatal clinics estimated the seroprevalence of HIV-1 at 0.6%, and of
+  HIV-2 at 1.1%. Five years later, sentinel surveillance in pregnant women was
+  established, using unlinked anonymous testing in four clinics. A dried blood
+  spot on filter paper was obtained and tested for HIV antibodies. Results:
+  Between May 2000 and August 2001, 8054 analysable samples were collected at
+  four sites. The prevalence of HIV-1 rose sharply in one rural area from 0.6 to
+  3.0% (P < 0.0001), but the increase was small and non-significant in two other
+  rural sites and in the urban site. The prevalence of HIV-2 did not change
+  significantly at any of the sites. The overall prevalence of HIV-1 was 1.0%
+  (95% confidence interval (CI) 0.8-1.3%), and of HIV-2 0.8% (CI 0.6-1.0%). Site,
+  nationality and higher age were significantly associated with HIV-1 infection,
+  and higher parity and site were significantly associated with HIV-2 infection.
+  Conclusion: Fifteen years after the first case of HIV-1 was described in The
+  Gambia, the epidemic is still at a low level. There is heterogeneity within the
+  country, with one rural area experiencing a fivefold increase in 6 years. The
+  prevalence of HIV-2 in The Gambia is stable.
+AI: Y
+MC: Clinical-Immunology (Human-Medicine, Medical-Sciences); Epidemiology-
+  (Population-Studies); Infection-; Obstetrics- (Human-Medicine, Medical-Sciences)
+ST: Hominidae-: Primates-, Mammalia-, Vertebrata-, Chordata-, Animalia-;
+  Retroviridae-: DNA-and-RNA-Reverse-Transcribing-Viruses, Viruses-,
+  Microorganisms-
+OR: HIV-1 [Human-immunodeficiency-virus-1] (Retroviridae-): pathogen-; HIV-2
+  [Human-immunodeficiency-virus-2] (Retroviridae-): pathogen-; human- (Hominidae
+  -): female-, patient-
+TN: Animals-; Chordates-; DNA-and-RNA-Reverse-Transcribing-Viruses; Humans-;
+  Mammals-; Microorganisms-; Primates-; Vertebrates-; Viruses-
+GE: Gambia- (Africa-, Ethiopian-region)
+DS: HIV-infection [human-immunodeficiency-virus-infection]: blood-and-lymphatic
+  -disease, immune-system-disease, viral-disease
+MI: pregnancy-; sentinel-surveillance
+ALT: HIV-Infections-(MeSH)
+AN: 200300423651
+UD: 20030917
+
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=0269
+  -9370&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:BV&pid=AN=200300423651&genre=articl
+  e&atitle=Regional%20differences%20in%20HIV%20trends%20in%20The%20Gambia%3a%20Res
+  ults%20from%20sentinel%20surveillance%20among%20pregnant%20women.&title=AIDS
+  -Hagerstown&issn=0269-9370&date=2003&volume=17&issue=12&spage=1841&aulast=
+
+Record 9 of 3326 in BIOSIS Previews 2003/07-2003/09: 27-39
+
+TI: Incidence of endemic entomopathogenic nematodes following application of
+  Steinernema riobrave for control of Diaprepes abbreviatus.
+AU: Duncan-L-W {a}; Graham-J-H {a}; Dunn-D-C {a}; Zellers-J {a}; McCoy-C-W {a};
+  Nguyen-K
+AD: {a} Citrus Research and Education Center, University of Florida, Institute
+  of Food and Agricultural Sciences, 700 Experiment Station Road, Lake Alfred,
+  FL, 33850, USA; E-Mail: lwdn@lal.ufl.edu, USA
+SO: Journal-of-Nematology. [print] June 2003 2003; 35 (2): 178-186.
+PY: 2003
+DT: Article-
+IS: 0022-300X
+LA: English
+AB: Control of Diaprepes abbreviatus by endemic and exotic entomopathogenic
+  nematodes (EPN) was monitored during 2000-2001 in two citrus orchards in
+  central Florida (Bartow and Poinciana). Caged sentinel insect larvae were
+  buried beneath citrus trees for 7 days at 1 to 2-month intervals from April to
+  October each year. At Bartow, the survey occurred in experimental plots that
+  were (i) not treated with commercial EPN, (ii) treated twice annually since
+  1998 with commercially formulated Steinernema riobrave, or (iii) treated twice
+  annually with S. riobrave and liquid fertilization (15 times/year) occurred in
+  place of dry fertilizer (3 times/year) used in the other treatments. Four
+  endemic EPN species, in addition to S. riobrave, were recovered from the sandy
+  soil at Bartow: S. diaprepesi, Heterorhabditis zealandica, H. indica, and H.
+  bacteriophora. Mean insect mortality in control plots was 39.4% (range=13% to
+  74%), with seasonal maxima in May to July each year. Endemic EPN were recovered
+  from 55% (range=22% to 81%) of the cadavers each month. Total numbers of
+  endemic EPN recovered in all plots during 2 years were directly related to the
+  numbers of adult weevils (D. abbreviatus and Pachnaeus litus) captured in
+  modified Tedder's traps and inversely related to recovery of S. riobrave.
+  Insect mortality was higher and cadavers containing endemic EPN were more
+  numerous in untreated control plots than in S. riobrave-treated plots, except
+  during months in which S. riobrave was applied. In treated plots, endemic EPN
+  were recovered from cadavers at twice the rate of S. riobrave. Suppression of
+  endemic EPN in plots treated with S. riobrave, combined with inferior
+  persistence by the introduced species, may have attenuated the net efficacy of
+  S. riobrave against D. abbreviatus. In contrast, H. indica was the only endemic
+  nematode recovered from the sandy clay loam soil at Poinciana, where the
+  average mortality of D. abbreviatus was 12% (range 3% to 20%) and incidence of
+  H. indica did not exceed 8%. Results of these surveys suggest that the regional
+  patterns in the abundance and damage to citrus caused by D. abbreviatus in
+  Florida are regulated by endemic EPN and other soilborne enemies of the weevil.
+AI: Y
+MC: Pest-Assessment-Control-and-Management
+ST: Coleoptera-: Insecta-, Arthropoda-, Invertebrata-, Animalia-; Insecta-:
+  Arthropoda-, Invertebrata-, Animalia-; Nematoda-: Aschelminthes-, Helminthes-,
+  Invertebrata-, Animalia-; Rutaceae-: Dicotyledones-, Angiospermae-,
+  Spermatophyta-, Plantae-
+OR: Pachnaeus-litus (Coleoptera-): adult-, host-, pest-; Steinernema-riobrave
+  (Nematoda-): biological-control-agent, endemic-, entomopathogen-, parasite-;
+  citrus- (Rutaceae-): tropical/subtropical-fruit-crop; insect- (Insecta-);
+  nematode- (Coleoptera-): adult-, host-, pest-; nematode- (Nematoda-): natural
+  -enemy; weevil- (Coleoptera-)
+TN: Angiosperms-; Animals-; Arthropods-; Aschelminths-; Dicots-; Helminths-;
+  Insects-; Invertebrates-; Plants-; Spermatophytes-; Vascular-Plants
+CB: fertilizer-: agrichemical-
+GE: Bartow- (Florida-, USA-, North-America, Nearctic-region); Poinciana-
+  (Florida-, USA-, North-America, Nearctic-region)
+MQ: Tedder's-trap: field-equipment; biological-control [natural-control]:
+  applied-and-field-techniques; liquid-fertilization: applied-and-field-techniques
+MI: Abbott's-formula; competition-; insect-cadavers; mortality-; parasitism-;
+  regional-patterns; sandy-clay-loam-soils; seasonality-
+AN: 200300420667
+UD: 20030902
+
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=0022
+  -300X&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:BV&pid=AN=200300420667&genre=articl
+  e&atitle=Incidence%20of%20endemic%20entomopathogenic%20nematodes%20following%20a
+  pplication%20of%20Steinernema%20riobrave%20for%20control%20of%20Diaprepes%20abbr
+  eviatus.&title=Journal-of-Nematology&issn=0022
+  -300X&date=2003&volume=35&issue=2&spage=178&aulast=
+
+Record 10 of 3326 in BIOSIS Previews 2003/07-2003/09: 27-39
+
+TI: Field trials of Trichomalopsis sarcophagae (Hymenoptera: Pteromalidae) in
+  cattle feedlots: A potential biocontrol agent of filth flies (Diptera:
+  Muscidae).
+AU: Floate-K-D {a}
+AD: {a} Lethbridge Research Centre, Agriculture and Agri-Food Canada, 5403 1st
+  Avenue South, Lethbridge, Alberta, T1J 4B1, Canada; E-Mail: floatek@agr.gc.ca,
+  Canada
+SO: Canadian-Entomologist. [print] July-August 2003 2003; 135 (4): 599-608.
+PY: 2003
+DT: Article-
+IS: 0008-347X
+LA: English
+AB: A field study was performed in southern Alberta, Canada, to assess the
+  native wasp, Trichomalopsis sarcophagae (Gahan), as a potential biocontrol
+  agent for house fly, Musca domestica L., and stable fly, Stomoxys calcitrans
+  (L.). The wasp was readily reared in large numbers, which allowed for the
+  cumulative release of an estimated 4.63 million wasps into three commercial
+  feedlots during the 2-year study. Each of several releases predictably and
+  repeatedly enhanced parasitism of sentinel house fly pupae, whereas parasitism
+  remained low in three paired control feedlots where wasps were not released.
+  Releases every 2nd week had a disproportionately greater effect than releases
+  every 2nd month. In 1998, 1.2 million wasps were released into treatment
+  feedlots resulting in the recovery of 3 952 T. sarcophagae from 31 500 sentinel
+  pupae (0.13 wasps/pupa). In 1999, 3.43 million wasps were released into
+  treatment feedlots, with the recovery of 37 763 wasps from 47 720 sentinel
+  pupae (0.79 wasps/pupa). Hence, a 2.8-fold increase in the number of wasps
+  released in 1999 resulted in a 6.1-fold increase in the recovery of wasps. This
+  result supports industry recommendations of regular, repeated releases of wasps
+  every 2nd or 4th week versus one or infrequent releases throughout the summer.
+  There was no evidence that releases augmented overwintering populations of the
+  wasp in subsequent years. These results provide proof-of-concept for the mass
+  -rearing and release of T. sarcophagae as an inundative biocontrol agent for
+  the control of pest flies in cattle confinements. Further studies will be
+  required to assess the effect of T. sarcophagae releases on natural populations
+  of pest flies.
+AI: Y
+MC: Pest-Assessment-Control-and-Management
+ST: Bovidae-: Artiodactyla-, Mammalia-, Vertebrata-, Chordata-, Animalia-;
+  Diptera-: Insecta-, Arthropoda-, Invertebrata-, Animalia-; Hymenoptera-:
+  Insecta-, Arthropoda-, Invertebrata-, Animalia-
+OR: Musca-domestica [house-fly] (Diptera-): pest-; Stomoxys-calcitrans [stable
+  -fly] (Diptera-): pest-; Trichomalopsis-sarcophagae (Hymenoptera-): biological
+  -control-agent; cattle- (Bovidae-): host-
+TN: Animals-; Arthropods-; Artiodactyls-; Chordates-; Insects-; Invertebrates-;
+  Mammals-; Nonhuman-Mammals; Nonhuman-Vertebrates; Vertebrates-
+GE: Alberta- (Canada-, North-America, Nearctic-region)
+MI: biological-control; feedlots-; overwintering-populations
+AN: 200300418011
+UD: 20030902
+
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=0008
+  -347X&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:BV&pid=AN=200300418011&genre=articl
+  e&atitle=Field%20trials%20of%20Trichomalopsis%20sarcophagae%20%28Hymenoptera%3a%
+  20Pteromalidae%29%20in%20cattle%20feedlots%3a%20A%20potential%20biocontrol%20age
+  nt%20of%20filth%20flies%20%28Diptera%3a%20Muscidae%29.&title=Canadian
+  -Entomologist&issn=0008-347X&date=2003&volume=135&issue=4&spage=599&aulast=
+

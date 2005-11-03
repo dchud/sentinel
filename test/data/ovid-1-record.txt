@@ -1,0 +1,138 @@
+From autorun@ovid.com Thu Jul 31 04:32:31 2003
+Received: via tmail-2000(13) (invoked by user dlc33) for dlc33+Mailbox; Thu, 31 Jul 2003 04:32:30 -0400 (EDT)
+Return-Path: <autorun@ovid.com>
+Received: from CONVERSION-DAEMON.email.med.yale.edu by email.med.yale.edu
+ (PMDF V6.1-1 #40995) id <0HIV0X301RQ5XY@email.med.yale.edu>; Thu,
+ 31 Jul 2003 04:32:29 -0400 (EDT)
+Received: from mr3.its.yale.edu (mr3.its.yale.edu [130.132.50.9])
+ by email.med.yale.edu (PMDF V6.1-1 #40995)
+ with ESMTP id <0HIV0O30FRQ5F8@email.med.yale.edu>; Thu,
+ 31 Jul 2003 04:32:29 -0400 (EDT)
+Received: from ovid.com (oviddb2.ovid.com [199.98.88.92])
+	by mr3.its.yale.edu (8.11.6p2/8.11.6) with ESMTP id h6V8WYl17524; Thu,
+ 31 Jul 2003 04:33:00 -0400 (EDT)
+Received: (from autorun@localhost)	by ovid.com (8.9.3/8.9.3) id CAA25023; Thu,
+ 31 Jul 2003 02:32:14 -0600 (MDT)
+Date: Thu, 31 Jul 2003 02:32:14 -0600 (MDT)
+From: Ovid AutoAlert <autorun@ovid.com>
+Subject: Ovid Citationsmedline searches for toxins and sentinels	AutoAlert:
+ medline searches for toxins and sentinels  Database: MEDLINE <1996 to July
+ Week 4 2003>
+To: dlc33@email.med.yale.edu, bmt5@email.med.yale.edu, pmr9@email.med.yale.edu,
+ mw233@email.med.yale.edu
+Message-id: <200307310832.CAA25023@ovid.com>
+Content-type: text
+X-YaleITSMailFilter: Version 1.0c (attachment(s) not renamed)
+X-Spam-Status: No, hits=-2.1 required=5.0
+	tests=SPAM_PHRASE_00_01,SUBJECT_MONTH,SUBJECT_MONTH_2,
+	      SUBJ_HAS_SPACES
+	version=2.41
+X-Spam-Level: 
+
+<1>
+UI  - 12711418
+MI  - 22597090
+RO  - NLM
+AU  - Canesi L
+AU  - Ciacci C
+AU  - Betti M
+AU  - Scarpato A
+AU  - Citterio B
+AU  - Pruzzo C
+AU  - Gallo G
+IN  - Facolta di Scienze Ambientali, Istituto di Scienze
+      Fisiologiche, Universita di Urbino, Loc Crocicchia, 61029 (PU),
+      Urbino, Italy. canesi@uniurb.it
+TI  - Effects of PCB congeners on the immune function of Mytilus
+      hemocytes: alterations of tyrosine kinase-mediated cell signaling.
+SO  - Aquatic Toxicology. 2003 May 8;63(3):293-306
+AS  - Aquat Toxicol. 2003 May 8;63(3):293-306
+JC  - duy, 8500246, 8500246
+SB  - IM
+CP  - Netherlands
+MH  - Animal
+MH  - Blood Bactericidal Activity/de [Drug Effects]
+MH  - Cells, Cultured
+MH  - DNA-Binding Proteins/de [Drug Effects]
+MH  - Environmental Pollution/ae [Adverse Effects]
+MH  - Environmental Pollution/an [Analysis]
+MH  - *Hemocytes/de [Drug Effects]
+MH  - Hemocytes/im [Immunology]
+MH  - Lysosomes/de [Drug Effects]
+MH  - *Mussels/de [Drug Effects]
+MH  - Mussels/im [Immunology]
+MH  - Mussels/me [Metabolism]
+MH  - Polychlorinated Biphenyls/an [Analysis]
+MH  - *Polychlorinated Biphenyls/to [Toxicity]
+MH  - *Protein-Tyrosine Kinase/de [Drug Effects]
+MH  - *Signal Transduction/de [Drug Effects]
+MH  - Structure-Activity Relationship
+MH  - Toxicity Tests/mt [Methods]
+MH  - Trans-Activators/de [Drug Effects]
+MH  - Water Pollutants, Chemical/an [Analysis]
+MH  - *Water Pollutants, Chemical/to [Toxicity]
+AB  - Polychlorinated biphenyls (PCBs) are industrial chemicals
+      which have been released into the environment resulting in
+      widespread and persistent contamination. PCBs exist as 209 different
+      congeners depending on the chlorine substitution on the biphenyl
+      rings; the physical properties and the toxic effects of a PCB
+      congener are structure-dependent. In this work, individual
+      ortho-substituted non coplanar PCB congeners were tested for their
+      effects on the function of mussel (Mytilus galloprovincialis Lam.)
+      hemocytes. Moreover, the possibility that in mussel hemocytes
+      different PCBs may affect the signal transduction pathways involved
+      in the immune response was investigated, with particular regards to
+      relevant components of tyrosine-kinase mediated cell signaling. The
+      results were compared with those obtained with a model of
+      non-ortho-substituted coplanar congener. The results demonstrate
+      that the di-ortho-substituted, non coplanar PCB congeners P47
+      (2,2',4,4'-tetrachlorobiphenyl) and P153
+      (2,2',4,4',5,5'-hexachlorobiphenyl) can alter immune parameters of
+      mussel hemocytes, such as microbicidal activity and lysosomal enzyme
+      release, respectively. Both congeners, as well as the non-ortho,
+      coplanar congener P77 (3,3',4,4'-tetrachlorobiphenyl) significantly
+      reduced hemocyte lysosomal membrane stability; however, P77 had no
+      effect on either bacterial killing or lysozyme release. P47, P153
+      and P77 affected different components of tyrosine kinase-mediated
+      cell signalling; in particular, they lead to a time-dependent
+      increase in the phosphorylation level of the stress activated p38
+      and JNK Mitogen Activated Protein Kinases (MAPKs), as evaluated by
+      Western blotting of hemocyte protein extracts with specific
+      anti-phospho-MAPK antibodies. P153 also increased the level of
+      phosphorylated ERK (extracellularly regulated) MAPKs. Moreover, non
+      coplanar P47 and P153 caused increased tyrosine phosphorylation of
+      the transcription factor STAT5, thus possibly affecting gene
+      expression, whereas coplanar P77 was ineffective. The results
+      demonstrate that MAPKs, and in particular the stress-activated p38
+      and JNK MAPKs, that represents a key step in the response of mussel
+      hemocytes to bacterial infection, are a target for different non
+      coplanar and coplanar PCB congeners. The results also show
+      functional differences between different PCB congeners with respect
+      to the hemocyte functions. However, chlorine substitution at the
+      ortho positions is not necessarily related to immunotoxicity: the
+      hexachlorinated P128 (2,2',3,3',4,4'-hexachlorobiphenyl) had no
+      significant effect on mussel hemocytes, whereas its isomer P153,
+      that represents a major component of environmental PCBs, and that is
+      accumulated in mussel tissues, significantly affected both aspects
+      of the immune response and relevant signal transduction pathways.
+      These are the first data on the effects and possible mechanisms of
+      immunotoxicity of non coplanar PCBs in mussel hemocytes. The results
+      support the hypothesis that the innate immune system is a sensitive
+      target for these contaminants in both vertebrates and invertebrates.
+      Moreover, when considering that non coplanar congeners are present
+      both in commercial mixtures and, in higher proportions, in
+      environmental samples, the results suggest that bivalve hemocytes
+      represent a useful model for evaluating the potential immunotoxicity
+      of PCB contamination.
+RN  - 0 (DNA-Binding Proteins)
+RN  - 0 (Polychlorinated Biphenyls)
+RN  - 0 (Trans-Activators)
+RN  - 0 (Water Pollutants, Chemical)
+RN  - 0 (mammary gland-specific nuclear factor)
+RN  - EC 2-7-1-112 (Protein-Tyrosine Kinase)
+IS  - 0166-445X
+PT  - Journal Article
+LG  - English
+ED  - 20030722
+UP  - 20030723
+
