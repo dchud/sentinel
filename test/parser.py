@@ -11,13 +11,13 @@ class ParserTests (TestCase):
         self.context = Context()
         self.source_catalog = self.context.get_source_catalog()
 
-    def test_pubmed (self):
+    def test_pubmed_5 (self):
         source = self.source_catalog.get_source_by_name('pubmed-medline')
         mapped_terms = self.source_catalog.get_mapped_terms(source_id=source.uid)
         parser = Parser(source)
 
         # parse 5 records from disk
-        records = parser.parse( file_name='test/data/pubmed_5',
+        records = parser.parse(file_name='test/data/pubmed_5',
             mapped_terms=mapped_terms, is_email=False)
 
         # make sure we have 5

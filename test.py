@@ -1,9 +1,11 @@
+#!/usr/bin/env python2.4
+
 # $Id$
 
-from unittest import TestSuite, TextTestRunner, makeSuite
 from test import StatsTests, SearchTests, ParserTests
+from unittest import TestSuite, TextTestRunner, makeSuite
 
-def suite():
+def suite ():
     suite = TestSuite()
     suite.addTest(makeSuite(StatsTests, 'test'))
     suite.addTest(makeSuite(SearchTests, 'test'))
