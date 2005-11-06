@@ -10,7 +10,7 @@ Or a specific suite (search, parsing, stats)
     ./test.py parsing 
 """
 
-from test import StatsTests, SearchTests, PubmedMedlineTests
+from test import StatsTests, SearchTests, PubmedMedlineTests, OvidMedlineTests
 from unittest import TestSuite, TextTestRunner, makeSuite
 from sys import argv
 
@@ -29,6 +29,7 @@ if 'search' in tests:
 
 if 'parsing' in tests:
     suite.addTest(makeSuite(PubmedMedlineTests, 'test'))
+    suite.addTest(makeSuite(OvidMedlineTests, 'test'))
 
 # run 'em 
 runner = TextTestRunner(verbosity=2)

@@ -40,20 +40,30 @@ class PubmedMedlineTests (ParserTests):
 
     def test_length (self):
         records = self.parse('test/data/pubmed-medline5.txt')
-        self.assertTrue("got 5 records", len(records) == 5)
+        self.assertTrue(len(records) == 5)
 
     def test_single_value (self):
         records = self.parse('test/data/pubmed-medline5.txt')
         metadata = self.get_mapped_metadata(records[0])
-        self.assertTrue("title", metadata['title'] == 
+        self.assertTrue(metadata['title'] == \
             "ERGDB: Estrogen Responsive Genes Database.")
 
     def test_multi_value (self):
         records = self.parse('test/data/pubmed-medline5.txt')
         metadata = self.get_mapped_metadata(records[0])
-        self.assertTrue("authors", metadata['author'] == 
-            ['Tang S', 'Han H', 'Bajic VB'])
+        self.assertTrue(metadata['author'] == ['Tang S', 'Han H', 'Bajic VB'])
 
+class OvidMedlineTests (ParserTests):
 
+    def __init__ (self, name):
+        ParserTests.__init__(self, name, 'ovid-medline')
 
+    def test_length(self):
+        records = self.parse('test/data/ovid-medline12.txt')
+        self.assertTrue(len(records) == 200)
+
+    def test_single_value (self):
+        records = self.parse('test/data/ovid-medline12.txt')
+        metadata = self.get_mapped_metadata(records[11])
+        
 
