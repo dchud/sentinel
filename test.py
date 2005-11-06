@@ -1,17 +1,35 @@
 #!/usr/bin/env python2.4
 
-# $Id$
+"""
+Run all tests:
 
-from test import StatsTests, SearchTests, ParserTests
+    ./test.py 
+
+Or a specific suite (search, parsing, stats)
+
+    ./test.py parsing 
+"""
+
+from test import StatsTests, SearchTests, PubmedMedlineTests
 from unittest import TestSuite, TextTestRunner, makeSuite
+from sys import argv
 
-def suite ():
-    suite = TestSuite()
+# determine if we should all or just one 
+tests = [ 'stats', 'parsing', 'search' ]
+if len(argv) == 2: 
+    tests = [argv[1]]
+
+# add appropriate tests 
+suite = TestSuite()
+if 'stats' in tests:
     suite.addTest(makeSuite(StatsTests, 'test'))
-    suite.addTest(makeSuite(SearchTests, 'test'))
-    suite.addTest(makeSuite(ParserTests, 'test'))
-    return suite
 
-if __name__ == '__main__':
-    runner = TextTestRunner(verbosity=2)
-    runner.run(suite())
+if 'search' in tests:
+    suite.addTest(makeSuite(SearchTests, 'test'))
+
+if 'parsing' in tests:
+    suite.addTest(makeSuite(PubmedMedlineTests, 'test'))
+
+# run 'em 
+runner = TextTestRunner(verbosity=2)
+runner.run(suite)

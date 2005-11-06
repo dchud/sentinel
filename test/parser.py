@@ -33,23 +33,23 @@ class ParserTests (TestCase):
         return record.get_mapped_metadata(self.mapped_terms)
 
 
-class PubmedTests (ParserTests):
+class PubmedMedlineTests (ParserTests):
 
     def __init__ (self, name):
         ParserTests.__init__(self, name, 'pubmed-medline')
 
     def test_length (self):
-        records = self.parse('test/data/pubmed5.txt')
+        records = self.parse('test/data/pubmed-medline5.txt')
         self.assertTrue("got 5 records", len(records) == 5)
 
     def test_single_value (self):
-        records = self.parse('test/data/pubmed5.txt')
+        records = self.parse('test/data/pubmed-medline5.txt')
         metadata = self.get_mapped_metadata(records[0])
         self.assertTrue("title", metadata['title'] == 
             "ERGDB: Estrogen Responsive Genes Database.")
 
     def test_multi_value (self):
-        records = self.parse('test/data/pubmed5.txt')
+        records = self.parse('test/data/pubmed-medline5.txt')
         metadata = self.get_mapped_metadata(records[0])
         self.assertTrue("authors", metadata['author'] == 
             ['Tang S', 'Han H', 'Bajic VB'])
