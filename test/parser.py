@@ -59,11 +59,11 @@ class OvidMedlineTests (ParserTests):
         ParserTests.__init__(self, name, 'ovid-medline')
 
     def test_length(self):
-        records = self.parse('test/data/ovid-medline12.txt')
+        records = self.parse('test/data/ovid-medline200.txt')
         self.assertTrue(len(records) == 200)
 
     def test_single_value (self):
-        records = self.parse('test/data/ovid-medline12.txt')
+        records = self.parse('test/data/ovid-medline200.txt')
         metadata = self.get_mapped_metadata(records[11])
         
 
