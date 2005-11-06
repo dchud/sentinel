@@ -39,17 +39,17 @@ class PubmedMedlineTests (ParserTests):
         ParserTests.__init__(self, name, 'pubmed-medline')
 
     def test_length (self):
-        records = self.parse('test/data/pubmed-medline5.txt')
+        records = self.parse('test/data/pubmed-medline-5.txt')
         self.assertTrue(len(records) == 5)
 
     def test_single_value (self):
-        records = self.parse('test/data/pubmed-medline5.txt')
+        records = self.parse('test/data/pubmed-medline-5.txt')
         metadata = self.get_mapped_metadata(records[0])
         self.assertTrue(metadata['title'] == \
             "ERGDB: Estrogen Responsive Genes Database.")
 
     def test_multi_value (self):
-        records = self.parse('test/data/pubmed-medline5.txt')
+        records = self.parse('test/data/pubmed-medline-5.txt')
         metadata = self.get_mapped_metadata(records[0])
         self.assertTrue(metadata['author'] == ['Tang S', 'Han H', 'Bajic VB'])
 
@@ -59,11 +59,11 @@ class OvidMedlineTests (ParserTests):
         ParserTests.__init__(self, name, 'ovid-medline')
 
     def test_length(self):
-        records = self.parse('test/data/ovid-medline200.txt')
+        records = self.parse('test/data/ovid-medline-200.txt')
         self.assertTrue(len(records) == 200)
 
     def test_single_value (self):
-        records = self.parse('test/data/ovid-medline200.txt')
+        records = self.parse('test/data/ovid-medline-200.txt')
         metadata = self.get_mapped_metadata(records[11])
         
 
