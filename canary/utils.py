@@ -7,7 +7,7 @@ import os
 import re
 import time
 
-import canary.context
+import ldap
 
 linkages = ['relationships',
     'interspecies',
@@ -247,3 +247,31 @@ def clean_temp_image_dir (context):
             file_time = int(file[:file.index('.')])
             if now - file_time >= interval:
                 os.remove('%s/%s' % (config.temp_image_dir, file))
+
+
+def ldap_fetch (context, netid):
+    base_dn = "o=yale.edu"
+    search_scope = ldap.SCOPE_SUBTREE
+    retrieve_attributes = None
+    search_filter = 'uid=%s' % netid
+    try:
+        l = ldap.open("directory2.yale.edu")
+        l.protocol_version = ldap.VERSION3
+        result_set = []
+        ldap_result_id = l.search(base_dn, search_scope,
+            search_filter, retrieve_attributes)
+        while 1:
+            result_type, result_data = l.result(ldap_result_id, 0)
+            if (result_data == []):
+                break
+            else:
+                if result_type == ldap.RES_SEARCH_ENTRY:
+                    result_set.append(result_data)
+
+        for res in result_set:
+            id, data = res[0]
+            return data
+
+    except ldap.LDAPError, e:
+        context.logger.error('Error with Yale LDAP fetch: %s', e)
+        return {}

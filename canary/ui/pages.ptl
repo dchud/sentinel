@@ -4,6 +4,7 @@ from cStringIO import StringIO
 import logging
 import string
 from time import time
+import urllib
 
 import Image
 
@@ -15,7 +16,7 @@ from quixote.util import StaticFile
 from canary.qx_defs import NotLoggedInError, MyForm
 from canary.ui.pageframe import header, footer
 from canary import utils
-from canary.user import get_user_by_id
+from canary.user import get_user_by_id, get_user_by_yale_netid
 
 
 def _q_index [html] (request):
@@ -215,9 +216,7 @@ def not_found [html] (item_type='item'):
     footer()
 
 
-
-
-def login [html] (request):
+def login_general [html] (request):
 
     context = get_publisher().context
     # redirect if the user is already logged in
@@ -284,6 +283,63 @@ def login [html] (request):
         return request.redirect(form['go'])
     else:
         return request.redirect(str('/user/'))
+
+
+def login_yale [html] (request):
+    context = get_publisher().context
+    config = context.config
+    
+    form = MyForm(context)
+    form.method = 'post'
+    form.action_url = '/login'
+    form.add_hidden('go', None)
+    form.add_submit('login', 'login')
+
+    go = str('/user')
+    if form.is_submitted() \
+        and form['go']:
+        go = form['go']
+    
+    # If they are successfully logged in, then bounce
+    if getattr(request.session, str('user'), None):
+        request.redirect(go)
+
+    # Otherwise, attempt to validate their ticket
+    try:
+        ticket = request.get_form_var(str('ticket'), '')
+        if ticket:
+            validate_url = 'https://secure.its.yale.edu/cas/servlet/validate'
+            my_url = config.site_base_url + '/login'
+            params = '?service=%s&ticket=%s' % (my_url, ticket)
+            cas_data = urllib.URLopener().open(str(validate_url + params))
+            test = str(cas_data.readline()).strip()
+            if test == 'yes':
+                net_id = cas_data.readline().strip()
+                user = get_user_by_yale_netid(context, net_id)
+                if user:
+                    context.logger.debug('Found user: %s', user)
+                    session_mgr = get_session_manager()
+                    #request.session = session_mgr.get_session(request)
+                    request.session.set_user(user)
+                    request.redirect(go)
+    except:
+        import traceback
+        context.logger.error('Yale login error: %s', traceback.print_exc())
+
+    cas_url = 'https://secure.its.yale.edu/cas/login'
+    params = 'service=%s/login' % config.site_base_url
+    login_url = cas_url + '?' + params
+    
+    from canary.ui.pageframe import header, footer
+    header('Log in')
+    """
+    <h2>You are not logged in</h2>
+
+    <p>
+    You are not logged in.  Please log in through the <a href='%s'>Yale CAS</a>.
+    </p>
+    """ % login_url
+    footer()
 
 
 def logout [html] (request):

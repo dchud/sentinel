@@ -73,6 +73,7 @@ class CanaryConfig (quixote.config.Config):
         quixote.config.Config.__init__(self, read_defaults)
 
         my_vars = [
+            'site_base_url',
             'db_host',
             'db_user',
             'db_passwd',
@@ -90,6 +91,7 @@ class CanaryConfig (quixote.config.Config):
             'site_status_note',
             'enable_robots_txt',
             'robots_txt',
+            'authn_mode',
             ]
 
         for var in my_vars:

@@ -44,6 +44,25 @@ def get_user_by_uid (context, uid):
     except Exception, e:
         context.logger.error('Could not load user %s (%s)', uid, e)
         return None
+        
+
+def get_user_by_yale_netid (context, netid):
+    """
+    Find user for existing Yale netid.
+    """
+    if netid == None:
+        return None
+    cursor = context.get_cursor()
+    cursor.execute("""
+        SELECT id
+        FROM users
+        WHERE netid = %s
+        """, netid)
+    rows = cursor.fetchall()
+    if not len(rows) == 1:
+        return None
+    return get_user_by_id(context, rows[0][0])
+    
 
 def get_users (context):
     """ Return all users.  """
@@ -69,7 +88,7 @@ class User (DTable):
 
     TABLE_NAME = 'users'
 
-    def __init__ (self, uid=-1, id='', name='', email=''):
+    def __init__ (self, uid=-1, id='', name='', email='', netid=''):
         self.uid = uid
         self.id = id
         self.is_active = int(True)
@@ -79,6 +98,7 @@ class User (DTable):
         self.passwd = ''
         self.is_assistant = int(False)
         self.email = email
+        self.netid = ''
         # FIXME: signups not yet implemented
         #self.token = ''
         self.logger = logging.getLogger(str(self.__class__))
@@ -134,14 +154,14 @@ class User (DTable):
                 cursor.execute(insert_phrase + """
                     (uid, id, name, passwd, email,
                     is_active, is_admin, 
-                    is_editor, is_assistant)
+                    is_editor, is_assistant, netid)
                     VALUES 
                     (NULL, %s, %s, %s, %s,
                     %s, %s, 
-                    %s, %s)
+                    %s, %s, %s)
                     """, (self.id, self.name, self.passwd, self.email,
                     int(self.is_active), int(self.is_admin), 
-                    int(self.is_editor), int(self.is_assistant))
+                    int(self.is_editor), int(self.is_assistant), self.netid)
                     )
                 self.uid = self.get_new_uid(context)
                 self.logger.info('User %s created with uid %s', self.id, self.uid)
@@ -150,11 +170,11 @@ class User (DTable):
                 cursor.execute(update_phrase + """
                     SET id=%s, passwd=%s, name=%s, email=%s, 
                     is_active=%s, is_admin=%s, 
-                    is_editor=%s, is_assistant=%s
+                    is_editor=%s, is_assistant=%s, netid=%s
                     WHERE uid = %s
                     """, (self.id, self.passwd, self.name, self.email, 
                     int(self.is_active), int(self.is_admin), 
-                    int(self.is_editor), int(self.is_assistant),
+                    int(self.is_editor), int(self.is_assistant), self.netid,
                     self.uid)
                     )
                 self.logger.info('User %s updated', self.id)

@@ -17,6 +17,7 @@ _q_exports = [
     ]
 
 import cStringIO
+import sys
 
 from quixote.errors import PublishError
 from quixote.publish import get_publisher
@@ -26,7 +27,7 @@ from canary.qx_defs import NotLoggedInError
 from canary.qx_utils import MyStaticFile, load_static_exports
 from canary.ui import about, admin, assistant, edit, user, record_ui
 from canary.ui.pages import _q_index, _q_exception_handler, not_found, reaper
-from canary.ui.pages import login, logout
+from canary.ui.pages import login_general, login_yale, logout
 from canary.ui.pages import robots, TempImage
 from canary.ui.browse_ui import Browse
 from canary.ui.search import search, advanced_search
@@ -35,6 +36,10 @@ from canary.ui.search import search, advanced_search
 record = record_ui
 
 config = get_publisher().config
+
+this_module = sys.modules[__name__]
+login = getattr(this_module, 'login_%s' % config.authn_mode)
+
 
 def error (request):
     raise PublishError(public_msg = "Oops, an error occured.")

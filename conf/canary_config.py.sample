@@ -34,7 +34,6 @@ MAIL_DEBUG_ADDR = "foo@example.com"   # eg. "developers@example.com"
 
 UPLOAD_DIR = "/home/user/sites/canary_project/upload"
 
-
 # Variables defined locally for sentineltestsite.
 # Note that quixote.config.Config has been subclassed
 # as qx_defs.MyConfig to include these vars.
@@ -43,6 +42,8 @@ SESSION_COOKIE_NAME = "canary_database_session"
 SESSION_COOKIE_DOMAIN = "your.hostname"
 SESSION_COOKIE_PATH = "/"
 
+# Base url of the site, *NOT* including trailing slash
+SITE_BASE_URL = "localhost"
 
 DB_HOST = "localhost"
 DB_NAME = "dbname"
@@ -74,4 +75,12 @@ ENABLE_ROBOTS_TXT = False
 ROBOTS_TXT = {'SomeAgent': ['/path1', '/path2'],  
     'AnotherAgent': ['/']  
     }  
+
+# Shorthand name for authentication (provides 'login', 'logout' 
+# template functions).  Change this if you want to handle 
+# authentication another way in your local instance.
+#
+# Must be one of ('general', 'yale').
+AUTHN_MODE = "general"
+#AUTHN_MODE = "yale"
 
