@@ -80,7 +80,6 @@ class SourceCatalog:
                 del(self.sources[id])
         except:
             pass
-        context.close_cursor(cursor)
         
     def get_term (self, id):
         try:
@@ -162,8 +161,7 @@ class SourceCatalog:
                 source.delete_term(context, uid)
         except:
             pass
-        context.close_cursor(cursor)
-       
+        
     def load (self, context, load_terms=True):
         sources = {}
         cursor = context.get_cursor()
@@ -179,7 +177,6 @@ class SourceCatalog:
                 term_ids = source.terms.keys()
                 for term_uid in term_ids:
                     self.terms[term_uid] = source.terms[term_uid]
-        context.close_cursor(cursor)
         
         
 
@@ -284,7 +281,6 @@ class Source (CatalogItem):
             self.terms[term.uid] = term
             self.term_tokens[term.token] = term.uid
 
-        context.close_cursor(cursor)
         
         
     def save (self, context):
@@ -311,7 +307,6 @@ class Source (CatalogItem):
                 )
         # FIXME: should this be set from the SQL?
         self.date_modified = time.strftime(str('%Y-%m-%d'))
-        context.close_cursor(cursor)
         
 
     def delete_term (self, context, id):
@@ -324,7 +319,6 @@ class Source (CatalogItem):
             # FIXME: should we bother here? probably, just to be thorough,
             # although ui should reload source_catalog after any change.
             del(self.terms[id])
-        context.close_cursor(cursor)
         
 
 class Term (CatalogItem):
@@ -366,7 +360,6 @@ class Term (CatalogItem):
             row = dtuple.DatabaseTuple(desc, rows[0])
             for field in fields:
                 self.set(field, row[field])
-        context.close_cursor(cursor)
         
 
     def save (self, context):
@@ -400,5 +393,4 @@ class Term (CatalogItem):
                     self.uid)
                 )
         self.date_modified = time.strftime(str('%Y-%m-%d'))
-        context.close_cursor(cursor)
         

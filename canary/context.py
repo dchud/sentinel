@@ -13,7 +13,6 @@ import PyLucene
 import quixote.config
 
 import canary.db_model
-import canary.DBPool
 import canary.gazeteer
 import canary.source_catalog
 
@@ -78,8 +77,6 @@ class CanaryConfig (quixote.config.Config):
             'db_user',
             'db_passwd',
             'db_name',
-            'use_db_pool',
-            'db_pool_size',
             'log_level',
             'log_format',
             'log_dir',
@@ -128,26 +125,13 @@ class Context:
         self.logger = logging.getLogger(str(self.__class__))
         self.logger.debug('Started logger')
 
-        # Set up a dbpool
-        # FIXME:  Why isn't config.db_pool_size loading?  Hardcoded for now...
-        # FIXME:  Driver name is hardcoded too.
-        if self.config.use_db_pool:
-            if not self.__dict__.has_key('_dbpool'):
-                self.logger.info('Loading DBPool')
-                self._dbpool = canary.DBPool.DBPool(MySQLdb,
-                    10,                 #config.db_pool_size,
-                    self.config.db_host,
-                    self.config.db_user,
-                    self.config.db_passwd,
-                    self.config.db_name)
-        else:
-            if not self.__dict__.has_key('_connection'):
-                self.logger.info('Getting db connection')
-                self._connection = MySQLdb.connect(db=self.config.db_name,
-                    host=self.config.db_host, user=self.config.db_user,
-                    passwd=self.config.db_passwd)
-            if not self.__dict__.has_key('_cursor'):
-                self._cursor = self._connection.cursor()
+        if not self.__dict__.has_key('_connection'):
+            self.logger.info('Getting db connection')
+            self._connection = MySQLdb.connect(db=self.config.db_name,
+                host=self.config.db_host, user=self.config.db_user,
+                passwd=self.config.db_passwd)
+        if not self.__dict__.has_key('_cursor'):
+            self._cursor = self._connection.cursor()
 
         if not self.__dict__.has_key('_dbmodel'):
             self.logger.info('loading DBModel')
@@ -193,43 +177,9 @@ class Context:
             
     def get_cursor (self):
         """ 
-        Will behave differently, depending on whether config.use_db_pool
-        is set to True of False.
-        
-        If True:
-        Get a RDBMS cursor, by first grabbing a connection from the 
-        pool.  Store the connection in the context; a later client
-        call to close_cursor() will close the cursor and free the 
-        connection back to the pool.
-        
-        If False:
         Return the existing cursor.
         """
-        if self.config.use_db_pool:
-            self.connection = self._dbpool.getConnection()
-            return self.connection.cursor()
-        else:
-            return self._cursor
-
-    def close_cursor (self, cursor):
-        """
-        Will behave differently, depending on whether config.use_db_pool
-        is set to True of False.
-        
-        If True:
-        Close the current cursor and connection (back into the pool).
-        Assumes one-at-a-time, nonconcurrent processing of quixote
-        requests.  See get_cursor().
-        
-        If False:
-        Do nothing.
-        """
-        if self.config.use_db_pool:
-            #cursor.close()
-            self.connection.close()
-        else:
-            # Do nothing (leave the cursor as it is)
-            pass
+        return self._cursor
         
     def get_dbmodel (self):
         return self._dbmodel

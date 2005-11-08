@@ -83,7 +83,6 @@ class ExposureRoute (DTable):
                     """, self.uid)
             except Exception, e:
                 context.logger.error('ExposureRoute: %s (%s)', self.uid, e)
-        context.close_cursor(cursor)
         
         
     def save (self, context):
@@ -112,8 +111,7 @@ class ExposureRoute (DTable):
                 context.logger.error('ExposureRoute: %s (%s)', self.uid, e)
         # FIXME: should this be set from the SQL?
         self.date_modified = time.strftime(str('%Y-%m-%d'))
-        context.close_cursor(cursor)
-       
+        
 
 class Methodology (DTable):
 
@@ -349,7 +347,6 @@ class Methodology (DTable):
                     """, self.uid)
             except Exception, e:
                 context.logger.error('Methodology: %s (%s)', self.uid, e)
-        context.close_cursor(cursor)
         
     
     def load_routes (self, context):
@@ -367,7 +364,6 @@ class Methodology (DTable):
             for field in fields:
                 exp_route.set(field, row[field])
             self.add_route(exp_route)
-        context.close_cursor(cursor)
         
         
     def save (self, context):
@@ -421,9 +417,6 @@ class Methodology (DTable):
             
         for route in self.exposure_routes:
             route.save(context)
-            
-        context.close_cursor(cursor)
-        
         
 
     def create_form (self, context):
@@ -609,7 +602,6 @@ def find_exposures (context, search_term):
                 exposures_ranked.remove(exp)
                 exposures_ranked.insert(0, exp)
         
-        context.close_cursor(cursor)
         return exposures_ranked
     
     else:
@@ -654,7 +646,6 @@ class Exposure (DTable):
                     """, self.uid)
             except Exception, e:
                 context.logger.error('Exposure: %s (%s)', self.uid, e)
-        context.close_cursor(cursor)
         
     def save (self, context):
         cursor = context.get_cursor()
@@ -685,8 +676,7 @@ class Exposure (DTable):
                 context.logger.error('Exposure: %s (%s)', self.uid, e)
         # FIXME: should this be set from the SQL?
         self.date_modified = time.strftime(str('%Y-%m-%d'))
-        context.close_cursor(cursor)
-
+        
 
 def find_outcomes (context, search_term):
     # Note: for now, limit to only MeSH (umls_source_id==75)
@@ -731,7 +721,6 @@ def find_outcomes (context, search_term):
                 or search_term.lower() in [syn.lower() for syn in outcome.synonyms]:
                 outcomes_ranked.remove(outcome)
                 outcomes_ranked.insert(0, outcome)
-        context.close_cursor(cursor)
         return outcomes_ranked
     
     else:
@@ -775,7 +764,6 @@ class Outcome (DTable):
                     """, self.uid)
             except Exception, e:
                 context.logger.error('Outcome: %s (%s)', self.uid, e)
-        context.close_cursor(cursor)
         
     def save (self, context):
         cursor = context.get_cursor()
@@ -806,8 +794,7 @@ class Outcome (DTable):
                 context.logger.error('Outcome: %s (%s)', self.uid, e)
         # FIXME: should this be set from the SQL?
         self.date_modified = time.strftime(str('%Y-%m-%d'))
-        context.close_cursor(cursor)
-
+        
 def find_risk_factors (context, search_term):
     # Note: for now, limit to only MeSH (umls_source_id==75)
     
@@ -851,7 +838,6 @@ def find_risk_factors (context, search_term):
                 or search_term.lower() in [syn.lower() for syn in risk_factor.synonyms]:
                 risk_factors_ranked.remove(risk_factor)
                 risk_factors_ranked.insert(0, risk_factor)
-        context.close_cursor(cursor)
         return risk_factors_ranked
     
     else:
@@ -895,7 +881,6 @@ class RiskFactor (DTable):
                     """, self.uid)
             except Exception, e:
                 context.logger.error('RiskFactor: %s (%s)', self.uid, e)
-        context.close_cursor(cursor)
         
     def save (self, context):
         cursor = context.get_cursor()
@@ -926,7 +911,6 @@ class RiskFactor (DTable):
                 context.logger.error('RiskFactor: %s (%s)', self.uid, e)
         # FIXME: should this be set from the SQL?
         self.date_modified = time.strftime(str('%Y-%m-%d'))
-        context.close_cursor(cursor)
         
 def find_species (context,search_term):
     
@@ -969,7 +953,6 @@ def find_species (context,search_term):
                 or search_term.lower() in [syn.lower() for syn in spec.synonyms]:
                 species_ranked.remove(spec)
                 species_ranked.insert(0, spec)
-        context.close_cursor(cursor)
         return species_ranked
     
     else:
@@ -1067,7 +1050,6 @@ class Species (DTable):
                     """, self.uid)
             except Exception, e:
                 context.logger.error('Species: %s (%s)', self.uid, e)
-        context.close_cursor(cursor)
         
 
     def save (self, context):
@@ -1099,8 +1081,7 @@ class Species (DTable):
                 context.logger.error('Species: %s (%s)', self.uid, e)
         # FIXME: should this be set from the SQL?
         self.date_modified = time.strftime(str('%Y-%m-%d'))
-        context.close_cursor(cursor)
-
+        
 
 class Location (DTable):
     
@@ -1132,7 +1113,6 @@ class Location (DTable):
                     """, self.uid)
             except Exception, e:
                 context.logger.error('Location: %s (%s)', self.uid, e)
-        context.close_cursor(cursor)
                 
     def save (self, context):
         cursor = context.get_cursor()
@@ -1155,7 +1135,6 @@ class Location (DTable):
                     )
             except Exception, e:
                 context.logger.error('Location: %s (%s)', self.uid, e)
-        context.close_cursor(cursor)
         
         
 class Study (canary.context.Cacheable, DTable):
@@ -1649,8 +1628,7 @@ class Study (canary.context.Cacheable, DTable):
                 message=history_record['message'],
                 modified=history_record['modified'])
         
-        context.close_cursor(cursor)
-
+        
 
     def save (self, context):
         cursor = context.get_cursor()

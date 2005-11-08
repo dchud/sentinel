@@ -288,7 +288,6 @@ class Search:
             self.logger.error('Unable to perform search:', e)
             self.logger.error(traceback.format_stack())
         
-        context.close_cursor(cursor)
         return results
 
 

@@ -48,8 +48,6 @@ DB_HOST = "localhost"
 DB_NAME = "dbname"
 DB_USER = "dbuser"
 DB_PASSWD = "dbpass"
-USE_DB_POOL = False
-DB_POOL_SIZE = 5
 
 
 STATIC_HTML_DIR = "/home/user/projects/canary/canary/ui/html"

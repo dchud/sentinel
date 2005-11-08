@@ -83,7 +83,6 @@ class Concept (canary.context.Cacheable, DTable):
                 if not synonym in self.synonyms:
                     self.synonyms.append(synonym)
 
-        context.close_cursor(cursor)
         
     
     def save (self, context, update_all=False):
@@ -101,7 +100,6 @@ class Concept (canary.context.Cacheable, DTable):
 
         if context.config.use_cache:
             context.cache_set('%s:%s' % (self.CACHE_KEY, self.uid), self)
-        context.close_cursor(cursor)
            
     
     def add_synonym (self, context, term):
@@ -127,7 +125,6 @@ class Concept (canary.context.Cacheable, DTable):
                 (umls_term_id, term, umls_concept_id)
                 VALUES (%s, %s, %s)
                 """, (new_max, term, self.uid))
-        context.close_cursor(cursor)
            
 
 def find_concepts (context, search_term):
@@ -188,7 +185,6 @@ def find_concepts (context, search_term):
                 concepts_ranked.insert(0, concept)
         return concepts_ranked
     
-    context.close_cursor(cursor)
     return concepts.values()
 
 
@@ -277,7 +273,6 @@ class Category (DTable):
                 """, concept.uid)
         except Exception, e:
             self.logger.error('Could not remove concept %s (%s)', concept.uid, e)
-        context.close_cursor(cursor)
         
 
     def update_concept (self, concept):
@@ -336,7 +331,6 @@ class Category (DTable):
                 cat_concept.is_default = row['is_default']
                 cat_concept.load(context)
                 self.add_concept(cat_concept)
-        context.close_cursor(cursor)
         
         
     def save (self, context):
@@ -365,7 +359,6 @@ class Category (DTable):
                 SET name = %s, concept_types = %s
                 WHERE uid = %s
                 """, (self.name, self.get_types(shorthand=True), self.uid))
-        context.close_cursor(cursor)
         
 
 def load_categories (context):
@@ -382,7 +375,6 @@ def load_categories (context):
         category.load(context)
         categories.append(category)
     
-    context.close_cursor(cursor)
     return categories
 
 
@@ -408,7 +400,6 @@ class CategoryGroup (DTable):
                 SET name = %s
                 WHERE uid = %s
                 """, (self.name, self.uid))
-        context.close_cursor(cursor)
         
 
 class CategoryConcept (DTable):
@@ -477,7 +468,6 @@ class CategoryConcept (DTable):
             self.groups.append(row['category_group_id'])
         
         self.concept = Concept(context, self.concept_id)
-        context.close_cursor(cursor)
         
         
     def save (self, context):
@@ -504,5 +494,4 @@ class CategoryConcept (DTable):
                 is_broad = %s
                 WHERE uid = %s
                 """, (int(self.is_default), int(self.is_broad), self.uid))
-        context.close_cursor(cursor)
-    
+        

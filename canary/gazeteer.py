@@ -35,8 +35,7 @@ class Feature (DTable):
             row = dtuple.DatabaseTuple(desc, row)
             for field in fields:
                 self.set(field, row[field])
-        context.close_cursor(cursor)
-
+        
 
 class Gazeteer:
     """
@@ -74,8 +73,6 @@ class Gazeteer:
         for row in rows:
             self.fips_codes[(row[0], row[1])] = row[2]
         
-        context.close_cursor(cursor)
-        
             
     def search (self, context, feature_name, params={}):
         cursor = context.get_cursor()
@@ -106,6 +103,5 @@ class Gazeteer:
             if result.name.lower() == feature_name.lower():
                 results_ranked.remove(result)
                 results_ranked.insert(0, result)
-        context.close_cursor(cursor)
         return results_ranked
         

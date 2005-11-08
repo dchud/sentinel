@@ -111,8 +111,7 @@ class SqlTableMap:
         cursor = self.context.get_cursor()
         #context.execute("SELECT uid FROM sessions")
         cursor.execute("SELECT session_id FROM sessions")
-        self.context.close_cursor(cursor)
-
+        
         return [id for (id,) in cursor.fetchall()]
 
     def values (self):
@@ -125,7 +124,6 @@ class SqlTableMap:
                 access_time, messages, form_tokens
             FROM sessions
             """)
-        self.context.close_cursor(cursor)
         return [self._create_from_db(session_id, user_id, addr, c, a, msg, tokens) \
             for (session_id, user_id, addr, c, a, msg, tokens) in cursor.fetchall() ]
 
@@ -154,10 +152,8 @@ class SqlTableMap:
         assert cursor.rowcount <= 1
         if cursor.rowcount == 1:
             (session_id, user_id, addr, c, a, msg, tokens) = cursor.fetchone()
-            self.context.close_cursor(cursor)
             return self._create_from_db(session_id, user_id, addr, c, a, msg, tokens)
         else:
-            self.context.close_cursor(cursor)
             return default
             
     def __getitem__ (self, session_id):
@@ -197,7 +193,6 @@ class SqlTableMap:
                 DELETE FROM sessions 
                 WHERE session_id=%(session_id)s
                 """, {'session_id': session_id})
-            self.context.close_cursor(cursor)
             #conn.commit()
 
     def _save_to_db (self, session):
@@ -247,7 +242,6 @@ class SqlTableMap:
                str(session.messages),
                str('~~'.join(session._form_tokens))))
 
-        self.context.close_cursor(cursor)
         #conn.commit()
 
     def _create_from_db (self, session_id, user_id, addr, create_time, 

@@ -46,7 +46,6 @@ class DTable:
             new_uid = int(row[0])
         except:
             new_uid = -1
-        context.close_cursor(cursor)
         return new_uid
         
 

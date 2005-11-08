@@ -51,7 +51,6 @@ class Queue:
             for field in fields:
                 batch.set(field, row[field])
             self.batches.append(batch)
-        context.close_cursor(cursor)
         
 
 def find_needed_papers (context):
@@ -70,7 +69,6 @@ def find_needed_papers (context):
         rec = QueuedRecord(context, row[0])
         records.append(rec)
     
-    context.close_cursor(cursor)
     return records
     
 
@@ -226,7 +224,6 @@ class QueuedRecord (Cacheable, DTable):
                 except:
                     potential_dupes[rec_id] = [field]
 
-        context.close_cursor(cursor)
         return potential_dupes
         
 
@@ -299,7 +296,6 @@ class QueuedRecord (Cacheable, DTable):
         except ValueError:
             raise ValueError('Record not found')
         
-        context.close_cursor(cursor)
         
 
     def save (self, context):
@@ -356,8 +352,7 @@ class QueuedRecord (Cacheable, DTable):
 
         except Exception, e:
             context.logger.error('Save queued record: %s (%s)', self.uid, e)
-        context.close_cursor(cursor)
-
+        
         
         
     def save_metadata_value (self, context, source_id, term_id, value, 
@@ -374,8 +369,7 @@ class QueuedRecord (Cacheable, DTable):
             """, (self.uid, source_id, 
             term_id, value, sequence_position)
             )
-        context.close_cursor(cursor)
-       
+        
 
     def get_status (self, text=False):
         try:
@@ -425,9 +419,7 @@ class QueuedRecord (Cacheable, DTable):
                 context.cache_delete('record:%s' % self.uid)
         except Exception, e:
             context.logger.error('Delete queued record %s (%s)', self.uid, e)
-            
-        context.close_cursor(cursor)
-       
+        
 
 class Batch (DTable):
 
@@ -461,8 +453,6 @@ class Batch (DTable):
         else:
             for id, rec in self.queued_records.items():
                 rec.check_for_duplicates(context, complete_term_map)
-        context.close_cursor(cursor)
-       
         
     def get_statistics (self, context):
         """
@@ -491,7 +481,6 @@ class Batch (DTable):
         stats['total'] = stats['unclaimed'] + stats['claimed'] + stats['curated']
         stats['all'] = stats['total']
         stats['unfinished'] = stats['unclaimed'] + stats['claimed']
-        context.close_cursor(cursor)
         return stats
 
 
@@ -544,7 +533,6 @@ class Batch (DTable):
             record = QueuedRecord(context, row['uid'])
             self.queued_records[record.uid] = record
         self.num_records = len(self.queued_records)
-        context.close_cursor(cursor)
         
 
     def save (self, context):
@@ -578,8 +566,7 @@ class Batch (DTable):
         for record in self.loaded_records:
             record.queued_batch_id = self.uid
             record.save(context)
-        context.close_cursor(cursor)
-    
+        
     
     def delete (self, context):
         """ Delete this batch and all of its records 
@@ -595,8 +582,7 @@ class Batch (DTable):
                 """, self.uid)
         except Exception, e:
             self.logger.error(e)
-        context.close_cursor(cursor)
-
+        
 
 class Parser:
 

@@ -160,4 +160,3 @@ class Record:
                     break
                 self.species.append(row[0])
         
-        context.close_cursor()

@@ -24,7 +24,6 @@ def records_by_heading (context, term):
         rows = cursor.fetchall()
         for row in rows:
             results.append((row[0], row[1], row[2], row[3]))
-    context.close_cursor(cursor)
     return results
 
 
@@ -43,7 +42,6 @@ def records_by_heading_index (context):
     for row in rows:
         if row == None: break
         results.append((row[0], row[1], row[2]))
-    context.close_cursor(cursor)
     return results
 
 
@@ -88,7 +86,6 @@ def records_by_journal (context, issn, term_map={}):
     except Exception, e:
         context.logger.error('Records by journal: %s', e)
     
-    context.close_cursor(cursor)
     return journal_title, queued_records
 
 
@@ -114,7 +111,6 @@ def records_by_journal_index (context,term_map={}):
     rows = cursor.fetchall()
     for row in rows:
         results.append((row[0], row[1], row[2], row[3]))
-    context.close_cursor(cursor)
     return results
 
 
@@ -143,7 +139,6 @@ def records_by_methodology (context, methodology_id):
     except Exception, e:
         context.logger.error('Records by methodology: %s', e)
         
-    context.close_cursor(cursor)
     return queued_records
 
 
@@ -164,7 +159,6 @@ def records_by_methodology_index (context):
     for row in rows:
         results.append((row[0], row[1]))
 
-    context.close_cursor(cursor)
     return results
 
 
@@ -197,7 +191,6 @@ def records_by_year (context, year, term_map={}):
     except Exception, e:
         context.logger.error('Records by year: %s', e)
         
-    context.close_cursor(cursor)
     return queued_records
 
 
@@ -223,7 +216,6 @@ def records_by_year_index (context, term_map={}):
     rows = cursor.fetchall()
     for row in rows:
         results.append((row[0], row[1]))
-    context.close_cursor(cursor)
     return results
 
 
@@ -257,7 +249,6 @@ def records_by_author (context, author):
     except Exception, e:
         context.logger.error('Records by author: %s', e)
         
-    context.close_cursor(cursor)
     return queued_records
 
 
@@ -284,7 +275,6 @@ def records_by_author_index (context):
     cursor.execute(select_clause)
     rows = cursor.fetchall()
     results.extend([(r[0], r[1]) for r in rows])
-    context.close_cursor(cursor)
     return results
 
 
@@ -324,7 +314,6 @@ def records_by_concept (context, concept, concept_id):
     except Exception, e:
         context.logger.error('Records by concept: %s', e)
         
-    context.close_cursor(cursor)
     return queued_records
     
 
@@ -348,5 +337,4 @@ def records_by_concept_index (context, concept):
     cursor.execute(select_clause)
     rows = cursor.fetchall()
     results.extend([(r[0], r[1], r[2]) for r in rows])
-    context.close_cursor(cursor)
     return results

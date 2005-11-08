@@ -90,8 +90,6 @@ class ValueGroup:
         except:
             # FIXME: log something here.  how to handle?  define Error.
             pass
-            
-        context.close_cursor(cursor)
         
 
 class Value:
@@ -139,7 +137,6 @@ class Value:
         except:
             # FIXME: define Errors.
             pass
-        context.close_cursor(cursor)
         
             
     def delete (self, context):
@@ -152,8 +149,7 @@ class Value:
         except:
             # FIXME: define Errors
             pass
-        context.close_cursor(cursor)
-
+ 
 
 class DBModel:
     """
@@ -199,7 +195,6 @@ class DBModel:
                 group.add_value(value)
 
             self.add_group(group)
-        context.close_cursor(cursor)
         
 
     def get_value (self, value_id):
@@ -254,7 +249,6 @@ class DBModel:
             # FIXME: errors.
             pass
 
-        context.close_cursor(cursor)
         
         
     def get_value_description (self, group_id, serial_number):

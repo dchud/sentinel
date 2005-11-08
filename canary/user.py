@@ -62,7 +62,6 @@ def get_users (context):
         for field in fields:
             user.set(field, row[field])
         users[user.id] = user
-    context.close_cursor(cursor)
     return users
 
 
@@ -124,7 +123,6 @@ class User (DTable):
                     self.set(field, row[field])
             else:
                 raise 'InvalidUserError', 'No user "%s"' % self.id
-        context.close_cursor(cursor)
         
         
     def save (self, context):
@@ -162,8 +160,7 @@ class User (DTable):
                 self.logger.info('User %s updated', self.id)
         except Exception, e:
             self.logger.error(e)
-        context.close_cursor(cursor)
-
+        
 
     def delete (self, context):
         """ Delete this user from the database."""
@@ -178,4 +175,4 @@ class User (DTable):
         except Exception, e:
             self.logger.error(e)
             
-        context.close_cursor(cursor)
+        
