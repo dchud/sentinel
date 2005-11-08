@@ -8,6 +8,8 @@ Run all tests:
 Or a specific suite (search, parsing, stats)
 
     ./test.py parsing 
+
+$Id$
 """
 
 from test import StatsTests, SearchTests, PubmedMedlineTests, OvidMedlineTests
@@ -34,3 +36,8 @@ if 'parsing' in tests:
 # run 'em 
 runner = TextTestRunner(verbosity=2)
 runner.run(suite)
+
+# clean up .pyc files
+import os
+os.system('\\rm canary/*.pyc')
+os.system('\\rm test/*.pyc')
