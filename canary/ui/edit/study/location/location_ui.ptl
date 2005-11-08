@@ -77,9 +77,17 @@ def find [html] (request):
     
     form = MyForm(context)
     form.add(form2.StringWidget, 'search_term',
-        title='Specify the location to add:',
-        size='30',
+        title='Feature:',
+        size='20',
         required=True)
+    form.add(form2.StringWidget, 'search_region',
+        title='Region:',
+        size='10',
+        required=False)
+    form.add(form2.StringWidget, 'search_country',
+        title='Country:',
+        size='10',
+        required=False)
     form.add_submit('find', 'find')
     
         
@@ -100,7 +108,14 @@ def find [html] (request):
         return render()
     
     search_term = form['search_term']
-    locations = gazeteer.search(context, search_term)
+    search_region = ''
+    search_country = ''
+    if form['search_region']:
+        search_region = form['search_region']
+    if form['search_country']:
+        search_country = form['search_country']
+    locations = gazeteer.search(context, search_term, region=search_region, 
+        country=search_country)
     if len(locations) == 0:
         form.set_error('search_term', 'No locations found.')
         

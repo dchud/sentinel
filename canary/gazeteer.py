@@ -74,17 +74,55 @@ class Gazeteer:
             self.fips_codes[(row[0], row[1])] = row[2]
         
             
-    def search (self, context, feature_name, params={}):
+    def search (self, context, feature_name, region='', country='', params={}):
         cursor = context.get_cursor()
         results = []
         search_token = feature_name.strip() + '%'
         
-        cursor.execute("""
-            SELECT * 
-            FROM gazeteer
-            WHERE MATCH (name) AGAINST (%s)
-            LIMIT 100
-            """, feature_name)
+        if region:
+            region_name = region.strip() + '%'
+            
+            if country:
+                country_name = country.strip() + '%'
+                cursor.execute("""
+                    SELECT gazeteer.uid, gazeteer.name, gazeteer.country_code, gazeteer.adm1, 
+                        gazeteer.feature_type, gazeteer.latitude, gazeteer.longitude
+                    FROM gazeteer, gazeteer_countries, gazeteer_fips_codes
+                    WHERE gazeteer_countries.code = gazeteer.country_code
+                        AND gazeteer_fips_codes.fips_code = gazeteer.adm1
+                        AND MATCH (gazeteer.name) AGAINST (%s)
+                        AND gazeteer_countries.name LIKE %s
+                        AND gazeteer_fips_codes.name LIKE %s
+                    LIMIT 100
+                    """, (feature_name, country_name, region_name))
+            else:
+                cursor.execute("""
+                    SELECT gazeteer.uid, gazeteer.name, gazeteer.country_code, gazeteer.adm1, 
+                        gazeteer.feature_type, gazeteer.latitude, gazeteer.longitude
+                    FROM gazeteer, gazeteer_fips_codes
+                    WHERE gazeteer_fips_codes.fips_code = gazeteer.adm1
+                        AND MATCH (gazeteer.name) AGAINST (%s)
+                        AND gazeteer_fips_codes.name LIKE %s
+                    LIMIT 100
+                    """, (feature_name, region_name))
+        elif country:
+            country_name = country.strip() + '%'
+            cursor.execute("""
+                SELECT gazeteer.uid, gazeteer.name, gazeteer.country_code, gazeteer.adm1, 
+                    gazeteer.feature_type, gazeteer.latitude, gazeteer.longitude
+                FROM gazeteer, gazeteer_countries
+                WHERE gazeteer_countries.code = gazeteer.country_code
+                    AND MATCH (gazeteer.name) AGAINST (%s)
+                    AND gazeteer_countries.name LIKE %s
+                LIMIT 100
+                """, (feature_name, country_name))
+        else:
+            cursor.execute("""
+                SELECT * 
+                FROM gazeteer
+                WHERE MATCH (name) AGAINST (%s)
+                LIMIT 100
+                """, feature_name)
         
         while 1:
             row = cursor.fetchone()

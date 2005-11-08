@@ -572,7 +572,9 @@ def curate_three [html] (request, queued_record_id):
         <form method='POST' action='location/find'>
             <p>
             Add any location:
-            <input type='text' name='search_term' size='30' />
+            Feature: <input type='text' name='search_term' size='20' /> (req'd) <br />
+            Region: <input type='text' name='search_region' size='10' /> (optional)
+            Country: <input type='text' name='search_country' size='10' /> (optional)
             <input type='submit' name='find' value='find' />
             </p>
         </form>
