@@ -1,0 +1,1624 @@
+
+Record 1 of 20 in BIOSIS Previews 2005: 47 2005/10/30-2005/11/05
+
+TI: Live attenuated measles vaccine as a potential multivalent pediatric
+  vaccination vector
+AU: Tangy,-Frederic [Author,-Reprint-Author]; Naim,-Hussein-Y [Author]
+AD: Inst Pasteur, CNRS, URA 1930, Unite Virus Lents, F-75015 Paris V, France
+EMA: ftangy@pasteur.fr
+SO: Viral-Immunology. 2005; 18(2): 317-326
+PY: 2005
+DT: Literature-Review; Article
+IS: 0882-8245
+LA: English
+AB: Live attenuated RNA viruses make highly efficient vaccines. Among them is
+  the live attenuated measles virus (MV) vaccine that has been given to a very
+  large number of children and has been shown to be highly efficacious and safe.
+  MV vaccine induces a life-long immunity after a single injection or two low
+  -dose injections. It is easily produced on a large scale in most countries and
+  can be distributed at low cost. Reversion to pathogenicity has never been
+  observed with this vaccine. For all of these characteristics, developing of MV
+  vaccine vector as a multivalent vaccine to immunize children against both
+  measles and other infectious agents such as human immunodeficiency virus (HIV),
+  flaviviruses, or malaria might be very promising for worldwide use. As MV
+  vaccine is inexpensive to produce, the generation of recombinant vaccines may
+  remain affordable and attractive for the developing word. In this article, we
+  describe the development of MV vector and present some recent data showing the
+  capacity of recombinant MV vaccine to express various proteins from HIV and
+  West Nile virus. In addition, the ability of recombinant MV to induce specific
+  immune responses against these different pathogens are presented and discussed.
+AI: Y
+MC: Pharmacology-; Clinical-Immunology: Human-Medicine, Medical-Sciences;
+  Pediatrics-: Human-Medicine, Medical-Sciences
+ST: -[03615-] Flaviviridae-, -Positive-Sense-ssRNA-Viruses, Viruses-,
+  Microorganisms-; -[86215-] Hominidae-, -Primates, Mammalia-, Vertebrata-,
+  Chordata-, Animalia-; -[03503-] Paramyxoviridae-, -Negative-Sense-ssRNA
+  -Viruses, Viruses-, Microorganisms-; -[03305-] Retroviridae-, -DNA-and-RNA
+  -Reverse-Transcribing-Viruses, Viruses-, Microorganisms-
+OR: Flavivirus- (Flaviviridae-): genus-, pathogen-; West-Nile-virus
+  (Flaviviridae-): species-, pathogen-; human- (Hominidae-): common-, host-;
+  Measles-virus (Paramyxoviridae-): species-, pathogen-; Human-immunodeficiency
+  -virus (Retroviridae-): species-, HIV-, common-, pathogen-
+TN: Flaviviridae-: Microorganisms-, Positive-Sense-Single-Stranded-RNA-Viruses,
+  Viruses-; Hominidae-: Animals-, Chordates-, Humans-, Mammals-, Primates-,
+  Vertebrates-; Paramyxoviridae-: Microorganisms-, Negative-Sense-Single-Stranded
+  -RNA-Viruses, Viruses-; Retroviridae-: DNA-and-RNA-Reverse-Transcribing
+  -Viruses, Microorganisms-, Viruses-
+CB: measles-vaccine: immunologic-drug, immunostimulant-drug, vaccine-
+DS: malaria-: (Malaria-(MeSH)), blood-and-lymphatic-disease, parasitic-disease;
+  measles-: (Measles-(MeSH)), viral-disease, immunology-
+MQ: vaccination-: clinical-techniques
+MI: immunity-
+CC: 12512- (Pathology-Therapy)
+15006- (Blood-Blood-lymphatic-and
+  -reticuloendothelial-pathologies)
+22002- (Pharmacology-General)
+22005-
+  (Pharmacology-Clinical-pharmacology)
+22018- (Pharmacology-Immunological
+  -processes-and-allergy)
+25000- (Pediatrics-)
+33502- (Virology-General-and
+  -methods)
+34502- (Immunology-General-and-methods)
+34508- (Immunology
+  -Immunopathology-tissue-immunology)
+36006- (Medical-and-clinical-microbiology
+  -Virology)
+60504- (Parasitology-Medical)
+AN: 200510243266
+UD: 20051102
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=0882
+  -8245&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:PREV&id=pmid:&id=&issn=0882
+  -8245&isbn=&volume=18&issue=2&spage=317&pages=317
+  -326&date=2005&title=Viral%20Immunology&atitle=Live%20attenuated%20measles%20vac
+  cine%20as%20a%20potential%20multivalent%20pediatric%20vaccination%20vector&aulas
+  t=Tangy&pid=%3Cauthor%3ETangy%2c%20Frederic%3bNaim%2c%20Hussein%20Y%3C%2Fauthor%
+  3E%3CAN%3E200510243266%3C%2FAN%3E%3CDT%3ELiterature%20Review%3bArticle%3C%2FDT%3
+  E
+
+Record 2 of 20 in BIOSIS Previews 2005: 47 2005/10/30-2005/11/05
+
+TI: Semliki Forest virus and Kunjin virus RNA replicons elicit comparable
+  cellular immunity but distinct humoral immunity
+AU: Tannis,-Laura-Lee [Author]; Gauthier,-Andree [Author]; Evelegh,-Carole
+  [Author]; Parsons,-Robin [Author]; Nyholt,-Dana [Author]; Khromykh,-Alexander
+  [Author]; Bramson,-Jonathan-L [Author,-Reprint-Author]
+AD: McMaster Univ, Dept Pathol and Mol Med, Ctr Gene Therapeut, MDCL-5025,1200
+  Main St W, Hamilton, ON L8N 3Z5, Canada
+EMA: bramsonj@mcmaster.ca
+SO: Vaccine-. 2005; 23(33): 4189-4194
+PY: 2005
+DT: Article
+IS: 0264-410X
+LA: English
+AB: RNA replicons offer a number of qualities which make them attractive as
+  vaccination vectors. Both alphavirus and flavivirus replicon vaccines have been
+  investigated in preclinical models yet there has been little direct comparison
+  of the two vector systems. To determine whether differences in the biology of
+  the two vectors influence immunogenicity, we compared two prototypic replicon
+  vectors based on Semliki Forest virus (SFV) (alphavirus) and Kunjin virus (KUN)
+  (flavivirus). Both vectors when delivered as naked RNAs elicited comparable
+  CD8+ T cell responses but the SFV vectors elicited greater humoral responses to
+  an encoded cytoplasmic antigen beta-galactosidase. Studies in MHC class II
+  -deficient mice revealed that neither vector could overcome the dependence of
+  CD4+ T cell help in the development of humoral and cellular responses following
+  immunization. These studies indicate that the distinct biology of the two
+  replicon systems may differentially impact the adaptive immune response and
+  this may need to be considered when designing vaccination strategies. (c) 2005
+  Elsevier Ltd. All rights reserved.
+AI: Y
+MC: Molecular-Genetics: Biochemistry-and-Molecular-Biophysics; Immune-System:
+  Chemical-Coordination-and-Homeostasis
+ST: -[03615-] Flaviviridae-, -Positive-Sense-ssRNA-Viruses, Viruses-,
+  Microorganisms-; -[86375-] Muridae-, -Rodentia, Mammalia-, Vertebrata-,
+  Chordata-, Animalia-; -[03616-] Togaviridae-, -Positive-Sense-ssRNA-Viruses,
+  Viruses-, Microorganisms-
+OR: Kunjin-virus (Flaviviridae-): common-, West-Nile-virus, species-, gene
+  -vector; mouse- (Muridae-): common-, host-, female-, strain-BALB-c, strain
+  -C57BL-6; Semliki-Forest-virus (Togaviridae-): species-, gene-vector
+TN: Flaviviridae-: Microorganisms-, Positive-Sense-Single-Stranded-RNA-Viruses,
+  Viruses-; Muridae-: Animals-, Chordates-, Mammals-, Nonhuman-Vertebrates,
+  Nonhuman-Mammals, Rodents-, Vertebrates-; Togaviridae-: Microorganisms-,
+  Positive-Sense-Single-Stranded-RNA-Viruses, Viruses-
+PS: CD8-positive-T-cell: immune-system, blood-and-lymphatics
+CB: RNA-replicons
+MI: humoral-immunity; cellular-immunity
+CC: 02506- (Cytology-Animal)
+03502- (Genetics-General)
+03506- (Genetics
+  -Animal)
+15002- (Blood-Blood-and-lymph-studies)
+15004- (Blood-Blood-cell
+  -studies)
+31500- (Genetics-of-bacteria-and-viruses)
+33502- (Virology-General
+  -and-methods)
+34502- (Immunology-General-and-methods)
+AN: 200510243187
+UD: 20051102
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=0264
+  -410X&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:PREV&id=pmid:&id=&issn=0264
+  -410X&isbn=&volume=23&issue=33&spage=4189&pages=4189
+  -4194&date=2005&title=Vaccine%20&atitle=Semliki%20Forest%20virus%20and%20Kunjin%
+  20virus%20RNA%20replicons%20elicit%20comparable%20cellular%20immunity%20but%20di
+  stinct%20humoral%20immunity&aulast=Tannis&pid=%3Cauthor%3ETannis%2c%20Laura%20Le
+  e%3bGauthier%2c%20Andree%3bEvelegh%2c%20Carole%3bParsons%2c%20Robin%3bNyholt%2c%
+  20Dana%3bKhromykh%2c%20Alexander%3bBramson%2c%20Jonathan%20L%3C%2Fauthor%3E%3CAN
+  %3E200510243187%3C%2FAN%3E%3CDT%3EArticle%3C%2FDT%3E
+
+Record 3 of 20 in BIOSIS Previews 2005: 47 2005/10/30-2005/11/05
+
+TI: Genetic variation in West Nile virus from naturally infected mosquitoes and
+  birds suggests quasispecies structure and strong purifying selection
+AU: Jerzak,-Greta [Author]; Bernard,-Kristen-A [Author]; Kramer,-Laura-D
+  [Author]; Ebel,-Gregory-D [Author,-Reprint-Author]
+AD: New York State Dept Hlth, Wadsworth Ctr, Arbovirus Labs, 5668 State Farm Rd,
+  Slingerlands, NY 12159 USA
+EMA: ebel@wadsworth.org
+SO: Journal-of-General-Virology. 2005; 86(Part 8): 2175-2183
+PY: 2005
+DT: Article
+IS: 0022-1317
+LA: English
+AB: Intrahost genetic diversity was analysed in naturally infected mosquitoes
+  and birds to determine whether West Nile virus (WNV) exists in nature as a
+  quasispecies and to quantify selective pressures within and between hosts. WNV
+  was sampled from ten infected birds and ten infected mosquito pools collected
+  on Long Island, NY, USA, during the peak of the 2003 WNV transmission season. A
+  1938 nt fragment comprising the 3' 1159 nt of the WNV envelope (E) coding
+  region and the 5' 779 nt of the non-structural protein 1 (NS1) coding region
+  was amplified and cloned and 20 clones per specimen were sequenced. Results
+  from this analysis demonstrate that WNV infections are derived from a
+  genetically diverse population of genomes in nature. The mean nucleotide
+  diversity was 0.016 % within individual specimens and the mean percentage of
+  clones that differed from the consensus sequence was 19.5 %. WNV sequences in
+  mosquitoes were significantly more genetically diverse than WNV in birds. No
+  host-dependent bias for particular types of mutations was observed and
+  estimates of genetic diversity did not differ significantly between E and NS1
+  coding sequences. Non-consensus clones obtained from two avian specimens had
+  highly similar genetic signatures, providing preliminary evidence that WNV
+  genetic diversity may be maintained throughout the enzootic transmission cycle,
+  rather than arising independently during each infection. Evidence of purifying
+  selection was obtained from both intra- and interhost WNV populations.
+  Combined, these data support the observation that WNV populations may be
+  structured as a quasispecies and document strong purifying natural selection in
+  WNV populations.
+AI: Y
+MC: Nervous-System: Neural-Coordination; Epidemiology-: Population-Studies;
+  Infection-
+ST: -[85500-] Aves-, -Vertebrata, Chordata-, Animalia-; -[75314-] Diptera-, 
+  -Insecta, Arthropoda-, Invertebrata-, Animalia-; -[03615-] Flaviviridae-, 
+  -Positive-Sense-ssRNA-Viruses, Viruses-, Microorganisms-
+OR: bird- (Aves-): common-, host-; mosquito- (Diptera-): common-, host-; West
+  -Nile-virus (Flaviviridae-): species-, pathogen-
+TN: Aves-: Animals-, Birds-, Chordates-, Nonhuman-Vertebrates, Vertebrates-;
+  Diptera-: Animals-, Arthropods-, Insects-, Invertebrates-; Flaviviridae-:
+  Microorganisms-, Positive-Sense-Single-Stranded-RNA-Viruses, Viruses-
+CB: non-structural-protein-1: NS1-
+GE: Long-Island: New-York, USA-, North-America, Nearctic-region
+DS: West-Nile-fever: nervous-system-disease, viral-disease, epidemiology-
+MI: genetic-diversity
+CC: 20504- (Nervous-system-Physiology-and-biochemistry)
+20506- (Nervous-system
+  -Pathology)
+33502- (Virology-General-and-methods)
+36006- (Medical-and
+  -clinical-microbiology-Virology)
+37052- (Public-health-epidemiology
+  -Communicable-diseases)
+37056- (Public-health-epidemiology
+  -Miscellaneous)
+64076- (Invertebrata-comparative-experimental-morphology
+  -physiology-and-pathology-Insecta-physiology)
+AN: 200510238768
+UD: 20051102
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=0022
+  -1317&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:PREV&id=pmid:&id=&issn=0022
+  -1317&isbn=&volume=86&issue=Part%208&spage=2175&pages=2175
+  -2183&date=2005&title=Journal%20of%20General%20Virology&atitle=Genetic%20variati
+  on%20in%20West%20Nile%20virus%20from%20naturally%20infected%20mosquitoes%20and%2
+  0birds%20suggests%20quasispecies%20structure%20and%20strong%20purifying%20select
+  ion&aulast=Jerzak&pid=%3Cauthor%3EJerzak%2c%20Greta%3bBernard%2c%20Kristen%20A%3
+  bKramer%2c%20Laura%20D%3bEbel%2c%20Gregory%20D%3C%2Fauthor%3E%3CAN%3E20051023876
+  8%3C%2FAN%3E%3CDT%3EArticle%3C%2FDT%3E
+
+Record 4 of 20 in BIOSIS Previews 2005: 47 2005/10/30-2005/11/05
+
+TI: Effects of a mosquitocidal toxin on a mammalian epithelial cell line
+  expressing its target receptor
+AU: Pauchet,-Yannick [Author]; Luton,-Frederic [Author]; Castella,-Claude
+  [Author]; Charles,-Jean-Francois [Author]; Romey,-Georges [Author]; Pauron,
+  -David [Author,-Reprint-Author]
+AD: Inst Natl Rech Agron, UMR Reponses Organismes Stress Environm 112, 400 Route
+  Chappes,BP 167, F-06903 Sophia Antipolis, France
+EMA: pauron@antibes.inra.fr
+SO: Cellular-Microbiology. 2005; 7(9): 1335-1344
+PY: 2005
+DT: Article
+IS: 1462-5814
+LA: English
+AB: The spread of diseases transmitted by Anopheles and Culex mosquitoes, such
+  as malaria and West Nile fever, is a growing concern for human health. Bacillus
+  sphaericus binary toxin (Bin) is one of the few available bioinsecticides able
+  to control populations of these mosquitoes efficiently. We previously showed
+  that Bin binds to Cpm1, an alpha-glucosidase located on the apical side of
+  Culex larval midgut epithelium. We analysed the effects of Bin by expressing a
+  construct encoding Cpm1 in the mammalian epithelial MDCK cell line. Cpm1 is
+  targeted to the apical side of polarized MDCK, where it is anchored by
+  glycosylphosphatidylinositol (GPI) and displays alpha-glucosidase activity. Bin
+  bound to transfected cells and induced a non-specific current presumably
+  related to the opening of pores. The formation of these pores may be related to
+  the location of the toxin/receptor complex in lipid raft microdomains. Finally,
+  Bin promoted the time-dependent appearance of intracytoplasmic vacuoles but did
+  not drive cell lysis. Thus, the dual functionality (enzyme/toxin receptor) of
+  Cpm1 is fully conserved in MDCK cells and Cpm1 is an essential target protein
+  for Bin cytotoxicity in Culex mosquitoes.
+AI: Y
+MC: Biochemistry-and-Molecular-Biophysics; Parasitology-; Infection-
+ST: -[85765-] Canidae-, -Carnivora, Mammalia-, Vertebrata-, Chordata-, Animalia
+  -; -[75314-] Diptera-, -Insecta, Arthropoda-, Invertebrata-, Animalia-; -[07810
+  -] Endospore-forming-Gram-Positives, -Eubacteria, Bacteria-, Microorganisms-; 
+  -[03615-] Flaviviridae-, -Positive-Sense-ssRNA-Viruses, Viruses-,
+  Microorganisms-; -[86215-] Hominidae-, -Primates, Mammalia-, Vertebrata-,
+  Chordata-, Animalia-
+OR: MDCK-cell-line (Canidae-): cell_line-; Anopheles- (Diptera-): genus-,
+  disease-vector; Culex- (Diptera-): genus-, disease-vector; Bacillus-sphaericus
+  (Endospore-forming-Gram-Positives): species-; West-Nile-virus (Flaviviridae-):
+  species-, pathogen-; human- (Hominidae-): common-, host-
+TN: Canidae-: Animals-, Carnivores-, Chordates-, Mammals-, Nonhuman-Vertebrates,
+  Nonhuman-Mammals, Vertebrates-; Diptera-: Animals-, Arthropods-, Insects-,
+  Invertebrates-; Endospore-forming-Gram-Positives: Bacteria-, Eubacteria-,
+  Microorganisms-; Flaviviridae-: Microorganisms-, Positive-Sense-Single-Stranded
+  -RNA-Viruses, Viruses-; Hominidae-: Animals-, Chordates-, Humans-, Mammals-,
+  Primates-, Vertebrates-
+CB: alpha-glucosidase: 9001-42-7, EC-3.2.1.20; glycosylphosphatidylinositol-;
+  mosquitocidal-toxin; binary-toxin: pesticide-, insecticide-; Cpm1-; alpha
+  -glucoside-hydrolase: EC-3.2.1.20
+DS: malaria-: (Malaria-(MeSH)), blood-and-lymphatic-disease, parasitic-disease;
+  West-Nile-fever: nervous-system-disease, viral-disease
+RN: 9001-42-7
+CC: 02506- (Cytology-Animal)
+02508- (Cytology-Human)
+10060- (Biochemistry
+  -studies-General)
+10066- (Biochemistry-studies-Lipids)
+10802- (Enzymes
+  -General-and-comparative-studies-coenzymes)
+15006- (Blood-Blood-lymphatic-and
+  -reticuloendothelial-pathologies)
+20506- (Nervous-system-Pathology)
+31000-
+  (Physiology-and-biochemistry-of-bacteria)
+33502- (Virology-General-and
+  -methods)
+36006- (Medical-and-clinical-microbiology-Virology)
+54600- (Pest
+  -control-general-pesticides-and-herbicides)
+60502- (Parasitology
+  -General)
+60504- (Parasitology-Medical)
+64076- (Invertebrata-comparative
+  -experimental-morphology-physiology-and-pathology-Insecta-physiology)
+AN: 200510234178
+UD: 20051102
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=1462
+  -5814&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:PREV&id=pmid:&id=&issn=1462
+  -5814&isbn=&volume=7&issue=9&spage=1335&pages=1335
+  -1344&date=2005&title=Cellular%20Microbiology&atitle=Effects%20of%20a%20mosquito
+  cidal%20toxin%20on%20a%20mammalian%20epithelial%20cell%20line%20expressing%20its
+  %20target%20receptor&aulast=Pauchet&pid=%3Cauthor%3EPauchet%2c%20Yannick%3bLuton
+  %2c%20Frederic%3bCastella%2c%20Claude%3bCharles%2c%20Jean%20Francois%3bRomey%2c%
+  20Georges%3bPauron%2c%20David%3C%2Fauthor%3E%3CAN%3E200510234178%3C%2FAN%3E%3CDT
+  %3EArticle%3C%2FDT%3E
+
+Record 5 of 20 in BIOSIS Previews 2005: 47 2005/10/30-2005/11/05
+
+TI: Arginine-rich peptide conjugation to morpholino oligomers: Effects on
+  antisense activity and specificity
+AU: Nelson,-Michelle-H [Author]; Stein,-David-A [Author]; Kroeker,-Andrew-D
+  [Author]; Hatlevig,-Susie-A [Author]; Iversen,-Patrick-L [Author]; Moulton,
+  -Hong-M [Author,-Reprint-Author]
+AD: AVI BioPharma Inc, 4575 SW Res Way,Suite 200, Corvallis, OR 97333 USA
+EMA: moulton@avibio.com
+SO: Bioconjugate-Chemistry. 2005; 16(4): 959-966
+PY: 2005
+DT: Article
+IS: 1043-1802
+LA: English
+AB: Noncharged antisense compounds, such as phosphorodiamidate morpholino
+  oligomers (PMOs), do not readily enter mammalian cells in culture. A simple and
+  effective means for cellular delivery of PMOs is through their conjugation to
+  arginine-rich peptides. Understanding the effect of peptide conjugation on the
+  efficacy, toxicity, and specificity of PMOs is important to the successful
+  application of this antisense delivery method. We investigated the effects of
+  conjugation of arginine-rich peptides to PMO on the thermal stability, efficacy
+  and specificity for targeted RNA of the resulting compound. In vitro
+  translation assays showed that (1) R9F2-PMO generated antisense activity 3-25
+  -fold higher than corresponding nonconjugated PMO, (2) the level of antisense
+  activity enhancement by R9F2-PMO over a corresponding nonconjugated PMO is
+  related to the GC content of the PMO sequence, (3) R9F2 conjugation reduced the
+  minimum length of a PMO required to inactivate a target RNA from 20 bases to 14
+  bases, and (4) nonspecific effects of R9F2-PMO occur at lower concentrations
+  than corresponding PMO alone. Thermal stability of heteroduplexes of PMO and
+  complementary RNA were increased by conjugation of PMO to R9F2 peptide, likely
+  accounting for the increased specific antisense activity of conjugated over
+  nonconjugated PMO. A cell-culture based assay demonstrated that while
+  conjugation to unnatural peptides increased PMO efficacy without causing
+  nonspecificity at concentrations <= 10 yM, only L-peptide conjugation retained
+  high specificity at higher concentrations. This study demonstrates that
+  conjugation of PMO to an arginine-rich peptide generally increases the binding
+  affinity of the PMO to complementary RNA and increases its antisense potency.
+  Additionally, it is shown that the enzymatic stability of an L- or unnatural
+  peptide used for PMO conjugation affects the antisense properties of the
+  resulting compound.
+AI: Y
+MC: Molecular-Genetics: Biochemistry-and-Molecular-Biophysics
+ST: -[03615-] Flaviviridae-, -Positive-Sense-ssRNA-Viruses, Viruses-,
+  Microorganisms-; -[86215-] Hominidae-, -Primates, Mammalia-, Vertebrata-,
+  Chordata-, Animalia-; -[86375-] Muridae-, -Rodentia, Mammalia-, Vertebrata-,
+  Chordata-, Animalia-
+OR: West-Nile-virus (Flaviviridae-): species-; human- (Hominidae-): common-; rat
+  - (Muridae-): common-
+TN: Flaviviridae-: Microorganisms-, Positive-Sense-Single-Stranded-RNA-Viruses,
+  Viruses-; Hominidae-: Animals-, Chordates-, Humans-, Mammals-, Primates-,
+  Vertebrates-; Muridae-: Animals-, Chordates-, Mammals-, Nonhuman-Vertebrates,
+  Nonhuman-Mammals, Rodents-, Vertebrates-
+CB: RNA-; phosphorodiamidate-morpholino-oligomer; R9F2-peptide
+SD: AF196835-: GenBank-, EMBL-, DDJB-, amino-acid-sequence, nucleotide-sequence;
+  U09724-: GenBank-, EMBL-, DDJB-, amino-acid-sequence, nucleotide-sequence;
+  AY214166-: GenBank-, EMBL-, DDJB-, amino-acid-sequence, nucleotide-sequence
+GN: human-c-myc-gene [Hominidae-]; West-Nile-virus-WNV-gene [Flaviviridae-]; rat
+  -CYP3A2-gene [Muridae-]
+MI: antisense-delivery
+CC: 03502- (Genetics-General)
+03506- (Genetics-Animal)
+03508- (Genetics
+  -Human)
+10062- (Biochemistry-studies-Nucleic-acids-purines-and
+  -pyrimidines)
+10064- (Biochemistry-studies-Proteins-peptides-and-amino
+  -acids)
+31500- (Genetics-of-bacteria-and-viruses)
+33502- (Virology-General
+  -and-methods)
+AN: 200510233377
+UD: 20051102
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=1043
+  -1802&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:PREV&id=pmid:&id=&issn=1043
+  -1802&isbn=&volume=16&issue=4&spage=959&pages=959
+  -966&date=2005&title=Bioconjugate%20Chemistry&atitle=Arginine
+  -rich%20peptide%20conjugation%20to%20morpholino%20oligomers%3a%20Effects%20on%20
+  antisense%20activity%20and%20specificity&aulast=Nelson&pid=%3Cauthor%3ENelson%2c
+  %20Michelle%20H%3bStein%2c%20David%20A%3bKroeker%2c%20Andrew%20D%3bHatlevig%2c%2
+  0Susie%20A%3bIversen%2c%20Patrick%20L%3bMoulton%2c%20Hong%20M%3C%2Fauthor%3E%3CA
+  N%3E200510233377%3C%2FAN%3E%3CDT%3EArticle%3C%2FDT%3E
+
+Record 6 of 20 in BIOSIS Previews 2005: 46 2005/10/23-2005/10/29
+
+TI: Emerging vectorborne diseases and their control
+AU: Edman,-John-D [Author,-Reprint-Author]
+AD: Univ Calif Davis, Ctr Vectorborne Dis, Davis, CA 95616 USA
+BK: ACS Symposium Series. 2005; 892: 314-325
+AUB: Clark-JM; Ohkawa-H
+PB: AMER CHEMICAL SOC, 1155 SIXTEENTH ST NW, WASHINGTON, DC 20036 USA
+PY: 2005
+DT: Book-Chapter; Meeting
+IS: 0097-6156
+IB: 0841239037
+MT: Conference on New Discoveries in Agrochemicals, Honolulu, HI, USA; June 01 
+  -04, 2003 
+SP: Pesticide Sci Soc JapanAmer Chem Soc, Agrochem Div
+SE: ACS SYMPOSIUM SERIES.
+LA: English
+AB: Principally a combination of human population growth, environmental
+  degradation, public health inadequacies and rapid global transportation has put
+  the world at mounting risk from vectorborne and other infectious diseases.
+  Health problems associated with the emergence of new pathogens and the re
+  -emergence and spread of old ones have gained a new urgency due to the global
+  threat of bioterrorism. A large percentage of emerging diseases are vectorborne
+  and over one-third of the agents on the list of greatest concern from
+  bioterrorists are vectorborne. Many of these diseases are caused by viruses for
+  which there are no effective drugs for treatment or vaccines for prevention.
+  Drug and insecticide resistance has further complicated our ability to respond
+  effectively to these growing threats. Parasitic diseases like malaria,
+  leishmmaniasis and African trypanosomiasis are resurging in many regions.
+  Onchocerciasis and to a lesser extent filariasis control programs are reducing
+  the impact of these diseases. This has largely been possible because of along
+  -lasting new filaricide (Ivermectin) and targeted application of insecticides
+  to highly specialized development sites (i.e., riverine rapids). Chagas disease
+  also has declined significantly in the southern part of its range through home
+  improvement and indoor application of insecticides against domicilary kissing
+  bug vectors. Current outbreak of West Nile virus in North America and dengue
+  worldwide are examples of emerging threat from mosquito-borne arboviruses, even
+  in developed countries. Lyme disease, the most prevalent vectorborne disease in
+  the U.S. with nearly 18,000 cases annually, was not recognized until the early
+  1980's and was followed by the emergence of another tick-borne disease,
+  ehrlichiosis, in the 1990's. The ongoing West Nile epidemic highlights the fact
+  that while mosquito control remains the first line of defense, the main
+  adulticides and application strategies available for combating epidemics of
+  mosquito-borne diseases today are the same as those used > 25 years ago.
+  Adulticides alone have not adequately protected populations from further
+  transmission and disease spread. The demise of vector control programs and
+  their qualified staffs during the 1980's caught many states unprepared. The
+  U.S. is experiencing a vector control crisis at a time when disease threats and
+  control needs are increasing. The recent Institute of Medicine report:
+  "Microbial Threats to Health," offers remedies for reversing this imbalance. It
+  recommends investment to increase the armamentarium for vector control. Even
+  without new tools, many lives could be saved with current technology if
+  political will and adequate resources were committed to reducing the burden of
+  these diseases.
+AI: Y
+MC: Pharmacology-; Epidemiology-: Population-Studies; Infection-; Pesticides-
+ST: -[75314-] Diptera-, -Insecta, Arthropoda-, Invertebrata-, Animalia-; -[03615
+  -] Flaviviridae-, -Positive-Sense-ssRNA-Viruses, Viruses-, Microorganisms-; 
+  -[86215-] Hominidae-, -Primates, Mammalia-, Vertebrata-, Chordata-, Animalia-; 
+  -[03000-] Viruses-, -Microorganisms
+OR: mosquito- (Diptera-): common-, disease-vector; West-Nile-virus (Flaviviridae
+  -): species-, pathogen-; human- (Hominidae-): common-, host-; Arbovirus-
+  (Viruses-): common-, pathogen-
+TN: Diptera-: Animals-, Arthropods-, Insects-, Invertebrates-; Flaviviridae-:
+  Microorganisms-, Positive-Sense-Single-Stranded-RNA-Viruses, Viruses-;
+  Hominidae-: Animals-, Chordates-, Humans-, Mammals-, Primates-, Vertebrates-;
+  Viruses-: Microorganisms-, Viruses-
+CB: vaccines-: immunologic-drug, vaccine-; Ivermectin-: 70288-86-7, pesticide-;
+  antiinfective-agents: antiinfective-drug
+GE: North-America: Nearctic-region
+DS: malaria-: (Malaria-(MeSH)), blood-and-lymphatic-disease, parasitic-disease,
+  drug-therapy; Chagas-disease: parasitic-disease, drug-therapy; onchocerciasis-:
+  (Onchocerciasis-(MeSH)), parasitic-disease, drug-therapy; leishmaniasis-:
+  (Leishmaniasis-(MeSH)), integumentary-system-disease, parasitic-disease, drug
+  -therapy; filariasis-: (Filariasis-(MeSH)), parasitic-disease, drug-therapy;
+  dengue-: (Dengue-(MeSH)), viral-disease, drug-therapy; African-trypanosomiasis:
+  parasitic-disease, drug-therapy; West-Nile-fever: nervous-system-disease, viral
+  -disease, drug-therapy, epidemiology-
+RN: 70288-86-7
+MI: drug-resistance; bioterrorism-; insecticide-resistance
+CC: 12512- (Pathology-Therapy)
+15006- (Blood-Blood-lymphatic-and
+  -reticuloendothelial-pathologies)
+18506- (Integumentary-system
+  -Pathology)
+20506- (Nervous-system-Pathology)
+22002- (Pharmacology
+  -General)
+22005- (Pharmacology-Clinical-pharmacology)
+22018- (Pharmacology
+  -Immunological-processes-and-allergy)
+33502- (Virology-General-and
+  -methods)
+36006- (Medical-and-clinical-microbiology-Virology)
+37052- (Public
+  -health-epidemiology-Communicable-diseases)
+37054- (Public-health-epidemiology
+  -Organic-diseases-and-neoplasms)
+37056- (Public-health-epidemiology
+  -Miscellaneous)
+38502- (Chemotherapy-General-methods-and-metabolism)
+54600-
+  (Pest-control-general-pesticides-and-herbicides)
+60502- (Parasitology
+  -General)
+60504- (Parasitology-Medical)
+64076- (Invertebrata-comparative
+  -experimental-morphology-physiology-and-pathology-Insecta-physiology)
+AN: 200510227295
+UD: 20051025
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=0097
+  -6156&lpa.holdlink.isbn=0841239037
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:PREV&id=pmid:&id=&issn=0097
+  -6156&isbn=0841239037&volume=&issue=&spage=&pages=&date=2005&title=&atitle=Emerg
+  ing%20vectorborne%20diseases%20and%20their%20control&aulast=Edman&pid=%3Cauthor%
+  3EEdman%2c%20John%20D%3C%2Fauthor%3E%3CAN%3E200510227295%3C%2FAN%3E%3CDT%3EBook%
+  20Chapter%3bMeeting%3C%2FDT%3E
+
+Record 7 of 20 in BIOSIS Previews 2005: 46 2005/10/23-2005/10/29
+
+TI: Structural basis of West Nile virus neutralization by a therapeutic antibody
+AU: Nybakken,-Grant-E [Author]; Oliphant,-Theodore [Author]; Johnson,-Syd
+  [Author]; Burke,-Stephen [Author]; Diamond,-Michael-S [Author]; Fremont,-Daved
+  -H [Author,-Reprint-Author]
+AD: Washington Univ, Sch Med, Dept Pathol and Immunol, St Louis, MO 63110 USA
+EMA: Fremont@wustl.edu
+SO: Nature-(London). 2005; 437(7059): 764-768
+PY: 2005
+DT: Article
+IS: 0028-0836
+LA: English
+AB: West Nile virus is a mosquito-borne flavivirus closely related to the human
+  epidemic-causing dengue, yellow fever and Japanese encephalitis viruses(1). In
+  establishing infection these icosahedral viruses undergo endosomal membrane
+  fusion catalysed by envelope glycoprotein rearrangement of the putative
+  receptor-binding domain III (DIII) and exposure of the hydrophobic fusion
+  loop(2-4). Humoral immunity has an essential protective function early in the
+  course of West Nile virus infection(5,6). Here, we investigate the mechanism of
+  neutralization by the E16 monoclonal antibody that specifically binds DIII.
+  Structurally, the E16 antibody Fab fragment engages 16 residues positioned on
+  four loops of DIII, a consensus neutralizing epitope sequence conserved in West
+  Nile virus and distinct in other flaviviruses. The E16 epitope protrudes from
+  the surface of mature virions in three distinct environments(7), and docking
+  studies predict Fab binding will leave fivefold clustered epitopes exposed. We
+  also show that E16 inhibits infection primarily at a step after viral
+  attachment, potentially by blocking envelope glycoprotein conformational
+  changes. Collectively, our results suggest that a vaccine strategy targeting
+  the dominant DIII epitope may elicit safe and effective immune responses
+  against flaviviral diseases.
+AI: Y
+MC: Pharmacology-; Infection-; Immune-System: Chemical-Coordination-and
+  -Homeostasis
+ST: -[86205-] Cercopithecidae-, -Primates, Mammalia-, Vertebrata-, Chordata-,
+  Animalia-; -[75314-] Diptera-, -Insecta, Arthropoda-, Invertebrata-, Animalia-;
+  -[03615-] Flaviviridae-, -Positive-Sense-ssRNA-Viruses, Viruses-,
+  Microorganisms-
+OR: Vero-cell-line (Cercopithecidae-): cell_line-, African-green-monkey-kidney
+  -cells; mosquito- (Diptera-): common-, disease-vector; West-Nile-virus
+  (Flaviviridae-): species-, pathogen-
+TN: Cercopithecidae-: Animals-, Chordates-, Mammals-, Nonhuman-Mammals, Nonhuman
+  -Vertebrates, Nonhuman-Primates, Primates-, Vertebrates-; Diptera-: Animals-,
+  Arthropods-, Insects-, Invertebrates-; Flaviviridae-: Microorganisms-, Positive
+  -Sense-Single-Stranded-RNA-Viruses, Viruses-
+CB: envelope-glycoprotein; Fab-fragments; receptor-binding-domain-III; E16
+  -monoclonal-antibody: immunologic-drug, immunostimulant-drug
+DS: West-Nile-fever: nervous-system-disease, viral-disease
+MI: virus-neutralization
+CC: 02506- (Cytology-Animal)
+12512- (Pathology-Therapy)
+20506- (Nervous-system
+  -Pathology)
+22002- (Pharmacology-General)
+22018- (Pharmacology-Immunological
+  -processes-and-allergy)
+33502- (Virology-General-and-methods)
+34502-
+  (Immunology-General-and-methods)
+36006- (Medical-and-clinical-microbiology
+  -Virology)
+64076- (Invertebrata-comparative-experimental-morphology-physiology
+  -and-pathology-Insecta-physiology)
+AN: 200510227135
+UD: 20051025
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=0028
+  -0836&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:PREV&id=pmid:&id=&issn=0028
+  -0836&isbn=&volume=437&issue=7059&spage=764&pages=764
+  -768&date=2005&title=Nature%20%28London%29&atitle=Structural%20basis%20of%20West
+  %20Nile%20virus%20neutralization%20by%20a%20therapeutic%20antibody&aulast=Nybakk
+  en&pid=%3Cauthor%3ENybakken%2c%20Grant%20E%3bOliphant%2c%20Theodore%3bJohnson%2c
+  %20Syd%3bBurke%2c%20Stephen%3bDiamond%2c%20Michael%20S%3bFremont%2c%20Daved%20H%
+  3C%2Fauthor%3E%3CAN%3E200510227135%3C%2FAN%3E%3CDT%3EArticle%3C%2FDT%3E
+
+Record 8 of 20 in BIOSIS Previews 2005: 46 2005/10/23-2005/10/29
+
+TI: West Nile virus activity - United States, 2005
+AU: Anonymous [Author]
+SO: Morbidity-and-Mortality-Weekly-Report. 2005; 54(27): 678-679
+PY: 2005
+DT: Article
+IS: 1057-5987
+LA: English
+MC: Epidemiology-: Population-Studies; Infection-; Neurology-: Human-Medicine,
+  Medical-Sciences
+ST: -[75314-] Diptera-, -Insecta, Arthropoda-, Invertebrata-, Animalia-; -[03615
+  -] Flaviviridae-, -Positive-Sense-ssRNA-Viruses, Viruses-, Microorganisms-; 
+  -[86215-] Hominidae-, -Primates, Mammalia-, Vertebrata-, Chordata-, Animalia-
+OR: mosquito- (Diptera-): common-, disease-vector; West-Nile-virus (Flaviviridae
+  -): species-, pathogen-; human- (Hominidae-): common-, adolescent-, aged-, aged
+  -80-and-over, middle-age, adult-, host-
+TN: Diptera-: Animals-, Arthropods-, Insects-, Invertebrates-; Flaviviridae-:
+  Microorganisms-, Positive-Sense-Single-Stranded-RNA-Viruses, Viruses-;
+  Hominidae-: Animals-, Chordates-, Humans-, Mammals-, Primates-, Vertebrates-
+GE: California-: USA-, North-America, Nearctic-region; Florida-: USA-, North
+  -America, Nearctic-region; Arkansas-: USA-, North-America, Nearctic-region;
+  Arizona-: USA-, North-America, Nearctic-region; Texas-: USA-, North-America,
+  Nearctic-region; Minnesota-: USA-, North-America, Nearctic-region
+DS: West-Nile-virus-infection: nervous-system-disease, viral-disease,
+  transmission-, mortality-, epidemiology-
+MI: CDC-; presumptive-viremic-blood-donor; ArboNET-
+CC: 20506- (Nervous-system-Pathology)
+24500- (Gerontology-)
+25000- (Pediatrics
+  -)
+33502- (Virology-General-and-methods)
+36006- (Medical-and-clinical
+  -microbiology-Virology)
+37052- (Public-health-epidemiology-Communicable
+  -diseases)
+37054- (Public-health-epidemiology-Organic-diseases-and
+  -neoplasms)
+37056- (Public-health-epidemiology-Miscellaneous)
+64076-
+  (Invertebrata-comparative-experimental-morphology-physiology-and-pathology
+  -Insecta-physiology)
+AN: 200510226751
+UD: 20051025
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=1057
+  -5987&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:PREV&id=pmid:&id=&issn=1057
+  -5987&isbn=&volume=54&issue=27&spage=678&pages=678
+  -679&date=2005&title=Morbidity%20and%20Mortality%20Weekly%20Report&atitle=West%2
+  0Nile%20virus%20activity%20
+  -%20United%20States%2c%202005&aulast=&pid=%3Cauthor%3EAnonymous%3C%2Fauthor%3E%3
+  CAN%3E200510226751%3C%2FAN%3E%3CDT%3EArticle%3C%2FDT%3E
+
+Record 9 of 20 in BIOSIS Previews 2005: 46 2005/10/23-2005/10/29
+
+TI: Persistent West Nile virus infection in the golden hamster: Studies on its
+  mechanism and possible implications for other flavivirus infections
+AU: Tesh,-Robert-B [Author,-Reprint-Author]; Siirin,-Marina [Author]; Guzman,
+  -Hilda [Author]; Travassos-da-Rosa,-Amelia-P-A [Author]; Wu,-Xiaoyan [Author];
+  Duan,-Tao [Author]; Lei,-Hao [Author]; Nunes,-Marcio-R [Author]; Xiao,-Shu-Yuan
+  [Author]
+AD: Univ Texas, Dept Pathol, Med Branch, 301 Univ Blvd, Galveston, TX 77555 USA
+EMA: rtesh@utmb.edu
+SO: Journal-of-Infectious-Diseases. 2005; 192(2): 287-295
+PY: 2005
+DT: Article
+IS: 0022-1899
+LA: English
+AB: Golden hamsters (Mesocricetus auratus) experimentally infected with West
+  Nile virus (WNV) developed chronic renal infection and persistent shedding of
+  virus in urine for up to 8 months, despite initial rapid clearance of virus
+  from blood and the timely appearance of high levels of specific neutralizing
+  antibodies. Infectious WNV could be recovered by direct culture of their urine
+  and by cocultivation of kidney tissue for up to 247 days after initial
+  infection. Only moderate histopathologic changes were observed in the kidneys
+  or brain of the chronically infected hamsters, although WNV antigen was readily
+  detected by immunohistochemistry within epithelium, interstitial cells, and
+  macrophages in the distal renal tubules. Comparison of WNV isolates from serial
+  urine samples from individual hamsters over several months indicated that the
+  virus underwent both genetic and phenotypic changes during persistent
+  infection. These findings are similar to previous reports of persistent
+  infection with tickborne encephalitis and Modoc viruses.
+AI: Y
+MC: Biochemistry-and-Molecular-Biophysics; Nervous-System: Neural-Coordination;
+  Infection-; Blood-and-Lymphatics: Transport-and-Circulation; Urology-: Human
+  -Medicine, Medical-Sciences
+ST: -[86310-] Cricetidae-, -Rodentia, Mammalia-, Vertebrata-, Chordata-,
+  Animalia-; -[03615-] Flaviviridae-, -Positive-Sense-ssRNA-Viruses, Viruses-,
+  Microorganisms-
+OR: Mesocricetus-auratus (Cricetidae-): species-, golden-hamster, common-, host
+  -; West-Nile-virus (Flaviviridae-): species-, pathogen-; Modoc-virus
+  (Flaviviridae-): species-, pathogen-
+TN: Cricetidae-: Animals-, Chordates-, Mammals-, Nonhuman-Vertebrates, Nonhuman
+  -Mammals, Rodents-, Vertebrates-; Flaviviridae-: Microorganisms-, Positive
+  -Sense-Single-Stranded-RNA-Viruses, Viruses-
+PS: blood-: blood-and-lymphatics; urine-: excretory-system; macrophage-: immune
+  -system, blood-and-lymphatics; kidney-: excretory-system; distal-renal-tubule:
+  excretory-system
+CB: neutralizing-antibody
+DS: West-Nile-fever: nervous-system-disease, viral-disease, etiology-
+MQ: immunohistochemistry-: laboratory-techniques, histology-and-cytology
+  -techniques, immunologic-techniques
+CC: 02506- (Cytology-Animal)
+10060- (Biochemistry-studies-General)
+15002-
+  (Blood-Blood-and-lymph-studies)
+15004- (Blood-Blood-cell-studies)
+15504-
+  (Urinary-system-Physiology-and-biochemistry)
+15506- (Urinary-system
+  -Pathology)
+20504- (Nervous-system-Physiology-and-biochemistry)
+20506-
+  (Nervous-system-Pathology)
+33502- (Virology-General-and-methods)
+34502-
+  (Immunology-General-and-methods)
+36006- (Medical-and-clinical-microbiology
+  -Virology)
+AN: 200510224063
+UD: 20051025
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=0022
+  -1899&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:PREV&id=pmid:&id=&issn=0022
+  -1899&isbn=&volume=192&issue=2&spage=287&pages=287
+  -295&date=2005&title=Journal%20of%20Infectious%20Diseases&atitle=Persistent%20We
+  st%20Nile%20virus%20infection%20in%20the%20golden%20hamster%3a%20Studies%20on%20
+  its%20mechanism%20and%20possible%20implications%20for%20other%20flavivirus%20inf
+  ections&aulast=Tesh&pid=%3Cauthor%3ETesh%2c%20Robert%20B%3bSiirin%2c%20Marina%3b
+  Guzman%2c%20Hilda%3bTravassos%20da%20Rosa%2c%20Amelia%20P%20A%3bWu%2c%20Xiaoyan%
+  3bDuan%2c%20Tao%3bLei%2c%20Hao%3bNunes%2c%20Marcio%20R%3bXiao%2c%20Shu%20Yuan%3C
+  %2Fauthor%3E%3CAN%3E200510224063%3C%2FAN%3E%3CDT%3EArticle%3C%2FDT%3E
+
+Record 10 of 20 in BIOSIS Previews 2005: 46 2005/10/23-2005/10/29
+
+TI: Donor infection: An opinion on lung donor utilization
+AU: Garrity,-Edward-R-Jr [Author,-Reprint-Author]; Boettcher,-Heidi [Author];
+  Gabbay,-Eli [Author]
+AD: Loyola Univ, Med Ctr, Dept Pulm and Crit Care Med, 2160 S 1st Ave, Maywood,
+  IL 60153 USA
+EMA: egarrit@lumc.edu
+SO: Journal-of-Heart-and-Lung-Transplantation. 2005; 24(7): 791-797
+PY: 2005
+DT: Editorial; Article
+IS: 1053-2498
+LA: English
+MC: Surgery-: Medical-Sciences; Pharmacology-; Infection-
+ST: -[03613-] Coronaviridae-, -Positive-Sense-ssRNA-Viruses, Viruses-,
+  Microorganisms-; -[03615-] Flaviviridae-, -Positive-Sense-ssRNA-Viruses,
+  Viruses-, Microorganisms-; -[07700-] Gram-Positive-Cocci, -Eubacteria, Bacteria
+  -, Microorganisms-; -[03115-] Herpesviridae-, -dsDNA-Viruses, Viruses-,
+  Microorganisms-; -[86215-] Hominidae-, -Primates, Mammalia-, Vertebrata-,
+  Chordata-, Animalia-; -[07702-] Micrococcaceae-, -Gram-Positive-Cocci,
+  Eubacteria-, Bacteria-, Microorganisms-; -[06508-] Pseudomonadaceae-, -Gram
+  -Negative-Aerobic-Rods-and-Cocci, Eubacteria-, Bacteria-, Microorganisms-; 
+  -[03305-] Retroviridae-, -DNA-and-RNA-Reverse-Transcribing-Viruses, Viruses-,
+  Microorganisms-; -[03000-] Viruses-, -Microorganisms
+OR: Severe-Acute-Respiratory-Syndrome-virus (Coronaviridae-): common-, pathogen
+  -; West-Nile-virus (Flaviviridae-): species-, pathogen-; Enterococcus- (Gram
+  -Positive-Cocci): genus-, pathogen-; Varicella-Zoster-virus (Herpesviridae-):
+  common-, Human-herpesvirus-3, species-, pathogen-; Herpesvirus- (Herpesviridae
+  -): common-, pathogen-; Epstein-Barr-virus (Herpesviridae-): common-, EBV-,
+  common-, pathogen-; human- (Hominidae-): common-, host-; Staphylococcus-aureus
+  (Micrococcaceae-): species-, pathogen-; Burkholderia-cepacia (Pseudomonadaceae
+  -): species-, pathogen-; Human-immunodeficiency-virus (Retroviridae-): species
+  -, HIV-, common-, pathogen-; Hepatitis-virus (Viruses-): common-, pathogen-
+TN: Coronaviridae-: Microorganisms-, Positive-Sense-Single-Stranded-RNA-Viruses,
+  Viruses-; Flaviviridae-: Microorganisms-, Positive-Sense-Single-Stranded-RNA
+  -Viruses, Viruses-; Gram-Positive-Cocci: Bacteria-, Eubacteria-, Microorganisms
+  -; Herpesviridae-: Double-Stranded-DNA-Viruses, Microorganisms-, Viruses-;
+  Hominidae-: Animals-, Chordates-, Humans-, Mammals-, Primates-, Vertebrates-;
+  Micrococcaceae-: Bacteria-, Eubacteria-, Microorganisms-; Pseudomonadaceae-:
+  Bacteria-, Eubacteria-, Microorganisms-; Retroviridae-: DNA-and-RNA-Reverse
+  -Transcribing-Viruses, Microorganisms-, Viruses-; Viruses-: Microorganisms-,
+  Viruses-
+CB: infectious-agents; methicillin-: 61-32-5, antibacterial-drug, antiinfective
+  -drug, resistance-; vancomycin-: 1404-90-6, antibacterial-drug, antiinfective
+  -drug, resistance-
+DS: Epstein-Barr-virus-infection: neoplastic-disease, viral-disease; fungal
+  -infection: (Mycoses-(MeSH)), fungal-disease; hepatitis-: (Hepatitis-(MeSH)),
+  digestive-system-disease; cancer-: (Neoplasms-(MeSH)), neoplastic-disease;
+  Creutzfeldt-Jakob-disease: nervous-system-disease, prion-disease, behavioral
+  -and-mental-disorders; severe-acute-respiratory-syndrome: SARS-, (Severe-Acute
+  -Respiratory-Syndrome-(MeSH)), respiratory-system-disease, viral-disease; human
+  -immunodeficiency-virus-infection: HIV-infection, (HIV-Infections-(MeSH)),
+  viral-disease, immune-system-disease; herpesvirus-infection: (Herpesviridae
+  -Infections-(MeSH)), viral-disease; Burkholderia-cepacia-infection: bacterial
+  -disease; Staphylococcus-aureus-infection: bacterial-disease, drug-therapy;
+  West-Nile-fever: nervous-system-disease, viral-disease; enterococcus-infection:
+  bacterial-disease, drug-therapy; Varicella-Zoster-infection: viral-disease
+RN: 61-32-5; 1404-90-6
+MQ: lung-transplantation: therapeutic-and-prophylactic-techniques, clinical
+  -techniques
+CC: 07004- (Behavioral-biology-Human-behavior)
+10060- (Biochemistry-studies
+  -General)
+11105- (Anatomy-and-Histology-Surgery)
+12512- (Pathology
+  -Therapy)
+14006- (Digestive-system-Pathology)
+16006- (Respiratory-system
+  -Pathology)
+20506- (Nervous-system-Pathology)
+21002- (Psychiatry
+  -Psychopathology-psychodynamics-and-therapy)
+22002- (Pharmacology
+  -General)
+22005- (Pharmacology-Clinical-pharmacology)
+24004- (Neoplasms
+  -Pathology-clinical-aspects-and-systemic-effects)
+31000- (Physiology-and
+  -biochemistry-of-bacteria)
+33502- (Virology-General-and-methods)
+34508-
+  (Immunology-Immunopathology-tissue-immunology)
+36002- (Medical-and-clinical
+  -microbiology-Bacteriology)
+36006- (Medical-and-clinical-microbiology
+  -Virology)
+36008- (Medical-and-clinical-microbiology-Mycology)
+38502-
+  (Chemotherapy-General-methods-and-metabolism)
+38504- (Chemotherapy
+  -Antibacterial-agents)
+AN: 200510223922
+UD: 20051025
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=1053
+  -2498&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:PREV&id=pmid:&id=&issn=1053
+  -2498&isbn=&volume=24&issue=7&spage=791&pages=791
+  -797&date=2005&title=Journal%20of%20Heart%20and%20Lung%20Transplantation&atitle=
+  Donor%20infection%3a%20An%20opinion%20on%20lung%20donor%20utilization&aulast=Gar
+  rity&pid=%3Cauthor%3EGarrity%2c%20Edward%20R%20Jr%3bBoettcher%2c%20Heidi%3bGabba
+  y%2c%20Eli%3C%2Fauthor%3E%3CAN%3E200510223922%3C%2FAN%3E%3CDT%3EEditorial%3bArti
+  cle%3C%2FDT%3E
+
+Record 11 of 20 in BIOSIS Previews 2005: 46 2005/10/23-2005/10/29
+
+TI: West Nile virus detection in urine
+AU: Tonry,-Jessica-H [Author,-Reprint-Author]; Brown,-Craig-B [Author]; Cropp,
+  -Cecil-B [Author]; Co,-Juliene-K-G [Author]; Bennett,-Shannon-N [Author];
+  Nerurkar,-Vivek-R [Author]; Kuberski,-Timothy [Author]; Gubler,-Duane-J [Author]
+AD: John A Burns Sch Med, Leahi Hosp, Dept Trop Med and Med Microbiol, Atherton
+  Bldg,3rd Floor,3675 Kilauea Ave, Honolulu, HI 96816 USA
+EMA: jtonry@rocketmail.com
+SO: Emerging-Infectious-Diseases. 2005; 11(8): 1294-1296
+PY: 2005
+DT: Article
+IS: 1080-6040
+LA: English
+AB: We report West Nile virus (WNV) RNA in urine collected from a patient with
+  encephalitis 8 days after symptom onset. Viral RNA was detected by reverse
+  transcriptase-polymerase chain reaction (RT-PCR). Sequence and phylogenetic
+  analysis confirmed the PCR product to have >= 99% similarity to the WNV strain
+  NY 2000-crow3356.
+AI: Y
+MC: Infection-; Neurology-: Human-Medicine, Medical-Sciences; Biochemistry-and
+  -Molecular-Biophysics
+ST: -[03615-] Flaviviridae-, -Positive-Sense-ssRNA-Viruses, Viruses-,
+  Microorganisms-; -[86215-] Hominidae-, -Primates, Mammalia-, Vertebrata-,
+  Chordata-, Animalia-
+OR: West-Nile-virus (Flaviviridae-): species-, pathogen-, strain-NY; human-
+  (Hominidae-): common-, aged-, host-, male-
+TN: Flaviviridae-: Microorganisms-, Positive-Sense-Single-Stranded-RNA-Viruses,
+  Viruses-; Hominidae-: Animals-, Chordates-, Humans-, Mammals-, Primates-,
+  Vertebrates-
+PS: urine-: excretory-system
+CB: RNA-
+SD: M12294-: GenBank-, EMBL-, DDJB-, amino-acid-sequence, nucleotide-sequence;
+  AF260968-: GenBank-, EMBL-, DDJB-, amino-acid-sequence, nucleotide-sequence
+DS: encephalitis-: (Encephalitis-(MeSH)), nervous-system-disease, symptom-
+CC: 03506- (Genetics-Animal)
+10060- (Biochemistry-studies-General)
+10062-
+  (Biochemistry-studies-Nucleic-acids-purines-and-pyrimidines)
+10064-
+  (Biochemistry-studies-Proteins-peptides-and-amino-acids)
+15504- (Urinary
+  -system-Physiology-and-biochemistry)
+20506- (Nervous-system-Pathology)
+24500-
+  (Gerontology-)
+31500- (Genetics-of-bacteria-and-viruses)
+33502- (Virology
+  -General-and-methods)
+36006- (Medical-and-clinical-microbiology-Virology)
+AN: 200510220122
+UD: 20051025
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=1080
+  -6040&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:PREV&id=pmid:&id=&issn=1080
+  -6040&isbn=&volume=11&issue=8&spage=1294&pages=1294
+  -1296&date=2005&title=Emerging%20Infectious%20Diseases&atitle=West%20Nile%20viru
+  s%20detection%20in%20urine&aulast=Tonry&pid=%3Cauthor%3ETonry%2c%20Jessica%20H%3
+  bBrown%2c%20Craig%20B%3bCropp%2c%20Cecil%20B%3bCo%2c%20Juliene%20K%20G%3bBennett
+  %2c%20Shannon%20N%3bNerurkar%2c%20Vivek%20R%3bKuberski%2c%20Timothy%3bGubler%2c%
+  20Duane%20J%3C%2Fauthor%3E%3CAN%3E200510220122%3C%2FAN%3E%3CDT%3EArticle%3C%2FDT
+  %3E
+
+Record 12 of 20 in BIOSIS Previews 2005: 46 2005/10/23-2005/10/29
+
+TI: Virology, pathology, and clinical manifestations of West Nile virus disease
+AU: Hayes,-Edward-B [Author,-Reprint-Author]; Sejvar,-James-J [Author]; Zaki,
+  -Sherif-R [Author]; Lanciotti,-Robert-S [Author]; Bode,-Amy-V [Author];
+  Campbell,-Grant-L [Author]
+AD: Ctr Dis Control and Prevent, Div Vector Borne Infect Dis, POB 2087, Ft
+  Collins, CO 80526 USA
+EMA: ebh2@cdc.gov
+SO: Emerging-Infectious-Diseases. 2005; 11(8): 1174-1179
+PY: 2005
+DT: Article
+IS: 1080-6040
+LA: English
+AB: West Nile virus (WNV) causes epidemics of febrile illness, meningitis,
+  encephalitis, and flaccid paralysis. Since it was first detected in New York
+  City in 1999, and through 2004, > 16,000 WNV disease cases have been reported
+  in the United States. Over the past 5 years, research on WNV disease has
+  expanded rapidly. This review highlights new information regarding the
+  virology, clinical manifestations, and pathology of WNV disease, which will
+  provide a new platform for further research into diagnosis, treatment, and
+  possible prevention of WNV through vaccination.
+AI: Y
+MC: Infection-; Epidemiology-: Population-Studies; Neurology-: Human-Medicine,
+  Medical-Sciences
+ST: -[03615-] Flaviviridae-, -Positive-Sense-ssRNA-Viruses, Viruses-,
+  Microorganisms-; -[86215-] Hominidae-, -Primates, Mammalia-, Vertebrata-,
+  Chordata-, Animalia-
+OR: West-Nile-virus (Flaviviridae-): species-, pathogen-; human- (Hominidae-):
+  common-, host-
+TN: Flaviviridae-: Microorganisms-, Positive-Sense-Single-Stranded-RNA-Viruses,
+  Viruses-; Hominidae-: Animals-, Chordates-, Humans-, Mammals-, Primates-,
+  Vertebrates-
+GE: New-York-City: New-York, USA-, North-America, Nearctic-region
+DS: meningitis-: (Meningitis-(MeSH)), nervous-system-disease; encephalitis-:
+  (Encephalitis-(MeSH)), nervous-system-disease; West-Nile-fever: nervous-system
+  -disease, viral-disease, drug-therapy, prevention-and-control, diagnosis-;
+  flaccid-paralysis: nervous-system-disease
+CC: 12504- (Pathology-Diagnostic)
+12512- (Pathology-Therapy)
+20506- (Nervous
+  -system-Pathology)
+33502- (Virology-General-and-methods)
+36006- (Medical-and
+  -clinical-microbiology-Virology)
+37052- (Public-health-epidemiology
+  -Communicable-diseases)
+37054- (Public-health-epidemiology-Organic-diseases
+  -and-neoplasms)
+37056- (Public-health-epidemiology-Miscellaneous)
+AN: 200510220102
+UD: 20051025
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=1080
+  -6040&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:PREV&id=pmid:&id=&issn=1080
+  -6040&isbn=&volume=11&issue=8&spage=1174&pages=1174
+  -1179&date=2005&title=Emerging%20Infectious%20Diseases&atitle=Virology%2c%20path
+  ology%2c%20and%20clinical%20manifestations%20of%20West%20Nile%20virus%20disease&
+  aulast=Hayes&pid=%3Cauthor%3EHayes%2c%20Edward%20B%3bSejvar%2c%20James%20J%3bZak
+  i%2c%20Sherif%20R%3bLanciotti%2c%20Robert%20S%3bBode%2c%20Amy%20V%3bCampbell%2c%
+  20Grant%20L%3C%2Fauthor%3E%3CAN%3E200510220102%3C%2FAN%3E%3CDT%3EArticle%3C%2FDT
+  %3E
+
+Record 13 of 20 in BIOSIS Previews 2005: 46 2005/10/23-2005/10/29
+
+TI: Epidemiology and transmission dynamics of West Nile Virus disease
+AU: Hayes,-Edward-B [Author,-Reprint-Author]; Komar,-Nicholas [Author]; Nasci,
+  -Roger-S [Author]; Montgomery,-Susan-P [Author]; O'Leary,-Daniel-R [Author];
+  Campbell,-Grant-L [Author]
+AD: Ctr Dis Control and Prevent, Div Vector Borne Infect Dis, POB 2087, Ft
+  Collins, CO 80526 USA
+EMA: ebh2@cdc.gov
+SO: Emerging-Infectious-Diseases. 2005; 11(8): 1167-1173
+PY: 2005
+DT: Article
+IS: 1080-6040
+LA: English
+AB: From 1937 until 1999, West Nile virus (WNV) garnered scant medical attention
+  as the cause of febrile illness and sporadic encephalitis in parts of Africa,
+  Asia, and Europe. After the surprising detection of WNV in New York City in
+  1999, the virus has spread dramatically westward across the United States,
+  southward into Central America and the Caribbean, and northward into Canada,
+  resulting in the largest epidemics of neuroinvasive WNV disease ever reported.
+  From 1999 to 2004, > 7,000 neuroinvasive WNV disease cases were reported in the
+  United States. In 2002, WNV transmission through blood transfusion and organ
+  transplantation was described for the first time, intrauterine transmission was
+  first documented, and possible transmission through breastfeeding was reported.
+  This review highlights new information regarding the epidemiology and dynamics
+  of WNV transmission, providing a new platform for further research into
+  preventing and controlling WNV disease.
+AI: Y
+MC: Infection-; Neurology-: Human-Medicine, Medical-Sciences; Epidemiology-:
+  Population-Studies
+ST: -[03615-] Flaviviridae-, -Positive-Sense-ssRNA-Viruses, Viruses-,
+  Microorganisms-; -[86215-] Hominidae-, -Primates, Mammalia-, Vertebrata-,
+  Chordata-, Animalia-
+OR: West-Nile-virus (Flaviviridae-): species-, pathogen-; human- (Hominidae-):
+  common-, host-
+TN: Flaviviridae-: Microorganisms-, Positive-Sense-Single-Stranded-RNA-Viruses,
+  Viruses-; Hominidae-: Animals-, Chordates-, Humans-, Mammals-, Primates-,
+  Vertebrates-
+GE: Europe-: Palearctic-region; Africa-: Ethiopian-region, Palearctic-region;
+  Canada-: North-America, Nearctic-region; New-York-City: New-York, USA-, North
+  -America, Nearctic-region; Asia-: Oriental-region, Palearctic-region; Central
+  -America: Neotropical-region; Caribbean-: West-Indies, Neotropical-region
+DS: West-Nile-fever: nervous-system-disease, viral-disease, transmission-,
+  epidemiology-; sporadic-encephalitis: nervous-system-disease
+MQ: organ-transplantation: therapeutic-and-prophylactic-techniques, clinical
+  -techniques; blood-transfusion: therapeutic-and-prophylactic-techniques,
+  clinical-techniques
+CC: 20506- (Nervous-system-Pathology)
+33502- (Virology-General-and
+  -methods)
+36006- (Medical-and-clinical-microbiology-Virology)
+37052- (Public
+  -health-epidemiology-Communicable-diseases)
+37054- (Public-health-epidemiology
+  -Organic-diseases-and-neoplasms)
+37056- (Public-health-epidemiology
+  -Miscellaneous)
+AN: 200510220101
+UD: 20051025
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=1080
+  -6040&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:PREV&id=pmid:&id=&issn=1080
+  -6040&isbn=&volume=11&issue=8&spage=1167&pages=1167
+  -1173&date=2005&title=Emerging%20Infectious%20Diseases&atitle=Epidemiology%20and
+  %20transmission%20dynamics%20of%20West%20Nile%20Virus%20disease&aulast=Hayes&pid
+  =%3Cauthor%3EHayes%2c%20Edward%20B%3bKomar%2c%20Nicholas%3bNasci%2c%20Roger%20S%
+  3bMontgomery%2c%20Susan%20P%3bO%27Leary%2c%20Daniel%20R%3bCampbell%2c%20Grant%20
+  L%3C%2Fauthor%3E%3CAN%3E200510220101%3C%2FAN%3E%3CDT%3EArticle%3C%2FDT%3E
+
+Record 14 of 20 in BIOSIS Previews 2005: 46 2005/10/23-2005/10/29
+
+TI: Emerging infections and pregnancy: West Nile virus, monkeypox, severe acute
+  respiratory syndrome, and bioterrorism
+AU: Jamieson,-Denise-J [Author,-Reprint-Author]; Jernigan,-Daniel-B [Author];
+  Ellis,-Jane-E [Author]; Treadwell,-Tracee-A [Author]
+AD: Natl Ctr Chron Dis Prevent and Hlth Promot, Ctr Dis Control and Prevent, Div
+  Reprod Hlth, 4770 Buford Highway, Atlanta, GA 30341 USA
+EMA: djamieson@cdc.gov
+SO: Clinics-in-Perinatology. 2005; 32(3): 765-776,XI,XII-764
+PY: 2005
+DT: Article
+IS: 0095-5108
+LA: English
+AB: As new infectious diseases, such as West Nile virus, monkeypox, and severe
+  acute respiratory syndrome (SARS) are recognized in the United States, there
+  are critical questions about how these infectious diseases will affect pregnant
+  women and their infants. In addition, the implications of bioterrorist attacks
+  for exposed pregnant women need to be considered. In this article, the authors
+  address the following questions for a number of infectious disease threats: (1)
+  does pregnancy affect the clinical course of these novel infectious diseases?,
+  (2) what are the implications for prophylaxis and treatment of exposed or
+  infected pregnant women?, and (3) are these novel infectious diseases
+  transmitted during pregnancy, labor and delivery, or breastfeeding?
+AI: Y
+MC: Infection-; Obstetrics-: Human-Medicine, Medical-Sciences
+ST: -[75314-] Diptera-, -Insecta, Arthropoda-, Invertebrata-, Animalia-; -[86215
+  -] Hominidae-, -Primates, Mammalia-, Vertebrata-, Chordata-, Animalia-
+OR: Anthrax- (Diptera-): genus-; human- (Hominidae-): common-, adult-, infant-
+TN: Diptera-: Animals-, Arthropods-, Insects-, Invertebrates-; Hominidae-:
+  Animals-, Chordates-, Humans-, Mammals-, Primates-, Vertebrates-
+DS: severe-acute-respiratory-syndrome: SARS-, (Severe-Acute-Respiratory-Syndrome
+  -(MeSH)), respiratory-system-disease, viral-disease; smallpox-: (Smallpox
+  -(MeSH)), viral-disease; monkeypox-: viral-disease; West-Nile-fever: nervous
+  -system-disease, viral-disease
+MI: pregnancy-; bioterrorism-
+CC: 16006- (Respiratory-system-Pathology)
+16506- (Reproductive-system
+  -Pathology)
+20506- (Nervous-system-Pathology)
+25000- (Pediatrics-)
+36006-
+  (Medical-and-clinical-microbiology-Virology)
+64076- (Invertebrata-comparative
+  -experimental-morphology-physiology-and-pathology-Insecta-physiology)
+AN: 200510219105
+UD: 20051025
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=0095
+  -5108&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:PREV&id=pmid:&id=&issn=0095
+  -5108&isbn=&volume=32&issue=3&spage=&pages=&date=2005&title=Clinics%20in%20Perin
+  atology&atitle=Emerging%20infections%20and%20pregnancy%3a%20West%20Nile%20virus%
+  2c%20monkeypox%2c%20severe%20acute%20respiratory%20syndrome%2c%20and%20bioterror
+  ism&aulast=Jamieson&pid=%3Cauthor%3EJamieson%2c%20Denise%20J%3bJernigan%2c%20Dan
+  iel%20B%3bEllis%2c%20Jane%20E%3bTreadwell%2c%20Tracee%20A%3C%2Fauthor%3E%3CAN%3E
+  200510219105%3C%2FAN%3E%3CDT%3EArticle%3C%2FDT%3E
+
+Record 15 of 20 in BIOSIS Previews 2005: 46 2005/10/23-2005/10/29
+
+TI: The host type I interferon response to viral and bacterial infections
+AU: Perry,-Andrea-K [Author]; Chen,-Gang [Author]; Zheng,-Dahai [Author]; Tang,
+  -Hong [Author]; Cheng,-Genhong [Author,-Reprint-Author]
+AD: Univ Calif Los Angeles, Dept Microbiol Immunol and Mol Genet, 8-240 Factor
+  Bldg,10833 Le Conte Ave, Los Angeles, CA 90095 USA
+EMA: genhongc@microbio.ucla.edu
+SO: Cell-Research. 2005; 15(6): 407-422
+PY: 2005
+DT: Literature-Review; Article
+IS: 1001-0602
+LA: English
+AB: Type I interferons (IFN) are well studied cytokines with anti-viral and
+  immune-modulating functions. Type I IFNs are produced following viral
+  infections, but until recently, the mechanisms of viral recognition leading to
+  IFN production were largely unknown. Toll like receptors (TLRs) have emerged as
+  key transducers of type I IFN during viral infections by recognizing various
+  viral components. Furthermore, much progress has been made in defining the
+  signaling pathways downstream of TLRs for type I IFN production. TLR7 and TLR9
+  have become apparent as universally important in inducing type I IFN during
+  infection with most viruses, particularly by plasmacytoid dendritic cells. New
+  intracellular viral pattern recognition receptors leading to type I IFN
+  production have been identified. Many bacteria can also induce the up
+  -regulation of these cytokines. Interestingly, recent studies have found a
+  detrimental effect on host cells if type I IFN is produced during infection
+  with the intracellular gram-positive bacterial pathogen, Listeria
+  monocytogenes. This review will discuss the recent advances made in defining
+  the signaling pathways leading to type I IFN production.
+AI: Y
+MC: Infection-; Biochemistry-and-Molecular-Biophysics
+ST: -[03615-] Flaviviridae-, -Positive-Sense-ssRNA-Viruses, Viruses-,
+  Microorganisms-; -[03115-] Herpesviridae-, -dsDNA-Viruses, Viruses-,
+  Microorganisms-; -[08881-] Mycobacteriaceae-, -Mycobacteria, Actinomycetes-and
+  -Related-Organisms, Eubacteria-, Bacteria-, Microorganisms-; -[03505-]
+  Orthomyxoviridae-, -Negative-Sense-ssRNA-Viruses, Viruses-, Microorganisms-; 
+  -[03503-] Paramyxoviridae-, -Negative-Sense-ssRNA-Viruses, Viruses-,
+  Microorganisms-; -[07830-] Regular-Nonsporing-Gram-Positive-Rods, -Eubacteria,
+  Bacteria-, Microorganisms-; -[03504-] Rhabdoviridae-, -Negative-Sense-ssRNA
+  -Viruses, Viruses-, Microorganisms-
+OR: West-Nile-virus (Flaviviridae-): species-, pathogen-; Human-herpesvirus-1
+  (Herpesviridae-): species-, Herpes-simplex-virus-1, common-, pathogen-; Human
+  -herpesvirus-2 (Herpesviridae-): species-, HSV-2, common-, pathogen-; Murine
+  -cytomegalovirus (Herpesviridae-): species-, MCMV-, common-, pathogen-;
+  Mycobacterium-tuberculosis (Mycobacteriaceae-): species-, pathogen-; Influenza
+  -virus (Orthomyxoviridae-): species-; Sendai-virus (Paramyxoviridae-): species
+  -, pathogen-; Newcastle-disease-virus (Paramyxoviridae-): species-, NDV-,
+  common-, pathogen-; Listeria-monocytogenes (Regular-Nonsporing-Gram-Positive
+  -Rods): species-, pathogen-; Vesicular-stomatitis-virus (Rhabdoviridae-):
+  common-, pathogen-
+TN: Flaviviridae-: Microorganisms-, Positive-Sense-Single-Stranded-RNA-Viruses,
+  Viruses-; Herpesviridae-: Double-Stranded-DNA-Viruses, Microorganisms-, Viruses
+  -; Mycobacteriaceae-: Bacteria-, Eubacteria-, Microorganisms-; Orthomyxoviridae
+  -: Microorganisms-, Negative-Sense-Single-Stranded-RNA-Viruses, Viruses-;
+  Paramyxoviridae-: Microorganisms-, Negative-Sense-Single-Stranded-RNA-Viruses,
+  Viruses-; Regular-Nonsporing-Gram-Positive-Rods: Bacteria-, Eubacteria-,
+  Microorganisms-; Rhabdoviridae-: Microorganisms-, Negative-Sense-Single
+  -Stranded-RNA-Viruses, Viruses-
+PS: plasmacytoid-dendritic-cell: immune-system
+CB: type-I-interferon; TLR7-: Toll-like-receptor-7; TLR9-: Toll-like-receptor-9
+DS: viral-infection: (Virus-Diseases-(MeSH)), viral-disease; bacterial
+  -infection: (Bacterial-Infections-(MeSH)), bacterial-disease
+CC: 10060- (Biochemistry-studies-General)
+31000- (Physiology-and-biochemistry
+  -of-bacteria)
+33502- (Virology-General-and-methods)
+34502- (Immunology
+  -General-and-methods)
+36006- (Medical-and-clinical-microbiology-Virology)
+AN: 200510218429
+UD: 20051025
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=1001
+  -0602&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:PREV&id=pmid:&id=&issn=1001
+  -0602&isbn=&volume=15&issue=6&spage=407&pages=407
+  -422&date=2005&title=Cell%20Research&atitle=The%20host%20type%20I%20interferon%2
+  0response%20to%20viral%20and%20bacterial%20infections&aulast=Perry&pid=%3Cauthor
+  %3EPerry%2c%20Andrea%20K%3bChen%2c%20Gang%3bZheng%2c%20Dahai%3bTang%2c%20Hong%3b
+  Cheng%2c%20Genhong%3C%2Fauthor%3E%3CAN%3E200510218429%3C%2FAN%3E%3CDT%3ELiteratu
+  re%20Review%3bArticle%3C%2FDT%3E
+
+Record 16 of 20 in BIOSIS Previews 2005: 46 2005/10/23-2005/10/29
+
+TI: A mathematical model for assessing control strategies against West Nile virus
+AU: Bowman,-C [Author]; Gumel,-A-B [Author,-Reprint-Author]; van-den-Driessche,
+  -P [Author]; Wu,-J [Author]; Zhu,-H [Author]
+AD: Univ Manitoba, Dept Math, 342 Machray Hall, Winnipeg, MB R3T 2N2, Canada
+EMA: gumelab@cc.umanitoba.ca
+SO: Bulletin-of-Mathematical-Biology. 2005; 67(5): 1107-1133
+PY: 2005
+DT: Article
+IS: 0092-8240
+LA: English
+AB: Since its incursion into North America in 1999, West Nile virus (WNV) has
+  spread rapidly across the continent resulting in numerous human infections and
+  deaths. Owing to the absence of an effective diagnostic test and therapeutic
+  treatment against WNV, public health officials have focussed on the use of
+  preventive measures in an attempt to halt the spread of WNV in humans. The aim
+  of this paper is to use mathematical modelling and analysis to assess two main
+  anti-WNV preventive strategies, namely: mosquito reduction strategies and
+  personal protection. We propose a single-season ordinary differential equation
+  model for the transmission dynamics of WNV in a mosquito-bird-human community,
+  with birds as reservoir hosts and culicine mosquitoes as vectors. The model
+  exhibits two equilibria; namely the disease-free equilibrium and a unique
+  endemic equilibrium. Stability analysis of the model shows that the disease
+  -free equilibrium is globally asymptotically stable if a certain threshold
+  quantity (R-0), which depends solely on parameters associated with the mosquito
+  -bird cycle, is less than unity. The public health implication of this is that
+  WNV can be eradicated from the mosquito-bird cycle (and, consequently, from the
+  human population) if the adopted mosquito reduction strategy (or strategies)
+  can make R-0 < 1. On the other hand, it is shown, using a novel and robust
+  technique that is based on the theory of monotone dynamical systems coupled
+  with a regular perturbation argument and a Liapunov function, that if R-0 > 1,
+  then the unique endemic equilibrium is globally stable for small WNV-induced
+  avian mortality. Thus, in this case, WNV persists in the mosquito-bird
+  population. (c) 2005 Society for Mathematical Biology. Published by Elsevier
+  Ltd. All rights reserved.
+AI: Y
+MC: Epidemiology-: Population-Studies; Ecology-: Environmental-Sciences; Models
+  -and-Simulations: Computational-Biology
+ST: -[85500-] Aves-, -Vertebrata, Chordata-, Animalia-; -[75314-] Diptera-, 
+  -Insecta, Arthropoda-, Invertebrata-, Animalia-; -[03615-] Flaviviridae-, 
+  -Positive-Sense-ssRNA-Viruses, Viruses-, Microorganisms-; -[86215-] Hominidae-,
+  -Primates, Mammalia-, Vertebrata-, Chordata-, Animalia-
+OR: bird- (Aves-): common-; mosquito- (Diptera-): common-, disease-vector; West
+  -Nile-virus (Flaviviridae-): species-, pathogen-; human- (Hominidae-): common-,
+  host-
+TN: Aves-: Animals-, Birds-, Chordates-, Nonhuman-Vertebrates, Vertebrates-;
+  Diptera-: Animals-, Arthropods-, Insects-, Invertebrates-; Flaviviridae-:
+  Microorganisms-, Positive-Sense-Single-Stranded-RNA-Viruses, Viruses-;
+  Hominidae-: Animals-, Chordates-, Humans-, Mammals-, Primates-, Vertebrates-
+GE: North-America: Nearctic-region
+MI: control-strategy; transmission-dynamics; mosquito-reduction-strategy;
+  personal-protection
+CC: 04500- (Mathematical-biology-and-statistical-methods)
+07502- (Ecology
+  -environmental-biology-General-and-methods)
+07508- (Ecology-environmental
+  -biology-Animal)
+10515- (Biophysics-Biocybernetics)
+33502- (Virology-General
+  -and-methods)
+37056- (Public-health-epidemiology-Miscellaneous)
+64076-
+  (Invertebrata-comparative-experimental-morphology-physiology-and-pathology
+  -Insecta-physiology)
+AN: 200510217806
+UD: 20051025
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=0092
+  -8240&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:PREV&id=pmid:&id=&issn=0092
+  -8240&isbn=&volume=67&issue=5&spage=1107&pages=1107
+  -1133&date=2005&title=Bulletin%20of%20Mathematical%20Biology&atitle=A%20mathemat
+  ical%20model%20for%20assessing%20control%20strategies%20against%20West%20Nile%20
+  virus&aulast=Bowman&pid=%3Cauthor%3EBowman%2c%20C%3bGumel%2c%20A%20B%3bvan%20den
+  %20Driessche%2c%20P%3bWu%2c%20J%3bZhu%2c%20H%3C%2Fauthor%3E%3CAN%3E200510217806%
+  3C%2FAN%3E%3CDT%3EArticle%3C%2FDT%3E
+
+Record 17 of 20 in BIOSIS Previews 2005: 46 2005/10/23-2005/10/29
+
+TI: West Nile Virus encephalopathy in an allogeneic stem cell transplant
+  recipient: use of quantitative PCR for diagnosis and assessment of viral
+  clearance (vol 36, pg 369, 2005)
+AU: Brenner,-W [Author,-Reprint-Author]; Storch,-G [Author]; Buller,-R [Author];
+  Vij,-R [Author]; Devine,-S [Author]; DiPersio,-J [Author]
+AD: Washington Univ, Sch Med, Sect Bone Marrow Transplantat and Leukemia, St
+  Louis, MO 63130 USA
+SO: Bone-Marrow-Transplantation. 2005; 36(4): 369-370
+PY: 2005
+DT: Letter
+IS: 0268-3369
+LA: English
+MC: Methods-and-Techniques; Clinical-Chemistry: Allied-Medical-Sciences;
+  Infection-
+ST: -[03615-] Flaviviridae-, -Positive-Sense-ssRNA-Viruses, Viruses-,
+  Microorganisms-; -[86215-] Hominidae-, -Primates, Mammalia-, Vertebrata-,
+  Chordata-, Animalia-
+OR: West-Nile-virus (Flaviviridae-): species-, pathogen-; human- (Hominidae-):
+  common-, middle-age, host-, female-
+TN: Flaviviridae-: Microorganisms-, Positive-Sense-Single-Stranded-RNA-Viruses,
+  Viruses-; Hominidae-: Animals-, Chordates-, Humans-, Mammals-, Primates-,
+  Vertebrates-
+PS: brain-: nervous-system; pericardial-fluid; spine-: skeletal-system
+DS: encephalopathy-: nervous-system-disease; seizures-: (Seizures-(MeSH)),
+  nervous-system-disease; quadriplegia-: (Quadriplegia-(MeSH)), nervous-system
+  -disease; encephalitis-: (Encephalitis-(MeSH)), nervous-system-disease,
+  etiology-; chronic-myeloid-leukemia: CML-, (Leukemia-, Myeloid-, Chronic
+  -(MeSH)), neoplastic-disease, blood-and-lymphatic-disease; cardiac-tamponade:
+  (Cardiac-Tamponade-(MeSH)), heart-disease, symptom-
+MQ: magnetic-resonance-imaging: laboratory-techniques, diagnostic-techniques,
+  clinical-techniques, imaging-and-microscopy-techniques; cytology-: laboratory
+  -techniques, histology-and-cytology-techniques; stem-cell-transplantation:
+  therapeutic-and-prophylactic-techniques, clinical-techniques; lumbar-puncture:
+  clinical-techniques, diagnostic-techniques; quantitative-polymerase-chain
+  -reaction: laboratory-techniques, genetic-techniques; unrelated-donor-bone
+  -marrow-transplantation: therapeutic-and-prophylactic-techniques, clinical
+  -techniques
+MI: viral-clearance
+CC: 10006- (Clinical-biochemistry-General-methods-and-applications)
+14506-
+  (Cardiovascular-system-Heart-pathology)
+15006- (Blood-Blood-lymphatic-and
+  -reticuloendothelial-pathologies)
+18004- (Bones-joints-fasciae-connective-and
+  -adipose-tissue-Physiology-and-biochemistry)
+20504- (Nervous-system-Physiology
+  -and-biochemistry)
+20506- (Nervous-system-Pathology)
+24004- (Neoplasms
+  -Pathology-clinical-aspects-and-systemic-effects)
+24010- (Neoplasms-Blood-and
+  -reticuloendothelial-neoplasms)
+33502- (Virology-General-and-methods)
+36006-
+  (Medical-and-clinical-microbiology-Virology)
+AN: 200510217558
+UD: 20051025
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=0268
+  -3369&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:PREV&id=pmid:&id=&issn=0268
+  -3369&isbn=&volume=36&issue=4&spage=369&pages=369
+  -370&date=2005&title=Bone%20Marrow%20Transplantation&atitle=West%20Nile%20Virus%
+  20encephalopathy%20in%20an%20allogeneic%20stem%20cell%20transplant%20recipient%3
+  a%20use%20of%20quantitative%20PCR%20for%20diagnosis%20and%20assessment%20of%20vi
+  ral%20clearance%20%28vol%2036%2c%20pg%20369%2c%202005%29&aulast=Brenner&pid=%3Ca
+  uthor%3EBrenner%2c%20W%3bStorch%2c%20G%3bBuller%2c%20R%3bVij%2c%20R%3bDevine%2c%
+  20S%3bDiPersio%2c%20J%3C%2Fauthor%3E%3CAN%3E200510217558%3C%2FAN%3E%3CDT%3ELette
+  r%3C%2FDT%3E
+
+Record 18 of 20 in BIOSIS Previews 2005: 46 2005/10/23-2005/10/29
+
+TI: Identifying the region influencing the cis-mode of maturation of West Nile
+  (Sarafend) virus using chimeric infectious clones
+AU: Li,-J [Author]; Bhuvanakantham,-R [Author]; Howe,-J [Author]; Ng,-M-L
+  [Author,-Reprint-Author]
+AD: Natl Univ Singapore, Flavivriol Lab, Dept Microbiol, 5 Sci Dr 2, Singapore
+  117597, Singapore
+EMA: micngml@nus.edu.sg
+SO: Biochemical-and-Biophysical-Research-Communications. 2005; 334(2): 714-720
+PY: 2005
+DT: Article
+IS: 0006-291X
+LA: English
+AB: West Nile (Sarafend) virus [WN(S)V] has been shown to egress by budding at
+  the plasma membrane of infected cells. However, the region influencing this
+  mode of virus release remains to be deciphered. In this study, we have
+  constructed three chimeric clones in which specific regions of West Nile
+  (Wengler) virus [WN(W)V] were replaced for the corresponding regions of WN(S)V
+  in the full-length infectious clone of WN(S)V to define the region responsible
+  for the cis-niode of WN(S)V maturation. The WN(W)V matures by the trans-mode.
+  All of the resulting chimeric viruses were found to be infective. Transmission
+  electron microscopy analyses performed in Vero cells infected with these
+  chimeric Viruses disclosed that the 5' end of the WN(S)V genome plays a major
+  role in influencing the process of maturation at the plasma membrane. (c) 2005
+  Elsevier Inc. All rights reserved.
+AI: Y
+MC: Infection-; Molecular-Genetics: Biochemistry-and-Molecular-Biophysics
+ST: -[86205-] Cercopithecidae-, -Primates, Mammalia-, Vertebrata-, Chordata-,
+  Animalia-; -[03615-] Flaviviridae-, -Positive-Sense-ssRNA-Viruses, Viruses-,
+  Microorganisms-
+OR: Vero-cell-line (Cercopithecidae-): cell_line-, host-; West-Nile-virus
+  (Flaviviridae-): species-, pathogen-, strain-Wengler, strain-Sarafend
+TN: Cercopithecidae-: Animals-, Chordates-, Mammals-, Nonhuman-Mammals, Nonhuman
+  -Vertebrates, Nonhuman-Primates, Primates-, Vertebrates-; Flaviviridae-:
+  Microorganisms-, Positive-Sense-Single-Stranded-RNA-Viruses, Viruses-
+PS: plasma-membrane
+MI: budding-; cis-mode-of-maturation; chimeric-infectious-clone
+CC: 02506- (Cytology-Animal)
+03502- (Genetics-General)
+03506- (Genetics
+  -Animal)
+31500- (Genetics-of-bacteria-and-viruses)
+33502- (Virology-General
+  -and-methods)
+36006- (Medical-and-clinical-microbiology-Virology)
+AN: 200510216490
+UD: 20051025
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=0006
+  -291X&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:PREV&id=pmid:&id=&issn=0006
+  -291X&isbn=&volume=334&issue=2&spage=714&pages=714
+  -720&date=2005&title=Biochemical%20and%20Biophysical%20Research%20Communications
+  &atitle=Identifying%20the%20region%20influencing%20the%20cis
+  -mode%20of%20maturation%20of%20West%20Nile%20%28Sarafend%29%20virus%20using%20ch
+  imeric%20infectious%20clones&aulast=Li&pid=%3Cauthor%3ELi%2c%20J%3bBhuvanakantha
+  m%2c%20R%3bHowe%2c%20J%3bNg%2c%20M%20L%3C%2Fauthor%3E%3CAN%3E200510216490%3C%2FA
+  N%3E%3CDT%3EArticle%3C%2FDT%3E
+
+Record 19 of 20 in BIOSIS Previews 2005: 47 2005/10/30-2005/11/05
+
+TI: Culex quinquefasciatus (Diptera : Culicidae) as a potential West Nile virus
+  vector in Tucson, Arizona: Blood meal analysis indicates feeding on both humans
+  and birds - 
+AU: Zinser,-Margaret [Author]; Ramberg,-Frank [Author]; Willott,-Elizabeth
+  [Author,-Reprint-Author]
+AD: Univ Arizona, Dept Entomol, Forbes 410, Tucson, AZ 85721 USA
+EMA: willott@ag.arizona.edu
+SO: Journal-of-Insect-Science-(Tucson). 2004; 4
+PY: 2004
+DT: Article
+IS: 1536-2442
+LA: English
+AB: Most reports from the United States suggest Culex quinquefasciatus
+  mosquitoes feed minimally on humans. Given the abundance of C. quinquefasciatus
+  in residential Tucson and parts of metropolitan Phoenix, and the arrival of
+  West Nile virus to this area, discovering the blood meal hosts of the local
+  population is important. Using a sandwich ELISA technique, the local C.
+  quinquefasciatus were found to feed on both humans and birds. This suggests
+  they should be considered potential West Nile virus vectors.
+AI: Y
+MC: Biogeography-: Population-Studies; Methods-and-Techniques; Infection-;
+  Terrestrial-Ecology: Ecology-, Environmental-Sciences
+ST: -[75314-] Diptera-, -Insecta, Arthropoda-, Invertebrata-, Animalia-; -[03615
+  -] Flaviviridae-, -Positive-Sense-ssRNA-Viruses, Viruses-, Microorganisms-; 
+  -[86215-] Hominidae-, -Primates, Mammalia-, Vertebrata-, Chordata-, Animalia-
+OR: Culex-quinquefasciatus (Diptera-): species-, mosquito-, common-, disease
+  -vector; West-Nile-virus (Flaviviridae-): species-, pathogen-; human-
+  (Hominidae-): common-, host-
+TN: Diptera-: Animals-, Arthropods-, Insects-, Invertebrates-; Flaviviridae-:
+  Microorganisms-, Positive-Sense-Single-Stranded-RNA-Viruses, Viruses-;
+  Hominidae-: Animals-, Chordates-, Humans-, Mammals-, Primates-, Vertebrates-
+PS: blood-: blood-and-lymphatics
+GE: Tucson-: Arizona-, USA-, North-America, Nearctic-region
+DS: West-Nile-fever: nervous-system-disease, viral-disease, transmission-
+MQ: ELISA-: laboratory-techniques, immunologic-techniques; blood-meal-analysis:
+  laboratory-techniques
+CC: 05500- (Social-biology-and-human-ecology)
+07502- (Ecology-environmental
+  -biology-General-and-methods)
+07508- (Ecology-environmental-biology
+  -Animal)
+15002- (Blood-Blood-and-lymph-studies)
+15004- (Blood-Blood-cell
+  -studies)
+20506- (Nervous-system-Pathology)
+33502- (Virology-General-and
+  -methods)
+36006- (Medical-and-clinical-microbiology-Virology)
+62800- (Animal
+  -distribution)
+64076- (Invertebrata-comparative-experimental-morphology
+  -physiology-and-pathology-Insecta-physiology)
+AN: 200510238919
+UD: 20051102
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=1536
+  -2442&lpa.holdlink.isbn=
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:PREV&id=pmid:&id=&issn=1536
+  -2442&isbn=&volume=4&issue=Tucson&spage=&pages=4&date=2004&title=Journal%20of%20
+  Insect%20Science%20%28Tucson%29&atitle=Culex%20quinquefasciatus%20%28Diptera%20%
+  3a%20Culicidae%29%20as%20a%20potential%20West%20Nile%20virus%20vector%20in%20Tuc
+  son%2c%20Arizona%3a%20Blood%20meal%20analysis%20indicates%20feeding%20on%20both%
+  20humans%20and%20birds%20
+  -%20&aulast=Zinser&pid=%3Cauthor%3EZinser%2c%20Margaret%3bRamberg%2c%20Frank%3bW
+  illott%2c%20Elizabeth%3C%2Fauthor%3E%3CAN%3E200510238919%3C%2FAN%3E%3CDT%3EArtic
+  le%3C%2FDT%3E
+
+Record 20 of 20 in BIOSIS Previews 2005: 46 2005/10/23-2005/10/29
+
+TI: Using science to address a growing worldwide water dilemma for the 21(st)
+  century
+AU: Eden,-Susanna [Author,-Reprint-Author]; Lawford,-Richard-G [Author]
+BK: Water Resources Monograph Series. 2003; 16: 15-41
+AUB: Lawford-RG; Fort-DD; Hartmann-HC; Eden-S
+PB: AMER GEOPHYSICAL UNION, 2000 FLORIDA AVE NW, WASHINGTON, DC 20009 USA
+PY: 2003
+DT: Book-Chapter; Meeting
+IB: 0875903207
+MT: Spring Meeting of the American-Geophysical-Union, WASHINGTON, D.C.; May 30 
+  -June 03, 2000
+SP: Amer Geophys Union
+SE: WATER RESOURCES MONOGRAPH SERIES.
+LA: English
+MC: Infection-; Pollution-Assessment-Control-and-Management; Gastroenterology-:
+  Human-Medicine, Medical-Sciences; Neurology-: Human-Medicine, Medical-Sciences;
+  Public-Health: Allied-Medical-Sciences
+ST: -[05000-] Bacteria-, -Microorganisms; -[03615-] Flaviviridae-, -Positive
+  -Sense-ssRNA-Viruses, Viruses-, Microorganisms-; -[86215-] Hominidae-, 
+  -Primates, Mammalia-, Vertebrata-, Chordata-, Animalia-; -[03402-] Reoviridae-,
+  -dsRNA-Viruses, Viruses-, Microorganisms-; -[03404-] Totiviridae-, -dsRNA
+  -Viruses, Viruses-, Microorganisms-
+OR: bacteria- (Bacteria-): common-, pathogen-; West-Nile-virus (Flaviviridae-):
+  species-, pathogen-; human- (Hominidae-): common-, host-; Rotavirus-
+  (Reoviridae-): species-, pathogen-; Giardiavirus- (Totiviridae-): species-,
+  pathogen-
+TN: Bacteria-: Bacteria-, Eubacteria-, Microorganisms-; Flaviviridae-:
+  Microorganisms-, Positive-Sense-Single-Stranded-RNA-Viruses, Viruses-;
+  Hominidae-: Animals-, Chordates-, Humans-, Mammals-, Primates-, Vertebrates-;
+  Reoviridae-: Double-Stranded-RNA-Viruses, Microorganisms-, Viruses-;
+  Totiviridae-: Double-Stranded-RNA-Viruses, Microorganisms-, Viruses-
+DS: diarrhea-: (Diarrhea-(MeSH)), digestive-system-disease; cholera-: (Cholera
+  -(MeSH)), bacterial-disease; Rotavirus-infection: viral-disease; West-Nile
+  -virus-infection: nervous-system-disease, viral-disease; dengue-fever: (Dengue
+  -(MeSH)), viral-disease; yellow-fever: (Yellow-Fever-(MeSH)), viral-disease;
+  water-borne-disease: disease-miscellaneous; Giardiavirus-infection: viral
+  -disease
+MI: WHO-; climate-change; water-management; water-availability; water
+  -distribution; distribution-system; water-cycle; water-use; water-development;
+  worldwide-water-dilemma; water-inventory
+CC: 14006- (Digestive-system-Pathology)
+20506- (Nervous-system
+  -Pathology)
+31000- (Physiology-and-biochemistry-of-bacteria)
+33502- (Virology
+  -General-and-methods)
+36002- (Medical-and-clinical-microbiology
+  -Bacteriology)
+36006- (Medical-and-clinical-microbiology-Virology)
+37001-
+  (Public-health-General-and-miscellaneous)
+37015- (Public-health-Air-water-and
+  -soil-pollution)
+AN: 200510231650
+UD: 20051025
+WEBLH: Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=&lpa.holdli
+  nk.isbn=0875903207
+ILINK: <img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:PREV&id=pmid:&id=&issn=&isbn=087590
+  3207&volume=&issue=&spage=&pages=&date=2003&title=&atitle=Using%20science%20to%2
+  0address%20a%20growing%20worldwide%20water%20dilemma%20for%20the%2021%28st%29%20
+  century&aulast=Eden&pid=%3Cauthor%3EEden%2c%20Susanna%3bLawford%2c%20Richard%20G
+  %3C%2Fauthor%3E%3CAN%3E200510231650%3C%2FAN%3E%3CDT%3EBook%20Chapter%3bMeeting%3
+  C%2FDT%3E
+

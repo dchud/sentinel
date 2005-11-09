@@ -1,0 +1,66 @@
+Record 1 of 1 in BIOSIS Previews 2005: 46 2005/10/23-2005/10/29
+
+TI: Detection of Avian Influenza virus in tracheal swab samples using a
+  commercial antigen capture test.
+AU: Rojas,-A [Author]; Rosario,-C [Author]; Merino,-R [Author]
+SO: Poultry-Science. 2004; 83(10): 1813-1814
+PY: 2004
+DT: Meeting-Abstract; Meeting
+IS: 0032-5791
+LA: English
+MC: Infection-; Methods-and-Techniques; Respiratory-System: Respiration-;
+  Veterinary-Medicine: Medical-Sciences
+ST: -[85536-] Galliformes-, -Aves, Vertebrata-, Chordata-, Animalia-; -[03505-]
+  Orthomyxoviridae-, -Negative-Sense-ssRNA-Viruses, Viruses-, Microorganisms-
+OR: broiler-chicken (Galliformes-): common-, host-; Avian-influenza-virus
+  (Orthomyxoviridae-): common-, pathogen-
+TN: Galliformes-: Animals-, Birds-, Chordates-, Nonhuman-Vertebrates,
+  Vertebrates-; Orthomyxoviridae-: Microorganisms-, Negative-Sense-Single
+  -Stranded-RNA-Viruses, Viruses-
+DS: avian-influenza-virus-infection: (Influenza-(MeSH)), respiratory-system
+  -disease, viral-disease, etiology-, diagnosis-
+MQ: PCR-: polymerase-chain-reaction, laboratory-techniques, genetic-techniques;
+  tracheal-swab: laboratory-techniques, immunologic-techniques; antigen-capture
+  -test: laboratory-techniques, immunologic-techniques
+CC: 00520- (General-biology-Symposia-transactions-and-proceedings)
+10062-
+  (Biochemistry-studies-Nucleic-acids-purines-and-pyrimidines)
+12504- (Pathology
+  -Diagnostic)
+16004- (Respiratory-system-Physiology-and-biochemistry)
+16006-
+  (Respiratory-system-Pathology)
+33502- (Virology-General-and-methods)
+36006-
+  (Medical-and-clinical-microbiology-Virology)
+38002- (Veterinary-science
+  -General-and-methods)
+38004- (Veterinary-science-Pathology)
+38006-
+  (Veterinary-science-Microbiology)
+AN: 200510229444
+UD: 20051025
+
+This document is available from the following sources:
+
+Link to holdings information
+Check for Holdings
+  http://sladmin.silverplatter.com:4416/lpascripts/holdlink.pl?lpa.holdlink.url=ht
+  tp://orbexpress.library.yale.edu/cgi
+  -bin/Pwebrecon.cgi?DB%3Dlocal%26BOOL1%3Das%2Ba%2Bphrase%26&lpa.holdlink.issnurl=
+  FLD1%3DISSN%2B%28ISSN%29%26CNT%3D50%26SAB1%3D$$LPAISSN&lpa.holdlink.isbnurl=FLD1
+  %3DISBN%2B%28ISBN%29%26CNT%3D50%26SAB1%3D$$LPAISBN&lpa.holdlink.issn=0032
+  -5791&lpa.holdlink.isbn=
+
+Related information can be found at the following sources:
+
+Related internet links
+<img src=http://www.library.yale.edu/sfx/images/sfx.gif>
+  http://sfx.library.yale.edu/sfx_local?sid=SP:PREV&id=pmid:&id=&issn=0032
+  -5791&isbn=&volume=83&issue=10&spage=1813&pages=1813
+  -1814&date=2004&title=Poultry%20Science&atitle=Detection%20of%20Avian%20Influenz
+  a%20virus%20in%20tracheal%20swab%20samples%20using%20a%20commercial%20antigen%20
+  capture%20test.&aulast=Rojas&pid=%3Cauthor%3ERojas%2c%20A%3bRosario%2c%20C%3bMer
+  ino%2c%20R%3C%2Fauthor%3E%3CAN%3E200510229444%3C%2FAN%3E%3CDT%3EMeeting%20Abstra
+  ct%3bMeeting%3C%2FDT%3E
+
