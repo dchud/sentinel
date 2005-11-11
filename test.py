@@ -7,14 +7,17 @@ Run all tests:
 
 Or a specific suite (search, parsing, stats)
 
-    ./test.py parsing 
+    ./test.py parser
 
 $Id$
 """
 
-from test import StatsTests, SearchTests, PubmedMedlineTests, OvidMedlineTests
-from unittest import TestSuite, TextTestRunner, makeSuite
+from os import system
 from sys import argv
+from unittest import TestSuite, TextTestRunner, makeSuite
+
+from test import StatsTests, SearchTests, PubmedMedlineTests, \
+    OvidMedlineTests, BiosisPreviewsTests
 
 # determine if we should all or just one 
 tests = [ 'stats', 'parsing', 'search' ]
@@ -29,15 +32,15 @@ if 'stats' in tests:
 if 'search' in tests:
     suite.addTest(makeSuite(SearchTests, 'test'))
 
-if 'parsing' in tests:
+if 'parser' in tests:
     suite.addTest(makeSuite(PubmedMedlineTests, 'test'))
     suite.addTest(makeSuite(OvidMedlineTests, 'test'))
+    suite.addTest(makeSuite(BiosisPreviewsTests, 'test'))
 
 # run 'em 
 runner = TextTestRunner(verbosity=2)
 runner.run(suite)
 
 # clean up .pyc files
-import os
-os.system('\\rm canary/*.pyc')
-os.system('\\rm test/*.pyc')
+system('\\rm canary/*.pyc')
+system('\\rm test/*.pyc')

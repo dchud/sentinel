@@ -53,6 +53,7 @@ class PubmedMedlineTests (ParserTests):
         metadata = self.get_mapped_metadata(records[0])
         self.assertTrue(metadata['author'] == ['Tang S', 'Han H', 'Bajic VB'])
 
+
 class OvidMedlineTests (ParserTests):
 
     def __init__ (self, name):
@@ -73,4 +74,14 @@ class OvidMedlineTests (ParserTests):
         metadata = self.get_mapped_metadata(records[199])
         self.assertTrue(len(metadata['author']) == 2)
         self.assertTrue(metadata['author'] == ['Weber DJ', 'Rutala WA'])
-        
+
+
+class BiosisPreviewsTests (ParserTests):
+
+    def __init__ (self, name):
+        ParserTests.__init__(self, name, 'biosis-previews')
+
+    def test_length (self):
+        records = self.parse('test/data/webspirs-biosis-250.txt')
+        self.assertTrue(len(records) == 250)
+
