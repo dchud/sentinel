@@ -333,10 +333,16 @@ def login_yale [html] (request):
     from canary.ui.pageframe import header, footer
     header('Log in')
     """
-    <h2>You are not logged in</h2>
+    <h3>Log in</h3>
 
     <p>
-    You are not logged in.  Please log in through the <a href='%s'>Yale CAS</a>.
+    You are not logged in.  Please <a 
+    href="http://canarydatabase.org/login">log in here</a>.
+    </p>
+    
+    <p>
+    If you are Canary project staff at Yale,
+    please log in through the <a href='%s'>Yale CAS</a>.
     </p>
     """ % login_url
     footer()
