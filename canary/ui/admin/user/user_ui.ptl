@@ -7,6 +7,7 @@ _q_exports = [
     ]
 
 import logging
+import traceback
 
 from quixote import get_publisher, get_request
 from quixote.errors import TraversalError
@@ -54,6 +55,8 @@ class UserActions:
             else:
                 raise TraversalError
         except:
+            context = get_publisher().context
+            context.logger.error(traceback.print_exc())
             return not_found('user')
 
 
@@ -84,6 +87,10 @@ class UserForm (MyForm):
         self.add(form2.CheckboxWidget, 'is_active', 
             title='Active', 
             value=True)
+        self.add(form2.StringWidget, 'user_netid',
+            title='Yale netid',
+            size=10,
+            required=False)
         self.add(form2.PasswordWidget, 'user_pass',
             title='Set user password', 
             required=False)
@@ -138,6 +145,8 @@ def create [html] (request):
         user.is_assistant = True
     if form['is_active']:
         user.is_active = True
+    if form['user_netid']:
+        user.netid = form['user_netid']
 
     user.save(context)
     form.logger.info(str('Created user %s' % user_id))
@@ -173,56 +182,63 @@ def edit [html] (user_id=None):
             form.get_widget('is_active').set_value(user.is_active)
         except:
             form.get_widget('is_active').set_value(True)
+        form.get_widget('user_netid').set_value(user.netid)
         return render()
 
-    user_id = form['user_id']
-    user_email = form['user_email']
-    user_pass = form['user_pass']
-    if not user_id == user.get_id():
-        form.set_error('user_id', 'User id cannot be changed')
-        form.get_widget('user_id').set_value(user.get_id())
-    if not is_valid_email(user_email):
-        form.set_error('user_email', 'Please enter a valid email address.')
-    if not user_pass == None and not is_valid_password(user_pass):
-        form.set_error('user_pass', 'Must be at least 4 charcters.')
+    try:
+        user_id = form['user_id']
+        user_email = form['user_email']
+        user_pass = form['user_pass']
+        if not user_id == user.get_id():
+            form.set_error('user_id', 'User id cannot be changed')
+            form.get_widget('user_id').set_value(user.get_id())
+        if not is_valid_email(user_email):
+            form.set_error('user_email', 'Please enter a valid email address.')
+        if not user_pass == None and not is_valid_password(user_pass):
+            form.set_error('user_pass', 'Must be at least 4 charcters.')
+    
+        if form.has_errors():
+            return render()
+    
+        user.email = user_email
+    
+        if form['user_name']:
+            user.name = form['user_name']
+    
+        if form['is_editor']:
+            user.is_editor = True
+        else:
+            user.is_editor = False
+    
+        if form['is_admin']:
+            user.is_admin = True
+        else:
+            user.is_admin = False
+    
+        if form['is_assistant']:
+            user.is_assistant = True
+        else:
+            user.is_assistant = False
+    
+        if form['is_active']:
+            user.is_active = True
+        else:
+            user.is_active = False
+    
+        if user_pass:
+            user.set_password(user_pass)
+            
+        if form['user_netid']:
+            user.netid = form['user_netid']
+    
+        user.save(context)
+        add_message('Edited user %s' % user_id)
+        form.logger.info(str('Edited user %s' % user_id))
+    except:
+        form.logger.error(traceback.print_exc())
 
-    if form.has_errors():
-        return render()
-
-    user.email = user_email
-
-    if form['user_name']:
-        user.name = form['user_name']
-
-    if form['is_editor']:
-        user.is_editor = True
-    else:
-        user.is_editor = False
-
-    if form['is_admin']:
-        user.is_admin = True
-    else:
-        user.is_admin = False
-
-    if form['is_assistant']:
-        user.is_assistant = True
-    else:
-        user.is_assistant = False
-
-    if form['is_active']:
-        user.is_active = True
-    else:
-        user.is_active = False
-
-    if user_pass:
-        user.set_password(user_pass)
-
-    user.save(context)
-    add_message('Edited user %s' % user_id)
-    form.logger.info(str('Edited user %s', user_id))
     request = get_request()
     request.redirect(str('/admin'))
-
 
 
 class DeleteUserForm (MyForm):
