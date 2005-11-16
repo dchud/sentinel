@@ -1,0 +1,815 @@
+<1>
+AN  - PREV200510258332
+RO  - Copyright Thomson 2005.
+AU  - Liu Hua-lei [Author]
+AU  - Wei Jian-chao [Author]
+AU  - Zhou Bin [Author]
+AU  - Cao Rui-bing [Author]
+AU  - Chen Pu-yan [Author, Reprint Author; E-mail: aid@njau.edu.cn]
+IN  - Nanjing Agr Univ, Minist Agr, Key Lab Anim Dis Diagnos and Immunol, Nanjing 210095, Peoples R China.
+CY  - Peoples R China
+TI  - PCR site-directed mutagenesis of avian influenza virus hemagglutinin gene in vitro and expression in 293T cell
+SO  - Weishengwu Xuebao. 45(4).  AUG 2005. 614-616.
+PT  - Article.
+IS  - 0001-6209
+CC  - [02508] Cytology - Human
+      [03502] Genetics - General
+      [03508] Genetics - Human
+      [10062] Biochemistry studies - Nucleic acids, purines and pyrimidines
+      [31500] Genetics of bacteria and viruses
+      [33502] Virology - General and methods
+      [36006] Medical and clinical microbiology - Virology
+LG  - Chinese
+AB  - The site-directed mutagenesis of HA gene was made by using PCR, and mismatches were introduced into primers. Mutagenesis was performed in a three-step PCR. The amplified fragments from the second PCR which contained the mutation site were cloned into the pcDNA3 vector, named pHAm. The sequencing analysis showed that the mutation site was correct. The amino acid sequence at the cleavage site of the HA protein was from RKKR down arrow GLF to RSSR down arrow GLF. The recombinant plasmid pHAm was transiently transfected into 293T cells by the calcium phosphate precipitation method. Indirect immunofluorescent assay (IFA), confirmed expression of the HA protein on the cell membrane the mutant HA gene was a promising candidate for further studies.
+MC  - Infection;  Methods and Techniques;  Molecular Genetics: Biochemistry and Molecular Biophysics
+BC  - [86215] Hominidae
+      [03505] Orthomyxoviridae
+ST  - [86215] Hominidae, Primates, Mammalia, Vertebrata, Chordata, Animalia
+      [03505] Orthomyxoviridae, Negative Sense ssRNA Viruses, Viruses, Microorganisms
+TN  - Hominidae: Animals, Chordates, Humans, Mammals, Primates, Vertebrates;  Orthomyxoviridae: Microorganisms, Negative Sense Single-Stranded RNA Viruses, Viruses
+OR  - 293T cell line: cell_line, expression system [Hominidae];  Avian influenza virus: common, pathogen [Orthomyxoviridae]
+CB  - hemagglutinin: 459875-18-4
+GN  - Avian influenza virus HA gene [Orthomyxoviridae]: expression, site-directed mutagenesis
+MQ  - polymerase chain reaction: laboratory techniques, genetic techniques
+YR  - 2005
+UP  - 200548. BIOSIS Update: 20051108.
+
+
+<2>
+AN  - PREV200510258305
+RO  - Copyright Thomson 2005.
+AU  - Zhang Ping-hu [Author]
+AU  - Liu Xiao-wen [Author]
+AU  - Qian Zhong-ming [Author]
+AU  - Tang Ying-hua [Author]
+AU  - Liu Xiu-fan [Author, Reprint Author; E-mail: xfliu@yzu.edu.cn]
+IN  - Yangzhou Univ, Minist Agr, Key Lab Anim Infect Dis, Yangzhou 225009, Peoples R China.
+CY  - Peoples R China
+TI  - Phylogenetic analysis of the surface glycoprotein genes of an aquatic bird origin influenza virus isolate A/Duck/Yangzhou/233/2002(H6N2)
+SO  - Weishengwu Xuebao. 45(4).  AUG 2005. 491-495.
+PT  - Article.
+IS  - 0001-6209
+CC  - [03502] Genetics - General
+      [03506] Genetics - Animal
+      [10062] Biochemistry studies - Nucleic acids, purines and pyrimidines
+      [10064] Biochemistry studies - Proteins, peptides and amino acids
+      [10802] Enzymes - General and comparative studies: coenzymes
+      [16006] Respiratory system - Pathology
+      [31500] Genetics of bacteria and viruses
+      [33502] Virology - General and methods
+      [36006] Medical and clinical microbiology - Virology
+LG  - Chinese
+AB  - Several H6 subtype avian A influenza viruses were isolated from aquatic birds in some live bird markets when we surveyed the ecology of the influenza in East China for more than two years and identified by specific RT-PCR. In this paper, the hemagglutinin (HA) and neuraminidase (NA) gene of one representative virus named A/Duck/Yangzhou/233/2002 (H6N2) (Dk/YZ/23.3/02) had been sequenced. Phylogenetic analysis of the H6 gene sequences available in the Influenza Sequence Database showed that the Dk/YZ/233/02 viruses cluster together with Dk/HK/3461/99 (H6N1) and Ck/Taiwan/na3/98 (H6N1). Phylogenetic analysis of the N2 NA genes of Dk/YZ/233/02 revealed that the NA gene of DkNZ/233/02 had genetically close relationships with that of H9N2 viruses isolated from duck in Japan and from chickens in South Korea, which were distinct from those of Ck/Beijing/94 (H9N2). The sequence of cleavage site between HA1 and HA2 of Dk/YZ/233/02 is P-Q-I-E-T-R-D, which was the typical characterization of the LPAIV.
+MC  - Infection;  Methods and Techniques;  Molecular Genetics: Biochemistry and Molecular Biophysics
+BC  - [85504] Anseriformes
+      [85500] Aves
+      [85536] Galliformes
+      [03505] Orthomyxoviridae
+ST  - [85504] Anseriformes, Aves, Vertebrata, Chordata, Animalia
+      [85500] Aves, Vertebrata, Chordata, Animalia
+      [85536] Galliformes, Aves, Vertebrata, Chordata, Animalia
+      [03505] Orthomyxoviridae, Negative Sense ssRNA Viruses, Viruses, Microorganisms
+TN  - Anseriformes: Animals, Birds, Chordates, Nonhuman Vertebrates, Vertebrates;  Aves: Animals, Birds, Chordates, Nonhuman Vertebrates, Vertebrates;  Galliformes: Animals, Birds, Chordates, Nonhuman Vertebrates, Vertebrates;  Orthomyxoviridae: Microorganisms, Negative Sense Single-Stranded RNA Viruses, Viruses
+OR  - duck: common, host [Anseriformes];  aquatic bird: common, host [Aves];  chicken: common, host [Galliformes];  Influenza virus: common, pathogen, H9N2 subtype, Ck/Beijing/94, Ck/Taiwan/na3/98, H6N1 subtype, Dk/HK/3461/99, H6N2 subtype, strain-A/Duck/Yangzhou/233/2002 [Orthomyxoviridae]
+DS  - influenza: (Influenza (MeSH)), respiratory system disease, viral disease
+CB  - glycoprotein;  gene sequences;  hemagglutinin: 459875-18-4;  neuraminidase: 9001-67-6, EC 3.2.1.18
+GN  - Influenza virus HA gene [Orthomyxoviridae];  Influenza virus NA gene [Orthomyxoviridae];  Influenza virus glycoprotein gene [Orthomyxoviridae]
+MQ  - RT-PCR: reverse transcriptase-polymerase chain reaction, laboratory techniques, genetic techniques;  phylogenetic analysis: genetic techniques
+GE  - Japan: Asia, Palearctic region;  China: Asia, Palearctic region;  South Korea: Asia, Palearctic region
+YR  - 2005
+UP  - 200548. BIOSIS Update: 20051108.
+
+
+<3>
+AN  - PREV200510255387
+RO  - Copyright Thomson 2005.
+AU  - Lee, Chang-Won [Author]
+AU  - Swayne, David E. [Author]
+AU  - Linares, Jose A. [Author]
+AU  - Senne, Dennis A. [Author]
+AU  - Suarez, David L. [Author, Reprint Author; E-mail: dsuarez@seprl.usda.gov]
+IN  - USDA ARS, SE Poultry Res Lab, 934 Coll Stn Rd, Athens, GA 30605 USA.
+CY  - USA
+TI  - H5N2 avian influenza outbreak in Texas in 2004: The first highly pathogenic strain in the United States in 20 years?
+SO  - Journal of Virology. 79(17).  SEP 2005. 11412-11421.
+PT  - Article.
+IS  - 0022-538X
+CC  - [03502] Genetics - General
+      [03506] Genetics - Animal
+      [25502] Development and Embryology - General and descriptive
+      [31500] Genetics of bacteria and viruses
+      [33502] Virology - General and methods
+      [36006] Medical and clinical microbiology - Virology
+      [37052] Public health: epidemiology - Communicable diseases
+      [37056] Public health: epidemiology - Miscellaneous
+LG  - English
+AB  - In early 2004, an H5N2 avian influenza virus (AM that met the molecular criteria for classification as a highly pathogenic AIV was isolated from chickens in the state of Texas in the United States. However, clinical manifestations in the affected flock were consistent with avian influenza caused by a low-pathogenicity AIV and the representative virus (A/chicken/Texas/298313/04 [TX/04]) was not virulent for experimentally inoculated chickens. The hemagglutinin (HA) gene of the TX/04 isolate was similar in sequence to A/chicken/Texas/ 167280-4/02 (TX/02), a low-pathogenicity AIV isolate recovered from chickens in Texas in 2002. However, the TX/04 isolate had one additional basic amino acid at the HA cleavage site, which could be attributed to a single point mutation. The TX/04 isolate was similar in sequence to TX/02 isolate in several internal genes (NP, M, and NS), but some genes (PA, PB1, and PB2) had sequence of a clearly different origin. The TX/04 isolate also had a stalk deletion in the NA gene, characteristic of a chicken-adapted AIV. By analyzing viruses constructed by in vitro mutagenesis followed by reverse genetics, we found that the pathogenicity of the TX/04 virus could be increased in vitro and in vivo by the insertion of an additional basic amino acid at the HA cleavage site and not by the loss of a glycosylation site near the cleavage site. Our study provides the genetic and biologic characteristics of the TX/04 isolate, which highlight the complexity of the polygenic nature of the virulence of influenza viruses.
+MC  - Infection;  Epidemiology: Population Studies;  Molecular Genetics: Biochemistry and Molecular Biophysics
+BC  - [85536] Galliformes
+      [03505] Orthomyxoviridae
+ST  - [85536] Galliformes, Aves, Vertebrata, Chordata, Animalia
+      [03505] Orthomyxoviridae, Negative Sense ssRNA Viruses, Viruses, Microorganisms
+TN  - Galliformes: Animals, Birds, Chordates, Nonhuman Vertebrates, Vertebrates;  Orthomyxoviridae: Microorganisms, Negative Sense Single-Stranded RNA Viruses, Viruses
+OR  - chicken: common, embryo, host [Galliformes];  Avian influenza virus: common, pathogen, TX/04 isolate, strain-H5N2 [Orthomyxoviridae]
+DS  - avian influenza virus infection: (Influenza (MeSH)), viral disease, epidemiology, genetics, etiology
+GN  - Avian influenza virus PB2 gene [Orthomyxoviridae];  Avian influenza virus PB1 gene [Orthomyxoviridae];  Avian influenza virus PA gene [Orthomyxoviridae];  Avian influenza virus HA gene [Orthomyxoviridae]: Avian influenza virus hemagglutinin gene;  Avian influenza virus NP gene [Orthomyxoviridae];  Avian influenza virus NS gene [Orthomyxoviridae];  Avian influenza virus NA gene [Orthomyxoviridae]: stalk deletion
+GE  - Texas: USA, North America, Nearctic region
+MI  - pathogenicity;  reverse genetics
+YR  - 2005
+UP  - 200548. BIOSIS Update: 20051108.
+
+
+<4>
+AN  - PREV200510246423
+RO  - Copyright Thomson 2005.
+AU  - Kwon, Yong-Kuk [Author]
+AU  - Joh, Seong-Joon [Author]
+AU  - Kim, Min-Chul [Author]
+AU  - Sung, Haan-Woo [Author]
+AU  - Lee, Youn-Jeong [Author]
+AU  - Choi, Jun-Gu [Author]
+AU  - Lee, Eun-Kyoung [Author]
+AU  - Kim, Jae-Hong [Author, Reprint Author; E-mail: kimhong@nvrqs.go.kr]
+IN  - Natl Vet Res and Quarantine Serv, MAF 480, Anyang 430824, South Korea.
+CY  - South Korea
+TI  - Highly pathogenic avian influenza (H5N1) in the commercial domestic ducks of South Korea
+SO  - Avian Pathology. 34(4).  AUG 2005. 367-370.
+PT  - Article.
+IS  - 0307-9457
+CC  - [14004] Digestive system - Physiology and biochemistry
+      [15504] Urinary system - Physiology and biochemistry
+      [17002] Endocrine - General
+      [17008] Endocrine - Pancreas
+      [26502] Animal production - General and methods
+      [27002] Poultry production - General and methods
+      [33502] Virology - General and methods
+      [36006] Medical and clinical microbiology - Virology
+      [37052] Public health: epidemiology - Communicable diseases
+      [37056] Public health: epidemiology - Miscellaneous
+LG  - English
+AB  - The present study reports the clinical, virological and pathological findings observed in a natural outbreak of highly pathogenic avian influenza in farmed commercial ducks. The ducks developed clinical signs, including mild respiratory distress, depression, mild diarrhoea, loss of appetite and increasing mortality (up to 12%). At necropsy, multifocal mottled necrosis was commonly found in the pancreas with splenomegaly, hepatomegaly, and swollen kidneys. Microscopically, there was necrotized pancreatitis and hepatitis, and lymphocytic meningoencephalitis and myocarditis. Influenza viral antigen was demonstrated in areas closely associated with histopathological lesion. Avian influenza virus was isolated from the caecal tonsil, faeces, and kidney of the domestic ducks. The isolated virus was identified as a highly pathogenic H5N1, with a haemagglutinin proteolytic cleavage site deduced amino acid sequence of... QREKRKKR/GLFGAIAG... In order to determine the pathogenicity of the isolate, eight 6-week-old specific pathogen free chickens were inoculated intravenously with the virus, and all birds died within 24 h after inoculation. This is the first report of an outbreak of highly pathogenic avian influenza with clinical signs in commercial domestic ducks in South Korea.
+MC  - Epidemiology: Population Studies;  Infection;  Animal Husbandry: Agriculture
+BC  - [85504] Anseriformes
+      [03505] Orthomyxoviridae
+ST  - [85504] Anseriformes, Aves, Vertebrata, Chordata, Animalia
+      [03505] Orthomyxoviridae, Negative Sense ssRNA Viruses, Viruses, Microorganisms
+TN  - Anseriformes: Animals, Birds, Chordates, Nonhuman Vertebrates, Vertebrates;  Orthomyxoviridae: Microorganisms, Negative Sense Single-Stranded RNA Viruses, Viruses
+OR  - domestic duck: common, host [Anseriformes];  Avian influenza virus: common, pathogen, highly pathogenic virus, strain-H5N1 [Orthomyxoviridae]
+PS  - pancreas: endocrine system, digestive system;  feces: digestive system;  kidney: excretory system;  caecal tonsil
+DS  - avian influenza virus infection: (Influenza (MeSH)), viral disease, epidemiology, mortality, symptom
+CB  - hemagglutinin: 459875-18-4;  viral antigen
+MQ  - microscopy: laboratory techniques, imaging and microscopy techniques;  commercial duck farming: applied and field techniques
+GE  - South Korea: Asia, Palearctic region
+YR  - 2005
+UP  - 200548. BIOSIS Update: 20051108.
+
+
+<5>
+AN  - PREV200510229444
+RO  - Copyright Thomson 2005.
+AU  - Rojas, A. [Author]
+AU  - Rosario, C. [Author]
+AU  - Merino, R. [Author]
+TI  - Detection of Avian Influenza virus in tracheal swab samples using a commercial antigen capture test.
+SO  - Poultry Science. 83(10).  OCT 2004. 1813-1814.
+PT  - Meeting.
+LT  - Meeting Abstract.
+IS  - 0032-5791
+CC  - [00520] General biology - Symposia, transactions and proceedings
+      [10062] Biochemistry studies - Nucleic acids, purines and pyrimidines
+      [12504] Pathology - Diagnostic
+      [16004] Respiratory system - Physiology and biochemistry
+      [16006] Respiratory system - Pathology
+      [33502] Virology - General and methods
+      [36006] Medical and clinical microbiology - Virology
+      [38002] Veterinary science - General and methods
+      [38004] Veterinary science - Pathology
+      [38006] Veterinary science - Microbiology
+LG  - English
+MC  - Infection;  Methods and Techniques;  Respiratory System: Respiration;  Veterinary Medicine: Medical Sciences
+BC  - [85536] Galliformes
+      [03505] Orthomyxoviridae
+ST  - [85536] Galliformes, Aves, Vertebrata, Chordata, Animalia
+      [03505] Orthomyxoviridae, Negative Sense ssRNA Viruses, Viruses, Microorganisms
+TN  - Galliformes: Animals, Birds, Chordates, Nonhuman Vertebrates, Vertebrates;  Orthomyxoviridae: Microorganisms, Negative Sense Single-Stranded RNA Viruses, Viruses
+OR  - broiler chicken: common, host [Galliformes];  Avian influenza virus: common, pathogen [Orthomyxoviridae]
+DS  - avian influenza virus infection: (Influenza (MeSH)), respiratory system disease, viral disease, etiology, diagnosis
+MQ  - PCR: polymerase chain reaction, laboratory techniques, genetic techniques;  tracheal swab: laboratory techniques, immunologic techniques;  antigen capture test: laboratory techniques, immunologic techniques
+YR  - 2004
+UP  - 200546. BIOSIS Update: 20051025.
+
+
+<6>
+AN  - PREV200510227767
+RO  - Copyright Thomson 2005.
+AU  - WHO Consultation Human Influenza [Author]
+IN  - Univ Virginia, Hlth Sci Ctr, Dept Internal Med, POB 800473, Charlottesville, VA 22908 USA.
+CY  - USA
+TI  - Current concepts - Avian influenza A (H5N1) infection in humans
+SO  - New England Journal of Medicine. 353(13).  SEP 29 2005. 1374-1385.
+PT  - Article.
+LT  - Literature Review.
+IS  - 0028-4793
+CC  - [16006] Respiratory system - Pathology
+      [33502] Virology - General and methods
+      [36006] Medical and clinical microbiology - Virology
+      [37001] Public health - General and miscellaneous
+LG  - English
+MC  - Infection;  Public Health: Allied Medical Sciences;  Pulmonary Medicine: Human Medicine, Medical Sciences
+BC  - [85500] Aves
+      [86215] Hominidae
+      [03505] Orthomyxoviridae
+ST  - [85500] Aves, Vertebrata, Chordata, Animalia
+      [86215] Hominidae, Primates, Mammalia, Vertebrata, Chordata, Animalia
+      [03505] Orthomyxoviridae, Negative Sense ssRNA Viruses, Viruses, Microorganisms
+TN  - Aves: Animals, Birds, Chordates, Nonhuman Vertebrates, Vertebrates;  Hominidae: Animals, Chordates, Humans, Mammals, Primates, Vertebrates;  Orthomyxoviridae: Microorganisms, Negative Sense Single-Stranded RNA Viruses, Viruses
+OR  - bird: common, disease vector [Aves];  human: common, host [Hominidae];  Avian influenza A virus: common, Influenza A virus, species, pathogen, strain-H5N1 [Orthomyxoviridae]
+DS  - avian influenza: (Influenza (MeSH)), respiratory system disease, viral disease, transmission, prevention and control, epidemiology
+GE  - Asia: Oriental region, Palearctic region
+MI  - WHO
+YR  - 2005
+UP  - 200546. BIOSIS Update: 20051025.
+
+
+<7>
+AN  - PREV200510226754
+RO  - Copyright Thomson 2005.
+AU  - World Htlh Org [Reprint Author, Author]
+TI  - Update: Influenza activity - United States and worldwide, 2004-05 season
+SO  - MMWR - Morbidity & Mortality Weekly Report. 54(25).  JUL 1 2005. 631-634.
+PT  - Article.
+IS  - 1057-5987
+CC  - [16004] Respiratory system - Physiology and biochemistry
+      [16006] Respiratory system - Pathology
+      [33502] Virology - General and methods
+      [36006] Medical and clinical microbiology - Virology
+      [37052] Public health: epidemiology - Communicable diseases
+      [37054] Public health: epidemiology - Organic diseases and neoplasms
+      [37056] Public health: epidemiology - Miscellaneous
+      [38002] Veterinary science - General and methods
+      [38004] Veterinary science - Pathology
+      [38006] Veterinary science - Microbiology
+LG  - English
+MC  - Epidemiology: Population Studies;  Infection;  Pulmonary Medicine: Human Medicine, Medical Sciences;  Respiratory System: Respiration;  Veterinary Medicine: Medical Sciences
+BC  - [85500] Aves
+      [86215] Hominidae
+      [03505] Orthomyxoviridae
+ST  - [85500] Aves, Vertebrata, Chordata, Animalia
+      [86215] Hominidae, Primates, Mammalia, Vertebrata, Chordata, Animalia
+      [03505] Orthomyxoviridae, Negative Sense ssRNA Viruses, Viruses, Microorganisms
+TN  - Aves: Animals, Birds, Chordates, Nonhuman Vertebrates, Vertebrates;  Hominidae: Animals, Chordates, Humans, Mammals, Primates, Vertebrates;  Orthomyxoviridae: Microorganisms, Negative Sense Single-Stranded RNA Viruses, Viruses
+OR  - poultry: common, host [Aves];  human: common, host [Hominidae];  Avian influenza A virus: common, Influenza A virus, species, pathogen, strain-H5N1 [Orthomyxoviridae];  Influenza virus B: common, Influenza B virus, species, pathogen [Orthomyxoviridae];  Influenza virus A: common, Influenza A virus, species, pathogen, strain-H1N1, strain-H1N2, strain-H3N2 [Orthomyxoviridae]
+DS  - influenza: (Influenza (MeSH)), respiratory system disease, viral disease, epidemiology, mortality, etiology;  avian influenza: (Influenza (MeSH)), respiratory system disease, viral disease, epidemiology, mortality, etiology
+GE  - Thailand: Asia, Oriental region;  USA: North America, Nearctic region;  Vietnam: Asia, Oriental region;  Cambodia: Asia, Oriental region
+MI  - worldwide outbreak
+YR  - 2005
+UP  - 200546. BIOSIS Update: 20051025.
+
+
+<8>
+AN  - PREV200510225573
+RO  - Copyright Thomson 2005.
+AU  - Lee, Davy C. W. [Author]
+AU  - Cheung, Chung-Yan [Author]
+AU  - Law, Anna H. Y. [Author]
+AU  - Mok, Chris K. P. [Author]
+AU  - Peiris, Malik [Author]
+AU  - Lau, Allan S. Y. [Author, Reprint Author; E-mail: asylau@hku.hk]
+IN  - Univ Hong Kong, Queen Mary Hosp, Dept Paediat and Adolescent Med, Immunol Res Lab, Hong Kong, Hong Kong, Peoples R China.
+CY  - Peoples R China
+TI  - p38 mitogen-activated protein kinase-dependent hyperinduction of tumor necrosis factor alpha expression in response to avian influenza virus H5N1
+SO  - Journal of Virology. 79(16).  AUG 2005. 10147-10154.
+PT  - Article.
+IS  - 0022-538X
+CC  - [02506] Cytology - Animal
+      [10060] Biochemistry studies - General
+      [10064] Biochemistry studies - Proteins, peptides and amino acids
+      [10802] Enzymes - General and comparative studies: coenzymes
+      [15002] Blood - Blood and lymph studies
+      [15004] Blood - Blood cell studies
+      [16006] Respiratory system - Pathology
+      [17002] Endocrine - General
+      [33502] Virology - General and methods
+      [34502] Immunology - General and methods
+      [36006] Medical and clinical microbiology - Virology
+LG  - English
+AB  - Avian influenza A virus subtype H5N1 can infect humans to cause a severe viral pneumonia with mortality rates of more than 30%. The biological basis for this unusual disease severity is not fully understood. We previously demonstrated that in contrast to human influenza A virus subtypes including H1N1 or H3N2, the H5N1 virus associated with the "bird flu" outbreak in Hong Kong in 1997 (H5N1/97) hyperinduces proinflammatory cytokines, including tumor necrosis factor alpha (TNF-alpha), in primary human macrophages in vitro. To delineate the molecular mechanisms involved, we analyzed the role of transcription factor NF-kappa B and cellular kinases in TNF-alpha dysregulation. H5N1 and H1N1 viruses did not differ in the activation of NF-kappa B or degradation Of I kappa B-alpha in human macrophages. However, we demonstrated that unlike H1N1 virus, H5N1/97 strongly activates mitogen-activated protein kinase (MAPK), including p38 MAPK and extracellular signal-regulated kinases 1 and 2. Specific inhibitors of p38 MAPK significantly reduced the H5N1/97-induced TNF-alpha expression in macrophages. Taken together, our findings suggest that H5N1/97-mediated hyperinduction of cytokines involves the p38 MAPK signaling pathway. These results may provide insights into the pathogenesis of H5N1 disease and rationales for the development of novel therapeutic strategies.
+MC  - Biochemistry and Molecular Biophysics;  Infection
+BC  - [03505] Orthomyxoviridae
+ST  - [03505] Orthomyxoviridae, Negative Sense ssRNA Viruses, Viruses, Microorganisms
+TN  - Orthomyxoviridae: Microorganisms, Negative Sense Single-Stranded RNA Viruses, Viruses
+OR  - Avian influenza virus: common, subtype H5N1 [Orthomyxoviridae];  Human influenza A virus: common [Orthomyxoviridae]
+PS  - macrophage: immune system, blood and lymphatics
+DS  - bird flu: respiratory system disease, viral disease;  viral pneumonia: (Pneumonia, Viral (MeSH)), respiratory system disease, viral disease, mortality
+CB  - p38 mitogen-activated protein kinase: 165245-96-5, EC 2.7.1.37;  tumor necrosis factor alpha;  mitogen-activated protein kinase: 142243-02-5, EC 2.7.1.37;  proinflammatory cytokine;  extracellular signal-regulated kinase-1: 137632-07-6;  extracellular signal-regulated kinase-2: 137632-08-7, EC 2.7.1.37;  cellular kinase
+YR  - 2005
+UP  - 200546. BIOSIS Update: 20051025.
+
+
+<9>
+AN  - PREV200510215207
+RO  - Copyright Thomson 2005.
+AU  - Pasick, John [Author, Reprint Author; E-mail: jpasick@inspection.gc.ca]
+IN  - Canadian Food Inspect Agcy, Natl Ctr Foreign Anim Dis, Canadian Sci Ctr Human and Anim Hlth, 1015 Arlington St, Winnipeg, MB R3E 3M4, Canada.
+CY  - Canada
+TI  - Application of DIVA vaccines and their companion diagnostic tests to foreign animal disease eradication
+SO  - Animal Health Research Reviews. 5(2).  DEC 2004. 257-262.
+PT  - Article.
+LT  - Literature Review.
+IS  - 1466-2523
+CC  - [12504] Pathology - Diagnostic
+      [12512] Pathology - Therapy
+      [16004] Respiratory system - Physiology and biochemistry
+      [16006] Respiratory system - Pathology
+      [22002] Pharmacology - General
+      [22018] Pharmacology - Immunological processes and allergy
+      [34502] Immunology - General and methods
+      [36006] Medical and clinical microbiology - Virology
+      [38002] Veterinary science - General and methods
+      [38004] Veterinary science - Pathology
+      [38006] Veterinary science - Microbiology
+LG  - English
+MC  - Pharmacology;  Infection;  Methods and Techniques;  Immune System: Chemical Coordination and Homeostasis;  Respiratory System: Respiration;  Veterinary Medicine: Medical Sciences
+BC  - [85500] Aves
+      [85740] Suidae
+ST  - [85500] Aves, Vertebrata, Chordata, Animalia
+      [85740] Suidae, Artiodactyla, Mammalia, Vertebrata, Chordata, Animalia
+TN  - Aves: Animals, Birds, Chordates, Nonhuman Vertebrates, Vertebrates;  Suidae: Animals, Artiodactyls, Chordates, Mammals, Nonhuman Vertebrates, Nonhuman Mammals, Vertebrates
+OR  - aves: common [Aves];  swine: common [Suidae]
+DS  - pseudorabies: (Pseudorabies (MeSH)), viral disease, drug therapy, prevention and control, diagnosis;  foot-and-mouth disease: (Foot-and-Mouth Disease (MeSH)), viral disease, drug therapy, prevention and control, diagnosis;  classical swine fever: (Classical Swine Fever (MeSH)), viral disease, drug therapy, prevention and control, diagnosis;  avian influenza: (Influenza (MeSH)), respiratory system disease, viral disease, drug therapy, prevention and control, diagnosis
+CB  - differentiating infected from vaccinated animals vaccine: immunologic-drug, immunostimulant-drug, vaccine
+MQ  - vaccination: clinical techniques;  diagnostic test: clinical techniques, diagnostic techniques
+MI  - host immune response;  disease eradication
+YR  - 2004
+UP  - 200546. BIOSIS Update: 20051025.
+
+
+<10>
+AN  - PREV200510212429
+RO  - Copyright Thomson 2005.
+AU  - Lu, Jian-Hong [Author]
+AU  - Liu, Xiu-Fan [Author, Reprint Author; E-mail: xfliu@yzu.edu.cn]
+AU  - Shao, Wei-Xing [Author]
+AU  - Liu, Yu-Liang [Author]
+AU  - Wei, Dong-Ping [Author]
+AU  - Liu, Hong-Qi [Author]
+IN  - Yangzhou Univ, Sch Vet Med, Anim Infect Dis Lab, Yangzhou 225009, Jiangsu, Peoples R China.
+CY  - Peoples R China
+TI  - Phylogenetic analysis of eight genes of H9N2 subtype influenza virus: A Mainland China strain possessing early isolates' genes that have been circulating
+SO  - Virus Genes. 31(2).  OCT 2005. 163-169.
+PT  - Article.
+IS  - 0920-8569
+CC  - [03506] Genetics - Animal
+      [03509] Genetics - Population genetics
+      [16004] Respiratory system - Physiology and biochemistry
+      [16006] Respiratory system - Pathology
+      [31500] Genetics of bacteria and viruses
+      [33502] Virology - General and methods
+      [36006] Medical and clinical microbiology - Virology
+LG  - English
+AB  - H9N2 subtype influenza virus has become worldwide and prevalent in China. Previous studies illustrated that at least three sublineages had been established in terrestrial poultry of Eurasian avian. In this presentation, eight full-length genes of an H9N2 strain, A/Chicken/Shanghai/F/98 (Ck/SH/F/98) were obtained. Sequence analysis and phylogenetic studies were conducted by comparing eight genes with those of all the available H9N2 strains from the GenBank. The results showed that four genes ( HA, NA, M and NS genes) of Ck/SH/F/98 were incorporated into the sublineage represented by the early mainland China strain, Ck/BJ/1/94. However, the other four of RNP genes of Ck/SH/F/98 did not show close relationship with those of the three known sublineages' viruses. Therefore, Ck/SH/F/98 was a natural reassortant between different sublineages. In addition, comparison showed that Ck/SH/F/98 could be a putative precursor of a later isolate from southern China, Dk/ST/1605/01, with at least six genes of both closely related, indicating genes of Ck/SH/F/98 and early isolates had ever been circulating. Further comparison in terms of molecular markers of species specificity of HA1 revealed that DK/ST/1605/01 also resembled Ck/SH/F/98 more than a common earlier duck strain. The results supported the idea of two-way transmission between terrestrial and aquatic birds that emphasized the importance to raise concerns on the natural evolution of all the eight genes of H9N2 avian influenza viruses.
+MC  - Infection;  Methods and Techniques;  Population Genetics: Population Studies;  Respiratory System: Respiration
+BC  - [85536] Galliformes
+      [03505] Orthomyxoviridae
+ST  - [85536] Galliformes, Aves, Vertebrata, Chordata, Animalia
+      [03505] Orthomyxoviridae, Negative Sense ssRNA Viruses, Viruses, Microorganisms
+TN  - Galliformes: Animals, Birds, Chordates, Nonhuman Vertebrates, Vertebrates;  Orthomyxoviridae: Microorganisms, Negative Sense Single-Stranded RNA Viruses, Viruses
+OR  - chicken: common, egg, host [Galliformes];  Influenza virus: common, pathogen, strain-H9N2, strain-Ck/BJ/1/94, strain-Ck/SH/F/98 [Orthomyxoviridae]
+DS  - influenza: (Influenza (MeSH)), respiratory system disease, viral disease
+CB  - molecular markers
+GN  - Influenza virus HA gene [Orthomyxoviridae];  Influenza virus NA gene [Orthomyxoviridae];  Influenza virus M gene [Orthomyxoviridae];  chicken NS gene [Galliformes]
+MQ  - sequence analysis: laboratory techniques, genetic techniques;  phylogenetic analysis: laboratory techniques, genetic techniques
+GE  - China: Asia, Palearctic region
+MI  - GenBank sequence data;  species specificity;  natural evolution
+YR  - 2005
+UP  - 200545. BIOSIS Update: 20051018.
+
+
+<11>
+AN  - PREV200510208398
+RO  - Copyright Thomson 2005.
+AU  - Shinya, Kyoko [Author]
+AU  - Hatta, Masato [Author]
+AU  - Yamada, Shinya [Author]
+AU  - Takada, Ayato [Author]
+AU  - Watanabe, Shinji [Author]
+AU  - Halfmann, Peter [Author]
+AU  - Horimoto, Taisuke [Author]
+AU  - Neumann, Gabriele [Author]
+AU  - Kim, Jin Hyun [Author]
+AU  - Lim, Wilina [Author]
+AU  - Guan, Yi [Author]
+AU  - Peiris, Malik [Author]
+AU  - Kiso, Makoto [Author]
+AU  - Suzuki, Takashi [Author]
+AU  - Suzuki, Yasuo [Author]
+AU  - Kawaoka, Yoshihiro [Author, Reprint Author; E-mail: kawaokay@svm.vetmed.wisc.edu]
+IN  - Univ Wisconsin, Sch Vet Med, Dept Pathobiol Sci, 2015 Linden Dr, Madison, WI 53706 USA.
+CY  - USA
+TI  - Characterization of a human H5N1 influenza A virus isolated in 2003
+SO  - Journal of Virology. 79(15).  AUG 2005. 9926-9932.
+PT  - Article.
+IS  - 0022-538X
+CC  - [02506] Cytology - Animal
+      [02508] Cytology - Human
+      [10060] Biochemistry studies - General
+      [25000] Pediatrics
+      [33502] Virology - General and methods
+      [36006] Medical and clinical microbiology - Virology
+LG  - English
+AB  - In 2003, H5N1 avian influenza virus infections were diagnosed in two Hong Kong residents who had visited the Fujian province in mainland China, affording us the opportunity to characterize one of the viral isolates, A/Hong Kong/213/03 (HK213; H5N1). In contrast to H5N1 viruses isolated from humans during the 1997 outbreak in Hong Kong, HK213 retained several features of aquatic bird viruses, including the lack of a deletion in the neuraminidase stalk and the absence of additional oligosaccharide chains at the globular head of the hemagglutinin molecule. It demonstrated weak pathogenicity in mice and ferrets but caused lethal infection in chickens. The original isolate failed to produce disease in ducks but became more pathogenic after five passages. Taken together, these findings portray the HK213 isolate as an aquatic avian influenza A virus without the molecular changes associated with the replication of H5N1 avian viruses in land-based poultry such as chickens. This case challenges the view that adaptation to land-based poultry is a prerequisite for the replication of aquatic avian influenza A viruses in humans.
+MC  - Biochemistry and Molecular Biophysics;  Infection
+BC  - [85504] Anseriformes
+      [85765] Canidae
+      [85536] Galliformes
+      [86215] Hominidae
+      [85780] Mustelidae
+      [03505] Orthomyxoviridae
+ST  - [85504] Anseriformes, Aves, Vertebrata, Chordata, Animalia
+      [85765] Canidae, Carnivora, Mammalia, Vertebrata, Chordata, Animalia
+      [85536] Galliformes, Aves, Vertebrata, Chordata, Animalia
+      [86215] Hominidae, Primates, Mammalia, Vertebrata, Chordata, Animalia
+      [85780] Mustelidae, Carnivora, Mammalia, Vertebrata, Chordata, Animalia
+      [03505] Orthomyxoviridae, Negative Sense ssRNA Viruses, Viruses, Microorganisms
+TN  - Anseriformes: Animals, Birds, Chordates, Nonhuman Vertebrates, Vertebrates;  Canidae: Animals, Carnivores, Chordates, Mammals, Nonhuman Vertebrates, Nonhuman Mammals, Vertebrates;  Galliformes: Animals, Birds, Chordates, Nonhuman Vertebrates, Vertebrates;  Hominidae: Animals, Chordates, Humans, Mammals, Primates, Vertebrates;  Mustelidae: Animals, Carnivores, Chordates, Mammals, Nonhuman Vertebrates, Nonhuman Mammals, Vertebrates;  Orthomyxoviridae: Microorganisms, Negative Sense Single-Stranded RNA Viruses, Viruses
+OR  - mallard duck: common, host [Anseriformes];  MDCK cell line: cell_line, Madin-Darby canine kidney cells [Canidae];  chicken: common, host [Galliformes];  human: common, child, host, male [Hominidae];  ferret: common, host [Mustelidae];  Human influenza virus: common, pathogen, strain-H5N1 [Orthomyxoviridae]
+GE  - Hong Kong: Asia, Palearctic region
+YR  - 2005
+UP  - 200545. BIOSIS Update: 20051018.
+
+
+<12>
+AN  - PREV200510203301
+RO  - Copyright Thomson 2005.
+AU  - Shinya, K. [Author]
+AU  - Suto, A. [Author]
+AU  - Kawakami, M. [Author]
+AU  - Sakamoto, H. [Author]
+AU  - Umemura, T. [Author]
+AU  - Kawaoka, Y. [Author]
+AU  - Kasal, N. [Author]
+AU  - Ito, T. [Author, Reprint Author; E-mail: toshiito@muses.tottori-u.ac.jp]
+IN  - Tottori Univ, Fac Agr, Dept Vet Publ Hlth, Tottori 6808553, Japan.
+CY  - Japan
+TI  - Neurovirulence of H7N7 influenza A virus: Brain stem encephalitis accompanied with aspiration pneumonia in mice
+SO  - Archives of Virology. 150(8).  AUG 2005. 1653-1660.
+PT  - Article.
+IS  - 0304-8608
+CC  - [16004] Respiratory system - Physiology and biochemistry
+      [16006] Respiratory system - Pathology
+      [20504] Nervous system - Physiology and biochemistry
+      [20506] Nervous system - Pathology
+      [33502] Virology - General and methods
+      [36006] Medical and clinical microbiology - Virology
+LG  - English
+AB  - A mouse-adapted influenza A virus, A/equine/London/1416/73-MA (H7N7) caused viral pneumonia, ganglionitis and encephalitis after intranasal inoculation in mice. Virological and pathological data suggested that this virus spreads to the brain by both hematogenous and transneuronal routes, and produces encephalitic lesions similar to those seen in mice infected with H5 highly pathogenic avian influenza A viruses by intranasal infection. Some mice infected with this strain were affected by aspiration pneumonia, which may be caused by neurogenic dysfunction of the pharyngeal/laryngeal reflex due to brain stem encephalitis.
+MC  - Nervous System: Neural Coordination;  Infection;  Respiratory System: Respiration
+BC  - [86375] Muridae
+      [03505] Orthomyxoviridae
+ST  - [86375] Muridae, Rodentia, Mammalia, Vertebrata, Chordata, Animalia
+      [03505] Orthomyxoviridae, Negative Sense ssRNA Viruses, Viruses, Microorganisms
+TN  - Muridae: Animals, Chordates, Mammals, Nonhuman Vertebrates, Nonhuman Mammals, Rodents, Vertebrates;  Orthomyxoviridae: Microorganisms, Negative Sense Single-Stranded RNA Viruses, Viruses
+OR  - mouse: common, strain-BALB/c [Muridae];  Influenza A virus: species, strain-H7N7 [Orthomyxoviridae]
+DS  - aspiration pneumonia: (Pneumonia, Aspiration (MeSH)), respiratory system disease;  brain stem encephalitis: nervous system disease
+MI  - neurovirulence
+YR  - 2005
+UP  - 200545. BIOSIS Update: 20051018.
+
+
+<13>
+AN  - PREV200510201989
+RO  - Copyright Thomson 2005.
+AU  - Apisarnthanarak, A. [Author, Reprint Author]
+AU  - Kitphati, R. [Author]
+AU  - Auwanit, W. [Author]
+AU  - Thawatsupha, P. [Author]
+AU  - Chittaganpitch, M. [Author]
+AU  - Saeng-Aroon, S. [Author]
+AU  - Waicharoen, S. [Author]
+AU  - Storch, G. A. [Author]
+AU  - Mundy, L. M. [Author]
+AU  - Fraser, V. J. [Author]
+TI  - Unusual presentation of avian influenza and impact of delayed recognition on health care workers in a tertiary care hospital in Thailand.
+SO  - Abstracts of the Interscience Conference on Antimicrobial Agents & Chemotherapy. 44 OCT-NOV 2004. 340.
+PT  - Meeting.
+LT  - Meeting Abstract.
+IS  - 0733-6373
+MF  - 44th Interscience Conference on Antimicrobial Agents and Chemotherapy, Washington, DC, USA; October 30 -November 02, 2004.
+CC  - [00520] General biology - Symposia, transactions and proceedings
+      [10060] Biochemistry studies - General
+      [10062] Biochemistry studies - Nucleic acids, purines and pyrimidines
+      [12502] Pathology - General
+      [12504] Pathology - Diagnostic
+      [12512] Pathology - Therapy
+      [15002] Blood - Blood and lymph studies
+      [15004] Blood - Blood cell studies
+      [16006] Respiratory system - Pathology
+      [22002] Pharmacology - General
+      [22005] Pharmacology - Clinical pharmacology
+      [33502] Virology - General and methods
+      [34502] Immunology - General and methods
+      [36006] Medical and clinical microbiology - Virology
+      [37052] Public health: epidemiology - Communicable diseases
+      [37054] Public health: epidemiology - Organic diseases and neoplasms
+      [37056] Public health: epidemiology - Miscellaneous
+      [38502] Chemotherapy - General, methods and metabolism
+      [38504] Chemotherapy - Antibacterial agents
+LG  - English
+MC  - Pharmacology;  Epidemiology: Population Studies;  Infection;  Pulmonary Medicine: Human Medicine, Medical Sciences
+BC  - [85536] Galliformes
+      [86215] Hominidae
+      [03505] Orthomyxoviridae
+ST  - [85536] Galliformes, Aves, Vertebrata, Chordata, Animalia
+      [86215] Hominidae, Primates, Mammalia, Vertebrata, Chordata, Animalia
+      [03505] Orthomyxoviridae, Negative Sense ssRNA Viruses, Viruses, Microorganisms
+TN  - Galliformes: Animals, Birds, Chordates, Nonhuman Vertebrates, Vertebrates;  Hominidae: Animals, Chordates, Humans, Mammals, Primates, Vertebrates;  Orthomyxoviridae: Microorganisms, Negative Sense Single-Stranded RNA Viruses, Viruses
+OR  - chicken: common [Galliformes];  human: common, adult, host, female [Hominidae];  Avian influenza virus: common, pathogen [Orthomyxoviridae]
+PS  - lymph: immune system, blood and lymphatics
+DS  - acute respiratory distress syndrome: ARDS, (Respiratory Distress Syndrome (MeSH)), respiratory system disease;  avian influenza: (Influenza (MeSH)), respiratory system disease, viral disease, drug therapy, mortality, diagnosis, transmission;  pneumonia: (Pneumonia (MeSH)), respiratory system disease, drug therapy, symptom, pathology
+CB  - imipenem: 64221-86-9, antibacterial-drug, antiinfective-drug;  azithromycin: 83905-01-5, antibacterial-drug, antiinfective-drug;  ceftazidime: 72558-82-8, antibacterial-drug, antiinfective-drug;  amikacin: 37517-28-5, antibacterial-drug, antiinfective-drug;  norfloxacin: 70458-96-7, enzyme inhibitor-drug, antiinfective-drug, antibacterial-drug;  H5
+MQ  - PCR: polymerase chain reaction, laboratory techniques, genetic techniques;  RT-PCR: reverse transcriptase-polymerase chain reaction, laboratory techniques, genetic techniques;  nasopharyngeal aspiration: clinical techniques, diagnostic techniques
+GE  - Thailand: Asia, Oriental region
+MI  - health care worker
+YR  - 2004
+UP  - 200545. BIOSIS Update: 20051018.
+
+
+<14>
+AN  - PREV200510183345
+RO  - Copyright Thomson 2005.
+AU  - Swayne, David E. [Author, Reprint Author]
+AU  - Beck, Joan R. [Author]
+IN  - USDA ARS, SE Poultry Res Lab, 934 Coll Stn Rd, Athens, GA 30605 USA.
+CY  - USA
+TI  - Experimental study to determine if low-pathogenicity and high-pathogenicity avian influenza viruses can be present in chicken breast and thigh meat following intranasal virus inoculation
+SO  - Avian Diseases. 49(1).  MAR 2005. 81-85.
+PT  - Article.
+IS  - 0005-2086
+CC  - [53012] Horticulture - Miscellaneous and mixed crops
+LG  - English
+AB  - Two low-pathogenicity (LP) and two high-pathogenicity (HP) avian influenza (AI) viruses were inoculated into chickens by the intranasal route to determine the presence of the Al virus in breast and thigh meat as well as any potential role that meat could fill as a transmission vehicle. The LPAI viruses caused localized virus infections in respiratory and gastrointestinal (GI) tracts. Virus was not detected in blood, bone marrow, or breast and thigh meat, and feeding breast and thigh meat from virus-infected birds did not transmit the virus. In contrast to the two LPAI viruses, A/chicken/Pennsylvania/1370/1983 (H5N2) HPAI virus caused respiratory and GI tract infections with systemic spread, and virus was detected in blood, bone marrow, and breast and thigh meat. Feeding breast or thigh meat from HPAI (H5N2) virus-infected chickens to other chickens did not transmit the infection. However, A/chicken/Korea/ES/2003 (H5N1) HPAI virus produced high titers of virus in the breast meat, and feeding breast meat from these infected chickens to other chickens resulted in Al virus infection and death. Usage of either recombinant fowlpox vaccine with H5 Al gene insert or inactivated Al whole-virus vaccines prevented HPAI virus in breast meat. These data indicate that the potential for LPAI virus appearing in meat of infected chickens is negligible, while the potential for having HPAI virus in meat from infected chickens is high, but proper usage of vaccines call prevent HPAI virus from being present in meat.
+MC  - Horticulture: Agriculture
+YR  - 2005
+UP  - 200543. BIOSIS Update: 20051004.
+
+
+<15>
+AN  - PREV200510183332
+RO  - Copyright Thomson 2005.
+AU  - Spackman, E. [Author]
+AU  - Senne, D. A. [Author]
+AU  - Bulaga, L. L. [Author]
+AU  - Myers, T. J. [Author]
+AU  - Perdue, M. L. [Author]
+AU  - Garber, L. P. [Author]
+AU  - Lohman, K. [Author]
+AU  - Baum, L. T. [Author]
+AU  - Suarez, D. L. [Author]
+TI  - Development of real-time RT-PCR for the detection of avian influenza virus (vol 47, pg 1079, 2003)
+SO  - Avian Diseases. 49(2).  JUN 2005. 313.
+PT  - Article.
+LT  - Errata.
+IS  - 0005-2086
+CC  - [12504] Pathology - Diagnostic
+      [33502] Virology - General and methods
+      [36006] Medical and clinical microbiology - Virology
+LG  - English
+MC  - Methods and Techniques;  Infection
+BC  - [85500] Aves
+      [03505] Orthomyxoviridae
+ST  - [85500] Aves, Vertebrata, Chordata, Animalia
+      [03505] Orthomyxoviridae, Negative Sense ssRNA Viruses, Viruses, Microorganisms
+TN  - Aves: Animals, Birds, Chordates, Nonhuman Vertebrates, Vertebrates;  Orthomyxoviridae: Microorganisms, Negative Sense Single-Stranded RNA Viruses, Viruses
+OR  - bird: common, host [Aves];  Avian influenza virus: common, pathogen [Orthomyxoviridae]
+DS  - avian influenza: (Influenza (MeSH)), viral disease, diagnosis
+MQ  - real-time RT-PCR: real-time reverse transcriptase-polymerase chain reaction, laboratory techniques, genetic techniques
+YR  - 2005
+UP  - 200543. BIOSIS Update: 20051004.
+
+
+<16>
+AN  - PREV200510183313
+RO  - Copyright Thomson 2005.
+AU  - Tang, Y. [Author]
+AU  - Lee, C. W. [Author]
+AU  - Zhang, Y. [Author]
+AU  - Senne, D. A. [Author]
+AU  - Dearth, R. [Author]
+AU  - Byrum, B. [Author]
+AU  - Perez, D. R. [Author]
+AU  - Suarez, D. L. [Author]
+AU  - Saif, Y. M. [Author, Reprint Author]
+IN  - Ohio State Univ, Ohio Agr Res and Dev Ctr, Food Anim Hlth Res Program, Wooster, OH 44691 USA.
+CY  - USA
+TI  - Isolation and characterization of H3N2 influenza A virus from turkeys
+SO  - Avian Diseases. 49(2).  JUN 2005. 207-213.
+PT  - Article.
+IS  - 0005-2086
+CC  - [02506] Cytology - Animal
+      [10062] Biochemistry studies - Nucleic acids, purines and pyrimidines
+      [12502] Pathology - General
+      [15002] Blood - Blood and lymph studies
+      [15004] Blood - Blood cell studies
+      [16004] Respiratory system - Physiology and biochemistry
+      [16006] Respiratory system - Pathology
+      [33502] Virology - General and methods
+      [36006] Medical and clinical microbiology - Virology
+      [38002] Veterinary science - General and methods
+      [38004] Veterinary science - Pathology
+      [38006] Veterinary science - Microbiology
+LG  - English
+AB  - Five 34-wk-old turkey breeder layer flocks in separate houses of 2550 birds each in a single farm in Ohio experienced a drop in egg production from late January to early February 2004. Tracheal swabs (n = 60), cloacal swabs (n = 50), and convalescent sera (n = 110) from the flocks were Submitted to the laboratory for diagnostics. Virus isolation was attempted in specific-pathogen free embryonating chicken eggs and Vero and MDCK cells. Virus characterization was performed using agar gel immunodiffusion, the hemagglutination test, the hemagglutination inhibition rest, the virus neutralization test, reverse transcription-polymerase chain reaction, sequencing, and phylogenetic analysis. A presumptive influenza virus was successfully propagated and isolated on the first passage in MDCK cells, but initially not in Vero cells or specific-pathogen free chicken embryos. After two passages in MDCK cells, it was possible to propagate the isolate in specific-pathogen free chicken embryos. Preliminary sequence analysis of the isolated virus confirmed that it was influenza A virus with almost 100% (235/236) identity with the matrix gene of a swine influenza A virus, A/Swine/Illinois/100084/01 (H1N2). However, it was not possible to Subtype the virus using conventional serotyping methods. The results of genetic characterization of the isolated virus showed that it was the H3N2 subtype and was designated as A/Turkey/OH/313053/04 (H3N2). Phylogenetic analysis of the eight gene segments of the virus showed that A/Turkey/OH/313053/04 (H3N2) isolate was most closely related to the triple-reassortant H3N2 swine viruses [A/Swine/W1/14094/99 (H3N2)] that have been circulating among pigs in the United States since 1998, which contains gene segments from avian, swine, and human viruses. The A/Turkey/OH/313053/04 (H3N2) isolated from turkeys in this study was classified as a low pathogenic avian influenza A virus because it only caused a drop in egg production with minor other clinical signs and no mortality.
+MC  - Methods and Techniques;  Infection;  Respiratory System: Respiration;  Veterinary Medicine: Medical Sciences
+BC  - [85765] Canidae
+      [86205] Cercopithecidae
+      [85536] Galliformes
+      [03505] Orthomyxoviridae
+      [85740] Suidae
+ST  - [85765] Canidae, Carnivora, Mammalia, Vertebrata, Chordata, Animalia
+      [86205] Cercopithecidae, Primates, Mammalia, Vertebrata, Chordata, Animalia
+      [85536] Galliformes, Aves, Vertebrata, Chordata, Animalia
+      [03505] Orthomyxoviridae, Negative Sense ssRNA Viruses, Viruses, Microorganisms
+      [85740] Suidae, Artiodactyla, Mammalia, Vertebrata, Chordata, Animalia
+TN  - Canidae: Animals, Carnivores, Chordates, Mammals, Nonhuman Vertebrates, Nonhuman Mammals, Vertebrates;  Cercopithecidae: Animals, Chordates, Mammals, Nonhuman Mammals, Nonhuman Vertebrates, Nonhuman Primates, Primates, Vertebrates;  Galliformes: Animals, Birds, Chordates, Nonhuman Vertebrates, Vertebrates;  Orthomyxoviridae: Microorganisms, Negative Sense Single-Stranded RNA Viruses, Viruses;  Suidae: Animals, Artiodactyls, Chordates, Mammals, Nonhuman Vertebrates, Nonhuman Mammals, Vertebrates
+OR  - MDCK cell line: cell_line, host [Canidae];  Vero cell line: cell_line, host [Cercopithecidae];  turkey: common, host [Galliformes];  chicken: common, egg, host [Galliformes];  Swine influenza A virus: species, pathogen [Orthomyxoviridae];  Avian influenza A virus: species, pathogen, strain-H3N2 [Orthomyxoviridae];  pig: common, host [Suidae]
+PS  - sera: blood and lymphatics
+DS  - avian influenza A virus infection: respiratory system disease, viral disease, pathology;  swine influenza Avirus infection: respiratory system disease, viral disease
+MQ  - phylogenetic analysis: laboratory techniques, genetic techniques;  virus neutralization test: laboratory techniques;  reverse transcription-polymerase chain reaction: laboratory techniques, genetic techniques;  sequencing analysis: laboratory techniques, genetic techniques;  agar gel immunodiffusion: laboratory techniques, immunologic techniques;  hemagglutination inhibition test: laboratory techniques;  hemagglutination test: laboratory techniques
+YR  - 2005
+UP  - 200543. BIOSIS Update: 20051004.
+
+
+<17>
+AN  - PREV200510181939
+RO  - Copyright Thomson 2005.
+AU  - Overgaauw, Paul [Author]
+TI  - Netherlands Society for Veterinary Epidemiology and Economy (VEEC)
+OT  - Nederlandse Vereniging voor Veterinaire Epidemiologie en Economie (VEEC)
+SO  - Tijdschrift voor Diergeneeskunde. 130(8).  APR 15 2005. 249-251.
+PT  - Article.
+IS  - 0040-7453
+CC  - [10062] Biochemistry studies - Nucleic acids, purines and pyrimidines
+      [12502] Pathology - General
+      [12512] Pathology - Therapy
+      [15002] Blood - Blood and lymph studies
+      [15004] Blood - Blood cell studies
+      [16004] Respiratory system - Physiology and biochemistry
+      [16006] Respiratory system - Pathology
+      [19004] Dental - Physiology and biochemistry
+      [20506] Nervous system - Pathology
+      [31000] Physiology and biochemistry of bacteria
+      [33502] Virology - General and methods
+      [34502] Immunology - General and methods
+      [36001] Medical and clinical microbiology - General and methods
+      [36002] Medical and clinical microbiology - Bacteriology
+      [36006] Medical and clinical microbiology - Virology
+      [37052] Public health: epidemiology - Communicable diseases
+      [37054] Public health: epidemiology - Organic diseases and neoplasms
+      [37056] Public health: epidemiology - Miscellaneous
+      [38502] Chemotherapy - General, methods and metabolism
+      [38506] Chemotherapy - Antiviral agents
+      [64052] Invertebrata: comparative, experimental morphology, physiology and pathology - Arthropoda: general
+MC  - Infection;  Epidemiology: Population Studies
+BC  - [75000] Arthropoda
+      [06702] Enterobacteriaceae
+      [03615] Flaviviridae
+      [07700] Gram-Positive Cocci
+      [86215] Hominidae
+      [03000] Viruses
+ST  - [75000] Arthropoda, Invertebrata, Animalia
+      [06702] Enterobacteriaceae, Facultatively Anaerobic Gram-Negative Rods, Eubacteria, Bacteria, Microorganisms
+      [03615] Flaviviridae, Positive Sense ssRNA Viruses, Viruses, Microorganisms
+      [07700] Gram-Positive Cocci, Eubacteria, Bacteria, Microorganisms
+      [86215] Hominidae, Primates, Mammalia, Vertebrata, Chordata, Animalia
+      [03000] Viruses, Microorganisms
+TN  - Arthropoda: Animals, Arthropods, Invertebrates;  Enterobacteriaceae: Bacteria, Eubacteria, Microorganisms;  Flaviviridae: Microorganisms, Positive Sense Single-Stranded RNA Viruses, Viruses;  Gram-Positive Cocci: Bacteria, Eubacteria, Microorganisms;  Hominidae: Animals, Chordates, Humans, Mammals, Primates, Vertebrates;  Viruses: Microorganisms, Viruses
+OR  - arthropod: common, disease vector [Arthropoda];  Salmonella typhimurium: species, pathogen [Enterobacteriaceae];  Salmonella dublin: species, pathogen [Enterobacteriaceae];  West Nile virus: species, pathogen, distribution [Flaviviridae];  Streptococcus suis: species [Gram-Positive Cocci];  human: common, host [Hominidae];  influenza virus: common, pathogen [Viruses];  rabies virus: common, pathogen [Viruses]
+PS  - respiratory system: respiratory system;  tonsil: immune system, dental and oral system, blood and lymphatics
+DS  - severe acute respiratory syndrome: SARS, (Severe Acute Respiratory Syndrome (MeSH)), respiratory system disease, viral disease;  cholera: (Cholera (MeSH)), bacterial disease, epidemiology;  salmonellosis: bacterial disease, epidemiology;  rabies: (Rabies (MeSH)), viral disease, epidemiology;  West Nile fever: nervous system disease, viral disease, epidemiology;  avian influenza: (Influenza (MeSH)), viral disease, infectious disease, pathology, mortality, prevention and control, symptom, epidemiology, transmission;  meningitis: (Meningitis (MeSH)), nervous system disease, viral disease, epidemiology
+CB  - antiinfluenza agents: antiinfective-drug, antiviral-drug
+MQ  - polymerase chain reaction: laboratory techniques, genetic techniques;  bacterial culture: laboratory techniques, culturing techniques;  Bayesian method: mathematical and computer techniques;  serotyping: laboratory techniques, immunologic techniques, diagnostic techniques, clinical techniques
+GE  - USA: North America, Nearctic region;  Europe: Palearctic region
+MI  - risk assessment;  ecosystem;  infection control;  sensitivity;  specificity;  seroconversion;  pandemic;  viral spread;  Nederlandse Vereniging voor Veterinaire Epidemiologie en Economie;  emerging zoonosis: epidemiology
+YR  - 2005
+UP  - 200542. BIOSIS Update: 20050927.
+
+
+<18>
+AN  - PREV200510181625
+RO  - Copyright Thomson 2005.
+AU  - Longini, Ira M. Jr [Author, Reprint Author; E-mail: longini@sph.emory.edu]
+AU  - Nizam, Azhar [Author]
+AU  - Xu, Shufu [Author]
+AU  - Ungchusak, Kumnuan [Author]
+AU  - Hanshaoworakul, Wanna [Author]
+AU  - Cummings, Derek A. T. [Author]
+AU  - Halloran, M. Elizabeth [Author]
+IN  - Emory Univ, Rollins Sch Publ Hlth, Dept Biostat, 1518 Clifton Rd NE, Atlanta, GA 30322 USA.
+CY  - USA
+TI  - Containing pandemic influenza at the source
+SO  - Science (Washington D C). 309(5737).  AUG 12 2005. 1083-1087,1078.
+PT  - Article.
+IS  - 0036-8075
+CC  - [04500] Mathematical biology and statistical methods
+      [10515] Biophysics - Biocybernetics
+      [12512] Pathology - Therapy
+      [16004] Respiratory system - Physiology and biochemistry
+      [16006] Respiratory system - Pathology
+      [22002] Pharmacology - General
+      [22005] Pharmacology - Clinical pharmacology
+      [33502] Virology - General and methods
+      [36006] Medical and clinical microbiology - Virology
+      [37001] Public health - General and miscellaneous
+      [37052] Public health: epidemiology - Communicable diseases
+      [37054] Public health: epidemiology - Organic diseases and neoplasms
+      [37056] Public health: epidemiology - Miscellaneous
+      [38502] Chemotherapy - General, methods and metabolism
+      [38506] Chemotherapy - Antiviral agents
+LG  - English
+AB  - Highly pathogenic avian influenza A (subtype H5N1) is threatening to cause a human pandemic of potentially devastating proportions. We used a stochastic influenza simulation model for rural Southeast Asia to investigate the effectiveness of targeted antiviral prophylaxis, quarantine, and pre-vaccination in containing an emerging influenza strain at the source. If the basic reproductive number (R-o) was below 1.60, our simulations showed that a prepared response with targeted antivirals would have a high probability of containing the disease, In that case, an antiviral agent stockpile on the order of 100,000 to 1 million courses for treatment and prophylaxis would be sufficient. If pre-vaccination occurred, then targeted antiviral prophylaxis. could be effective for containing strains with an R-o as high as 2.1. Combinations of targeted antiviral prophylaxis, pre-vaccination, and quarantine could contain strains with an R-o as high as 2.4.
+MC  - Pharmacology;  Epidemiology: Population Studies;  Infection;  Public Health: Allied Medical Sciences;  Pulmonary Medicine: Human Medicine, Medical Sciences;  Models and Simulations: Computational Biology
+BC  - [86215] Hominidae
+      [03505] Orthomyxoviridae
+ST  - [86215] Hominidae, Primates, Mammalia, Vertebrata, Chordata, Animalia
+      [03505] Orthomyxoviridae, Negative Sense ssRNA Viruses, Viruses, Microorganisms
+TN  - Hominidae: Animals, Chordates, Humans, Mammals, Primates, Vertebrates;  Orthomyxoviridae: Microorganisms, Negative Sense Single-Stranded RNA Viruses, Viruses
+OR  - human: common, host [Hominidae];  Avian influenza A virus: common, Influenza A virus, species, pathogen [Orthomyxoviridae]
+PS  - respiratory system: respiratory system
+DS  - avian influenza A infection: respiratory system disease, viral disease, drug therapy, prevention and control, epidemiology
+CB  - antiviral agent: antiinfective-drug, antiviral-drug
+MQ  - quarantine: therapeutic and prophylactic techniques, clinical techniques;  targeted antiviral prophylaxis: therapeutic and prophylactic techniques, clinical techniques;  pre-vaccination: therapeutic and prophylactic techniques, clinical techniques;  stochastic influenza simulation model: mathematical and computer techniques
+GE  - Southeast Asia: Asia, Oriental region
+MI  - stockpile;  basic reproductive number
+YR  - 2005
+UP  - 200542. BIOSIS Update: 20050927.
+
+
+<19>
+AN  - PREV200510179139
+RO  - Copyright Thomson 2005.
+AU  - Lange, J. H. [Author, Reprint Author; E-mail: johnhlange@worldnet.att.net]
+IN  - Envirosafe Training and Consultants, POB 114022, Pittsburgh, PA 15239 USA.
+CY  - USA
+TI  - SARS, emerging diseases, healthcare workers and respirators
+SO  - Journal of Hospital Infection. 60(3).  JUL 2005. 293.
+PT  - Letter.
+IS  - 0195-6701
+CC  - [16006] Respiratory system - Pathology
+      [36006] Medical and clinical microbiology - Virology
+LG  - English
+MC  - Methods and Techniques;  Infection;  Pulmonary Medicine: Human Medicine, Medical Sciences
+BC  - [86215] Hominidae
+ST  - [86215] Hominidae, Primates, Mammalia, Vertebrata, Chordata, Animalia
+TN  - Hominidae: Animals, Chordates, Humans, Mammals, Primates, Vertebrates
+OR  - human: common, female, male [Hominidae]
+DS  - severe acute respiratory syndrome: SARS, (Severe Acute Respiratory Syndrome (MeSH)), respiratory system disease, viral disease, transmission;  avian influenza: (Influenza (MeSH)), respiratory system disease, viral disease, transmission;  severe acute respiratory syndrome coronavirus: SARS CoV, respiratory system disease, viral disease, transmission
+MQ  - respiratory therapy: therapeutic and prophylactic techniques, clinical techniques;  aerosolization: aerosol therapy, therapeutic and prophylactic techniques, clinical techniques
+MI  - healthcare workers;  respiratory protection;  personal protective equipment;  airborne transmission
+YR  - 2005
+UP  - 200542. BIOSIS Update: 20050927.
+
+
+<20>
+AN  - PREV200510177685
+RO  - Copyright Thomson 2005.
+AU  - Heymann, D. [Author, Reprint Author]
+TI  - Combating viral infections: from smallpox to polio, SARS and avian influenza
+SO  - Infection. 33(3).  JUN 2005. 184-185.
+PT  - Meeting.
+LT  - Meeting Abstract.
+IS  - 0300-8126
+MF  - 8th Congress of Infectious Diseases and Tropical Medicine, Hamburg, GERMANY; June 09 -11, 2005.
+CC  - [00520] General biology - Symposia, transactions and proceedings
+      [12512] Pathology - Therapy
+      [16006] Respiratory system - Pathology
+      [20506] Nervous system - Pathology
+      [22002] Pharmacology - General
+      [22005] Pharmacology - Clinical pharmacology
+      [22018] Pharmacology - Immunological processes and allergy
+      [33502] Virology - General and methods
+      [34502] Immunology - General and methods
+      [36006] Medical and clinical microbiology - Virology
+LG  - English
+MC  - Pharmacology;  Infection;  Immune System: Chemical Coordination and Homeostasis
+BC  - [03613] Coronaviridae
+      [86215] Hominidae
+      [03505] Orthomyxoviridae
+      [03603] Picornaviridae
+      [03110] Poxviridae
+      [03305] Retroviridae
+ST  - [03613] Coronaviridae, Positive Sense ssRNA Viruses, Viruses, Microorganisms
+      [86215] Hominidae, Primates, Mammalia, Vertebrata, Chordata, Animalia
+      [03505] Orthomyxoviridae, Negative Sense ssRNA Viruses, Viruses, Microorganisms
+      [03603] Picornaviridae, Positive Sense ssRNA Viruses, Viruses, Microorganisms
+      [03110] Poxviridae, dsDNA Viruses, Viruses, Microorganisms
+      [03305] Retroviridae, DNA and RNA Reverse Transcribing Viruses, Viruses, Microorganisms
+TN  - Coronaviridae: Microorganisms, Positive Sense Single-Stranded RNA Viruses, Viruses;  Hominidae: Animals, Chordates, Humans, Mammals, Primates, Vertebrates;  Orthomyxoviridae: Microorganisms, Negative Sense Single-Stranded RNA Viruses, Viruses;  Picornaviridae: Microorganisms, Positive Sense Single-Stranded RNA Viruses, Viruses;  Poxviridae: Double-Stranded DNA Viruses, Microorganisms, Viruses;  Retroviridae: DNA and RNA Reverse Transcribing Viruses, Microorganisms, Viruses
+OR  - SARS virus: common, Severe Acute Respiratory Syndrome virus, common, pathogen [Coronaviridae];  human: common, host [Hominidae];  Avian influenza virus: common, pathogen [Orthomyxoviridae];  influenza virus: common, pathogen, strain-H5N1 [Orthomyxoviridae];  poliovirus: common, pathogen [Picornaviridae];  Smallpox virus: common, Variola virus, species, pathogen [Poxviridae];  Acquired immunodeficiency syndrome retrovirus: common, pathogen [Retroviridae]
+DS  - SARS: severe acute respiratory syndrome, respiratory system disease, viral disease;  smallpox: (Smallpox (MeSH)), viral disease;  polio: (Poliomyelitis (MeSH)), nervous system disease, viral disease, transmission;  avian influenza: (Influenza (MeSH)), viral disease
+CB  - oral polio vaccine: immunologic-drug, immunostimulant-drug, vaccine
+GE  - Thailand: Asia, Oriental region;  Vietnam: Asia, Oriental region;  Cambodia: Asia, Oriental region
+YR  - 2005
+UP  - 200542. BIOSIS Update: 20050927.
+
+
+

@@ -1,0 +1,44 @@
+<1>
+AN  - PREV200510255391
+RO  - Copyright Thomson 2005.
+AU  - Klein, Robyn S. [Author, Reprint Author; E-mail: rklein@im.wustl.edu]
+AU  - Lin, Eugene [Author]
+AU  - Zhang, Bo [Author]
+AU  - Luster, Andrew D. [Author]
+AU  - Tollett, Judy [Author]
+AU  - Samuel, Melanie A. [Author]
+AU  - Engle, Michael [Author]
+AU  - Diamond, Michael S. [Author]
+IN  - Washington Univ, Sch Med, Dept Med, Div Infect Dis, Campus Box 8051,660 S Euclid Ave, St Louis, MO 63110 USA.
+CY  - USA
+TI  - Neuronal CXCL10 directs CD8(+) T-cell recruitment and control of West Nile virus encephalitis
+SO  - Journal of Virology. 79(17).  SEP 2005. 11457-11466.
+PT  - Article.
+IS  - 0022-538X
+CC  - [02506] Cytology - Animal
+      [12512] Pathology - Therapy
+      [15002] Blood - Blood and lymph studies
+      [15004] Blood - Blood cell studies
+      [20504] Nervous system - Physiology and biochemistry
+      [20506] Nervous system - Pathology
+      [22002] Pharmacology - General
+      [22024] Pharmacology - Neuropharmacology
+      [33502] Virology - General and methods
+      [34502] Immunology - General and methods
+      [36006] Medical and clinical microbiology - Virology
+LG  - English
+AB  - The activation and entry of antigen-specific CD8(+) T cells into the central nervous system is an essential step towards clearance of West Nile virus (WNV) from infected neurons. The molecular signals responsible for the directed migration of virus-specific T cells and their cellular sources are presently unknown. Here we demonstrate that in response to WNV infection, neurons secrete the chemokine CXCL10, which recruits effector T cells via the chemokine receptor CXCR3. Neutralization or a genetic deficiency of CXCL10 leads to a decrease in CXCR3(+) CD8(+) T-cell trafficking, an increase in viral burden in the brain, and enhanced morbidity and mortality. These data support a new paradigm in chemokine neurobiology, as neurons are not generally considered to generate antiviral immune responses, and CXCL10 may represent a novel neuroprotective agent in response to WNV infection in the central nervous system.
+MC  - Pharmacology;  Nervous System: Neural Coordination;  Infection;  Immune System: Chemical Coordination and Homeostasis
+BC  - [03615] Flaviviridae
+ST  - [03615] Flaviviridae, Positive Sense ssRNA Viruses, Viruses, Microorganisms
+TN  - Flaviviridae: Microorganisms, Positive Sense Single-Stranded RNA Viruses, Viruses
+OR  - West Nile virus: species [Flaviviridae]
+PS  - neuron: nervous system;  CD8-positive T cell: immune system, blood and lymphatics
+DS  - west nile virus encephalitis: (Encephalitis, Viral (MeSH)), nervous system disease, viral disease, drug therapy
+CB  - CXCR3 chemokine receptor;  CXCL10: chemokine;  CXCL10: neuroprotectant-drug
+MI  - viral burden
+YR  - 2005
+UP  - 200548. BIOSIS Update: 20051108.
+
+
+
