@@ -1,0 +1,255 @@
+<1>
+UI  - 19932287963
+AU  - Meyer, H.
+AU  - Rziha, H. J.
+TI  - Characterization of the gene encoding the A-type inclusion protein of camelpox virus and sequence comparison with other orthopoxviruses.
+SO  - Journal of General Virology. 1993. 74: 8, 1679-1684. 26 ref. 
+AB  - A gene identified in camelpox virus strain CP-1 is similar to the 160K gene of cowpox virus strain Brighton (BR) that encodes the A-type inclusion body protein (ATIP). The CP-1 gene was mapped, sequenced, and the ATIP-specific mRNA was identified. The open reading frame [2178 nucleotides (nt)] was at a similar position in the CP genome as the one reported for the cowpox virus 160K AT1 gene. DNA sequence comparison showed a deletion of two adjacent adenine residues relative to cowpox virus BR, generating a reading frame shift accompanied by the formation of a translational stop codon. An identical deletion has been described for vaccinia virus strain Western Reserve. The DNA sequence of the corresponding region of monkeypox virus strain Copenhagen showed a deletion leading to a putative stop codon 75 nt upstream of the same stop codons in the camelpox and vaccinia virus genes. These findings are consistent with the expression of truncated ATIPs, of 94K in vaccinia and the camelpox viruses and of 92K in monkeypox virus. In addition, a deletion of 789 bp could be localized downstream of the AT1 open reading frame in camelpox virus isolates of different origin. This causes the transcription of a shortened AT1-specific mRNA (3.7 kb) relative to vaccinia and cowpox viruses (both 4.5 kb). The similarity observed in ATIP encoding and flanking sequences suggests that vaccinia and camelpox viruses are descended from a common ancestor.
+MH  - Viral proteins
+MH  - Gene expression
+MH  - Messenger RNA
+MH  - nucleotide sequences
+MH  - Biotechnology
+MH  - viral diseases
+
+
+<2>
+UI  - 19930515941
+AU  - Fenner, F.
+TI  - Patterns of establishment and spread of animal viruses.
+SO  - Introduction of genetically-modified organisms into the environment.. John Wiley & Sons, Chichester, UK: 1990. 99-116. 30 ref. 
+AB  - Patterns of establishment and spread of animal viruses are discussed under the headings: vertical transmission; horizontal transmission; spread in the body; shedding; inapparent infections; survival of viruses in nature; some examples of establishment and spread in new environments (myxoma virus, cowpox virus, human monkeypox); and live virus vaccines (poliovirus vaccines, recombinant vaccinia virus vaccines).
+MH  - Arboviruses
+MH  - Disease transmission
+MH  - Domestic animals
+MH  - Wild animals
+MH  - epidemiology
+MH  - Viral diseases
+
+
+<3>
+UI  - 19922091228
+AU  - Meyer, A.
+AU  - Esposito, J. J.
+AU  - Gras, F.
+AU  - Kolakowski, T.
+AU  - Fatras, M.
+AU  - Muller, G.
+TI  - First appearance in Gabon of human monkey pox.  [French]
+SO  - Medecine Tropicale. 1991. 51: 1, 53-57. 
+AB  - The authors record the first recognized cases of human monkey-pox infection in Gabon. Four children in a single family were infected simultaneously in mid-1987, and 2 died; diagnosis was based on haematogenous virus-isolation (in one of those who died) and on "clinical and epidemiological findings" in the remainder. The fatal cases presented with some of the manifestations of "haemorrhagic fever" and were not dominated by the classical cutaneous symptoms and signs (especially the exanthem). Both liver and spleen were involved, a feature that the authors consider has not previously been documented in human infection, but has been recorded in infected monkeys. The source of the infection was not delineated; there was no evidence of human-to-human transmission. The authors consider that this zoonosis should be considered in individuals in a potentially endemic area (i.e. the humid forests of Central Africa) presenting with clinical manifestations suggestive of a viral haemorrhagic fever.G.C. Cook
+MH  - Monkeypox
+MH  - children
+MH  - families
+
+
+<4>
+UI  - 19902202157
+AU  - Czerny, C. P.
+AU  - Meyer, H.
+AU  - Mahnel, H.
+TI  - Establishment of an ELISA for the detection of orthopox viruses based on neutralizing monoclonal and polyclonal antibodies.
+SO  - Journal of Veterinary Medicine. Series B. 1989. 36: 7, 537-546. 27 ref. 
+AB  - Various combinations of polyclonal and neutralizing monoclonal antibodies (MAbs) of distinct specficity were evaluated as capture or detecting antibodies in an orthopox virus antigen ELISA. Acceptable results were achieved in an assay based on polyclonal antibodies. A 10 times higher sensitivity, however, was obtained using a combination of one monoclonal catching antibody reactive with viral envelope epitopes and polyclonal detection antibodies. This configuration was superior in sensitivity to all others. Specificity was confirmed with 5 vaccinia virus strains (including one recombinant virus) and 8 species of orthopox viruses. Monkeypox and mousepox virus reacted exclusively in the polyclonal assay due to lack of the specific epitope for the monoclonal antibody. The detection limit compared to the infectivity titre was 10superscript 3-104 in the monoclonal/polyclonal and 104-105 TCID50/0.1 ml in the polyclonal combination. The correlation between infectivity- and ELISA-titre was demonstrated by a study of the replication cycle of the rabbitpox virus Utrecht in the permanent rabbit kidney cell line RK-13. With the established ELISAs vaccinia virus could also be detected in organ suspensions of lethally infected NMRI-mice, depending on the level of infectivity.
+MH  - Biotechnology
+MH  - Monoclonal antibodies
+MH  - Diagnosis
+MH  - ELISA
+MH  - viral diseases
+
+
+<5>
+UI  - 19892289229
+AU  - Fenner, F.
+AU  - Wittek, R.
+AU  - Dumbell, K. R.
+TI  - Monkeypox virus.
+SO  - The orthopoxviruses.. Academic Press Inc., San Diego, CA 92101, USA: 1989. 227-268. 
+MH  - Viral diseases
+MH  - Zoonoses
+
+
+<6>
+UI  - 19892289226
+AU  - Fenner, F.
+AU  - Wittek, R.
+AU  - Dumbell, K. R.
+TI  - The orthopoxviruses.
+SO  - The orthopoxviruses.. Academic Press Inc., San Diego, CA 92101, USA: 1989. 432. 45 pp. of ref. 
+AB  - This book is intended to give a comprehensive account of all the known species of orthopoxviruses which includes 2 important viruses, small pox which is now of historical interest and vaccinia virus which has a potential use as a vector for carrying genes from other microorganisms for vaccine production. There are 12 chapters entitled: Historical introduction and overview; Structure and chemical composition of the virion; Replication and morphogenesis of vaccinia virus; The pathogenesis, pathology and immunology or orthopoxvirus infections; Vaccinia virus; The tool for smallpox eradication; Cowpox virus; Variola virus; Monkeypox virus; Ectromelia virus; Other orthopoxviruses; The global spread, control and eradication of smallpox; and Vaccinia virus as a vector for vaccine antigens. There is a bibliography of about 950 references and a subject index.
+MH  - Vaccines
+MH  - Smallpox
+MH  - viral diseases
+
+
+<7>
+UI  - 19892059789
+AU  - Khodakevich, L.
+AU  - Jezek, Z.
+AU  - Messinger, D.
+TI  - Monkeypox virus: ecology and public health significance.
+SO  - Bulletin of the World Health Organization. 1988. 66: 6, 747-752. 24 ref. 
+AB  - The ecology of monkeypox virus was investigated in squirrels, terrestrial and arboreal rodents, and bats at Kinshasa, Zaire. In an initial survey carried out at Bumba zone (northern Zaire), blood-samples were obtained from 120 sheep and goats, 67 domestic cats, 172 terrestrial rodents and 21 squirrels (Funisciurus sp. and Heliosciurus sp.) in areas where human monkeypox had previously been reported; the result was that 2 of 18 F. anerythrus squirrels (and none of the other species tested) were seropositive for monkeypox-specific antibodies and 1 of these had pock-like skin lesions-both these and other organs yielded monkeypox virus. The study was later extended to forested country in central and western Zaire. Overall, 1122 terrestrial rodents and insectivores were tested; all were negative. A total of 659 Funisciurus sp. and 101 Heliosciurus sp. squirrels were also studied; 156 (23.7%) and 15 (14.9%) respectively were positive. Of 153 non-human primates tested (most were Cercopithecus ascanius) 12 (7.8%) were seropositive. Experimental studies showed that the virus was efficiently transmitted through air and excreta (vomit and faeces) among captive squirrels and also by skin scarification. However, the virus was not found in ants (which form a significant part of squirrels' diet) which were fed on infected tissues of squirrels.
+MH  - Monkeypox
+MH  - wild animals
+MH  - Ecology
+MH  - Zoonoses
+MH  - Children
+MH  - Viral diseases
+MH  - Human diseases
+MH  - transmission
+MH  - vectors
+MH  - epidemiology
+MH  - disease transmission
+MH  - disease vectors
+
+
+<8>
+UI  - 19892057606
+AU  - Jezek, Z.
+AU  - Szczeniowski, M.
+AU  - Paluku, K. M.
+AU  - Mutombo, M.
+AU  - Grab, B.
+TI  - Human monkeypox: confusion with chickenpox.
+SO  - Acta Tropica. 1988. 45: 4, 297-307. 
+AB  - The authors report results of a study carried out in Zaire to estimate the frequency with which a diagnosis of monkeypox can be confused with other "eruptive diseases" including varicella (chickenpox). About 20% of the initial clinical diagnoses were made by physicians and the remainder by medical assistants and nurses. Between 1981 and 1986, 977 individuals with a skin eruption which was not diagnosed as monkeypox were subjected to laboratory investigation (serology, electron microscopic examination and culture of fluid, or scabs from the eruption). Of 730 cases diagnosed as varicella, 24 (3.3%) were monkeypox; 12 (7.3%) of 165 cases of atypical varicella, and 5 (6.1%) of 82 cases in which a clinical diagnosis of the dermatological condition could not be ascertained, were also shown to be monkeypox. Four of the misdiagnosed monkeypox patients died. "Regional pleomorphism", indefinite body-distribution of skin eruptions, and a centripetal distribution of lesions accounted for misdiagnoses in 46%, 49% and 17%, respectively; 76% of misdiagnosed cases had evidence of regional lymphadenopathy.
+MH  - Monkeypox
+MH  - diagnosis
+MH  - differential diagnosis
+
+
+<9>
+UI  - 19892056679
+AU  - Jezek, Z.
+AU  - Grab, B.
+AU  - Szczeniowski, M. V.
+AU  - Paluku, K. M.
+AU  - Mutombo, M.
+TI  - Human monkeypox: secondary attack rates.
+SO  - Bulletin of the World Health Organization. 1988. 66: 4, 465-470. 
+AB  - In 1981 and 1986, 2278 people in Zaire had close contact with a patient (of whom 245 were identified) who had acquired monkeypox from an animal source. During these 6 years, 93 cases were identified in which the infection was considered to have a human origin [see Jezek et al. above]; of these, 69 infections were spread in the first generation, 19 in the second, and 5 in the third or fourth generation. The probability of a close contact becoming ill from a known human case was estimated at 3%. These infections were usually associated with living in an affected household (usually a poorly ventilated hut), under conditions of maximum exposure. The highest attack rate (11.7%) was in unvaccinated household contacts aged <4 years. No evidence was forthcoming that the secondary attack rate differed between 1970-80 and 1981-86. This evidence is considered by the authors to be consistent with the concept that the "monkeypox virus is poorly adapted for sustained transmission between humans and that such transmission does not pose a significant health problem".G.C. Cook
+MH  - Monkeypox
+MH  - epidemiology
+
+
+<10>
+UI  - 19892056678
+AU  - Jezek, Z.
+AU  - Grab, B.
+AU  - Szczeniowski, M.
+AU  - Paluku, K. M.
+AU  - Mutombo, M.
+TI  - Clinico-epidemiological features of monkeypox patients with an animal or human source of infection.
+SO  - Bulletin of the World Health Organization. 1988. 66: 4, 459-464. 
+AB  - Between 1981 and 1986, 338 patients in Zaire were diagnosed as suffering from monkeypox; 245 (72%) were considered to have been infected from an animal, and 93 (28%) a human source. Of the former, children accounted for most cases-27% 3-4 years, 20% 5-6 years, and only 4% were >15 years old; male:female ratio was 58:42. Of the latter, the age distribution was more uniform, and infected adults were more common; male:female ratio was 43:57 (i.e. a reversal of that in the animal-infected cases; P <0.05). Analysis of the clinical data (including fatality rates) obtained from the survey did not support the view that those cases infected from a human source (73 were studied, and compared with 222 infected by animals) were more severe, i.e. passage through the human host did not seem to enhance the virulence of the monkeypox virus.
+MH  - Monkeypox
+MH  - epidemiology
+
+
+<11>
+UI  - 19892056506
+AU  - Fine, P. E. M.
+AU  - Jezek, Z.
+AU  - Grab, B.
+AU  - Dixon, H.
+TI  - The transmission potential of monkeypox virus in human populations.
+SO  - International Journal of Epidemiology. 1988. 17: 3, 643-650. 
+AB  - In order to assess the degree of protection rendered by previous smallpox vaccination (which was discontinued in 1980), and to determine the transmission potential of the monkeypox virus in unvaccinated communities, data on 209 monkeypox cases diagnosed in Zaire during a 5-year period (1980-84) have been analysed. By using scars as the marker of previous vaccination, the authors conclude that this imparted about 85% protection-rate against monkeypox infection. They also consider that the number of human monkeypox cases (which usually have an animal origin) will increase as vaccination-derived protection declines. However, because the monkeypox virus is less transmissible than smallpox was, it will not persist (by person-to-person transmission) in human communities-even in the complete absence of vaccination. The Global Commission for the Certification of Smallpox Eradication recommended (i) the cessation of routine smallpox vaccination in areas endemic for monkeypox, and (ii) encouragement of continuous epidemiological surveillance; this general policy is supported by these authors from their study of this relatively small number of cases.G.C. Cook
+MH  - Monkeypox
+
+
+<12>
+UI  - 19882053711
+AU  - Jezek, Z.
+AU  - Grab, B.
+AU  - Paluku, K. M.
+AU  - Szczeniowski, M. V.
+TI  - Human monkeypox: disease pattern, incidence and attack rates in a rural area of northern Zaire.
+SO  - Tropical and Geographical Medicine. 1988. 40: 2, 73-83. 4 ref. 
+AB  - The epidemiological features of 91 cases of monkeypox (MP) reported from 1981 to 1985 in Bumba zone, northern Zaire, are documented. In 68 (75%) cases the clinical diagnosis was confirmed by demonstration of MP virus and by serology. Age range was from 7 months to 29 years; 93% of patients were <15 years old. Smallpox scars were detected in 10 (11%). The cases arose from 61 separate outbreaks; 42 of these consisted of a single recognized case. Average incidence rate in 1981-85 was 0.63 new cases/10 000 population; amongst unvaccinated and vaccinated individuals the average annual primary attack rate was 1.70 and 0.04/10 000, respectively. Secondary attack rates for those with and without a vaccination scar were 0.7% and 4.3%, respectively (P <0.001). Cases occurred throughout the year, and there was evidence of clustering of cases in the northern part of the zone. Many unvaccinated contacts living in close proximity to index cases escaped infection. In 70 cases, an animal source of infection was suspected, and in 21 the origin was considered to be a human one. Overall case-fatality rate was 9%; these 8 deaths occurred sporadically. The low incidence of human MP in this locality is considered to indicate that it has only limited public health importance, even though this is well known to be an enzoonotic area.G.C. Cook
+MH  - Monkeypox
+MH  - epidemiology
+MH  - Zoonoses
+
+
+<13>
+UI  - 19882278656
+AU  - Cook, G. C.
+TI  - Human monkeypox: a viral disease with an uncertain future in Africa.
+SO  - Tropical Diseases Bulletin. 1988. 85: 2, R1-R16. 49 ref. 
+MH  - Viral diseases
+MH  - Reviews
+MH  - Zoonoses
+
+
+<14>
+UI  - 19862274436
+AU  - Khodakevich, L.
+AU  - Jezek, Z.
+AU  - Kinzanzka, K.
+TI  - Isolation of monkeypox virus from wild squirrel infected in nature. [Correspondence].
+SO  - Lancet. 1986. I: 8472, 98-99. 3 ref. 
+AB  - Monkeypox virus was isolated from a squirrel (Funisciurus anerythrus) with skin eruptions which had been captured in Zaire near a village where human monkeypox had occurred. Monkeypox-specific antibodies were detected in another six squirrels of the same species.
+MH  - Zoonoses
+MH  - Wild animals
+MH  - viral diseases
+MH  - monkeypox
+
+
+<15>
+UI  - 19842251324
+AU  - Roumillat, L. F.
+AU  - Patton, J. L.
+AU  - Davis, M. L.
+TI  - Monoclonal antibodies to a monkeypox virus polypeptide determinant.
+SO  - Journal of Virology. 1984. 52: 1, 290-292. 17 ref. 
+MH  - monoclonal antibodies
+
+
+<16>
+UI  - 19832225637
+AU  - Manshande, J. P.
+AU  - Kabaya-Wa-Rutenda
+TI  - Human monkeypox transmitted by a Chimpanzee.
+SO  - Lancet. 1983. I: 8333, 1110-1111. 
+MH  - Epidemiology
+
+
+<17>
+UI  - 19832223018
+AU  - Mutombo, M. wa
+AU  - Arita, I.
+AU  - Jezek, Z.
+TI  - Human monkeypox transmitted by a chimpanzee in a tropical rain-forest area of Zaire.
+SO  - Lancet. 1983. 1: 8327, 735-737. 6 ref. 
+MH  - zoonoses
+
+
+<18>
+UI  - 19802272765
+AU  - Dumbell, K. R.
+AU  - Archard, L. C.
+TI  - Comparison of white pock (h) mutants of monkeypox virus with parental monkeypox and with variola-like viruses isolated from animals.
+SO  - Nature, UK. 1980. 286: 5768, 29-32. 17 ref. 
+
+
+<19>
+UI  - 19802267615
+AU  - Arita, M.
+AU  - Tagaya, I.
+TI  - Virion polypeptides of poxviruses.
+SO  - Archives of Virology. 1980. 63: 34, 209-225. 34 ref. 
+
+
+<20>
+UI  - 19792254002
+AU  - Marennikova, S. S.
+AU  - Shelokhina, E. M.
+AU  - Maltseva, N. N.
+AU  - Matsevich, G. R.
+TI  - Monkeypox virus as a source of whitepox virus.
+SO  - Intervirology. 1979. 11: 6, 333-340. 15 ref. 
+
+
+

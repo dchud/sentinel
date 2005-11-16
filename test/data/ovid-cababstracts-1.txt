@@ -1,0 +1,15 @@
+<1>
+UI  - 19882211732
+AU  - Luo, Y. Y.
+AU  - Lai, D. M.
+AU  - Kang, S. C.
+AU  - Wu, J. J.
+AU  - Wu, L. T.
+TI  - Serological survey of poultry diseases in breeding ducks in I-Lan county, Taiwan.  [Chinese]
+SO  - Taiwan Journal of Veterinary Medicine and Animal Husbandry. 1987. 49, 71-82. 9 ref. 
+AB  - In serological tests on 820 ducks, 94.6% were positive for Newcastle disease, 100% for egg drop syndrome 76, 88.8% for fowl cholera, 26.6% for Mycoplasma gallisepticum, 52.4% for Mycoplasma synoviae, 8.8% for pullorum disease, 0.4% for infectious bursal disease, 14.9% for infectious bronchitis, 5.4% for avian influenza and none for Marek's disease.
+MH  - Disease surveys
+MH  - poultry diseases
+
+
+
