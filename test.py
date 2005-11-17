@@ -5,7 +5,7 @@ Run all tests:
 
     ./test.py 
 
-Or a specific suite (search, parsing, stats)
+Or a specific suite (search, parser, stats)
 
     ./test.py parser
 
@@ -17,10 +17,10 @@ from sys import argv
 from unittest import TestSuite, TextTestRunner, makeSuite
 
 from test import StatsTests, SearchTests, PubmedMedlineTests, \
-    OvidMedlineTests, BiosisPreviewsTests
+    OvidMedlineTests, OvidBiosisTests, TermTests
 
 # determine if we should all or just one 
-tests = [ 'stats', 'parsing', 'search' ]
+tests = [ 'stats', 'parsing', 'search', 'term' ]
 if len(argv) == 2: 
     tests = [argv[1]]
 
@@ -35,7 +35,10 @@ if 'search' in tests:
 if 'parser' in tests:
     suite.addTest(makeSuite(PubmedMedlineTests, 'test'))
     suite.addTest(makeSuite(OvidMedlineTests, 'test'))
-    suite.addTest(makeSuite(BiosisPreviewsTests, 'test'))
+    suite.addTest(makeSuite(OvidBiosisTests, 'test'))
+
+if 'term' in tests:
+    suite.addTest(makeSuite(TermTests, 'test'))
 
 # run 'em 
 runner = TextTestRunner(verbosity=2)

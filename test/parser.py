@@ -66,7 +66,7 @@ class OvidMedlineTests (ParserTests):
     def test_single_value (self):
         records = self.parse('test/data/ovid-medline-200.txt')
         metadata = self.get_mapped_metadata(records[199])
-        self.assertTrue( metadata['source'] == 
+        self.assertTrue(metadata['source'] == 
             'Clin Infect Dis. 2001 Feb 1;32(3):446-56')
 
     def test_multi_value (self):
@@ -76,12 +76,30 @@ class OvidMedlineTests (ParserTests):
         self.assertTrue(metadata['author'] == ['Weber DJ', 'Rutala WA'])
 
 
-class BiosisPreviewsTests (ParserTests):
+class OvidBiosisTests (ParserTests):
 
     def __init__ (self, name):
-        ParserTests.__init__(self, name, 'biosis-previews')
+        ParserTests.__init__(self, name, 'ovid-biosis')
 
     def test_length (self):
-        records = self.parse('test/data/webspirs-biosis-250.txt')
-        self.assertTrue(len(records) == 250)
+        records = self.parse('test/data/ovid-biosis-200.txt')
+        self.assertTrue(len(records) == 200)
+
+    def test_single_value(self):
+        records = self.parse('test/data/ovid-biosis-200.txt')
+        metadata = self.get_mapped_metadata(records[110])
+        self.assertTrue(metadata['title'] == 
+            'PCR Strategy for Identification and Differentiation of ' + 
+            'Smallpox and Other orthopoxviruses')
+
+    def test_multi_value(self):
+        records = self.parse('test/data/ovid-biosis-200.txt')
+        metadata = self.get_mapped_metadata(records[110])
+        self.assertTrue(len(metadata['author']) == 5)
+        self.assertTrue(metadata['author'] == [ \
+            'Ropp, Susan L. [Author]', 
+            'Jin, Qi [Author]', 
+            'Knight, Janice C. [Author]', 
+            'Massung, Robert F. [Author]', 
+            'Esposito, Joseph J. [Reprint author]' ])
 

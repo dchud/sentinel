@@ -673,4 +673,4 @@ class Parser:
                     record.add_metadata(term, val.strip())
             else:
                 record.add_metadata(term, value)
-                    
+
