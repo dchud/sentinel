@@ -85,14 +85,14 @@ class OvidBiosisTests (ParserTests):
         records = self.parse('test/data/ovid-biosis-200.txt')
         self.assertTrue(len(records) == 200)
 
-    def test_single_value(self):
+    def test_single_value (self):
         records = self.parse('test/data/ovid-biosis-200.txt')
         metadata = self.get_mapped_metadata(records[110])
         self.assertTrue(metadata['title'] == 
             'PCR Strategy for Identification and Differentiation of ' + 
             'Smallpox and Other orthopoxviruses')
 
-    def test_multi_value(self):
+    def test_multi_value (self):
         records = self.parse('test/data/ovid-biosis-200.txt')
         metadata = self.get_mapped_metadata(records[110])
         self.assertTrue(len(metadata['author']) == 5)
