@@ -35,6 +35,10 @@ class Journal (canary.context.Cacheable, DTable):
         self.iso_abbr = ''
         self.nlm_id = ''
     
+    def no_dash (self):
+        """Return the ISSN without the dash."""
+        return self.issn[0:4] + self.issn[5:]
+           
     def load_from_issn (self, context, issn):
         if not issn:
             return

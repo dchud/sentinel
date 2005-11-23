@@ -414,7 +414,6 @@ class SearchIndex:
             doc.add(PyLucene.Field('article-type', str(study.article_type),
                 False, True, False))
             
-            
             source_catalog = self.context.get_source_catalog()
             complete_term_map = source_catalog.get_complete_mapping()
             mapped_metadata = record.get_mapped_metadata(complete_term_map)
@@ -435,11 +434,16 @@ class SearchIndex:
             if issn:
                 j = Journal()
                 j.load_from_issn(self.context, issn)
+                no_dash = j.no_dash()
                 self.logger.debug('indexing journal: %s, abbv:%s, issn:%s' % \
                     (j.journal_title, j.abbreviation, issn))
                 doc.add(PyLucene.Field('journal', issn,
                     False, True, True))
+                doc.add(PyLucene.Field('journal', no_dash,
+                    False, True, True))
                 doc.add(PyLucene.Field('all', issn,
+                    False, True, True))
+                doc.add(PyLucene.Field('all', no_dash,
                     False, True, True))
                 if j.abbreviation:
                     doc.add(PyLucene.Field('journal', j.abbreviation,
