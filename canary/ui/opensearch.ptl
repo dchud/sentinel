@@ -1,0 +1,175 @@
+# $Id$
+
+import sys
+import urlparse
+
+from elementtree import ElementTree as etree
+from elementtree.ElementTree import Element, SubElement, ElementTree, PI
+
+from quixote import get_publisher
+
+from canary.loader import QueuedRecord
+from canary.search import SearchIndex
+from canary import utils
+
+_q_exports = ['_q_index']
+
+
+def _q_index [plain] (request):
+    request.response.set_content_type('text/xml')
+    params = {}
+    for k, v in request.formiter():
+        if k in ('searchTerms', 'count', 'startIndex', 'startPage'):
+            params[k] = v
+        # Map field names
+        elif k == 'q':
+            params['searchTerms'] = v
+        elif k == 'w':
+            params['count'] = v
+        elif k == 'o':
+            params['startIndex'] = v
+
+    # Default to description page if no query present
+    if params.get('searchTerms', None):
+        resp = opensearch(request, params)
+    else:
+        resp = description(request)
+
+    return '<?xml version="1.0"?>\n' + etree.tostring(resp)
+
+
+def description [plain] (request):
+    context = get_publisher().context
+    config = context.config
+
+    resp = Element('OpenSearchDescription')
+    resp.set('xmlns', 'http://a9.com/-/spec/opensearchdescription/1.0/')
+
+    url = SubElement(resp, 'Url')
+    url.text = config.site_base_url + \
+        '/opensearch/?q={searchTerms}&amp;w={count}&amp;o={startIndex}'
+
+    format = SubElement(resp, 'Format')
+    format.text = 'http://a9.com/-/spec/opensearchrss/1.0/'
+
+    short_name = SubElement(resp, 'ShortName')
+    short_name.text = 'Canary Database'
+
+    description = SubElement(resp, 'Description')
+    description.text = 'Search the Canary Database of Animals as Human Environmental Health Hazards'
+
+    tags = SubElement(resp, 'Tags')
+    tags.text = 'Canary Database animal sentinels human health zoonoses bioterrorism'
+
+    image = SubElement(resp, 'Image')
+    image.text = 'http://canarydatabase.org/images/bird-logo.gif'
+    
+    contact = SubElement(resp, 'Contact')
+    contact.text = config.error_email
+
+    return resp
+
+
+def opensearch [plain] (request, params):
+    context = get_publisher().context
+    config = context.config
+    source_catalog = context.get_source_catalog()
+    complete_term_mapping = source_catalog.get_complete_mapping()
+    
+    resp = Element('rss')
+    resp.set('xmlns:openSearch', 'http://a9.com/-/spec/opensearchrss/1.0/')
+    
+    channel = SubElement(resp, 'channel')
+    
+    title = SubElement(channel, 'title')
+    title.text = 'Canary Database Opensearch'
+    
+    link = SubElement(channel, 'link')
+    link.text = config.site_base_url
+    
+    description = SubElement(channel, 'description')
+    description.text = 'Search results for "%s" in the Canary Database' % params['searchTerms']
+    
+    language = SubElement(channel, 'language')
+    language.text = 'en-us'
+
+    copyright = SubElement(channel, 'copyright')
+    copyright.text = '&copy;2004-2005, Yale University School of Medicine, New Haven, Connecticut, USA.'
+    
+    result_set = []
+    try: 
+        search_index = SearchIndex(context)
+        raw_query = utils.fix_double_quotes(params['searchTerms'])
+        hits, searcher = search_index.search(raw_query, 
+            require_visible=True)
+        
+        for i, doc in hits:
+            uid = doc.get(str('uid'))
+            record = QueuedRecord(context, uid)
+            if record.status == record.STATUS_CURATED:
+                result_set.append(record)
+        searcher.close()       
+    except:
+        import traceback
+        context.logger.debug(traceback.print_exc())
+        total_results = SubElement(channel, 'openSearch:totalResults')
+        total_results.text = '0'
+        return resp
+
+    try:
+        start_index = int(params.get('startIndex', 1))
+        if start_index < 1 \
+            or start_index > len(result_set):
+            raise ValueError
+    except ValueError:
+        start_index = 1
+   
+    try:
+        count = int(params.get('count', 25))
+        if count < 1:
+            raise ValueError
+    except ValueError:
+        count = 25
+        
+    try:
+        start_page = int(params.get('startPage', 1))
+        if start_page < 1:
+            raise ValueError
+    except ValueError:
+        count = 25
+
+
+    # Note: passed value for startIndex will be over-by-one in python slice
+    if start_index:
+        actual_start_index = start_index - 1
+
+    if start_page > 1:
+        actual_start_index = (start_page * count) + actual_start_index
+
+    os_total_results = SubElement(channel, 'openSearch:totalResults')
+    os_total_results.text = str(len(result_set))
+
+    os_start_index = SubElement(channel, 'openSearch:startIndex')
+    os_start_index.text = str(start_index)
+    
+    os_items_per_page = SubElement(channel, 'openSearch:itemsPerPage')
+    os_items_per_page.text = str(count)
+
+    for record in result_set[actual_start_index:actual_start_index+count]:
+        mm = record.get_mapped_metadata(complete_term_mapping)
+        item = SubElement(channel, 'item')
+        item_title = SubElement(item, 'title')
+        item_title.text = mm['title']
+        link = SubElement(item, 'link')
+        link.text = '%s/record/%s' % (config.site_base_url, record.uid)
+        source = mm.get('source', '')
+        abstract = mm.get('abstract', '')
+        if source:
+            item_description = SubElement(item, 'description')
+            if abstract:
+                item_description.text = 'Abstract: %s (%s)' % (abstract, source)
+            else:
+                item_description.text = source
+
+    return resp
+    

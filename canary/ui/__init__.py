@@ -6,14 +6,18 @@ _q_exports = [
     'record',
     'canary_png',
     'advanced_search',
+    'opensearch',
     'about',
     'admin',
     'edit',
     'login',
     'logout',
+    'register',
+    'verify',
     'user',
     'assistant',
     'reaper',
+    'resetpass',
     ]
 
 import cStringIO
@@ -25,11 +29,12 @@ from quixote.util import StaticFile
 
 from canary.qx_defs import NotLoggedInError
 from canary.qx_utils import MyStaticFile, load_static_exports
-from canary.ui import about, admin, assistant, edit, user, record_ui
+from canary.ui import about, admin, assistant, edit, user, record_ui, opensearch
+from canary.ui.browse_ui import Browse
 from canary.ui.pages import _q_index, _q_exception_handler, not_found, reaper
 from canary.ui.pages import login_general, login_yale, logout
+from canary.ui.pages import register, verify, resetpass
 from canary.ui.pages import robots, TempImage
-from canary.ui.browse_ui import Browse
 from canary.ui.search import search, advanced_search
 
 
