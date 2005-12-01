@@ -12,6 +12,8 @@ _q_exports = [
     'unclaim',
     ]
 
+import time
+
 from quixote import get_publisher, get_request
 from quixote.errors import AccessError, PublishError, TraversalError
 from quixote import form2
@@ -778,10 +780,15 @@ def summary [html] (request, queued_record_id):
         queued_record.status = queued_record.STATUS_CURATED
         queued_record.duplicate_score = 0
         queued_record.save(context)
-        study.set_status(str('curated'))
-        history_messages.append('Set record status to curated')
-        study.add_history(curator_user_id=session.user.get_id(),
-            message='; '.join(history_messages))
+        if not study.get_status(text=True) == 'curated':
+            study.set_status(str('curated'))
+            study.date_curated = time.strftime(str('%Y-%m-%d'))
+            history_messages.append('Set record status to curated')
+        else:
+            history_messages.append('Updated record')
+        if history_messages:
+            study.add_history(curator_user_id=session.user.get_id(),
+                message='; '.join(history_messages))
         study.save(context)
         form.logger.info(str('Finished curating study %s' % study.uid))
         request.redirect(str('/edit'))

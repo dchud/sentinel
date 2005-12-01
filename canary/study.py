@@ -1199,6 +1199,7 @@ class Study (canary.context.Cacheable, DTable):
         self.locations = []
         self.date_modified = None
         self.date_entered = None
+        self.date_curated = None
         self.history = {}
         
     
@@ -1642,7 +1643,7 @@ class Study (canary.context.Cacheable, DTable):
                     has_relationships, has_interspecies, 
                     has_exposure_linkage, has_outcome_linkage,
                     has_genomic, comments, 
-                    date_modified, date_entered)
+                    date_modified, date_entered, date_curated)
                     VALUES 
                     (NULL, 
                     %s, %s, %s, %s,
@@ -1650,12 +1651,13 @@ class Study (canary.context.Cacheable, DTable):
                     %s, %s,
                     %s, %s,
                     %s, %s,
-                    NOW(), NOW())
+                    NOW(), NOW(), %s)
                     """, (self.record_id, self.status, self.article_type, self.curator_user_id,
                     int(self.has_outcomes), int(self.has_exposures), 
                     int(self.has_relationships), int(self.has_interspecies), 
                     int(self.has_exposure_linkage), int(self.has_outcome_linkage),
-                    int(self.has_genomic), self.comments)
+                    int(self.has_genomic), self.comments,
+                    self.date_curated)
                     )
             except Exception, e:
                 context.logger.error('Save study: %s (%s)', self.uid, e)
@@ -1671,13 +1673,14 @@ class Study (canary.context.Cacheable, DTable):
                     has_relationships = %s, has_interspecies = %s, 
                     has_exposure_linkage = %s, has_outcome_linkage = %s,
                     has_genomic = %s, comments = %s,
-                    date_modified = NOW()
+                    date_modified = NOW(), date_curated = %s
                     WHERE uid = %s
                     """, (self.record_id, self.status, self.article_type, self.curator_user_id,
                     int(self.has_outcomes), int(self.has_exposures), 
                     int(self.has_relationships), int(self.has_interspecies), 
                     int(self.has_exposure_linkage), int(self.has_outcome_linkage),
                     int(self.has_genomic), self.comments,
+                    self.date_curated,
                     self.uid)
                     )
             except Exception, e:
@@ -1712,7 +1715,8 @@ class Study (canary.context.Cacheable, DTable):
                     context.logger.error('Save study history: %s (%s)', self.uid, e)
                     
         if context.config.use_cache:
-            context.cache_set('%s:%s' % (self.CACHE_KEY, self.uid), self)
+            # Force reload on next call to flush history times
+            context.cache_delete('%s:%s' % (self.CACHE_KEY, self.uid))
         
         
     def delete (self, context):
