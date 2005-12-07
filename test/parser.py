@@ -137,4 +137,4 @@ class OvidBiosisTests (ParserTests):
             'Jin, Qi [Author]', 
             'Knight, Janice C. [Author]', 
             'Massung, Robert F. [Author]', 
-            'Esposito, Joseph J. [Reprint author]' ])
+            'Esposito, Joseph J. [Reprint author]'])
