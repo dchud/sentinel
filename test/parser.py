@@ -76,6 +76,38 @@ class OvidMedlineTests (ParserTests):
         self.assertTrue(metadata['author'] == ['Weber DJ', 'Rutala WA'])
 
 
+class OvidCabAbstractsTests (ParserTests):
+    
+    def __init__ (self, name):
+        ParserTests.__init__(self, name, 'ovid-cababstracts')
+
+    def test_length (self):
+        records = self.parse('test/data/ovid-cababstracts-1.txt')
+        self.assertTrue(len(records) == 1)
+        
+    def test_length20 (self):
+        records = self.parse('test/data/ovid-cababstracts-20.txt')
+        self.assertTrue(len(records) == 20)
+
+    def test_length99 (self):
+        records = self.parse('test/data/ovid-cababstracts-99.txt')
+        self.assertTrue(len(records) == 99)
+
+    def test_single_value (self):
+        records = self.parse('test/data/ovid-cababstracts-99.txt')
+        metadata = self.get_mapped_metadata(records[98])
+        self.assertTrue(metadata['pubdate'] == '1972',
+            'metadata[pubdate] == %s' % metadata['pubdate'])
+
+    def test_multi_value (self):
+        records = self.parse('test/data/ovid-cababstracts-20.txt')
+        metadata = self.get_mapped_metadata(records[19])
+        self.assertTrue(len(metadata['subject']) == 13,
+            'len(metadata[subject]) == %s' % len(metadata['subject']))
+        self.assertTrue(metadata['author'] == ['Moscona, A.'],
+            'metadata[author] == %s' %metadata['author'])
+
+
 class OvidBiosisTests (ParserTests):
 
     def __init__ (self, name):
@@ -84,6 +116,10 @@ class OvidBiosisTests (ParserTests):
     def test_length (self):
         records = self.parse('test/data/ovid-biosis-200.txt')
         self.assertTrue(len(records) == 200)
+
+    def test_length20 (self):
+        records = self.parse('test/data/ovid-biosis-20.txt')
+        self.assertTrue(len(records) == 20)
 
     def test_single_value (self):
         records = self.parse('test/data/ovid-biosis-200.txt')
@@ -102,4 +138,3 @@ class OvidBiosisTests (ParserTests):
             'Knight, Janice C. [Author]', 
             'Massung, Robert F. [Author]', 
             'Esposito, Joseph J. [Reprint author]' ])
-
