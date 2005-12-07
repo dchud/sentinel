@@ -1,15 +1,36 @@
 <1>
-UI  - 19882211732
-AU  - Luo, Y. Y.
-AU  - Lai, D. M.
-AU  - Kang, S. C.
-AU  - Wu, J. J.
-AU  - Wu, L. T.
-TI  - Serological survey of poultry diseases in breeding ducks in I-Lan county, Taiwan.  [Chinese]
-SO  - Taiwan Journal of Veterinary Medicine and Animal Husbandry. 1987. 49, 71-82. 9 ref. 
-AB  - In serological tests on 820 ducks, 94.6% were positive for Newcastle disease, 100% for egg drop syndrome 76, 88.8% for fowl cholera, 26.6% for Mycoplasma gallisepticum, 52.4% for Mycoplasma synoviae, 8.8% for pullorum disease, 0.4% for infectious bursal disease, 14.9% for infectious bronchitis, 5.4% for avian influenza and none for Marek's disease.
-MH  - Disease surveys
-MH  - poultry diseases
+UI  - 20053171464
+AU  - Dean, J. L.
+AU  - Palermo, B. J.
+TI  - West Nile virus encephalitis.
+SO  - Current Infectious Disease Reports. BioMed Central Ltd, London, UK: 2005. 7: 4, 292-296. 
+AB  - West Nile virus (WNV) is a small RNA virus. It was first isolated in the blood of a febrile woman in the West Nile district of Uganda in 1937. Although WNV has caused human disease in Africa and Europe since its identification, the first documented human infections occurred in the United States in 1999. Wild birds are the reservoir for WNV, and most transmission to humans occurs after the bite of an infected mosquito. In humans, 80% of infections are asymptomatic and nearly 20% cause a mild self-limiting illness called WNV fever. Less than 1% will develop central nervous system (CNS) infection, which manifests as meningitis, encephalitis, or acute flaccid paralysis. The case fatality rate for CNS infection is approximately 15%. Human vaccine is not available. Personal mosquito protection remains the best prevention, and treatment is supportive.
+CC  - Pesticides and Drugs; Control [HH405], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Public Health Pests, Vectors and Intermediate Hosts [VV230]
+MH  - brain
+MH  - brain diseases
+MH  - central nervous system
+MH  - clinical aspects
+MH  - disease prevention
+MH  - disease transmission
+MH  - disease vectors
+MH  - encephalitis
+MH  - epidemiology
+MH  - human diseases
+MH  - medical treatment
+MH  - meningitis
+MH  - mortality
+MH  - mosquito-borne diseases
+MH  - nervous system diseases
+MH  - paralysis
+MH  - reservoir hosts
+MH  - West Nile fever
+CP  - UK
+LG  - English
+PT  - Journal article
+UR  - http://www.current-reports.com/article_frame.cfm?PubID=IR07-4-2-03&Type=Abstract
+IS  - 1523-3847
+YR  - 2005
+UP  - 200511
 
 
 

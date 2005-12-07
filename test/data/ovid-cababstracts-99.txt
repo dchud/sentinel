@@ -1,0 +1,3072 @@
+<1>
+UI  - 20053185411
+AU  - Chen, N. H.
+AU  - Li GuiYun
+AU  - Liszewski, M. K.
+AU  - Atkinson, J. P.
+AU  - Jahrling, P. B.
+AU  - Feng, Z. H.
+AU  - Schriewer, J.
+AU  - Buck, C.
+AU  - Wang, C. L.
+AU  - Lefkowitz, E. J.
+AU  - Esposito, J. J.
+AU  - Harms, T.
+AU  - Damon, I. K.
+AU  - Roper, R. L.
+AU  - Upton, C.
+AU  - Buller, R. M. L.
+IN  - Department of Molecular Microbiology and Immunology, Saint Louis University Health Sciences Center, M432, 1402 South Grand Boulevard, St. Louis, MO 63104, USA.
+TI  - Virulence differences between monkeypox virus isolates from West Africa and the Congo basin.
+SO  - Virology. Elsevier Inc., San Diego, USA: 2005. 340: 1, 46-63. many ref. 
+AB  - Studies indicate that West African and Congo basin isolates of monkeypox virus (MPXV) are genetically distinct. Here, we show Congo basin MPXV-ZAI-V79 is more virulent for cynomolgus monkeys as compared to presumed West African MPXV-COP-58. This finding may explain the lack of case-fatalities in the U.S. 2003 monkeypox outbreak, which was caused by a West African virus. Virulence differences between West African and Congo basin MPXV are further supported by epidemiological analyses that observed a similar prevalence of antibodies in non-vaccinated humans in both regions, while >90% of reported cases occurred in the Congo basin, and no fatal cases were observed outside of this region. To determine the basis for this difference in virulence, we sequenced the genomes of one human West African isolate, and two presumed West African isolates and compared the sequences to Congo basin MPXV-ZAI-96-I-16. The analysis identified D10L, D14L, B10R, B14R, and B19R as possible virulence genes, with D14L (ortholog of vaccinia complement protein) as a leading candidate.
+OI  - 10.1016/j.virol.2005.05.030
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Molecular Biology and Molecular Genetics [ZZ360], Genetics and Molecular Biology of Microorganisms [ZZ395]
+MH  - genes
+MH  - genetic diversity
+MH  - genome analysis
+MH  - genomes
+MH  - human diseases
+MH  - monkeypox
+MH  - nucleotide sequences
+MH  - pathogenicity
+MH  - strain differences
+MH  - strains
+MH  - virulence
+MH  - zoonoses
+MH  - man
+MH  - Congo
+MH  - West Africa
+BT  - Central Africa, Africa South of Sahara, Africa, Developing Countries, ACP Countries, Francophone Africa, Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals
+CP  - USA
+LG  - English
+PT  - Journal article
+UR  - http://www.sciencedirect.com/science/journal/00426822
+IS  - 0042-6822
+YR  - 2005
+UP  - 200511
+
+
+<2>
+UI  - 20053169590
+AU  - Esteban, D. J.
+AU  - Buller, R. M. L.
+IN  - Department of Biochemistry and Microbiology, University of Victoria, PO Box 3055 STN CSC, Victoria BC V8W 3P6, Canada.
+TI  - Ectromelia virus: the causative agent of mousepox.
+SO  - Journal of General Virology. Society for General Microbiology, Reading, UK: 2005. 86: 10, 2645-2659. many ref. 
+AB  - Ectromelia virus (ECTV) is an orthopoxvirus whose natural host is the mouse; it is related closely to Variola virus, the causative agent of smallpox, and Monkeypox virus, the cause of an emerging zoonosis. The recent sequencing of its genome, along with an effective animal model, makes ECTV an attractive model for the study of poxvirus pathogenesis, antiviral and vaccine testing and viral immune and inflammatory responses. This review discusses the pathogenesis of mousepox, modulation of the immune response by the virus and the cytokine and cellular components of the skin and systemic immune system that are critical to recovery from infection.
+OI  - 10.1099/vir.0.81090-0
+CC  - Animal Immunology [LL650], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821]
+MH  - cell mediated immunity
+MH  - cytokines
+MH  - disease models
+MH  - hosts
+MH  - immune response
+MH  - pathogenesis
+MH  - reviews
+MH  - viral diseases
+MH  - ectromelia virus
+MH  - mice
+MH  - Orthopoxvirus
+BT  - Orthopoxvirus, Chordopoxvirinae, Poxviridae, viruses, Muridae, rodents, mammals, vertebrates, Chordata, animals, small mammals
+ID  - immunomodulation, mouse pox
+CP  - UK
+LG  - English
+PT  - Journal article
+IS  - 0022-1317
+YR  - 2005
+UP  - 200511
+
+
+<3>
+UI  - 20053144372
+AU  - Glinski, Z.
+AU  - Kostro, K.
+IN  - Wydzia Medycyny Weterynaryjnej AR, ul. Akademicka 12, 20-033 Lublin, Poland.
+TI  - Emerging zoonoses of public health concern.  [Polish]
+OT  - Nowo pojawiajace sie zoonozy zagrazajacce zdrowiu publicznemu.
+SO  - Zycie Weterynaryjne. Krajowa Izba Lekarsko Weterynaryjna, Warszawa, Poland: 2005. 80: 8, 481-484. 37 ref. 
+AB  - Zoonoses have assumed increasing importance for public health since over 75% of newly emerging diseases that have affected people over two last decades appeared to have zoonotic character. Among factors influencing the emergence of new zoonoses are environmental changes, population migration, urban decay, international travel and trade, globalization of food supplies and changes in food processing, immunosuppression, microbial adaptation and resistance. The epidemics and outbreaks of BSE, SARS, of highly virulent influenza virus infections, West Nile virus encephalitis, Ebola, Nipah, Rift Valley fever, monkeypox, Lyme borreliosis, and foodborne diseases (caused by: Salmonella spp., Campylobacter spp., enterohaemolytic Escherichia coli, Toxoplasma gondii, Cryptosporidium spp.) have demonstrated the global importance of emerging zoonoses. The rapid distribution of information, careful monitoring and new diagnostic methods should enhance the control measures thus help in public health protection.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210]
+MH  - animal diseases
+MH  - disease control
+MH  - disease prevention
+MH  - human diseases
+MH  - public health
+MH  - zoonoses
+MH  - man
+BT  - Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals
+CP  - Poland
+LG  - Polish
+SL  - English
+PT  - Journal article
+IS  - 0137-6810
+YR  - 2005
+UP  - 200509
+
+
+<4>
+UI  - 20053145066
+AU  - Edghill-Smith, Y.
+AU  - Golding, H.
+AU  - Manischewitz, J.
+AU  - King, L. R.
+AU  - Scott, D.
+AU  - Bray, M.
+AU  - Nalca, A.
+AU  - Hooper, J. W.
+AU  - Whitehouse, C. A.
+AU  - Schmitz, J. E.
+AU  - Reimann, K. A.
+AU  - Franchini, G.
+IN  - Animal Models & Retroviral Vaccines Section, National Cancer Institute, 41/D804, Bethesda, MD 20892, USA.
+TI  - Smallpox vaccine-induced antibodies are necessary and sufficient for protection against monkeypox virus.
+SO  - Nature Medicine. Nature Publishing Group, London, UK: 2005. 11: 7, 740-747. 
+AB  - Vaccination with live vaccinia virus affords long-lasting protection against variola virus, the agent of smallpox. Its mode of protection in humans, however, has not been clearly defined. Here we report that vaccinia-specific B-cell responses are essential for protection of macaques from monkeypox virus, a variola virus orthologue. Antibody-mediated depletion of B cells, but not CD4+ or CD8+ T cells, abrogated vaccine-induced protection from a lethal intravenous challenge with monkeypox virus. In addition, passive transfer of human vaccinia-neutralizing antibodies protected nonimmunized macaques from severe disease. Thus, vaccines able to induce long-lasting protective antibody responses may constitute realistic alternatives to the currently available smallpox vaccine (Dryvax).
+OI  - 10.1038/nm1261
+CC  - Host Resistance and Immunity [HH600], Human Immunology and Allergology [VV055], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Animal Models of Human Diseases [VV400], Animal and in vitro Models for Pharmaceuticals [VV450]
+MH  - animal models
+MH  - antibodies
+MH  - B lymphocytes
+MH  - human diseases
+MH  - immune response
+MH  - laboratory animals
+MH  - monkeypox
+MH  - smallpox
+MH  - vaccine development
+MH  - vaccines
+MH  - Macaca
+MH  - vaccinia virus
+MH  - variola virus
+BT  - Cercopithecidae, Primates, mammals, vertebrates, Chordata, animals, Orthopoxvirus, Chordopoxvirinae, Poxviridae, viruses
+ID  - monkeypox virus
+CP  - UK
+LG  - English
+PT  - Journal article
+UR  - http://www.nature.com/nm/journal/v11/n7/abs/nm1261.html
+IS  - 1078-8956
+YR  - 2005
+UP  - 200509
+
+
+<5>
+UI  - 20053142126
+AU  - Baba, A. I.
+IN  - Faculty of Veterinary Medicine, Cluj-Napoca, Romania.
+TI  - Veterinary medicine implications in bioterrorism.
+SO  - Buletinul Universitatii de Stiinte Agricole si Medicina Veterinara Cluj-Napoca, Seria Medicina Veterinara. University of Agricultural Sciences, Central Library (Exchanges), Cluj-Napoca, Romania: 2004. 61: 22-28. 7 ref. 
+AB  - This article describes the use of microorganisms in bioterrorism activities, with emphasis on Bacillus anthracis, Clostridium botulinum, Yersinia pestis, Francisella tularensis, variola virus, monkeypox virus, viral haemorrhagic fever viruses, Rift Valley fever virus, Ebola virus, Marburg virus, and the importance of veterinarians in the surveillance of animal and human health. Measures to identify and prevent potential bioterrorism and terrorist attacks are also discussed.
+CC  - Professions; Practice and Service [CC700], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Conflict [UU495], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Public Health Pests, Vectors and Intermediate Hosts [VV230], Human Health and the Environment [VV500], Pathogens, Parasites and Infectious Diseases (Wild Animals) [YY700]
+MH  - anthrax
+MH  - bacterial diseases
+MH  - biological warfare
+MH  - botulism
+MH  - disease surveys
+MH  - disease transmission
+MH  - domestic animals
+MH  - epidemiological surveys
+MH  - epidemiology
+MH  - infectious diseases
+MH  - livestock
+MH  - monkeypox
+MH  - plague
+MH  - public health
+MH  - Rift Valley fever
+MH  - terrorism
+MH  - tularaemia
+MH  - veterinarians
+MH  - veterinary medicine
+MH  - viral diseases
+MH  - viral haemorrhagic fevers
+MH  - wild animals
+MH  - zoonoses
+MH  - Bacillus anthracis
+MH  - Clostridium botulinum
+MH  - Ebola virus
+MH  - Francisella tularensis
+MH  - man
+MH  - Marburg virus
+MH  - Rift Valley fever virus
+MH  - variola virus
+MH  - viruses
+MH  - Yersinia pestis
+BT  - Bacillus, Bacillaceae, Firmicutes, bacteria, prokaryotes, Clostridium, Clostridiaceae, Filovirus, Filoviridae, viruses, Francisella, Gracilicutes, Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals, Phlebovirus, Bunyaviridae, Orthopoxvirus, Chordopoxvirinae, Poxviridae, Yersinia, Enterobacteriaceae
+ID  - bioterrorism, emerging diseases
+CP  - Romania
+LG  - English
+PT  - Journal article
+IS  - 1454-2382
+YR  - 2004
+UP  - 200509
+
+
+<6>
+UI  - 20053100444
+AU  - Gileva, I. P.
+AU  - Ryazankin, I. A.
+AU  - Nepomnyashchikh, T. S.
+AU  - Totmenin, A. V.
+AU  - Maxutov, Z. A.
+AU  - Lebedev, L. R.
+AU  - Afinogenova, G. N.
+AU  - Pustoshilova, N. M.
+AU  - Shchelkunov, S. N.
+IN  - Vector State Research Center of Virology and Biotechnology, Koltsovo, Novosibirsk Region 630559, Russia.
+TI  - Expression of genes for orthopoxviral TNF-binding proteins in insect cells and investigation of the recombinant TNF-binding proteins.
+SO  - Molecular Biology (New York). MAIK Nauka/Interperiodica Publishing, Moscow, Russia: 2005. 39: 2, 218-225. 39 ref. 
+AB  - Genes for tumour necrosis factor (TNF)-binding proteins (CrmBs) of the variola virus (VARV), monkeypox virus (MPXV) or cowpox virus (CPXV) were isolated by polymerase chain reaction (PCR) from viral genomes and expressed in a baculovirus system in the Spodoptera frugiperda Sf21 insect cell line. Properties of the purified recombinant proteins were studied by various physicochemical and immunological methods. Using solid-phase enzyme linked immunosorbent assay (ELISA), it was shown that viral proteins inhibited hTNF binding with polyclonal anti-hTNF antibodies, with the efficiency of inhibition decreasing in the series VARV-CrmB > CPXV-CrmB > MPXV-CrmB. Biological activity of the recombinant protein preparations was assessed by their ability to neutralize TNF cytotoxicity on the L929 murine fibroblast cells line. CrmBs were shown to neutralize cytotoxicity of human, mouse and rabbit TNF in a species-specific manner. It was also shown that the efficiency of VARV-CrmB in inhibiting hTNF cytotoxicity exceeded that of polyclonal anti-hTNF antibodies. Orthopoxviral CrmB proteins can provide a basis for the development of new anti-TNF drugs.
+NT  - Translated from Molekulyarnaya Biologiya, Vol 39, No 2, 2005, pp. 245-254.
+OI  - 10.1007/s11008-005-0032-x
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Biochemistry and Physiology of Microorganisms [ZZ394], Genetics and Molecular Biology of Microorganisms [ZZ395]
+MH  - antibodies
+MH  - binding proteins
+MH  - cell lines
+MH  - cytotoxicity
+MH  - ELISA
+MH  - gene expression
+MH  - genes
+MH  - immune evasion
+MH  - monkeypox
+MH  - polymerase chain reaction
+MH  - recombinant proteins
+MH  - tumour necrosis factor
+MH  - viral proteins
+MH  - cowpox virus
+MH  - man
+MH  - mice
+MH  - Orthopoxvirus
+MH  - rabbits
+MH  - Spodoptera frugiperda
+MH  - variola virus
+BT  - Orthopoxvirus, Chordopoxvirinae, Poxviridae, viruses, Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals, Muridae, rodents, small mammals, Leporidae, Lagomorpha, Spodoptera, Noctuidae, Lepidoptera, insects, arthropods, invertebrates
+CP  - Russia
+LG  - English
+PT  - Journal article
+UR  - http://springerlink.metapress.com/link.asp?id=106292
+IS  - 0026-8933
+YR  - 2005
+UP  - 200507
+
+
+<7>
+UI  - 20053076118
+AU  - Gottschalk, R.
+AU  - Preiser, W.
+IN  - Center of Competence for Highly Infectious Diseases, Hesse, Germany.
+TI  - Bioterrorism: is it a real threat?
+SO  - Medical Microbiology and Immunology. Springer-Verlag GmbH, Heidelberg, Germany: 2005. 194: 3, 109-114. 
+AB  - The Geneva Protocol of 1925 commits the signatory nations to refraining from the use of biological weapons. However, the terrorist assaults of September 2001 and, subsequently, the anthrax-containing letters are cause for great concerns: new threats to the security of nations are expected, as terrorist organizations seem to increasingly explore novel ways of spreading terror. In this context, naturally emerging diseases such as SARS, monkeypox or West Nile fever assume new importance because it is difficult to distinguish between natural epidemics and possible bioweapon assaults. Great efforts on the part of governments and public health authorities are necessary to counteract these threats.
+OI  - 10.1007/s00430-004-0228-z
+CC  - Conflict [UU495], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210]
+MH  - anthrax
+MH  - bacterial diseases
+MH  - human diseases
+MH  - monkeypox
+MH  - respiratory diseases
+MH  - smallpox
+MH  - terrorism
+MH  - viral diseases
+MH  - West Nile fever
+MH  - Bacillus anthracis
+MH  - Coronavirus
+MH  - man
+MH  - variola virus
+MH  - West Nile virus
+BT  - Bacillus, Bacillaceae, Firmicutes, bacteria, prokaryotes, Coronaviridae, viruses, Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals, Orthopoxvirus, Chordopoxvirinae, Poxviridae, Flavivirus, Flaviviridae
+ID  - bioterrorism, SARS coronavirus, severe acute respiratory syndrome
+CP  - Germany
+LG  - English
+PT  - Journal article
+UR  - http://springerlink.metapress.com/app/home/contribution.asp?wasp=c30bcc1d1cb74c84b33ad10020389be3&referrer=parent&backto=issue,1,8;journal,2,36;linkingpublicationresults,1:100444,1
+IS  - 0300-8584
+YR  - 2005
+UP  - 200505
+
+
+<8>
+UI  - 20053067143
+AU  - Xiao, S. Y.
+AU  - Sbrana, E.
+AU  - Watts, D. M.
+AU  - Siirin, M.
+AU  - Rosa, A. P. A. T. da
+AU  - Tesh, R. B.
+IN  - University of Texas Medical Branch, 301 University Blvd, Galveston, TX 77555-0609, USA.
+TI  - Experimental infection of prairie dogs with monkeypox virus.
+SO  - Emerging Infectious Diseases. National Center for Infectious Diseases, Centers for Disease Control and Prevention, Atlanta, USA: 2005. 11: 4, 539-545. 7 ref. 
+AB  - Studies of experimental infection of prairie dogs (Cynomys ludovicianus) with monkeypox virus are described. After intraperitoneal infection, all of the animals died within 11 days. Virus was cultured from their blood and oropharynx several days before death; at necropsy, most of the organs tested contained monkeypox virus. Marked hepatic and splenic necrosis were observed, along with mild inflammatory changes in the lungs. After intranasal (IN) infection, the primary pathologic changes were in the lungs and pleural cavity. Some of the IN infected animals (40%) survived, and monkeypox virus could be cultured from their nasal discharge and oropharynx for <22 days. Ulcerative lesions also developed on the lips, tongue, and buccal mucosa of the surviving animals. Our findings support an earlier report, which suggested that infected prairie dogs can transmit monkeypox virus by respiratory and mucocutaneous contact with susceptible animals and persons.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Public Health Pests, Vectors and Intermediate Hosts [VV230]
+MH  - clinical aspects
+MH  - disseminated infections
+MH  - experimental infection
+MH  - liver
+MH  - lungs
+MH  - monkeypox
+MH  - mortality
+MH  - spleen
+MH  - Cynomys ludovicianus
+MH  - viruses
+BT  - Cynomys, Sciuridae, rodents, mammals, vertebrates, Chordata, animals
+ID  - monkeypox virus
+CP  - USA
+LG  - English
+PT  - Journal article
+IS  - 1080-6040
+YR  - 2005
+UP  - 200505
+
+
+<9>
+UI  - 20053036841
+AU  - McFadden, G.
+IN  - Department of Microbiology and Immunology, University of Western Ontario, Siebens-Drake Building, Room 133, 1400 Western Road, London, Ontario N6G 2V4, Canada.
+TI  - Poxvirus tropism.
+SO  - Nature Reviews Microbiology. Nature Publishing Group, London, UK: 2005. 3: 3, 201-213. 200 ref. 
+AB  - Despite the success of the WHO-led smallpox eradication programme a quarter of a century ago, there remains considerable fear that variola virus, or other related pathogenic poxviruses such as monkeypox, could re-emerge and spread disease in the human population. Even today, we are still mostly ignorant about why most poxvirus infections of vertebrate hosts show strict species specificity, or how zoonotic poxvirus infections occur when poxviruses occasionally leap into novel host species. Poxvirus tropism at the cellular level seems to be regulated by intracellular events downstream of virus binding and entry, rather than at the level of specific host receptors as is the case for many other viruses. This review summarizes our current understanding of poxvirus tropism and host range, and discusses the prospects of exploiting host-restricted poxvirus vectors for vaccines, gene therapy or tissue-targeted oncolytic viral therapies for the treatment of human cancers.
+OI  - 10.1038/nrmicro1099
+CC  - Host Resistance and Immunity [HH600], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Diagnostic, Therapeutic and Pharmacological Biotechnology [WW700], Microbial Life Cycles [ZZ396]
+MH  - gene therapy
+MH  - host range
+MH  - monkeypox
+MH  - reviews
+MH  - tropisms
+MH  - vaccines
+MH  - viral diseases
+MH  - viral replication
+MH  - zoonoses
+MH  - Poxviridae
+MH  - vaccinia virus
+MH  - variola virus
+BT  - viruses, Orthopoxvirus, Chordopoxvirinae, Poxviridae
+CP  - UK
+LG  - English
+PT  - Journal article
+UR  - HTTP://www.nature.com/reviews
+IS  - 1740-1526
+YR  - 2005
+UP  - 200503
+
+
+<10>
+UI  - 20053021917
+AU  - Brown, C.
+IN  - College of Veterinary Medicine, University of Georgia, Athens, GA 30602-7388, USA.
+TI  - Emerging zoonoses and pathogens of public health significance - an overview. (Emerging zoonoses and pathogens of public health concern.)
+SO  - Revue Scientifique et Technique - Office International des Epizooties. Office International des Epizooties, Paris, France: 2004. 23: 2, 435-442. 32 ref. 
+AB  - Emerging zoonotic diseases have assumed increasing importance in public and animal health, as the last few years have seen a steady stream of new diseases, each emerging from an unsuspected quarter and causing severe problems for animals and humans. The reasons for disease emergence are multiple, but there are two main factors - expansion of the human population and globalization of trade. Current issues such as the increasing movement of a variety of animal species, ecological disruption, uncultivatable organisms, and terrorism, all imply that emerging zoonotic diseases will in all probability, not only continue to occur, but will increase in the rate of their emergence. The recurring nature of the crises dictates that closer integration of veterinary and medical communities is warranted, along with improved education of the general public and policy makers.
+CC  - Protozoan, Helminth, Mollusc and Arthropod Parasites of Animals [LL822], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Protozoan, Helminth and Arthropod Parasites of Humans [VV220], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821]
+MH  - animal diseases
+MH  - bovine spongiform encephalopathy
+MH  - chronic infections
+MH  - echinococcosis
+MH  - ecological disturbance
+MH  - exotics
+MH  - globalization
+MH  - human diseases
+MH  - livestock
+MH  - monkeypox
+MH  - population growth
+MH  - poultry
+MH  - public health
+MH  - respiratory diseases
+MH  - reviews
+MH  - Rift Valley fever
+MH  - risk factors
+MH  - terrorism
+MH  - transport of animals
+MH  - viral diseases
+MH  - wild animals
+MH  - zoonoses
+MH  - Coronavirus
+MH  - Ebola virus
+MH  - Echinococcus
+MH  - man
+MH  - Rift Valley fever virus
+MH  - Toxoplasma
+BT  - Coronaviridae, viruses, Filovirus, Filoviridae, Taeniidae, Eucestoda, Cestoda, Platyhelminthes, invertebrates, animals, Homo, Hominidae, Primates, mammals, vertebrates, Chordata, Phlebovirus, Bunyaviridae, Sarcocystidae, Eucoccidiorida, Apicomplexa, Protozoa
+ID  - bioterrorism, emerging infectious diseases, Nipah virus, SARS coronavirus, severe acute respiratory syndrome
+CP  - France
+LG  - English
+SL  - Spanish, French
+PT  - Journal article
+IS  - 0253-1933
+IB  - 9290446218
+YR  - 2004
+UP  - 200503
+
+
+<11>
+UI  - 20053021922
+AU  - Bengis, R. G.
+AU  - Leighton, F. A.
+AU  - Fischer, J. R.
+AU  - Artois, M.
+AU  - Morner, T.
+AU  - Tate, C. M.
+IN  - Veterinary Investigation Centre, PO Box 12, Skukuza, Kruger National Park, 1350, South Africa.
+TI  - The role of wildlife in emerging and re-emerging zoonoses. (Emerging zoonoses and pathogens of public health concern.)
+SO  - Revue Scientifique et Technique - Office International des Epizooties. Office International des Epizooties, Paris, France: 2004. 23: 2, 497-511. 62 ref. 
+AB  - There are huge numbers of wild animals distributed throughout the world and the diversity of wildlife species is immense. Each landscape and habitat has a kaleidoscope of niches supporting an enormous variety of vertebrate and invertebrate species, and each species or taxon supports an even more impressive array of macro- and micro-parasites. Infectious pathogens that originate in wild animals have become increasingly important throughout the world in recent decades, as they have had substantial impacts on human health, agricultural production, wildlife-based economies and wildlife conservation. The emergence of these pathogens as significant health issues is associated with a range of causal factors, most of them linked to the sharp and exponential rise of global human activity. Among these causal factors are the burgeoning human population, the increased frequency and speed of local and international travel, the increase in human-assisted movement of animals and animal products, changing agricultural practices that favour the transfer of pathogens between wild and domestic animals, and a range of environmental changes that alter the distribution of wild hosts and vectors and thus facilitate the transmission of infectious agents. Two different patterns of transmission of pathogens from wild animals to humans are evident among these emerging zoonotic diseases. In one pattern, actual transmission of the pathogen to humans is a rare event but, once it has occurred, human-to-human transmission maintains the infection for some period of time or permanently. Some examples of pathogens with this pattern of transmission are human immunodeficiency virus/acquired immune deficiency syndrome, influenza A, Ebola virus and severe acute respiratory syndrome. In the second pattern, direct or vector-mediated animal-to-human transmission is the usual source of human infection. Wild animal populations are the principal reservoirs of the pathogen and human-to-human disease transmission is rare. Examples of pathogens with this pattern of transmission include rabies and other lyssaviruses, Nipah virus, West Nile virus, Hantavirus, and the agents of Lyme borreliosis, plague, tularaemia, leptospirosis and ehrlichiosis. These zoonotic diseases from wild animal sources all have trends that are rising sharply upwards. In this paper, the authors discuss the causal factors associated with the emergence or re-emergence of these zoonoses, and highlight a selection to provide a composite view of their range, variety and origins. However, most of these diseases are covered in more detail in dedicated papers elsewhere in this Review.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Pathogens, Parasites and Infectious Diseases (Wild Animals) [YY700]
+MH  - acquired immune deficiency syndrome
+MH  - brucellosis
+MH  - disease transmission
+MH  - human diseases
+MH  - leptospirosis
+MH  - Lyme disease
+MH  - monkeypox
+MH  - plague
+MH  - rabies
+MH  - reservoir hosts
+MH  - respiratory diseases
+MH  - Rift Valley fever
+MH  - tuberculosis
+MH  - tularaemia
+MH  - viral diseases
+MH  - West Nile fever
+MH  - wild animals
+MH  - zoonoses
+MH  - avian influenzavirus
+MH  - Borrelia burgdorferi
+MH  - Brucella
+MH  - Coronavirus
+MH  - Ebola virus
+MH  - Ehrlichia chaffeensis
+MH  - Ehrlichia phagocytophila
+MH  - Francisella tularensis
+MH  - Hantavirus
+MH  - human immunodeficiency virus
+MH  - Leptospira interrogans
+MH  - Lyssavirus
+MH  - man
+MH  - Marburg virus
+MH  - Mycobacterium bovis
+MH  - Paramyxovirus
+MH  - rabies virus
+MH  - Rift Valley fever virus
+MH  - simian immunodeficiency virus
+MH  - West Nile virus
+MH  - Yersinia pestis
+BT  - Influenzavirus, Orthomyxoviridae, viruses, Borrelia, Spirochaetaceae, Spirochaetales, Gracilicutes, bacteria, prokaryotes, Brucellaceae, Coronaviridae, Filovirus, Filoviridae, Ehrlichia, Ehrlichiaceae, Rickettsiales, Francisella, Bunyaviridae, Lentivirus, Retroviridae, Leptospira, Leptospiraceae, Rhabdoviridae, Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals, Mycobacterium, Mycobacteriaceae, Firmicutes, Paramyxoviridae, Lyssavirus, Phlebovirus, Flavivirus, Flaviviridae, Yersinia, Enterobacteriaceae
+ID  - Ehrlichia ewingii, ehrlichiosis, emerging infectious diseases, Hendra virus, Nipah virus, SARS coronavirus, severe acute respiratory syndrome
+CP  - France
+LG  - English
+SL  - Spanish, French
+PT  - Journal article
+IS  - 0253-1933
+IB  - 9290446218
+YR  - 2004
+UP  - 200503
+
+
+<12>
+UI  - 20053022743
+AU  - Lefkowitz, E. J.
+AU  - Upton, C.
+AU  - Changayil, S. S.
+AU  - Buck, C.
+AU  - Traktman, P.
+AU  - Buller, R. M. L.
+IN  - Department of Microbiology, University of Alabama at Birmingham, BBRB 276/11, 1530 3rd Avenue S., Birmingham, AL 35294-2170, USA.
+TI  - Poxvirus Bioinformatics Resource Center: a comprehensive Poxviridae informational and analytical resource. (Special issue: Database issue)
+SO  - Nucleic Acids Research. Oxford University Press, Oxford, UK: 2005. 33: 1, D311-D316. 17 ref. 
+AB  - The Poxvirus Bioinformatics Resource Center (PBRC) has been established to provide informational and analytical resources to the scientific community to aid research directed at providing a better understanding of the Poxviridae family of viruses. The PBRC was specifically established as the result of the concern that variola virus, the causative agent of smallpox, as well as related viruses, might be utilized as biological weapons. In addition, the PBRC supports research on poxviruses that might be considered new and emerging infectious agents such as monkeypox virus. The PBRC consists of a relational database and web application that supports the data storage, annotation, analysis and information exchange goals of the project. The current release consists of over 35 complete genomic sequences of various genera, species and strains of viruses from the Poxviridae family. Sequence and annotation information for these viruses has been obtained from sequences publicly available from GenBank as well as sequences not yet deposited in GenBank that have been obtained from ongoing sequencing projects. In addition to sequence data, the PBRC provides comprehensive annotation and curation of virus genes; analytical tools to aid in the understanding of the available sequence data, including tools for the comparative analysis of different virus isolates; and visualization tools to help better display the results of various analyses. The PBRC represents the initial development of what will become a more comprehensive Viral Bioinformatics Resource Center for Biodefense that will be one of the National Institute of Allergy and Infectious Diseases' 'Bioinformatics Resource Centers for Biodefense and Emerging or Re-Emerging Infectious Diseases'. The PBRC website is available at http://www.poxvirus.org.
+CC  - Information and Documentation [CC300], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Molecular Biology and Molecular Genetics [ZZ360], Genetics and Molecular Biology of Microorganisms [ZZ395]
+MH  - bioinformatics
+MH  - databases
+MH  - information technology
+MH  - molecular biology
+MH  - molecular genetics
+MH  - Poxviridae
+MH  - variola virus
+BT  - viruses, Orthopoxvirus, Chordopoxvirinae, Poxviridae
+CP  - UK
+LG  - English
+PT  - Journal article
+UR  - http://nar.oupjournals.org/
+IS  - 0305-1048
+YR  - 2005
+UP  - 200503
+
+
+<13>
+UI  - 20053011456
+AU  - Riley, P. Y.
+AU  - Chomel, B. B.
+IN  - Department of Population Health and Reproduction, School of Veterinary Medicine, University of California, Davis, CA 95616, USA.
+TI  - Hedgehog zoonoses.
+SO  - Emerging Infectious Diseases. National Center for Infectious Diseases, Centers for Disease Control and Prevention, Atlanta, USA: 2005. 11: 1, 1-5. 41 ref. 
+AB  - Exotic pets, including hedgehogs, have become popular in recent years among pet owners, especially in North America. Such animals can carry and introduce zoonotic agents, a fact well illustrated by the recent outbreak of monkeypox in pet prairie dogs. We reviewed known and potential zoonotic diseases that could be carried and transmitted by pet hedgehogs or by wild-caught hedgehogs that have been rescued.
+CC  - Pets and Companion Animals [LL070], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210]
+MH  - disease transmission
+MH  - epidemiology
+MH  - human diseases
+MH  - monkeypox
+MH  - outbreaks
+MH  - pets
+MH  - reviews
+MH  - viral diseases
+MH  - zoonoses
+MH  - Erinaceidae
+MH  - man
+MH  - USA
+BT  - insectivores, mammals, vertebrates, Chordata, animals, small mammals, Homo, Hominidae, Primates, North America, America, Developed Countries, OECD Countries
+CP  - USA
+LG  - English
+PT  - Journal article
+IS  - 1080-6040
+YR  - 2005
+UP  - 200502
+
+
+<14>
+UI  - 20053007528
+AU  - McFee, R. B.
+AU  - Leikin, J. B.
+AU  - Kiernan, K.
+IN  - Threat ScienceTM & Emergics USSM, Long Island Regional Poison Center, Winthrop University Hospital, Mineola, NY 11501, USA.
+TI  - Preparing for an era of Weapons of Mass Destruction (WMD) - are we there yet? Why we should all be concerned. Part II.
+SO  - Veterinary and Human Toxicology. American Academy of Veterinary and Comparative Toxicology, Manhattan, USA: 2004. 46: 6, 347-351. 26 ref. 
+AB  - September 11, 2001 demonstrated dramatic voids in national preparedness, and catalyzed massive efforts to identify and remedy vulnerabilities. Since Part I of this series appeared in August 2002, significant improvements have been achieved especially in bioterrorism and chemical terrorism for first responders and emergency medicine, law enforcement, and public health (surveillance). Such efforts manifested benefits during the SARS outbreaks and monkeypox cases of 2003. Nevertheless, emerging infectious diseases will continue to pose a threat if we do not remain vigilant and continue to invest in training, surveillance, and treatments. As expected, many poison centers and toxicologists have taken leadership roles nationwide. In regions where such leadership existed, preparedness levels are strong and collaborations resulted in the development of valuable response plans and training, including the Advanced Hazardous Life Support (AHLS) and Basic Disaster Life Support (BDLS) courses. Early success notwithstanding, experts suggest that current national preparedness has improved slightly from "1" (9/11) to "3" out of "10". Increasingly it has become evident that the nuclear threat, including radiation terrorism, is significant, against which the US remains inadequately prepared. Arguably the nuclear threat - whether accidental or planned - remains our highest consequence vulnerability, and we must rapidly improve our readiness across disciplines. Special populations including the elderly and children remain marginalized in preparedness protocols. Local vulnerabilities including chemical manufacturing and transportation - not just a risk for terrorism but industrial accidents - continue unabated. Our early success is not an endpoint; much work remains and time is fleeting. This report examines vulnerabilities that must be addressed to enhance preparedness.
+CC  - Policy and Planning [EE120], Conflict [UU495], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Human Toxicology and Poisoning [VV810]
+MH  - biological warfare
+MH  - children
+MH  - elderly
+MH  - emergencies
+MH  - human diseases
+MH  - infectious diseases
+MH  - poisoning
+MH  - policy
+MH  - radiation
+MH  - terrorism
+MH  - man
+BT  - Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals
+ID  - bioterrorism, emerging infectious diseases
+CP  - USA
+LG  - English
+PT  - Journal article
+IS  - 0145-6296
+YR  - 2004
+UP  - 200502
+
+
+<15>
+UI  - 20053010289
+AU  - Yang, M. M.
+AU  - Schneller, S. W.
+IN  - Department of Chemistry and Biochemistry, Auburn University, Auburn, AL 36849, USA.
+TI  - 5'-Homoaristeromycin. Synthesis and antiviral activity against orthopox viruses.
+SO  - Bioorganic & Medicinal Chemistry Letters. Pergamon Press, Oxford, UK: 2005. 15: 1, 149-151. 19 notes and ref. 
+AB  - An efficient synthesis of 5'-homoaristeromycin has been developed. This permitted an extensive antiviral analysis, which found potent activity toward vaccinia, cowpox, and monkeypox viruses. For comparative purposes, 5'-homoadenosine was made available by a newly designed route and found to be inactive.
+OI  - 10.1016/j.bmcl.2004.10.019
+CC  - Pesticides and Drugs; Control [HH405], Pesticides and Drugs; Chemistry and Formulation [HH420], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821]
+MH  - antiviral properties
+MH  - cowpox
+MH  - monkeypox
+MH  - pharmacodynamics
+MH  - synthesis
+MH  - cowpox virus
+MH  - Orthopoxvirus
+MH  - vaccinia virus
+BT  - Orthopoxvirus, Chordopoxvirinae, Poxviridae, viruses
+ID  - 5'-homoaristeromycin
+CP  - UK
+LG  - English
+PT  - Journal article
+UR  - http://www.sciencedirect.com/science?_ob=ArticleURL&_udi=B6TF9-4DN9T3K-3&_user=10&_handle=B-WA-A-W-CU-MsSAYWA-UUA-AAUYZAZDVW-AAUZAEDCVW-YZADBEZUZ-CU-U&_fmt=summary&_coverDate=01%2F03%2F2005&_rdoc=31&_orig=browse&_srch=%23toc%235221%232005%23999849998%23548942!&_cdi=5221&view=c&_acct=C000050221&_version=1&_urlVersion=0&_userid=10&md5=19f0a081796ae3b8228fceae01d932cb
+IS  - 0960-894X
+YR  - 2005
+UP  - 200502
+
+
+<16>
+UI  - 20053001667
+AU  - Prokopowicz, D.
+AU  - Wierzbicka, I.
+IN  - Klinika Obserwacyjno-Zakazna AM, ul. Zurawia 14, 15-540 Biaystok, Poland.
+TI  - Monkeypox - a dangerous zoonosis.  [Polish]
+OT  - Ospa mapia - grozna zoonoza.
+SO  - Medycyna Weterynaryjna. Polskiego Towarzystwa Nauk Weterynaryjnych, Lublin, Poland: 2005. 61: 1, 29-30. 22 ref. 
+AB  - The migration of people and the transport of animals beyond their natural environment result in the more and more frequent transfer of some diseases from one continent to another, outside epidemic areas. The last epidemic among people of an illness caused by an animal virus is 81 cases of monkeypox in the USA up until June 2003. This is the first case of the epidemic of this sickness observed in the northern hemisphere. Most cases of the disease occurred after patients had been bitten or scratched by prairie dogs (Cynomys spp.), commonly kept as pets in American homes. It has been proven that the animals became infected from imported Ghana rodents, African rats that constitute a natural reservoir of the virus.
+CC  - Pets and Companion Animals [LL070], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210]
+MH  - clinical aspects
+MH  - diagnosis
+MH  - disease prevalence
+MH  - disease transmission
+MH  - disease vectors
+MH  - epidemics
+MH  - epidemiology
+MH  - monkeypox
+MH  - pathogenesis
+MH  - reservoir hosts
+MH  - reviews
+MH  - viral diseases
+MH  - zoonoses
+MH  - Cynomys
+MH  - man
+MH  - Orthopoxvirus
+MH  - rodents
+MH  - Ghana
+MH  - USA
+BT  - Sciuridae, rodents, mammals, vertebrates, Chordata, animals, West Africa, Africa South of Sahara, Africa, Developing Countries, ACP Countries, Commonwealth of Nations, Anglophone Africa, Homo, Hominidae, Primates, Chordopoxvirinae, Poxviridae, viruses, North America, America, Developed Countries, OECD Countries
+CP  - Poland
+LG  - Polish
+SL  - English
+PT  - Journal article
+IS  - 0025-8628
+YR  - 2005
+UP  - 200502
+
+
+<17>
+UI  - 20043202216
+AU  - Langohr, I. M.
+AU  - Stevenson, G. W.
+AU  - Thacker, H. L.
+AU  - Regnery, R. L.
+IN  - Animal Disease Diagnostic Laboratory, Purdue University, 406 South University, West Lafayette, IN 47907, USA.
+TI  - Extensive lesions of monkeypox in a prairie dog (Cynomys sp.).
+SO  - Veterinary Pathology. American College of Veterinary Pathologists Inc, Lawrence, USA: 2004. 41: 6, 702-707. 8 ref. 
+AB  - Monkeypox with extensive lesions was diagnosed in a prairie dog that was involved in a recent human outbreak of monkeypox in the Midwestern United States. Gross lesions included oral ulcers, pulmonary consolidation, enlarged cervical and thoracic lymph nodes, and multifocal, small, white umbilicated plaques in the gastrointestinal wall. Microscopic lesions were extensive in the lungs and consisted of fibrinonecrotic bronchopneumonia with vasculitis and poorly defined eosinophilic intracytoplasmic inclusion bodies in cells thought to be alveolar epithelial cells, histiocytes, and fibroblasts. Multifocal necrotizing lesions, often accompanied by myxedema, were also present in most of the other examined organs. Aggregates of pox viral particles were observed within lesions by transmission electron microscopy. Monkeypox virus infection was confirmed by real-time polymerase chain reaction and virus culture at the Centers for Disease Control and Prevention. This report highlights the difficulties of rapid diagnosis of exotic or emerging diseases and further substantiates the prairie dog as an animal model of monkeypox.
+OI  - 10.1354/vp.41-6-702
+CC  - Animal Anatomy and Morphology [LL400], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Diagnosis of Animal Diseases [LL886]
+MH  - animal models
+MH  - case reports
+MH  - clinical aspects
+MH  - diagnosis
+MH  - histopathology
+MH  - monkeypox
+MH  - Cynomys
+BT  - Sciuridae, rodents, mammals, vertebrates, Chordata, animals
+CP  - USA
+LG  - English
+PT  - Journal article
+IS  - 0300-9858
+YR  - 2004
+UP  - 200412
+
+
+<18>
+UI  - 20043186163
+AU  - Kulesh, D. A.
+AU  - Loveless, B. M.
+AU  - Norwood, D.
+AU  - Garrison, J.
+AU  - Whitehouse, C. A.
+AU  - Hartmann, C.
+AU  - Mucker, E.
+AU  - Miller, D.
+AU  - Wasieloski, L. P., Jr.
+AU  - Huggins, J.
+AU  - Huhn, G.
+AU  - Miser, L. L.
+AU  - Imig, C.
+AU  - Martinez, M.
+AU  - Larsen, T.
+AU  - Rossi, C. A.
+AU  - Ludwig, G. V.
+IN  - Diagnostic Systems Division, US Army Medical Research Institute of Infectious Diseases, 1425 Porter St., Fort Detrick, MD 21702-5011, USA.
+TI  - Monkeypox virus detection in rodents using real-time 3'-minor groove binder TaqManReg. assays on the Roche LightCycler.
+SO  - Laboratory Investigation. United States and Canadian Academy of Pathology, Baltimore, USA: 2004. 84: 9, 1200-1208. 
+AB  - During the summer of 2003, an outbreak of human monkeypox occurred in the Midwest region of the United States. In all, 52 rodents suspected of being infected with monkeypox virus were collected from an exotic pet dealer and from private homes. The rodents were euthanized and submitted for testing to the United States Army Medical Research Institute of Infectious Diseases by the Galesburg Animal Disease Laboratory, Illinois Department of Agriculture. The rodent tissue samples were appropriately processed and then tested by using an integrated approach involving real-time polymerase chain reaction (PCR) assays, an antigen-detection immunoassay, and virus culture. We designed and extensively tested two specific real-time PCR assays for rapidly detecting monkeypox virus DNA using the Vaccinia virus F3L and N3R genes as targets. The assays were validated against panels of orthopox viral and miscellaneous bacterial DNAs. A pan-orthopox electrochemiluminescence (ECL) assay was used to further confirm the presence of Orthopoxvirus infection of the rodents. Seven of 12 (58%) animals (seven of 52 (15%) of all animals) tested positive in both monkeypox-specific PCR assays and two additional pan-orthopox PCR assays (in at least one tissue). The ECL results showed varying degrees of agreement with PCR. One hamster and three gerbils were positive by both PCR and ECL for all tissues tested. In addition, we attempted to verify the presence of monkeypox virus by culture on multiple cell lines, by immunohistology, and by electron microscopy, with negative results. Sequencing the PCR products from the samples indicated 100% identity with monkeypox virus strain Zaire-96-I-16 (a human isolate from the Congo). These real-time PCR and ECL assays represent a significant addition to the battery of tests for the detection of various orthopoxviruses. In light of the recent monkeypox virus transmissions, early detection of the virus is crucial for both natural outbreaks and potential acts of bioterrorism.
+OI  - 10.1038/labinvest.3700143
+CC  - Pets and Companion Animals [LL070], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Diagnosis of Animal Diseases [LL886], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Diagnosis of Human Disease [VV720], Techniques and Methodology [ZZ900]
+MH  - chemiluminescence immunoassays
+MH  - diagnosis
+MH  - diagnostic techniques
+MH  - disease distribution
+MH  - disease prevalence
+MH  - disease vectors
+MH  - epidemiology
+MH  - human diseases
+MH  - monkeypox
+MH  - outbreaks
+MH  - polymerase chain reaction
+MH  - viral antigens
+MH  - zoonoses
+MH  - gerbils
+MH  - hamsters
+MH  - man
+MH  - rodents
+MH  - vaccinia virus
+MH  - viruses
+MH  - USA
+BT  - Gerbillinae, Muridae, rodents, mammals, vertebrates, Chordata, animals, small mammals, Cricetinae, Homo, Hominidae, Primates, North America, America, Developed Countries, OECD Countries, Orthopoxvirus, Chordopoxvirinae, Poxviridae, viruses
+CP  - USA
+LG  - English
+PT  - Journal article
+UR  - http://www.nature.com/cgi-taf/DynaPage.taf?file=/labinvest/journal/v84/n9/abs/3700143a.html
+IS  - 0023-6837
+YR  - 2004
+UP  - 200412
+
+
+<19>
+UI  - 20043155147
+AU  - Charrel, R. N.
+AU  - Scola, B. la
+AU  - Raoult, D.
+IN  - Unite des Rickettsies, CNRS UMR 6020 IFR 48, Faculte de Medecine, Marseille, France.
+TI  - Multi-pathogens sequence containing plasmids as positive controls for universal detection of potential agents of bioterrorism.
+SO  - BMC Microbiology. BioMed Central Ltd, London, UK: 2004. 4: 21, (17 May 2004). 23 ref. 
+AB  - Background: The limited circulation of many of the agents that are likely to be used in a bioterrorism attack precludes the ready availability of positive controls. This means that only specialized laboratories can screen for the presence of these agents by nucleic amplification assays. Calibrated controls are also necessary for quantitative measurements. Primers and probes to be used in both conventional and real-time PCR assays were designed for the detection of agents likely to be used by a bioterrorist. Three plasmids, each of which contains 4 to 6 specific sequences from agents on the CDC Category A and B list (excluding RNA viruses) were constructed. Two plasmids incorporate the sequences of Category A and B agents, respectively. The third plasmid incorporates sequences from Variola major and organisms that cause rash-like illnesses that may be clinically confused with smallpox. An "exogenic sequence", introducing a NotI restriction site was incorporated in the native sequences of the bioterrorism agents inserted in plasmids. The designed molecular system for detection of bioterrorism agents was tested on each of these agents (except Monkeypox virus, Smallpox virus and 2 Burkholderia species for which no native DNA was available) and a collection of 50 isolates of C. burnetii using constructed plasmids as positive controls. Results: Designed primers and probes allowed molecular detection, in either single or multiplex assays, of agent-specific targets with analytical sensitivities of between 1 and 100 DNA copies. The plasmids could be used as positive controls. False-positive results due to contamination by the positive control were easily detected by sequencing and eliminated by digestion with NotI. Conclusion: Plasmid A and B can be used as positive controls in molecular assays for the detection of bioterrorism agents in clinical specimens or environmental samples. Plasmid C can be used as a positive control in differentiation of vesicular rashes. It is also possible to avoid or to ensure immediate detection of false positive results due to contamination by positive controls using these plasmids. These plasmids and the corresponding primers and probes are immediately available for all clinical microbiology laboratories provided they have molecular amplification equipment.
+CC  - Conflict [UU495], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Genetics and Molecular Biology of Microorganisms [ZZ395]
+MH  - biological warfare
+MH  - detection
+MH  - plasmids
+MH  - Coxiella burnetii
+MH  - variola virus
+BT  - Coxiella, Rickettsiaceae, Rickettsiales, bacteria, prokaryotes, Orthopoxvirus, Chordopoxvirinae, Poxviridae, viruses
+ID  - bioterrorism
+CP  - UK
+LG  - English
+PT  - Journal article
+UR  - http://www.biomedcentral.com/1471-2180/4/21/abstract
+IS  - 1471-2180
+YR  - 2004
+UP  - 200410
+
+
+<20>
+UI  - 20043159870
+AU  - Clercq, E. de
+AU  - Neyts, J.
+IN  - Rega Institute for Medical Research, K.U. Leuven, Minderbroedersstraat 10, B-3000, Leuven, Belgium.
+TI  - Therapeutic potential of nucleoside/nucleotide analogues against poxvirus infections.
+SO  - Reviews in Medical Virology. John Wiley & Sons, Chichester, UK: 2004. 14: 5, 289-300. 43 ref. 
+AB  - Several nucleoside and nucleotide analogues have been identified as potent antiviral agents with convincing activity against poxviruses (including variola, vaccinia, monkeypox, cowpox, molluscum contagiosum, orf). Among the nucleoside analogues, 8-methyladenosine and 2-amino-7-[(1,3-dihydroxy-2-propoxy)methyl]purine (S2242), have been identified as promising anti-poxvirus agents. Among the nucleotide analogues, (S)-1-(3-hydroxy-2-phosphonylmethoxypropyl)cytosine [(S)-HPMPC, cidofovir], (S)-9-(3-hydroxy-2-phosphonylmethoxypropyl)-2,6-diaminopurine [(S)-HPMPDAP] and (S)-6-(3-hydroxy-2-phosphonylmethoxypropyl)oxy-2,4-diaminopyrimidine [(S)-HPMPO-DAPy] have been identified as promising anti-poxvirus agents. These nucleoside and nucleotide analogues have proved to be efficacious in various animal models for poxvirus infections. Only one compound, cidofovir, has also proved efficacious against poxvirus infections in humans, i.e. molluscum contagiosum and orf (sheep pox). Cidofovir is formally licensed for clinical use (intravenous administration for the treatment of cytomegalovirus retinitis in AIDS patients); however, it could also be formulated for topical administration, or for oral administration in prodrug form, i.e. as 1-O-hexadecyloxypropyl-cidofovir.
+CC  - Pesticides and Drugs; Control [HH405], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Animal and in vitro Models for Pharmaceuticals [VV450], Pharmacology [VV730]
+MH  - antiviral agents
+MH  - antiviral properties
+MH  - in vitro
+MH  - nucleoside analogues
+MH  - viral diseases
+MH  - cowpox virus
+MH  - Poxviridae
+MH  - vaccinia virus
+MH  - variola virus
+BT  - Orthopoxvirus, Chordopoxvirinae, Poxviridae, viruses
+ID  - cidofovir, molluscum contagiosum virus, monkeypox virus
+CP  - UK
+LG  - English
+PT  - Journal article
+IS  - 1052-9276
+YR  - 2004
+UP  - 200410
+
+
+<21>
+UI  - 20043146359
+AU  - Chastel, C.
+AU  - Charmot, G.
+IN  - Laboratoire de virologie, Faculte de medecine, 22 Av. Camille Desmoulins, F-29 285 Brest Cedex, France.
+TI  - Bacterial and viral epidemics of zoonotic origin; the role of hunting and cutting up wild animals.  [French]
+OT  - Epidemies bacteriennes et virales d'origine zoonotique. Role de la chasse et du depecage d'animaux sauvages.
+SO  - Bulletin de la Societe de Pathologie Exotique. Societe de Pathologie Exotique, Paris, France: 2004. 97: 3, 207-212. 28 ref. 
+AB  - Since the Prehistoric times hunting has been a vital activity for man. However, this may account for the contamination of the hunter, his family and relatives. Infections may occur by direct contact with blood or tissues of infected animal during handling and cutting up preys and when preparing or eating meat, or also when bitten by injured animal. Apes and antelopes hunting in sub-Saharan Africa prove to be particularly important since it has been well established that the recent or previous emergence of some viral zoonosis (Ebola, aids, T lymphotropic viruses and monkeypox) resulted from hunting and poaching. Moreover predation among different species of non human primates such as that practised by chimpanzees against monkeys, has led to the construction of recombinant simian Lentiviruses, such as SIV cpz able to infect man and then spread over the entire mankind as it was the case with HIV-1. Severe acute respiratory syndrome is another possible example of the zoonotic risks represented by the sale, handling and cutting up Chinese wild animals such as Himalayan civets for culinary purposes.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Pathogens, Parasites and Infectious Diseases (Wild Animals) [YY700]
+MH  - acquired immune deficiency syndrome
+MH  - bacterial diseases
+MH  - epidemics
+MH  - HIV-1 infections
+MH  - human diseases
+MH  - hunting
+MH  - monkeypox
+MH  - risk factors
+MH  - viral diseases
+MH  - wild animals
+MH  - zoonoses
+MH  - chimpanzees
+MH  - Coronavirus
+MH  - Ebola virus
+MH  - human immunodeficiency virus type 1
+MH  - human T-cell lymphotropic virus
+MH  - Lentivirus
+MH  - man
+MH  - monkeys
+MH  - simian immunodeficiency virus
+MH  - Viverridae
+BT  - Pan, Pongidae, Primates, mammals, vertebrates, Chordata, animals, Coronaviridae, viruses, Filovirus, Filoviridae, human immunodeficiency virus, Lentivirus, Retroviridae, HTLV-BLV group, Homo, Hominidae, Fissipeda, carnivores
+ID  - SARS coronavirus, severe acute respiratory syndrome
+CP  - France
+LG  - French
+SL  - English
+PT  - Journal article
+IS  - 0037-9085
+YR  - 2004
+UP  - 200409
+
+
+<22>
+UI  - 20043137534
+AU  - Berger, S. A.
+AU  - Calisher, C. H.
+AU  - Keystone, J. S.
+IN  - Tel Aviv University School of Medicine, Tel Aviv, Israel.
+TI  - Exotic viral diseases: a global guide.
+SO  - Exotic viral diseases: a global guide. B.C. Decker Inc, Hamilton, Canada: 2003. xii + 252. 
+AB  - This book has been designed to provide clinicians, travel medicine practitioners, geographic medicine specialists, infectious disease consultants, and medical microbiologists with a tool for assisting in the evaluation of a patient from a remote area or with an otherwise exotic disease. The reader will be able to consider a specific diagnosis on the basis of presenting symptoms, known exposure, and geographic location. In addition, this book is intended to be a reference for teaching trainees in all areas of medicine, particularly medical microbiology and infectious diseases. Fevers covered in this book include 8 lethal haemorrhagic fevers such as Ebola; 11 varieties of encephalitis; lassa, dengue, sandfly and yellow fevers; herpes virus B; monkey pox; and o'nyong-nyong. Features include: tables to facilitate diagnosis; disease vectors; virus transmission routes; reservoirs for exotic viruses; and clinical syndromes associated with each viral infection.
+NT  - Text and illustrations also available on enclosed CD-ROM.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Diagnosis of Human Disease [VV720]
+MH  - dengue
+MH  - diagnosis
+MH  - disease vectors
+MH  - encephalitis
+MH  - fever
+MH  - human diseases
+MH  - Lassa fever
+MH  - monkeypox
+MH  - sandfly fever
+MH  - symptoms
+MH  - viral diseases
+MH  - viral haemorrhagic fevers
+MH  - yellow fever
+MH  - dengue virus
+MH  - Ebola virus
+MH  - human herpesvirus
+MH  - Lassa virus
+MH  - man
+MH  - yellow fever virus
+BT  - Flavivirus, Flaviviridae, viruses, Filovirus, Filoviridae, Herpesviridae, Arenavirus, Arenaviridae, Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals
+ID  - o'nyong-nyong fever
+CP  - Canada
+LG  - English
+PT  - Book
+IB  - 1550092057
+YR  - 2003
+UP  - 200409
+
+
+<23>
+UI  - 20043120481
+AU  - Gibbs, P.
+IN  - Box 110880, College of Veterinary Medicine, University of Florida, Gainesville, FL 32610, USA.
+MT  - Small animal and exotics. Book two: Pain management - zoonosis. Proceedings of the North American Veterinary Conference, Volume 18, Orlando, Florida, USA, 17-21 January 2004.
+TI  - Severe acute respiratory syndrome (SARS), monkeypox, and other emerging zoonotic diseases: how real are the threats for North America?
+SO  - Small animal and exotics. Book two: Pain management - zoonosis. Proceedings of the North American Veterinary Conference, Volume 18, Orlando, Florida, USA, 17-21 January 2004. Eastern States Veterinary Association, Gainesville, USA: 2004. 1235-1239. 
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Pathogens, Parasites and Infectious Diseases (Wild Animals) [YY700]
+MH  - bovine spongiform encephalopathy
+MH  - Creutzfeldt-Jakob disease
+MH  - disease prevalence
+MH  - disease prevention
+MH  - disease surveys
+MH  - foot and mouth disease
+MH  - human diseases
+MH  - imported infections
+MH  - monkeypox
+MH  - reviews
+MH  - risk assessment
+MH  - risk factors
+MH  - zoonoses
+MH  - Aphthovirus
+MH  - man
+MH  - Coronavirus
+MH  - North America
+BT  - Picornaviridae, viruses, Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals, America, Coronaviridae
+ID  - severe acute respiratory syndrome, SARS coronavirus
+CP  - USA
+LG  - English
+PT  - Book chapter
+PT  - Conference paper
+YR  - 2004
+UP  - 200409
+
+
+<24>
+UI  - 20043118638
+AU  - Quenelle, D. C.
+AU  - Collins, D. J.
+AU  - Kern, E. R.
+IN  - The University of Alabama School of Medicine, Birmingham, Alabama, USA.
+TI  - Cutaneous infections of mice with vaccinia or cowpox viruses and efficacy of cidofovir.
+SO  - Antiviral Research. Elsevier Science B.V., Amsterdam, Netherlands: 2004. 63: 1, 33-40. 36 ref. 
+AB  - Orthopoxviruses, including smallpox, monkeypox and molluscipox, pose risks to human health through bioterrorist acts or natural transmission. There is no approved therapy for orthopoxvirus infections; however, cidofovir (CDV) has been approved as an investigational new drug for emergency treatment of adverse effects following smallpox vaccination. For evaluation of new therapies directed against orthopoxvirus infections, we have utilized immunocompetent, hairless mice (SKH-1) inoculated by a cutaneous route with cowpox virus (CV) or vaccinia virus (VV). Mice subsequently developed skin lesions and virus was recovered from the site of inoculation and quantified. Skin biopsies were evaluated microscopically, revealing brick-like eosinophilic, intracytoplasmic inclusion bodies characteristic of orthopoxvirus infection. SKH-1 mice fully recovered from either CV or VV infection. Immunodeficient Athymic or Rhino mice inoculated with CV or VV had more lesions and severe disease than SKH-1 mice. CV-infected SKH-1 mice were treated either with systemic or topical CDV. Although some protection was achieved with systemic treatment, 5% topical CDV was most effective at reducing virus titers in skin, lung, kidney, and spleen. These models may provide a means for evaluating efficacy of new therapies directed against orthopoxvirus diseases and further confirm the topical activity of CDV against cutaneous infections.
+OI  - 10.1016/j.antiviral.2004.02.003
+CC  - Pesticides and Drugs; Control [HH405], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Animal Models of Human Diseases [VV400], Animal and in vitro Models for Pharmaceuticals [VV450], Pharmacology [VV730]
+MH  - adverse effects
+MH  - antiviral agents
+MH  - cowpox
+MH  - disease models
+MH  - drug therapy
+MH  - experimental infection
+MH  - human diseases
+MH  - immunization
+MH  - vaccination
+MH  - cowpox virus
+MH  - man
+MH  - mice
+MH  - vaccinia virus
+BT  - Orthopoxvirus, Chordopoxvirinae, Poxviridae, viruses, Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals, Muridae, rodents, small mammals
+ID  - cidofovir
+CP  - Netherlands
+LG  - English
+PT  - Journal article
+IS  - 0166-3542
+YR  - 2004
+UP  - 200408
+
+
+<25>
+UI  - 20043101935
+AU  - Phalen, D. N.
+IN  - Schubot Exotic Bird Health Center, Department of Large Animal Medicine and Surgery, Texas A&M University, College Station, TX 77843-4467, USA.
+TI  - Prairie dogs: vectors and victims. (Emerging diseases)
+SO  - Seminars in Avian and Exotic Pet Medicine. Elsevier Inc, Florida, USA: 2004. 13: 2, 105-107. 7 ref. 
+AB  - Prairie dogs (Cynomys spp.) are native to North America. They have proved to be a relatively popular pet in North America and in multiple countries around the world. All or the vast majority of prairie dogs sold in the pet trade are wild caught. Two zoonotic diseases that naturally occur in wild prairie dogs are tularaemia and plague. Epizootics of both of these diseases have occurred in recently captured prairie dogs intended for the pet trade. The lot containing prairie dogs with tularaemia was widely distributed within the United States and internationally before the disease was recognized. Recently, prairie dogs intended for the pet trade were exposed to monkeypox as the result of close contact with several species of wild caught African rodents. Infected prairie dogs developed a systemic disease with cutaneous manifestations. Prairie dogs were distributed to six states before the disease was recognized. As many as 76 people developed monkeypox from exposure to these prairie dogs. The last reported case was in June 2003. Currently, it is illegal to buy, sell, trade, or transport prairie dogs in the United States. However, veterinarians are still permitted to treat them.
+CC  - Pets and Companion Animals [LL070], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Veterinary Pests, Vectors and Intermediate Hosts [LL823], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Pathogens, Parasites and Infectious Diseases (Wild Animals) [YY700]
+MH  - bacterial diseases
+MH  - clinical aspects
+MH  - disease control
+MH  - disease transmission
+MH  - disease vectors
+MH  - human diseases
+MH  - monkeypox
+MH  - pets
+MH  - plague
+MH  - tularaemia
+MH  - zoonoses
+MH  - Cynomys
+MH  - Francisella tularensis
+MH  - man
+MH  - Orthopoxvirus
+MH  - Yersinia pestis
+MH  - Texas
+MH  - USA
+BT  - Sciuridae, rodents, mammals, vertebrates, Chordata, animals, Francisella, Gracilicutes, bacteria, prokaryotes, Francisella tularensis, Homo, Hominidae, Primates, Southern Plains States of USA, West South Central States of USA, Southern States of USA, USA, North America, America, Developed Countries, OECD Countries, Great Plains States of USA, Gulf States of USA, Yersinia, Enterobacteriaceae, Chordopoxvirinae, Poxviridae, viruses
+ID  - Francisella tularensis subsp. tularensis, prairie dogs
+CP  - USA
+LG  - English
+PT  - Journal article
+IS  - 1055-937X
+YR  - 2004
+UP  - 200407
+
+
+<26>
+UI  - 20043077094
+AU  - Davis, R. G.
+IN  - Center for Food and Public Health, Department of Veterinary Microbiology and Preventive Medicine, College of Veterinary Medicine, Iowa State University, Ames, IA 50011, USA.
+TI  - The ABCs of bioterrorism for veterinarians, focusing on Category A agents.
+SO  - Journal of the American Veterinary Medical Association. American Veterinary Medical Association, Schaumburg, USA: 2004. 224: 7, 1084-1095. 135 ref. 
+CC  - Professions; Practice and Service [CC700], Host Resistance and Immunity [HH600], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Conflict [UU495], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210]
+MH  - anthrax
+MH  - botulism
+MH  - clinical aspects
+MH  - disease control
+MH  - disease course
+MH  - disease prevention
+MH  - disease transmission
+MH  - monkeypox
+MH  - pathogens
+MH  - plague
+MH  - Rift Valley fever
+MH  - smallpox
+MH  - terrorism
+MH  - tularaemia
+MH  - vaccination
+MH  - vaccines
+MH  - veterinarians
+MH  - viral haemorrhagic fevers
+MH  - zoonoses
+MH  - animals
+MH  - Arenavirus
+MH  - Bacillus anthracis
+MH  - Clostridium botulinum
+MH  - Coronavirus
+MH  - Ebola virus
+MH  - Francisella tularensis
+MH  - man
+MH  - Marburg virus
+MH  - Rift Valley fever virus
+MH  - variola virus
+MH  - Yersinia pestis
+MH  - USA
+BT  - Arenaviridae, viruses, Bacillus, Bacillaceae, Firmicutes, bacteria, prokaryotes, Clostridium, Clostridiaceae, Coronaviridae, Filovirus, Filoviridae, Francisella, Gracilicutes, Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals, Phlebovirus, Bunyaviridae, North America, America, Developed Countries, OECD Countries, Orthopoxvirus, Chordopoxvirinae, Poxviridae, Yersinia, Enterobacteriaceae
+ID  - bioterrorism, SARS coronavirus, severe acute respiratory syndrome
+CP  - USA
+LG  - English
+PT  - Journal article
+IS  - 0003-1488
+YR  - 2004
+UP  - 200406
+
+
+<27>
+UI  - 20043028335
+AU  - Lennox, A. M.
+IN  - Avian and Exotic Animal Clinic, Indianapolis, Indiana, USA.
+TI  - Firsthand encounter with monkeypox.
+SO  - Exotic DVM. Zoological Education Network, Lake Worth, USA: 2003. 5: 4, 15-20. 12 ref. 
+CC  - Other Control Measures [HH700], Pets and Companion Animals [LL070], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210]
+MH  - antibodies
+MH  - case reports
+MH  - clinical aspects
+MH  - diagnosis
+MH  - disease control
+MH  - disease transmission
+MH  - monkeypox
+MH  - outbreaks
+MH  - quarantine
+MH  - zoonoses
+MH  - Cynomys
+MH  - Orthopoxvirus
+MH  - USA
+BT  - Sciuridae, rodents, mammals, vertebrates, Chordata, animals, Chordopoxvirinae, Poxviridae, viruses, North America, America, Developed Countries, OECD Countries
+CP  - USA
+LG  - English
+PT  - Journal article
+IS  - 1521-1363
+YR  - 2003
+UP  - 200403
+
+
+<28>
+UI  - 20043011983
+AU  - Reed, K. D.
+AU  - Melski, J. W.
+AU  - Graham, M. B.
+AU  - Regnery, R. L.
+AU  - Sotir, M. J.
+AU  - Wegner, M. V.
+AU  - Kazmierczak, J. J.
+AU  - Stratman, E. J.
+AU  - Li, Y.
+AU  - Fairley, J. A.
+AU  - Swain, G. R.
+AU  - Olson, V. A.
+AU  - Sargent, E. K.
+AU  - Kehl, S. C.
+AU  - Frace, M. A.
+AU  - Kline, R.
+AU  - Foldy, S. L.
+AU  - Davis, J. P.
+AU  - Damon, I. K.
+IN  - Department of Pathology, Marshfield Clinic Research Foundation, 1000 N. Oak, Marshfield, WI 54449, USA.
+TI  - The detection of monkeypox in humans in the Western Hemisphere.
+SO  - New England Journal of Medicine. Massachusetts Medical Society, Waltham, USA: 2004. 350: 4, 342-350. 29 ref. 
+AB  - BACKGROUND: During May and June 2003, an outbreak of febrile illness with vesiculopustular eruptions occurred among persons, in the midwestern USA, who had had contact with ill pet prairie dogs obtained through a common distributor. Zoonotic transmission of a bacterial or viral pathogen was suspected. METHODS: We reviewed medical records, conducted interviews and examinations, and collected blood and tissue samples for analysis from 11 patients and one prairie dog. Histopathological and electron-microscopical examinations, microbiological cultures, and molecular assays were performed to identify the aetiologic agent. RESULTS: The initial Wisconsin cases evaluated in this outbreak occurred in 5 males and 6 females ranging in age from 3 to 43 years. All patients reported having direct contact with ill prairie dogs before experiencing a febrile illness with skin eruptions. We found immunohistochemical or ultrastructural evidence of poxvirus infection in skin-lesion tissue from 4 patients. Monkeypox virus was recovered in cell cultures of seven samples from patients and from the prairie dog. The virus was identified by detection of monkeypox-specific DNA sequences in tissues or isolates from 6 patients and the prairie dog. Epidemiological investigation suggested that the prairie dogs had been exposed to at least one species of rodent recently imported into the USA from West Africa. CONCLUSIONS: Our investigation documents the isolation and identification of monkeypox virus from humans in the Western Hemisphere. Infection of humans was associated with direct contact with ill prairie dogs that were being kept or sold as pets.
+CC  - Pets and Companion Animals [LL070], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210]
+MH  - epidemiology
+MH  - fever
+MH  - human diseases
+MH  - monkeypox
+MH  - outbreaks
+MH  - zoonoses
+MH  - dogs
+MH  - man
+MH  - viruses
+MH  - USA
+MH  - Wisconsin
+BT  - Canis, Canidae, Fissipeda, carnivores, mammals, vertebrates, Chordata, animals, small mammals, Homo, Hominidae, Primates, North America, America, Developed Countries, OECD Countries, East North Central States of USA, North Central States of USA, USA, Lake States of USA
+ID  - prairie dogs
+CP  - USA
+LG  - English
+PT  - Journal article
+IS  - 0028-4793
+YR  - 2004
+UP  - 200402
+
+
+<29>
+UI  - 20043011021
+AU  - Gubser, C.
+AU  - Hue, S.
+AU  - Kellam, P.
+AU  - Smith, G. L.
+IN  - Department of Virology, Faculty of Medicine, Imperial College London, St Mary's Campus, Norfolk Place, London W2 1PG, UK.
+TI  - Poxvirus genomes: a phylogenetic analysis.
+SO  - Journal of General Virology. Society for General Microbiology, Reading, UK: 2004. 85: 1, 105-117. many ref. 
+AB  - The evolutionary relationships of 26 sequenced members of the poxvirus family have been investigated by comparing their genome organization and gene content and by using DNA and protein sequences for phylogenetic analyses. The central region of the genome of chordopoxviruses (ChPVs) is highly conserved in gene content and arrangement, except for some gene inversions in Fowlpox virus (FPV) and species-specific gene insertions in FPV and Molluscum contagiosum virus (MCV). In the central region 90 genes are conserved in all ChPVs, but no gene from near the termini is conserved throughout the subfamily. Inclusion of two entomopoxvirus (EnPV) sequences reduces the number of conserved genes to 49. The EnPVs are divergent from ChPVs and between themselves. Relationships between ChPV genera were evaluated by comparing the genome size, number of unique genes, gene arrangement and phylogenetic analyses of protein sequences. Overall, genus Avipoxvirus is the most divergent. The next most divergent ChPV genus is Molluscipoxvirus, whose sole member, MCV, infects only man. The Suipoxvirus, Capripoxvirus, Leporipoxvirus and Yatapoxvirus genera cluster together, with Suipoxvirus and Capripoxvirus sharing a common ancestor, and are distinct from the genus Orthopoxvirus (OPV). Within the OPV genus, Monkeypox virus, Ectromelia virus and Cowpox virus strain Brighton Red (BR) do not group closely with any other OPV, Variola virus and Camelpox virus form a subgroup, and Vaccinia virus is most closely related to CPV-GRI-90. This suggests that CPV-BR and GRI-90 should be separate species.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Taxonomy and Evolution [ZZ380], Genetics and Molecular Biology of Microorganisms [ZZ395]
+MH  - amino acid sequences
+MH  - chromosome inversion
+MH  - evolution
+MH  - gene expression
+MH  - genes
+MH  - genome analysis
+MH  - genomes
+MH  - molluscum contagiosum
+MH  - monkeypox
+MH  - nucleotide sequences
+MH  - phylogeny
+MH  - transposable elements
+MH  - Avipoxvirus
+MH  - Capripoxvirus
+MH  - Chordopoxvirinae
+MH  - cowpox virus
+MH  - ectromelia virus
+MH  - Entomopoxvirus
+MH  - fowl pox virus
+MH  - Leporipoxvirus
+MH  - Orthopoxvirus
+MH  - Poxviridae
+MH  - Suipoxvirus
+MH  - vaccinia virus
+MH  - variola virus
+BT  - Chordopoxvirinae, Poxviridae, viruses, Orthopoxvirus, Entomopoxvirinae, insect viruses, entomopathogens, pathogens, natural enemies, animal viruses, Avipoxvirus
+CP  - UK
+LG  - English
+PT  - Journal article
+IS  - 0022-1317
+YR  - 2004
+UP  - 200402
+
+
+<30>
+UI  - 20033212737
+AU  - Antia, R.
+AU  - Regoes, R. R.
+AU  - Koella, J. C.
+AU  - Bergstrom, C. T.
+IN  - Department of Biology, Emory University, Atlanta, GA 30322, USA.
+TI  - The role of evolution in the emergence of infectious diseases.
+SO  - Nature (London). Nature Publishing Group, London, UK: 2003. 426: 6967, 658-661. 29 ref. 
+AB  - This article presents a framework for a possible mechanism for the reemergence and spread of some infectious diseases from infected individuals in a susceptible population. The transmission kinetics of these diseases, which include, human immunodeficiency virus, monkeypox and severe acute respiratory syndrome epidemics, are discussed.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Mathematics and Statistics [ZZ100]
+MH  - disease transmission
+MH  - epidemics
+MH  - epidemiology
+MH  - HIV infections
+MH  - human diseases
+MH  - mathematical models
+MH  - monkeypox
+MH  - human immunodeficiency virus
+MH  - man
+BT  - Lentivirus, Retroviridae, viruses, Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals
+ID  - emerging infectious diseases, human corona virus, SARS coronavirus, severe acute respiratory syndrome
+CP  - UK
+LG  - English
+PT  - Journal article
+IS  - 0028-0836
+YR  - 2003
+UP  - 200401
+
+
+<31>
+UI  - 20033172146
+AU  - Yu EnShu
+TI  - Control of monkeypox.  [Chinese]
+SO  - Chinese Journal of Zoonoses. Editorial Committee of Chinese Journal of Zoonoses, Health and Anti-epidemic Station of Fujian Province, Fuzhou, China: 2003. 19: 5, 5-10. 13 ref. 
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Diagnosis of Animal Diseases [LL886]
+MH  - diagnosis
+MH  - disease prevalence
+MH  - disease transmission
+MH  - host range
+MH  - monkeypox
+MH  - reviews
+MH  - wild animals
+MH  - zoonoses
+ID  - diseases control
+CP  - China
+LG  - Chinese
+PT  - Journal article
+IS  - 1002-2694
+YR  - 2003
+UP  - 200401
+
+
+<32>
+UI  - 20033208945
+AU  - Lupi, O.
+AU  - Tyring, S. K.
+IN  - Sealy Center for Vaccine Development, University of Texas Medical Branch, Galveston, Texas, USA.
+TI  - Tropical dermatology: viral tropical diseases.
+SO  - Journal of the American Academy of Dermatology. Mosby Inc., St Louis, USA: 2003. 49: 6, 979-1000. 179 ref. 
+AB  - This paper presents the epidemiology, clinical aspects, pathogenesis, transmission, diagnosis, prevention, and management of viral tropical diseases. Viruses discussed include: dengue, yellow fever, West Nile fever (flaviviruses); Ebola (filovirus); hantavirus, Rift Valley fever, Crimean-Congo haemorrhagic fever (bunyaviruses); Lassa (arenavirus); human T-cell leukaemia virus type I (retrovirus); herpesvirus simiae; and monkeypox.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Diagnosis of Human Disease [VV720], Microbiology (General) [ZZ390]
+MH  - clinical aspects
+MH  - diagnosis
+MH  - disease prevention
+MH  - disease transmission
+MH  - epidemiology
+MH  - haemorrhagic fevers
+MH  - human diseases
+MH  - pathogenesis
+MH  - skin
+MH  - skin diseases
+MH  - therapy
+MH  - viral diseases
+MH  - Crimean-Congo haemorrhagic fever virus
+MH  - dengue virus
+MH  - Ebola virus
+MH  - Hantavirus
+MH  - human herpesvirus
+MH  - human T-cell lymphotropic virus type I
+MH  - Lassa virus
+MH  - man
+MH  - Rift Valley fever virus
+MH  - viruses
+MH  - West Nile virus
+MH  - yellow fever virus
+BT  - Nairovirus, Bunyaviridae, viruses, Flavivirus, Flaviviridae, Filovirus, Filoviridae, Herpesviridae, human T-cell lymphotropic virus, HTLV-BLV group, Retroviridae, Arenavirus, Arenaviridae, Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals, Phlebovirus
+ID  - monkeypox virus
+CP  - USA
+LG  - English
+PT  - Journal article
+IS  - 0190-9622
+YR  - 2003
+UP  - 200401
+
+
+<33>
+UI  - 20033177782
+AU  - Mayr, A.
+IN  - Institute of Microbiology, Infectious and Epidemic Diseases of the Veterinary, Faculty of the Ludwig-Maximilian, University of Munich, Weiheimer Strasse 1, Starnberg 823 19, Germany.
+TI  - Smallpox vaccination and bioterrorism with pox viruses. (Special issue: Vaccines)
+SO  - Comparative Immunology, Microbiology & Infectious Diseases. Pergamon Press, Oxford, UK: 2003. 26: 5/6, 423-430. 13 ref. 
+AB  - Bioterrorist attacks occupy a special place amongst the innumerable potential types of terrorist attack, with the intentional release of pox viruses being especially feared in this connection. Apart from the variola virus, the agent responsible for smallpox in humans, the monkeypox virus and numerous other animal pox viruses pose potential risks for humans and animals. This risk scenario also includes recombinations between the various pox viruses, changes in hosts and genetically engineered manipulations of pox viruses. For over 200 years, the method of choice for combatting smallpox was via vaccination with a reproductive, original vaccinia virus. Worldwide eradication of smallpox at the end of the 1970s and the discontinuation of routine smallpox vaccination in 1980 can be credited to such vaccination. Unfortunately, these vaccinations were associated with a large number of postvaccinal impairments, sometimes resulting in death (e.g. postvaccinal encephalitis). The only way to restrict such postvaccinal complications was to carry out initial vaccination within the first 2 postnatal years. Initial vaccination at a later age led to such a sharp increase in the number of vaccines with complications that vaccination had to be discouraged. The dilemma of the smallpox vaccine stocks stems from the fact that a large portion of these stocks are produced with the same vaccinia strains as before. This is irresponsible, especially as the percentage of immune-suppressed persons in the population, for whom vaccination-related complications is increasing. One solution to the dilemma of the smallpox vaccine stocks is the MVA strain. It is harmless, protects humans and animals equally well against smallpox and can be applied parenterally.
+CC  - Host Resistance and Immunity [HH600], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Human Health and the Environment [VV500]
+MH  - human diseases
+MH  - smallpox
+MH  - vaccination
+MH  - vaccine development
+MH  - man
+MH  - Poxviridae
+BT  - Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals, viruses
+ID  - bioterrorism
+CP  - UK
+LG  - English
+SL  - French
+PT  - Journal article
+IS  - 0147-9571
+YR  - 2003
+UP  - 200311
+
+
+<34>
+UI  - 20033146042
+AU  - Zhang JinShuo
+AU  - Liang Bing
+AU  - Zhang ShuYi
+IN  - Institute of Zoology, Chinese Academy of Sciences, Beijing 100080, China.
+TI  - Zoonosis based on wildlife and human: elementary introduction.  [Chinese]
+SO  - Chinese Journal of Zoology. Science Press, Beijing, China: 2003. 38: 4, 123-127. 35 ref. 
+AB  - Following the outbreak and epidemic of severe acute respiratory syndrome (SARS) particularly in China, there is a growing concern for infectious diseases that have been emerging for the past three decades. These diseases include acquired immune deficiency syndrome (AIDS), Lyme disease, Ebola, Hendra and Nipah from bats, and Monkey pox. These occurrences implicate wildlife species as reservoirs of pathogens that threat human health. The article elaborates on the need for up-to-date and accurate understanding of wildlife and human diseases and their relationship in order to prevent and control disease.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Pathogens, Parasites and Infectious Diseases (Wild Animals) [YY700]
+MH  - acquired immune deficiency syndrome
+MH  - disease control
+MH  - disease prevention
+MH  - disease vectors
+MH  - human diseases
+MH  - Lyme disease
+MH  - monkeypox
+MH  - outbreaks
+MH  - public health
+MH  - viral diseases
+MH  - wild animals
+MH  - zoonoses
+MH  - Borrelia burgdorferi
+MH  - Ebola virus
+MH  - man
+MH  - China
+BT  - Borrelia, Spirochaetaceae, Spirochaetales, Gracilicutes, bacteria, prokaryotes, East Asia, Asia, Developing Countries, Filovirus, Filoviridae, viruses, Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals
+ID  - Hendra virus, Nipah virus, severe acute respiratory syndrome
+CP  - China
+LG  - Chinese
+SL  - English
+PT  - Journal article
+IS  - 0250-3263
+YR  - 2003
+UP  - 200309
+
+
+<35>
+UI  - 20033136912
+IN  - 1600 Clifton Rd., Atlanta, GA 30333, USA.
+CA  - USA, Centers for Disease Control and Prevention
+TI  - Update: multistate outbreak of monkeypox - Illinois, Indiana, Kansas, Missouri, Ohio, and Wisconsin, 2003.
+SO  - Morbidity and Mortality Weekly Report. Massachusetts Medical Society, Waltham, USA: 2003. 52: 27, 642-646. 10 ref. 
+AB  - This report updates results of the epidemiological investigation, provides information on the use of smallpox vaccine during the outbreak, and summarizes the animal tracing activities to identify the origin and subsequent distribution of infected animals.
+CC  - Host Resistance and Immunity [HH600], Pets and Companion Animals [LL070], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210]
+MH  - epidemiology
+MH  - human diseases
+MH  - immunization
+MH  - monkeypox
+MH  - origin
+MH  - outbreaks
+MH  - smallpox
+MH  - vaccination
+MH  - vaccines
+MH  - zoonoses
+MH  - animals
+MH  - man
+MH  - variola virus
+MH  - Illinois
+MH  - Indiana
+MH  - Kansas
+MH  - Missouri
+MH  - Ohio
+MH  - USA
+MH  - Wisconsin
+BT  - East North Central States of USA, North Central States of USA, USA, North America, America, Developed Countries, OECD Countries, Corn Belt States of USA, Northern Plains States of USA, West North Central States of USA, Great Plains States of USA, Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals, Orthopoxvirus, Chordopoxvirinae, Poxviridae, viruses, Lake States of USA
+CP  - USA
+LG  - English
+PT  - Journal article
+IS  - 0149-2195
+YR  - 2003
+UP  - 200309
+
+
+<36>
+UI  - 20033126412
+AU  - Maskalyk, J.
+IN  - CMAJ, 1867 Alta Vista Dr., Ottawa, ON K1G 3Y6, Canada.
+TI  - Monkeypox outbreak among pet owners.
+SO  - Canadian Medical Association Journal. Canadian Medical Association, Ottawa, Canada: 2003. 169: 1, 44-45. 3 ref. 
+AB  - This article briefly describes an outbreak of monkeypox virus infection that occurred during 15 May-11 June 2003 among individuals from Wisconsin, Illinois, Indiana and New Jersey (USA) who had contact with prairie dogs (Cynomys ludovicianus) purchased as pets. The epidemiology, clinical presentation, diagnosis and management of monkeypox virus infection are discussed.
+CC  - Pets and Companion Animals [LL070], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Diagnosis of Human Disease [VV720], Pathogens, Parasites and Infectious Diseases (Wild Animals) [YY700]
+MH  - clinical aspects
+MH  - diagnosis
+MH  - epidemiology
+MH  - human diseases
+MH  - medical treatment
+MH  - monkeypox
+MH  - outbreaks
+MH  - viral diseases
+MH  - Cynomys ludovicianus
+MH  - man
+MH  - Illinois
+MH  - Indiana
+MH  - New Jersey
+MH  - USA
+MH  - Wisconsin
+BT  - Cynomys, Sciuridae, rodents, mammals, vertebrates, Chordata, animals, East North Central States of USA, North Central States of USA, USA, North America, America, Developed Countries, OECD Countries, Corn Belt States of USA, Homo, Hominidae, Primates, Middle Atlantic States of USA, Northeastern States of USA, Lake States of USA
+CP  - Canada
+LG  - English
+PT  - Journal article
+IS  - 0820-3946
+YR  - 2003
+UP  - 200309
+
+
+<37>
+UI  - 20033114395
+AU  - Melski, J.
+AU  - Reed, K.
+AU  - Stratman, E.
+AU  - Graham, M. B.
+AU  - Fairley, J.
+AU  - Edmiston, C.
+AU  - Kehl, K. S.
+AU  - Foldy, S. L.
+AU  - Swain, G. R.
+AU  - Biedrzycki, P.
+AU  - Gieryn, D.
+AU  - Ernst, K.
+AU  - Schier, D.
+AU  - Tomasello, C.
+AU  - Ove, J.
+AU  - Rausch, D.
+AU  - Healy-Haney, N.
+AU  - Kreuser, N.
+AU  - Wegner, M. V.
+AU  - Kazmierczak, J. J.
+AU  - Williams, C.
+AU  - Croft, D. R.
+AU  - Bostrom, H. H.
+AU  - Davis, J. P.
+AU  - Ehlenfeldt, R.
+AU  - Kirk, C. et al.
+IN  - Marshfield Clinic and Marshfield Laboratories, Marshfield, WI 54449, USA.
+TI  - Multistate outbreak of monkeypox - Illinois, Indiana, and Wisconsin, 2003.
+SO  - Morbidity and Mortality Weekly Report. Massachusetts Medical Society, Waltham, USA: 2003. 52: 23, 537-540. 10 ref. 
+AB  - This report summarizes initial descriptive epidemiological, clinical and laboratory data from an outbreak of monkeypox virus in Illinois, Indiana and Wisconsin, USA, and interim infection-control guidance and new animal import regulations introduced as a result. As of June 10 2003, a total of 53 cases had been investigated in these 3 states. A total of 14 (26%) patients had been hospitalized, including a child aged <10 years with encephalitis. Detailed clinical information was available for 30 cases, reported in Illinois and Wisconsin. In majority of the patients (22; 73%), a febrile illness either preceded or accompanied the onset of a papular rash. Respiratory symptoms (16; 64%), lymphadenopathy (14; 47%) and sore throat (10; 33%) were also prominent signs and symptoms. All patients had contact with animals. 51 patients reported direct or close contact with prairie dogs (Cynomys sp.) and one patient reported contact with a Gambian giant rat (Cricetomys sp.). One patient had contact with a rabbit that became ill after exposure to an ill prairie dog at a veterinary clinic. Skin biopsies were available for 5 patients; 4 showed orthopox viral antigens by immunohistochemical testing. Monkeypox-specific DNA signatures were also found in a viral isolate derived from lymphoid tissue of a patient's ill prairie dog. Investigation revealed that Gambian giant rats and other rodents imported from Ghana earlier in the year had been housed together with prairie dogs by an animal distributor; as this was probably the source of the infection, the import of rodents from Africa to the USA has been suspended, as has trade in some species.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Pets and Companion Animals [LL070]
+MH  - human diseases
+MH  - import controls
+MH  - imported infections
+MH  - monkeypox
+MH  - outbreaks
+MH  - pathology
+MH  - pets
+MH  - zoonoses
+MH  - Cricetomys
+MH  - Cynomys
+MH  - man
+MH  - Orthopoxvirus
+MH  - Ghana
+MH  - Illinois
+MH  - Indiana
+MH  - USA
+MH  - Wisconsin
+BT  - Cricetomyinae, Muridae, rodents, mammals, vertebrates, Chordata, animals, small mammals, Sciuridae, East North Central States of USA, North Central States of USA, USA, North America, America, Developed Countries, OECD Countries, Corn Belt States of USA, Homo, Hominidae, Primates, Chordopoxvirinae, Poxviridae, viruses, Lake States of USA, West Africa, Africa South of Sahara, Africa, Developing Countries, ACP Countries, Commonwealth of Nations, Anglophone Africa
+CP  - USA
+LG  - English
+PT  - Journal article
+IS  - 0149-2195
+YR  - 2003
+UP  - 200308
+
+
+<38>
+UI  - 20033054297
+AU  - Smee, D. F.
+AU  - Sidwell, R. W.
+IN  - Department of Animal, Dairy and Veterinary Sciences, Institute for Antiviral Research, Utah State University, Logan, UT 84322-5600, USA.
+TI  - A review of compounds exhibiting anti-orthopoxvirus activity in animal models. (Special issue: Viral Bioterrorism and Biodefense)
+SO  - Antiviral Research. Elsevier Science B.V., Amsterdam, Netherlands: 2003. 57: 1/2, 41-52. many ref. 
+AB  - Several animal models using mice (most frequently), rabbits, or monkeys have been used to identify compounds active against orthopoxvirus infections. The treatment of vaccinia virus infections has been well studied in models involving infection of scarified skin or eyes, or resulting from intravenous, intraperitoneal, intracerebral, or intranasal virus inoculation. Cowpox virus has been used in intranasal or aerosol infection studies to evaluate the treatment of lethal respiratory infections. Rabbitpox, monkeypox, and variola viruses have been employed to a lesser extent than the other viruses in chemotherapy experiments. A review of the literature over the past 50 years has identified a number of compounds effective in treating one or more of these infections, which include thiosemicarbazones, nucleoside and nucleotide analogs, interferon, interferon inducers, and other unrelated compounds. Substances that appear to have the greatest potential as anti-orthopoxvirus agents are the acyclic nucleotides, (S)-1-(3-hydroxy-2-phosphonylmethoxypropyl)cytosine (cidofovir, HPMPC) and 1-[((S)-2-hydroxy-2-oxo-1,4,2-dioxaphosphorinan-5-yl)methyl]cytosine (cyclic HPMPC), and the acyclic nucleoside analog, 2-amino-7-[(1,3-dihydroxy-2-propoxy)methyl]purine (S2242). Other classes of compounds that have not been sufficiently studied in lethal infection models and deserve further consideration are thiosemicarbazones related to methisazone, and analogs of adenosine-N1-oxide and 1-(benzyloxy)adenosine.
+RN  - 71-30-7
+OI  - 10.1016/S0166-3542(02)00199-7
+CC  - Pesticides and Drugs; Control [HH405], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Animal and in vitro Models for Pharmaceuticals [VV450]
+MH  - animal models
+MH  - antiviral agents
+MH  - antiviral properties
+MH  - cytosine
+MH  - drug therapy
+MH  - interferon
+MH  - nucleoside analogues
+MH  - reviews
+MH  - smallpox
+MH  - thiosemicarbazones
+MH  - cowpox virus
+MH  - mice
+MH  - monkeys
+MH  - Orthopoxvirus
+MH  - rabbits
+MH  - vaccinia virus
+MH  - variola virus
+BT  - Orthopoxvirus, Chordopoxvirinae, Poxviridae, viruses, Muridae, rodents, mammals, vertebrates, Chordata, animals, small mammals, Primates, Leporidae, Lagomorpha
+ID  - acyclic nucleotides, cidofovir, monkeypox virus
+CP  - Netherlands
+LG  - English
+PT  - Journal article
+IS  - 0166-3542
+YR  - 2003
+UP  - 200300
+
+
+<39>
+UI  - 20023063927
+AU  - Shchelkunov, S.
+AU  - Totmenin, A.
+AU  - Kolosova, I.
+IN  - State Research Center of Virology and Biotechnology 'Vector', Koltsovo, Novosibirsk Region 630559, Russia.
+TI  - Species-specific differences in organization of orthopoxvirus kelch-like proteins.
+SO  - Virus Genes. Kluwer Academic Publishers, Dordrecht, Netherlands: 2002. 24: 2, 157-162. 30 ref. 
+AB  - Organization of orthopoxvirus proteins of the kelch superfamily and their genes were analysed and compared. Complete genomic sequences of variola (VAR) strain India-1967 (VAR-IND), monkeypox (MPV) strain Zaire-96-I-16 (MPV-ZAI), vaccinia (VAC) strain Copenhagen (VAC-COP), and species-specific regions of cowpox (CPV) strain GRI-90 (CPV-GRI) viruses were used in the work. Despite the multiplicity of kelch-like proteins in orthopoxviruses, their function was still vague. It was discovered that the genes of orthopoxvirus kelch-like proteins were localized only to the terminal variable regions of the genome and displayed species-specific differences in the lengths of the proteins they potentially encode. All the genes belonging to kelch superfamily in the genome of VAR, which has the only host - the man, were mutationally destroyed. However, CPV, displaying the widest host range among orthopoxviruses, encoded the most numerous set of kelch-like proteins. Weak homologies between kelch-like proteins of one virus were demonstrated as well as high homologies between isologues of different orthopoxvirus species. The comparison performed suggest that CPV virus is most ancient and may be considered as the ancestor of other orthopoxviruses pathogenic for humans.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Taxonomy and Evolution [ZZ380], Genetics and Molecular Biology of Microorganisms [ZZ395]
+MH  - DNA sequencing
+MH  - genes
+MH  - genomes
+MH  - host range
+MH  - monkeypox
+MH  - mutations
+MH  - nucleotide sequences
+MH  - phylogeny
+MH  - proteins
+MH  - species differences
+MH  - cowpox virus
+MH  - Orthopoxvirus
+MH  - vaccinia virus
+MH  - variola virus
+BT  - Orthopoxvirus, Chordopoxvirinae, Poxviridae, viruses
+CP  - Netherlands
+LG  - English
+PT  - Journal article
+IS  - 0920-8569
+YR  - 2002
+UP  - 200200
+
+
+<40>
+UI  - 20023037084
+AU  - Meyer, H.
+AU  - Neubauer, H.
+AU  - Pfeffer, M.
+IN  - Institut fur Mikrobiologie, Sanitatsakademie der Bundeswehr, Neuherbergstrasse 11, 80937 Munchen, Germany.
+TI  - Amplification of 'variola virus-specific' sequences in German cowpox virus isolates.
+SO  - Journal of Veterinary Medicine. Series B. Blackwell Wissenschafts-Verlag GmbH, Berlin, Germany: 2002. 49: 1, 17-19. 14 ref. 
+AB  - In 1995, a polymerase chain reaction (PCR) protocol describing the specific detection of variola virus, the causative agent of smallpox, was published. Virulent variola major strains could be differentiated from less virulent variola minor strains because of the distinct amplicon sizes. In the present study, this PCR protocol was applied to DNA from various orthopoxvirus isolates. There was no amplification with the orthopoxvirus species vaccinia, monkeypox, mousepox, or camelpox viruses. However, amplification was observed in 6 out of 15 cowpox virus strains investigated. The size of the amplicons corresponded exactly with the size described for variola minor strains and the nucleotide sequence identity accounted for 97%. Findings are discussed with respect to the evolution of orthopoxvirus species assuming that variola virus most probably stems from a rodent-transmitted cowpox virus-like progenitor.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Biotechnology (General) [WW000], Taxonomy and Evolution [ZZ380], Genetics and Molecular Biology of Microorganisms [ZZ395]
+MH  - cowpox
+MH  - DNA
+MH  - DNA amplification
+MH  - evolution
+MH  - genetic analysis
+MH  - nucleotide sequences
+MH  - polymerase chain reaction
+MH  - smallpox
+MH  - zoonoses
+MH  - cowpox virus
+MH  - Orthopoxvirus
+MH  - variola virus
+BT  - Orthopoxvirus, Chordopoxvirinae, Poxviridae, viruses
+CP  - Germany
+LG  - English
+PT  - Journal article
+IS  - 0931-1793
+YR  - 2002
+UP  - 200200
+
+
+<41>
+UI  - 20023031018
+AU  - Steffen, R.
+AU  - DuPont, H. L.
+IN  - Institute for Social and Preventive Medicine, University of Zurich, Zurich, Switzerland.
+ED  - Steffen, R.
+ED  - DuPont, H. L.
+TI  - Manual of travel medicine and health.
+SO  - Manual of travel medicine and health. B.C. Decker Inc, Hamilton, Canada: 1999. xi + 515. 
+AB  - This manual, which is divided into 4 parts, contains information on preventive travel medicine. Infectious (anthrax, arenaviral haemorrhagic fevers, botulism, brucellosis, cholera, dengue, dermatitis, diphtheria, filariasis, filovirus infection, hantavirus, hepatitis A, B, C, delta, E, and G, human immunodeficiency virus, Japanese encephalitis, legionellosis, leishmaniasis, leprosy, leptospirosis, Lyme borreliosis, malaria, measles, meningococcal meningitis monkeypox, plague, poliomyelitis, rabies, respiratory tract infections, Rift Valley fever, schistosomiasis, sexually transmitted diseases, smallpox, tetanus, tickborne encephalitis, traveller's diarrhoea, trypanosomiasis, tuberculosis, typhoid fever and yellow fever) and non-infectious (accidents, altitude problems, animal bites and stings, diving problems, jet lag, motion sickness, poisoning, psychiatric problems and exposure to ultraviolet rays) health risks common to travellers are described. The last part provides information on diagnosis and management of illness, including persistent diarrhoea, fever, dermatological disorders and eosinophilia, after return.
+CC  - Pesticides and Drugs; Control [HH405], Host Resistance and Immunity [HH600], Food Contamination, Residues and Toxicology [QQ200], Tourism and Travel [UU700], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Protozoan, Helminth and Arthropod Parasites of Humans [VV220], Non-communicable Human Diseases and Injuries [VV600], Diagnosis of Human Disease [VV720], Human Toxicology and Poisoning [VV810]
+MH  - accidents
+MH  - altitude
+MH  - anthrax
+MH  - bites
+MH  - botulism
+MH  - brucellosis
+MH  - cholera
+MH  - dengue
+MH  - dermatitis
+MH  - diarrhoea
+MH  - diphtheria
+MH  - disease prevention
+MH  - diving
+MH  - eosinophilia
+MH  - fever
+MH  - filariasis
+MH  - foodborne diseases
+MH  - hepatitis A
+MH  - hepatitis B
+MH  - human diseases
+MH  - Japanese encephalitis
+MH  - leishmaniasis
+MH  - leptospirosis
+MH  - Lyme disease
+MH  - mental disorders
+MH  - monkeypox
+MH  - plague
+MH  - poisoning
+MH  - poliomyelitis
+MH  - rabies
+MH  - respiratory diseases
+MH  - Rift Valley fever
+MH  - schistosomiasis
+MH  - sexually transmitted diseases
+MH  - smallpox
+MH  - tetanus
+MH  - tickborne encephalitis
+MH  - travellers
+MH  - trypanosomiasis
+MH  - tuberculosis
+MH  - typhoid
+MH  - viral haemorrhagic fevers
+MH  - yellow fever
+MH  - Arenavirus
+MH  - Bacillus anthracis
+MH  - Borrelia burgdorferi
+MH  - Brucella
+MH  - Clostridium botulinum
+MH  - Clostridium tetani
+MH  - Corynebacterium diphtheriae
+MH  - dengue virus
+MH  - Filovirus
+MH  - Hantavirus
+MH  - hepatitis A virus
+MH  - hepatitis B virus
+MH  - human immunodeficiency virus
+MH  - human poliovirus
+MH  - Leishmania
+MH  - Leptospira
+MH  - man
+MH  - Mycobacterium tuberculosis
+MH  - rabies virus
+MH  - Rickettsia
+MH  - Rift Valley fever virus
+MH  - Salmonella typhi
+MH  - Schistosoma
+MH  - tickborne encephalitis virus
+MH  - Trypanosoma
+MH  - variola virus
+MH  - Vibrio cholerae
+MH  - yellow fever virus
+MH  - Yersinia pestis
+BT  - Arenaviridae, viruses, Bacillus, Bacillaceae, Firmicutes, bacteria, prokaryotes, Borrelia, Spirochaetaceae, Spirochaetales, Gracilicutes, Brucellaceae, Clostridium, Clostridiaceae, Corynebacterium, Corynebacteriaceae, Coryneform group of bacteria, Flavivirus, Flaviviridae, Filoviridae, Bunyaviridae, Hepatovirus, Picornaviridae, Hepadnaviridae, Lentivirus, Retroviridae, polioviruses, Enterovirus, Trypanosomatidae, Kinetoplastida, Sarcomastigophora, Protozoa, invertebrates, animals, Leptospiraceae, Homo, Hominidae, Primates, mammals, vertebrates, Chordata, Mycobacterium, Mycobacteriaceae, Lyssavirus, Rhabdoviridae, Rickettsiaceae, Rickettsiales, Phlebovirus, Salmonella, Enterobacteriaceae, Schistosomatidae, Digenea, Trematoda, Platyhelminthes, Orthopoxvirus, Chordopoxvirinae, Poxviridae, Vibrio, Vibrionaceae, Yersinia
+CP  - Canada
+LG  - English
+PT  - Book
+IB  - 155009078X
+YR  - 1999
+UP  - 200200
+
+
+<42>
+UI  - 20013036763
+AU  - Knobloch, J.
+IN  - Institut fur Tropenmedizin, Universitatsklinikum, Keplerstrasse 15, D-72074 Tubingen, Germany.
+TI  - Importation of dangerous pathogens. (Special issue: Travel medicine)  [German]
+OT  - Import gefahrlicher Erreger.
+SO  - Internist (Berlin). Springer-Verlag, Berlin, Germany: 1999. 40: 11, 1157-1167. 28 ref. 
+AB  - The diseases discussed include monkeypox, Argentinian, Bolivian, Brazilian and Venezuelan haemorrhagic fever, cholera, Ebola virus infection, Crimean-Congo haemorrhagic fever, Lassa fever, pulmonary anthrax, pneumonic plague, Marburg disease, pulmonary Hantavirus syndrome, and Rift Valley fever. The technical and administrative infrastructure to deal with these conditions in Germany needs to be improved.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210]
+MH  - anthrax
+MH  - bacterial diseases
+MH  - cholera
+MH  - disease control
+MH  - haemorrhagic fevers
+MH  - human diseases
+MH  - imported infections
+MH  - Lassa fever
+MH  - monkeypox
+MH  - plague
+MH  - Rift Valley fever
+MH  - viral diseases
+MH  - Bacillus anthracis
+MH  - Crimean-Congo haemorrhagic fever virus
+MH  - Ebola virus
+MH  - Hantavirus
+MH  - Lassa virus
+MH  - man
+MH  - Marburg virus
+MH  - Rift Valley fever virus
+MH  - Vibrio cholerae
+MH  - Yersinia pestis
+MH  - Germany
+BT  - Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals, Filovirus, Filoviridae, viruses, Nairovirus, Bunyaviridae, Arenavirus, Arenaviridae, Bacillus, Bacillaceae, Firmicutes, bacteria, prokaryotes, Yersinia, Enterobacteriaceae, Gracilicutes, Phlebovirus, Western Europe, Europe, Developed Countries, European Union Countries, OECD Countries, Vibrio, Vibrionaceae
+CP  - Germany
+LG  - German
+PT  - Journal article
+IS  - 0020-9554
+YR  - 1999
+UP  - 200200
+
+
+<43>
+UI  - 20013138954
+CA  - USA, American Society of Veterinary Clinical Pathology
+MT  - American Society for Veterinary Clinical Pathology (ASVCP) 36th Annual Meeting, in conjunction with the American College of Veterinary Pathologists (ACVP) 52nd Annual Meeting, Salt Lake City, Utah, 1-5 December, 2001.
+TI  - American Society for Veterinary Clinical Pathology (ASVCP) 36th Annual Meeting, in conjunction with the American College of Veterinary Pathologists (ACVP) 52nd Annual Meeting, Salt Lake City, Utah, 1-5 December, 2001.
+SO  - Veterinary Clinical Pathology. American Society of Veterinary Clinical Pathology, Baton Rouge, USA: 2001. 30: 3, 150-154. 
+AB  - The abstracts of studies that made it as competitors for the 'ASVCP Young Investigator Awards' are presented. The abstracts are of varied research topics. The first research deals with the characterization of a bleeding diathesis in a Thoroughbred filly, while the second deals with the evaluation of complete blood count and blood chemistry results in normal and Mycobacterium tuberculosis-infected elephants (Elephas maximus). An investigation on an increased mortality among periparturient lamb due to heritable coagulopathy is the topic of the third research. The fourth study deals with the importance of cytokine balance, especially between inducible nitric oxide synthase and transforming growth factor-B1, in the regulation of granulomatous inflammatory response. The expression of atrial natriuretic gene in cats with cardiomyopathy is the topic of the fifth abstract. Other studies include the development of an internet-based learning tool (problem list generator), an investigation of microsphere-based multiplexed analysis on the Luminex 100 flow cytometer (as an alternative for cytokine quantitation), the use of flow cytometer in evaluating murine bone marrow toxicity in pre-clinical drug development and an assessment of the value of urinary albumin excretion in the diagnosis of spontaneous rat nephropathy. Also, a rat model of the relationship of leptin resistance and increased salt sensitivity in obese individuals; a characterization of the haematologic and clinicopathologic changes in the bone marrow of cats with lymphosarcoma; a discussion on an alternate pathway taken by Plasmodium yoelii and other plasmodia to invade host cells (erythrocytes, normocytes and reticulocytes); and a determination of the effects of room temperature storage of blood samples on haematologic parameters are presented. Poster presentations of several aspects of urine analysis (urine pH measurement and staining of urine sediments for the detection of bacteriuria), in dogs and cats, are also presented in separate abstracts.
+NT  - Also published in Veterinary Pathology, 38:5, 569-605.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Protozoan, Helminth, Mollusc and Arthropod Parasites of Animals [LL822], Non-communicable Diseases and Injuries of Animals [LL860], Diagnosis of Animal Diseases [LL886], Techniques and Methodology [ZZ900]
+MH  - animal models
+MH  - bioinformatics
+MH  - biological techniques
+MH  - blood chemistry
+MH  - blood coagulation
+MH  - blood coagulation disorders
+MH  - blood coagulation factors
+MH  - bone marrow
+MH  - cardiomyopathy
+MH  - congenital abnormalities
+MH  - cytokines
+MH  - databases
+MH  - diagnosis
+MH  - diagnostic techniques
+MH  - drug development
+MH  - drug toxicity
+MH  - erythrocytes
+MH  - flow cytometry
+MH  - gene expression
+MH  - genes
+MH  - granuloma
+MH  - haematology
+MH  - haemorrhagic diathesis
+MH  - human diseases
+MH  - kidney diseases
+MH  - leptin
+MH  - lymphosarcoma
+MH  - macrocytic anaemia
+MH  - monkeypox
+MH  - obesity
+MH  - pathogenesis
+MH  - sample processing
+MH  - toxicology
+MH  - urine
+MH  - urine analysis
+MH  - cats
+MH  - dogs
+MH  - Elephas maximus
+MH  - horses
+MH  - mice
+MH  - Mycobacterium tuberculosis
+MH  - Plasmodium yoelii
+MH  - rats
+MH  - sheep
+BT  - Felis, Felidae, Fissipeda, carnivores, mammals, vertebrates, Chordata, animals, small mammals, Canis, Canidae, Elephas, Elephantidae, Proboscidea (mammals), Equus, Equidae, Perissodactyla, ungulates, Muridae, rodents, Mycobacterium, Mycobacteriaceae, Firmicutes, bacteria, prokaryotes, Plasmodium, Plasmodiidae, Haemospororida, Apicomplexa, Protozoa, invertebrates, Ovis, Bovidae, ruminants, Artiodactyla
+CP  - USA
+LG  - English
+PT  - Journal issue
+PT  - Conference proceedings
+IS  - 0275-6382
+YR  - 2001
+UP  - 200100
+
+
+<44>
+UI  - 20013043525
+AU  - Weber, D. J.
+AU  - Rutala, W. A.
+IN  - CB Number 7030 Burnett-Womack, 547, Division of Infectious Diseases, University of North Carolina at Chapel Hill, Chapel Hill, NC 27599-7030, USA.
+TI  - Risks and prevention of nosocomial transmission of rare zoonotic diseases.
+SO  - Clinical Infectious Diseases. University of Chicago Press, Chicago, USA: 2001. 32: 3, 446-456. 70 ref. 
+AB  - A review on rare zoonoses that pose nosocomial hazards (Andes virus pulmonary syndrome, anthrax, B virus infection, haemorrhagic fevers, monkeypox, plague, Q fever and rabies) in the USA is presented. Pre-exposure prophylaxis, proper isolation of the infected patient and management of the exposed health care providers are emphasized.
+CC  - Pesticides and Drugs; Control [HH405], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210]
+MH  - anthrax
+MH  - chemoprophylaxis
+MH  - disease control
+MH  - disease prevention
+MH  - haemorrhagic fevers
+MH  - human diseases
+MH  - monkeypox
+MH  - nosocomial infections
+MH  - plague
+MH  - Q fever
+MH  - rabies
+MH  - reviews
+MH  - risk
+MH  - zoonoses
+MH  - cercopithecine herpesvirus 1
+MH  - Coxiella burnetii
+MH  - Crimean-Congo haemorrhagic fever virus
+MH  - Ebola virus
+MH  - Hantavirus
+MH  - Lassa virus
+MH  - man
+MH  - Marburg virus
+MH  - Orthopoxvirus
+MH  - Rhabdoviridae
+MH  - Yersinia pestis
+MH  - USA
+BT  - Herpesviridae, viruses, Coxiella, Rickettsiaceae, Rickettsiales, bacteria, prokaryotes, Nairovirus, Bunyaviridae, Filovirus, Filoviridae, Arenavirus, Arenaviridae, Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals, Chordopoxvirinae, Poxviridae, North America, America, Developed Countries, OECD Countries, Yersinia, Enterobacteriaceae, Gracilicutes
+ID  - Andes virus, Hantavirus pulmonary syndrome
+CP  - USA
+LG  - English
+PT  - Journal article
+IS  - 1058-4838
+YR  - 2001
+UP  - 200100
+
+
+<45>
+UI  - 20013010752
+AU  - Loparev, V. N.
+AU  - Massung, R. F.
+AU  - Esposito, J. J.
+AU  - Meyer, H.
+IN  - Division of Viral and Rickettsial Diseases, National Center for Infectious Diseases, Centers for Disease Control and Prevention, U.S. Department of Health and Human Services, MS D-10, 1600 Clifton Rd., Atlanta, GA 30333, USA.
+TI  - Detection and differentiation of Old World orthopoxviruses: restriction fragment length polymorphism of the crmB gene region.
+SO  - Journal of Clinical Microbiology. American Society for Microbiology (ASM), Washington, USA: 2001. 39: 1, 94-100. 31 ref. 
+AB  - A restriction fragment length polymorphism (RFLP) assay was developed to identify and differentiate Old World, African-Eurasian orthopoxviruses (OPV): variola, vaccinia, cowpox, monkeypox, camelpox, ectromelia, and taterapox viruses. The test uses amplicons produced from virus genome DNA by PCR with a consensus primer pair designed from sequences determined for the cytokine response modifier B (crmB) gene of 43 different OPV strains of known taxonomic origin. The primer pair amplified a single specific product from each of the 115 OPV samples tested. Size-specific amplicons identified and differentiated ectromelia and vaccinia virus strains, which contain a truncated crmB gene, and enabled their differentiation from other OPV species. Restriction digests of amplified products allowed the identification and differentiation of variola, monkeypox, camelpox, vaccinia, and cowpox virus species and strains.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Genetics and Molecular Biology of Microorganisms [ZZ395]
+MH  - genes
+MH  - restriction fragment length polymorphism
+MH  - animals
+MH  - cowpox virus
+MH  - ectromelia virus
+MH  - man
+MH  - Orthopoxvirus
+MH  - vaccinia virus
+MH  - variola virus
+BT  - Orthopoxvirus, Chordopoxvirinae, Poxviridae, viruses, Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals
+ID  - camelpox virus, monkeypox virus, taterapox virus
+CP  - USA
+LG  - English
+PT  - Journal article
+IS  - 0095-1137
+YR  - 2001
+UP  - 200100
+
+
+<46>
+UI  - 20002212780
+AU  - Pastoret, P. P.
+IN  - Office International des Epizooties, 12, rue de Prony, 75017 Paris, France.
+TI  - An update on zoonoses.
+SO  - Revue Scientifique et Technique - Office International des Epizooties. 2000. 19: 1, 333. many ref. 
+AB  - The diseases covered in this special issue have been chosen on the basis of their importance, topicality and impact on public opinion, or of recent scientific discoveries that have shed new light on these diseases. There are chapters on Hantavirus, Bunyavirus, Filovirus, monkey poxvirus, new variant Creutzfeldt-Jakob disease, Lyme disease, cat scratch disease, Hendra and Nipah viruses, West Nile encephalitis, bat Lyssavirus infection and public health problems due to the influenza A viruses. Also included are: a brief historical overview of zoonoses, reports on foodborne bacterial infection and parasitic foodborne and waterborne zoonoses and controversial subjects, such as Borna disease virus infection and potential risks from xenotransplantation.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Protozoan, Helminth, Mollusc and Arthropod Parasites of Animals [LL822], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Protozoan, Helminth and Arthropod Parasites of Humans [VV220], Public Health Pests, Vectors and Intermediate Hosts [VV230]
+MH  - epidemiology
+MH  - zoonoses
+MH  - reviews
+MH  - parasites
+MH  - disease transmission
+MH  - bacterial diseases
+MH  - viral diseases
+MH  - infectious diseases
+MH  - public health
+MH  - Creutzfeldt-Jakob disease
+MH  - cat scratch disease
+MH  - foodborne diseases
+MH  - waterborne diseases
+MH  - xenografts
+MH  - monkeypox
+MH  - man
+MH  - animals
+MH  - Bunyavirus
+MH  - Filovirus
+MH  - Hantavirus
+MH  - West Nile virus
+MH  - Lyssavirus
+MH  - Borna disease virus
+MH  - Bartonella henselae
+BT  - Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals, Bunyaviridae, viruses, Filoviridae, Flavivirus, Flaviviridae, Rhabdoviridae, Bartonella, Bartonellaceae, bacteria, prokaryotes
+ID  - Hendra virus, Nipah virus
+LG  - English
+SL  - Spanish, French
+PT  - Miscellaneous
+YR  - 2000
+UP  - 200000
+
+
+<47>
+UI  - 19990505704
+AU  - Spratt, B. G.
+IN  - Wellcome Trust Centre for the Epidemiology of Infectious Disease, Department of Zoology, University of Oxford, South Parks Road, Oxford OX1 3PS, UK.
+TI  - Resurgent/emergent infectious diseases.
+SO  - British Medical Bulletin. 1998. 54: 3, 521-765. many ref. 
+AB  - This issue is made up of 18 chapters, starting with general essays about the emergence of infectious diseases, and control strategies, and continuing with individual chapters, from well known experts, on some of the diseases that have emerged or resurged in recent years. The diseases discussed include tuberculosis, HIV, Streptococcus pneumoniae, cholera, plague, diphtheria, Lyme disease, hantaviruses, filoviral haemorrhagic fevers, monkeypox, malaria, hepatitis viruses and bovine spongiform encephalopathy.
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Humans [VV200], Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - infectious diseases
+MH  - tuberculosis
+MH  - cholera
+MH  - plague
+MH  - diphtheria
+MH  - Lyme disease
+MH  - haemorrhagic fevers
+MH  - monkeypox
+MH  - malaria
+MH  - hepatitis
+MH  - bovine spongiform encephalopathy
+MH  - human diseases
+MH  - Creutzfeldt-Jakob disease
+MH  - parasites
+MH  - human immunodeficiency virus
+MH  - Streptococcus pneumoniae
+MH  - Hantavirus
+MH  - man
+MH  - protozoa
+BT  - Lentivirus, Retroviridae, viruses, Streptococcus, Streptococcaceae, Firmicutes, bacteria, prokaryotes, Bunyaviridae, Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals, invertebrates
+ID  - emerging infectious diseases
+LG  - English
+PT  - Book
+IS  - 0007-1420
+IB  - 1853153443
+YR  - 1998
+UP  - 199900
+
+
+<48>
+UI  - 19992200855
+AU  - Reid, H. W.
+IN  - Moredun Reserach Institute, 408 Gilmerton road, Edinburgh EH17 7JH, Scotland, UK.
+ED  - Palmer, S. R.
+ED  - Soulsby, Lord
+ED  - Simpson, D. I. H.
+TI  - Poxviruses.
+SO  - Zoonoses: biology, clinical practice and public health control.. Oxford University Press, Oxford, UK: 1998. 415-421. 12 ref. 
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820], Parasites, Vectors, Pathogens and Biogenic Diseases of Humans [VV200]
+MH  - zoonoses
+MH  - epidemiology
+MH  - disease prevention
+MH  - disease control
+MH  - treatment
+MH  - monkeypox
+MH  - Poxviridae
+MH  - Orthopoxvirus
+MH  - Parapoxvirus
+MH  - cowpox virus
+MH  - buffalo poxvirus
+MH  - seals
+MH  - bovine papular stomatitis virus
+MH  - reindeer
+MH  - Ovibos moschatus
+BT  - viruses, Chordopoxvirinae, Poxviridae, Orthopoxvirus, Pinnipedia, carnivores, mammals, vertebrates, Chordata, animals, Parapoxvirus, Rangifer, Cervidae, ruminants, Artiodactyla, ungulates, Ovibos, Bovidae
+ID  - yatapoxvirus
+CP  - UK
+LG  - English
+PT  - Book chapter
+IB  - 019262380X
+YR  - 1998
+UP  - 199900
+
+
+<49>
+UI  - 19972204930
+AU  - Meyer, H.
+AU  - Ropp, S. L.
+AU  - Esposito, J. J.
+IN  - Institute of Microbiology, Federal Armed Forces Medical Academy, Neuherbergstrasse 11, 80937 Munich, Germany.
+TI  - Gene for A-type inclusion body protein is useful for a polymerase chain reaction assay to differentiate orthopoxviruses.
+SO  - Journal of Virological Methods. 1997. 64: 2, 217-221. 11 ref. 
+AB  - A polymerase chain reaction using a single primer pair based on sequences from the major protein component of cowpox virus acidophilic-type inclusion body amplified sequences of 510 to 1673 bp from DNA samples of 6 of 8 Old World orthopoxviruses (cowpox, variola, monkeypox, camel pox, ectromelia and vaccinia) and 2 New World orthopoxviruses (skunk pox and, vole pox). DNA from another New World virus, raccoon pox, did not amplify. XbaI digest gel electrophoresis profiles of the amplicons improved differentiation.
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820], Biotechnology (General) [WW000]
+MH  - nucleotide sequences
+MH  - polymerase chain reaction
+MH  - detection
+MH  - viral diseases
+MH  - biotechnology
+MH  - cowpox virus
+MH  - ectromelia virus
+MH  - vaccinia virus
+MH  - variola virus
+MH  - orthopoxvirus
+BT  - Orthopoxvirus, Chordopoxvirinae, Poxviridae, viruses
+LG  - English
+PT  - Journal article
+IS  - 0166-0934
+YR  - 1997
+UP  - 199700
+
+
+<50>
+UI  - 19962008664
+ED  - Morse, S. S.
+TI  - Emerging viruses.
+SO  - Emerging viruses.. Oxford University Press, Oxford, UK: 1993. xxiii + 317. 
+AB  - This book, newly available in paperback format, examines the biological, ecological, and social factors responsible for the continuing emergence of new viral diseases, presenting brief reviews of some representative viruses. Divided into 8 main sections, the book covers the following major subject areas: viral emergence in historical context (including chapters on influenza and an overview of viral haemorrhagic fevers); viruses and the host; methods for detection of viruses; tracking emerging viruses (including the AIDS epidemic); ecological sources of emerging viruses (arthropod-borne viruses; Hantaan (Korean haemorrhagic fever), and related rodent zoonoses; filoviruses); interspecies transfer: case studies of animal viruses that recently crossed species (human monkeypox, seal plague virus; canine parvovirus 2); viral evolution, with reference to the variation and evolution of RNA viruses; prospects for the future.
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Humans [VV200], Human Treatment and Diagnosis (Non-Drug) [VV700], Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - human diseases
+MH  - incidence
+MH  - history
+MH  - influenza
+MH  - viral haemorrhagic fevers
+MH  - ecology
+MH  - pathogenesis
+MH  - detection
+MH  - diagnosis
+MH  - pathology
+MH  - acquired immune deficiency syndrome
+MH  - vector-borne diseases
+MH  - zoonoses
+MH  - monkeypox
+MH  - rna
+MH  - vectors
+MH  - climatic change
+MH  - epidemics
+MH  - disease surveys
+MH  - viral diseases
+MH  - evolution
+MH  - epidemiology
+MH  - aetiology
+MH  - arboviruses
+MH  - disease vectors
+MH  - man
+MH  - viruses
+MH  - hantaan virus
+MH  - rodents
+MH  - filoviridae
+MH  - phocine distemper virus
+MH  - canine parvovirus
+MH  - retroviridae
+BT  - Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals, Hantavirus, Bunyaviridae, viruses, Morbillivirus, Paramyxoviridae, Parvovirus, Parvoviridae
+ID  - emerging diseases
+CP  - UK
+LG  - English
+PT  - Book
+IB  - 0195104846
+YR  - 1993
+UP  - 199600
+
+
+<51>
+UI  - 19952200051
+AU  - Pfeffer, M.
+AU  - Meyer, H.
+AU  - Wiedmann, M.
+IN  - Institute for Microbiology, Infectious and Epidemic Diseases, Ludwig-Maximilians University, Veterinaestr. 13, 80539 Munich, Germany.
+TI  - A ligase chain reaction targeting two adjacent nucleotides allows the differentiation of cowpox virus from other Orthopoxvirus species.
+SO  - Journal of Virological Methods. 1994. 49: 3, 353-360. 31 ref. 
+AB  - The ligase chain reaction (LCR) targets 2 adjacent adenosine residues which are only present in the A-type inclusion protein gene (ATI-gene) of cowpox virus. Two primer pairs were designed with a one base overlap at the junction site and one primer of each pair was labelled with 32P. The ligation product was detected after denaturing PAGE and autoradiography. Before LCR, the corresponding region of the ATI-gene was amplified by a consensus primer-directed polymerase chain reaction. All 18 cowpox virus isolates investigated could be clearly distinguished from 10 vaccinia virus strains, 5 camelpox virus isolates, and from mousepox and monkeypox virus reference strains. The LCR method allows a fast identification of cowpox virus isolates and is useful for the analysis of small mutations within viral genes.
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820], Animal Treatment and Diagnosis (Non-Drug) [LL880], Biotechnology (General) [WW000]
+MH  - nucleotides
+MH  - differential diagnosis
+MH  - species
+MH  - polymerase chain reaction
+MH  - laboratory diagnosis
+MH  - viral diseases
+MH  - biotechnology
+MH  - dog diseases
+MH  - orthopoxvirus
+MH  - cattle
+MH  - bovine orthopoxvirus
+MH  - dogs
+BT  - Chordopoxvirinae, Poxviridae, viruses, Bos, Bovidae, ruminants, Artiodactyla, mammals, vertebrates, Chordata, animals, ungulates, Orthopoxvirus, Canis, Canidae, Fissipeda, carnivores
+ID  - ligase chain reaction
+LG  - English
+PT  - Journal article
+IS  - 0166-0934
+YR  - 1994
+UP  - 199500
+
+
+<52>
+UI  - 19942213254
+AU  - Meyer, H.
+AU  - Pfeffer, M.
+AU  - Rziha, H. J.
+IN  - Institute of Microbiology, Federal Armed Forces Medical Academy, 80937 Munchen, Germany.
+TI  - Sequence alterations within and downstream of the A-type inclusion protein gene allow differentiation of Orthopoxvirus species by polymerase chain reaction.
+SO  - Journal of General Virology. 1994. 75: 8, 1975-1981. 32 ref. 
+AB  - A PCR protocol to detect and differentiate species of the genus Orthopoxvirus was developed by the selection of oligonucleotides located within the gene that encodes the A-type inclusion protein of cowpox virus. The primer pair flanked a region showing distinct and specific DNA deletions in the corresponding sequences of vaccinia, mousepox, monkeypox and camelpox virus so that PCR resulted in DNA fragments of different sizes. This PCR protocol, combined with BglII restriction digests allowed the unequivocal assignment of 42 orthopoxvirus (OPV) strains and isolates to the correct OPV species. The resulting classification corresponded exactly with known biological data from the OPV strains investigated. 13 of 22 cowpox virus isolates could be subtyped by the presence or absence of a small BgIII fragment. DNA sequencing showed that the lack of this BgIII fragment was caused by a deletion of 72 nucleotides.
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820], Animal Physiology and Biochemistry (Excluding Nutrition) [LL600]
+MH  - DNA
+MH  - nucleotide sequences
+MH  - viral proteins
+MH  - polymerase chain reaction
+MH  - species differences
+MH  - viral diseases
+MH  - biotechnology
+MH  - cowpox virus
+MH  - vaccinia virus
+MH  - orthopoxvirus
+BT  - Orthopoxvirus, Chordopoxvirinae, Poxviridae, viruses
+ID  - camel poxvirus, mousepox virus, monkeypox virus
+LG  - English
+PT  - Journal article
+IS  - 0022-1317
+YR  - 1994
+UP  - 199400
+
+
+<53>
+UI  - 19932287963
+AU  - Meyer, H.
+AU  - Rziha, H. J.
+IN  - Institute of Microbiology, Federal Armed Forces Medical Academy, D-8000 Munich 45, Germany.
+TI  - Characterization of the gene encoding the A-type inclusion protein of camelpox virus and sequence comparison with other orthopoxviruses.
+SO  - Journal of General Virology. 1993. 74: 8, 1679-1684. 26 ref. 
+AB  - A gene identified in camelpox virus strain CP-1 is similar to the 160K gene of cowpox virus strain Brighton (BR) that encodes the A-type inclusion body protein (ATIP). The CP-1 gene was mapped, sequenced, and the ATIP-specific mRNA was identified. The open reading frame [2178 nucleotides (nt)] was at a similar position in the CP genome as the one reported for the cowpox virus 160K AT1 gene. DNA sequence comparison showed a deletion of two adjacent adenine residues relative to cowpox virus BR, generating a reading frame shift accompanied by the formation of a translational stop codon. An identical deletion has been described for vaccinia virus strain Western Reserve. The DNA sequence of the corresponding region of monkeypox virus strain Copenhagen showed a deletion leading to a putative stop codon 75 nt upstream of the same stop codons in the camelpox and vaccinia virus genes. These findings are consistent with the expression of truncated ATIPs, of 94K in vaccinia and the camelpox viruses and of 92K in monkeypox virus. In addition, a deletion of 789 bp could be localized downstream of the AT1 open reading frame in camelpox virus isolates of different origin. This causes the transcription of a shortened AT1-specific mRNA (3.7 kb) relative to vaccinia and cowpox viruses (both 4.5 kb). The similarity observed in ATIP encoding and flanking sequences suggests that vaccinia and camelpox viruses are descended from a common ancestor.
+CC  - Animal Genetics [LL220], Biotechnology (General) [WW000], Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - Viral proteins
+MH  - Gene expression
+MH  - Messenger RNA
+MH  - nucleotide sequences
+MH  - Biotechnology
+MH  - viral diseases
+MH  - Orthopoxvirus
+BT  - Chordopoxvirinae, Poxviridae, viruses
+ID  - camelpox virus
+LG  - English
+PT  - Journal article
+IS  - 0022-1317
+YR  - 1993
+UP  - 199300
+
+
+<54>
+UI  - 19930515941
+AU  - Fenner, F.
+IN  - John Curtin School of Medical Research, Australian National University, Canberra, Australia.
+ED  - Mooney, H. A.
+ED  - Bernardi, G.
+TI  - Patterns of establishment and spread of animal viruses.
+SO  - Introduction of genetically-modified organisms into the environment.. John Wiley & Sons, Chichester, UK: 1990. 99-116. 30 ref. 
+AB  - Patterns of establishment and spread of animal viruses are discussed under the headings: vertical transmission; horizontal transmission; spread in the body; shedding; inapparent infections; survival of viruses in nature; some examples of establishment and spread in new environments (myxoma virus, cowpox virus, human monkeypox); and live virus vaccines (poliovirus vaccines, recombinant vaccinia virus vaccines).
+CC  - Biological Resources (Animal) [PP710]
+MH  - Arboviruses
+MH  - Disease transmission
+MH  - Domestic animals
+MH  - Wild animals
+MH  - epidemiology
+MH  - Viral diseases
+MH  - Myxoma virus
+MH  - Man
+MH  - Viruses
+MH  - animals
+BT  - Leporipoxvirus, Chordopoxvirinae, Poxviridae, viruses, Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals
+CP  - UK
+LG  - English
+PT  - Miscellaneous
+IB  - 0471926779
+YR  - 1990
+UP  - 199300
+
+
+<55>
+UI  - 19922091228
+AU  - Meyer, A.
+AU  - Esposito, J. J.
+AU  - Gras, F.
+AU  - Kolakowski, T.
+AU  - Fatras, M.
+AU  - Muller, G.
+IN  - Div. clin., Inst Med. Trop, Hambourg, RFA.
+TI  - First appearance in Gabon of human monkey pox.  [French]
+OT  - Premiere apparition au Gabon de monkey-pox chez l'homme.
+SO  - Medecine Tropicale. 1991. 51: 1, 53-57. 
+AB  - The authors record the first recognized cases of human monkey-pox infection in Gabon. Four children in a single family were infected simultaneously in mid-1987, and 2 died; diagnosis was based on haematogenous virus-isolation (in one of those who died) and on "clinical and epidemiological findings" in the remainder. The fatal cases presented with some of the manifestations of "haemorrhagic fever" and were not dominated by the classical cutaneous symptoms and signs (especially the exanthem). Both liver and spleen were involved, a feature that the authors consider has not previously been documented in human infection, but has been recorded in infected monkeys. The source of the infection was not delineated; there was no evidence of human-to-human transmission. The authors consider that this zoonosis should be considered in individuals in a potentially endemic area (i.e. the humid forests of Central Africa) presenting with clinical manifestations suggestive of a viral haemorrhagic fever.G.C. Cook
+CC  - Human Health and Biology (General) [VV000]
+MH  - Monkeypox
+MH  - children
+MH  - families
+MH  - man
+MH  - Gabon
+MH  - Africa
+BT  - Central Africa, Africa South of Sahara, Africa, Developing Countries, ACP Countries, Francophone Africa, Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals
+LG  - French
+SL  - English
+PT  - Journal article
+IS  - 0025-682X
+YR  - 1991
+UP  - 199200
+
+
+<56>
+UI  - 19902202157
+AU  - Czerny, C. P.
+AU  - Meyer, H.
+AU  - Mahnel, H.
+IN  - Inst. Med. Microbiol., Univ., Veterinastr. 13, 8000 Munchen 22, German Federal Republic.
+TI  - Establishment of an ELISA for the detection of orthopox viruses based on neutralizing monoclonal and polyclonal antibodies.
+SO  - Journal of Veterinary Medicine. Series B. 1989. 36: 7, 537-546. 27 ref. 
+AB  - Various combinations of polyclonal and neutralizing monoclonal antibodies (MAbs) of distinct specficity were evaluated as capture or detecting antibodies in an orthopox virus antigen ELISA. Acceptable results were achieved in an assay based on polyclonal antibodies. A 10 times higher sensitivity, however, was obtained using a combination of one monoclonal catching antibody reactive with viral envelope epitopes and polyclonal detection antibodies. This configuration was superior in sensitivity to all others. Specificity was confirmed with 5 vaccinia virus strains (including one recombinant virus) and 8 species of orthopox viruses. Monkeypox and mousepox virus reacted exclusively in the polyclonal assay due to lack of the specific epitope for the monoclonal antibody. The detection limit compared to the infectivity titre was 10superscript 3-104 in the monoclonal/polyclonal and 104-105 TCID50/0.1 ml in the polyclonal combination. The correlation between infectivity- and ELISA-titre was demonstrated by a study of the replication cycle of the rabbitpox virus Utrecht in the permanent rabbit kidney cell line RK-13. With the established ELISAs vaccinia virus could also be detected in organ suspensions of lethally infected NMRI-mice, depending on the level of infectivity.
+CC  - Biotechnology (General) [WW000], Animal Physiology and Biochemistry (Excluding Nutrition) [LL600], Techniques and Methodology [ZZ900], Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820], Animal Treatment and Diagnosis (Non-Drug) [LL880]
+MH  - Biotechnology
+MH  - Monoclonal antibodies
+MH  - Diagnosis
+MH  - ELISA
+MH  - viral diseases
+MH  - Vaccinia virus
+MH  - Bovine orthopoxvirus
+MH  - orthopoxvirus
+BT  - Orthopoxvirus, Chordopoxvirinae, Poxviridae, viruses
+ID  - Polyclonal antibodies
+LG  - English
+SL  - German
+PT  - Journal article
+IS  - 0931-1793
+YR  - 1989
+UP  - 199000
+
+
+<57>
+UI  - 19892289229
+AU  - Fenner, F.
+AU  - Wittek, R.
+AU  - Dumbell, K. R.
+TI  - Monkeypox virus.
+SO  - The orthopoxviruses.. Academic Press Inc., San Diego, CA 92101, USA: 1989. 227-268. 
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820], Parasites, Vectors, Pathogens and Biogenic Diseases of Humans [VV200]
+MH  - Viral diseases
+MH  - Zoonoses
+MH  - Orthopoxvirus
+MH  - Primates
+BT  - Chordopoxvirinae, Poxviridae, viruses, mammals, vertebrates, Chordata, animals
+ID  - Monkeypox virus
+CP  - USA
+LG  - English
+PT  - Miscellaneous
+IB  - 0122530454
+YR  - 1989
+UP  - 198900
+
+
+<58>
+UI  - 19892289226
+AU  - Fenner, F.
+AU  - Wittek, R.
+AU  - Dumbell, K. R.
+IN  - John Curtin Sch. Med. Res., Nat. Univ., Canberra, ACT, Australia.
+TI  - The orthopoxviruses.
+SO  - The orthopoxviruses.. Academic Press Inc., San Diego, CA 92101, USA: 1989. 432. 45 pp. of ref. 
+AB  - This book is intended to give a comprehensive account of all the known species of orthopoxviruses which includes 2 important viruses, small pox which is now of historical interest and vaccinia virus which has a potential use as a vector for carrying genes from other microorganisms for vaccine production. There are 12 chapters entitled: Historical introduction and overview; Structure and chemical composition of the virion; Replication and morphogenesis of vaccinia virus; The pathogenesis, pathology and immunology or orthopoxvirus infections; Vaccinia virus; The tool for smallpox eradication; Cowpox virus; Variola virus; Monkeypox virus; Ectromelia virus; Other orthopoxviruses; The global spread, control and eradication of smallpox; and Vaccinia virus as a vector for vaccine antigens. There is a bibliography of about 950 references and a subject index.
+CC  - Host Resistance and Immunity [HH600], Animal Toxicology, Poisoning and Pharmacology [LL900], Parasites, Vectors, Pathogens and Biogenic Diseases of Humans [VV200], Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820], Animal Health and Hygiene (General) [LL800]
+MH  - Vaccines
+MH  - Smallpox
+MH  - viral diseases
+MH  - Vaccinia virus
+MH  - Cowpox virus
+MH  - Ectromelia virus
+MH  - Orthopoxvirus
+BT  - Orthopoxvirus, Chordopoxvirinae, Poxviridae, viruses
+ID  - Monkeypox virus, orthopoxviruses
+CP  - USA
+LG  - English
+PT  - Book
+IB  - 0122530454
+YR  - 1989
+UP  - 198900
+
+
+<59>
+UI  - 19892059789
+AU  - Khodakevich, L.
+AU  - Jezek, Z.
+AU  - Messinger, D.
+IN  - c/o WHO Representative, PO Box 3069, Addis Ababa, Ethiopia.
+TI  - Monkeypox virus: ecology and public health significance.
+SO  - Bulletin of the World Health Organization. 1988. 66: 6, 747-752. 24 ref. 
+AB  - The ecology of monkeypox virus was investigated in squirrels, terrestrial and arboreal rodents, and bats at Kinshasa, Zaire. In an initial survey carried out at Bumba zone (northern Zaire), blood-samples were obtained from 120 sheep and goats, 67 domestic cats, 172 terrestrial rodents and 21 squirrels (Funisciurus sp. and Heliosciurus sp.) in areas where human monkeypox had previously been reported; the result was that 2 of 18 F. anerythrus squirrels (and none of the other species tested) were seropositive for monkeypox-specific antibodies and 1 of these had pock-like skin lesions-both these and other organs yielded monkeypox virus. The study was later extended to forested country in central and western Zaire. Overall, 1122 terrestrial rodents and insectivores were tested; all were negative. A total of 659 Funisciurus sp. and 101 Heliosciurus sp. squirrels were also studied; 156 (23.7%) and 15 (14.9%) respectively were positive. Of 153 non-human primates tested (most were Cercopithecus ascanius) 12 (7.8%) were seropositive. Experimental studies showed that the virus was efficiently transmitted through air and excreta (vomit and faeces) among captive squirrels and also by skin scarification. However, the virus was not found in ants (which form a significant part of squirrels' diet) which were fed on infected tissues of squirrels.
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Humans [VV200], Public Health and Nuisance Pests [VV300], Human Health and Biology (General) [VV000]
+MH  - Monkeypox
+MH  - wild animals
+MH  - Ecology
+MH  - Zoonoses
+MH  - Children
+MH  - Viral diseases
+MH  - Human diseases
+MH  - transmission
+MH  - vectors
+MH  - epidemiology
+MH  - disease transmission
+MH  - disease vectors
+MH  - Hymenoptera
+MH  - Formicidae
+MH  - Viruses
+MH  - Orthopoxvirus
+MH  - Rodents
+MH  - Sciuridae
+MH  - Mammals
+MH  - Man
+MH  - Crematogaster
+MH  - Zaire
+MH  - Africa
+BT  - Central Africa, Africa South of Sahara, Africa, ACP Countries, Francophone Africa, Least Developed Countries, Developing Countries, insects, arthropods, invertebrates, animals, Hymenoptera, Chordopoxvirinae, Poxviridae, viruses, mammals, vertebrates, Chordata, rodents, Homo, Hominidae, Primates, Formicidae, Sciuridae, squirrels
+ID  - Funisciurus, Heliosciurus, monkeypox virus
+LG  - English
+SL  - French
+PT  - Journal article
+IS  - 0042-9686
+YR  - 1988
+UP  - 198900
+
+
+<60>
+UI  - 19892057606
+AU  - Jezek, Z.
+AU  - Szczeniowski, M.
+AU  - Paluku, K. M.
+AU  - Mutombo, M.
+AU  - Grab, B.
+IN  - Commun. Dis Div., WHO, CH-1211 Geneva 27, Switzerland.
+TI  - Human monkeypox: confusion with chickenpox.
+SO  - Acta Tropica. 1988. 45: 4, 297-307. 
+AB  - The authors report results of a study carried out in Zaire to estimate the frequency with which a diagnosis of monkeypox can be confused with other "eruptive diseases" including varicella (chickenpox). About 20% of the initial clinical diagnoses were made by physicians and the remainder by medical assistants and nurses. Between 1981 and 1986, 977 individuals with a skin eruption which was not diagnosed as monkeypox were subjected to laboratory investigation (serology, electron microscopic examination and culture of fluid, or scabs from the eruption). Of 730 cases diagnosed as varicella, 24 (3.3%) were monkeypox; 12 (7.3%) of 165 cases of atypical varicella, and 5 (6.1%) of 82 cases in which a clinical diagnosis of the dermatological condition could not be ascertained, were also shown to be monkeypox. Four of the misdiagnosed monkeypox patients died. "Regional pleomorphism", indefinite body-distribution of skin eruptions, and a centripetal distribution of lesions accounted for misdiagnoses in 46%, 49% and 17%, respectively; 76% of misdiagnosed cases had evidence of regional lymphadenopathy.
+CC  - Human Health and Biology (General) [VV000]
+MH  - Monkeypox
+MH  - diagnosis
+MH  - differential diagnosis
+LG  - English
+PT  - Journal article
+IS  - 0001-706X
+YR  - 1988
+UP  - 198900
+
+
+<61>
+UI  - 19892056679
+AU  - Jezek, Z.
+AU  - Grab, B.
+AU  - Szczeniowski, M. V.
+AU  - Paluku, K. M.
+AU  - Mutombo, M.
+IN  - Div. Commun. Dis, WHO, 1211 Geneva 27, Switzerland.
+TI  - Human monkeypox: secondary attack rates.
+SO  - Bulletin of the World Health Organization. 1988. 66: 4, 465-470. 
+AB  - In 1981 and 1986, 2278 people in Zaire had close contact with a patient (of whom 245 were identified) who had acquired monkeypox from an animal source. During these 6 years, 93 cases were identified in which the infection was considered to have a human origin [see Jezek et al. above]; of these, 69 infections were spread in the first generation, 19 in the second, and 5 in the third or fourth generation. The probability of a close contact becoming ill from a known human case was estimated at 3%. These infections were usually associated with living in an affected household (usually a poorly ventilated hut), under conditions of maximum exposure. The highest attack rate (11.7%) was in unvaccinated household contacts aged <4 years. No evidence was forthcoming that the secondary attack rate differed between 1970-80 and 1981-86. This evidence is considered by the authors to be consistent with the concept that the "monkeypox virus is poorly adapted for sustained transmission between humans and that such transmission does not pose a significant health problem".G.C. Cook
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Humans [VV200]
+MH  - Monkeypox
+MH  - epidemiology
+MH  - Zaire
+MH  - Africa
+BT  - Central Africa, Africa South of Sahara, Africa, ACP Countries, Francophone Africa, Least Developed Countries, Developing Countries
+LG  - English
+SL  - French
+PT  - Journal article
+IS  - 0042-9686
+YR  - 1988
+UP  - 198900
+
+
+<62>
+UI  - 19892056678
+AU  - Jezek, Z.
+AU  - Grab, B.
+AU  - Szczeniowski, M.
+AU  - Paluku, K. M.
+AU  - Mutombo, M.
+IN  - Div. Commun. Dis, WHO, 1211 Geneva 27, Switzerland.
+TI  - Clinico-epidemiological features of monkeypox patients with an animal or human source of infection.
+SO  - Bulletin of the World Health Organization. 1988. 66: 4, 459-464. 
+AB  - Between 1981 and 1986, 338 patients in Zaire were diagnosed as suffering from monkeypox; 245 (72%) were considered to have been infected from an animal, and 93 (28%) a human source. Of the former, children accounted for most cases-27% 3-4 years, 20% 5-6 years, and only 4% were >15 years old; male:female ratio was 58:42. Of the latter, the age distribution was more uniform, and infected adults were more common; male:female ratio was 43:57 (i.e. a reversal of that in the animal-infected cases; P <0.05). Analysis of the clinical data (including fatality rates) obtained from the survey did not support the view that those cases infected from a human source (73 were studied, and compared with 222 infected by animals) were more severe, i.e. passage through the human host did not seem to enhance the virulence of the monkeypox virus.
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Humans [VV200]
+MH  - Monkeypox
+MH  - epidemiology
+MH  - Zaire
+MH  - Africa
+BT  - Central Africa, Africa South of Sahara, Africa, ACP Countries, Francophone Africa, Least Developed Countries, Developing Countries
+LG  - English
+SL  - French
+PT  - Journal article
+IS  - 0042-9686
+YR  - 1988
+UP  - 198900
+
+
+<63>
+UI  - 19892056506
+AU  - Fine, P. E. M.
+AU  - Jezek, Z.
+AU  - Grab, B.
+AU  - Dixon, H.
+IN  - Dept Trop. Hyg., London Sch. Hyg. & Trop. Med., Keppel St, London WC1E 7HT, England.
+TI  - The transmission potential of monkeypox virus in human populations.
+SO  - International Journal of Epidemiology. 1988. 17: 3, 643-650. 
+AB  - In order to assess the degree of protection rendered by previous smallpox vaccination (which was discontinued in 1980), and to determine the transmission potential of the monkeypox virus in unvaccinated communities, data on 209 monkeypox cases diagnosed in Zaire during a 5-year period (1980-84) have been analysed. By using scars as the marker of previous vaccination, the authors conclude that this imparted about 85% protection-rate against monkeypox infection. They also consider that the number of human monkeypox cases (which usually have an animal origin) will increase as vaccination-derived protection declines. However, because the monkeypox virus is less transmissible than smallpox was, it will not persist (by person-to-person transmission) in human communities-even in the complete absence of vaccination. The Global Commission for the Certification of Smallpox Eradication recommended (i) the cessation of routine smallpox vaccination in areas endemic for monkeypox, and (ii) encouragement of continuous epidemiological surveillance; this general policy is supported by these authors from their study of this relatively small number of cases.G.C. Cook
+CC  - Human Health and Biology (General) [VV000]
+MH  - Monkeypox
+MH  - Zaire
+MH  - Africa
+BT  - Central Africa, Africa South of Sahara, Africa, ACP Countries, Francophone Africa, Least Developed Countries, Developing Countries
+ID  - transmission potential
+LG  - English
+PT  - Journal article
+IS  - 0300-5771
+YR  - 1988
+UP  - 198900
+
+
+<64>
+UI  - 19882053711
+AU  - Jezek, Z.
+AU  - Grab, B.
+AU  - Paluku, K. M.
+AU  - Szczeniowski, M. V.
+IN  - Smallpox Eradication Unit, WHO, 1211 Geneva, Switzerland.
+TI  - Human monkeypox: disease pattern, incidence and attack rates in a rural area of northern Zaire.
+SO  - Tropical and Geographical Medicine. 1988. 40: 2, 73-83. 4 ref. 
+AB  - The epidemiological features of 91 cases of monkeypox (MP) reported from 1981 to 1985 in Bumba zone, northern Zaire, are documented. In 68 (75%) cases the clinical diagnosis was confirmed by demonstration of MP virus and by serology. Age range was from 7 months to 29 years; 93% of patients were <15 years old. Smallpox scars were detected in 10 (11%). The cases arose from 61 separate outbreaks; 42 of these consisted of a single recognized case. Average incidence rate in 1981-85 was 0.63 new cases/10 000 population; amongst unvaccinated and vaccinated individuals the average annual primary attack rate was 1.70 and 0.04/10 000, respectively. Secondary attack rates for those with and without a vaccination scar were 0.7% and 4.3%, respectively (P <0.001). Cases occurred throughout the year, and there was evidence of clustering of cases in the northern part of the zone. Many unvaccinated contacts living in close proximity to index cases escaped infection. In 70 cases, an animal source of infection was suspected, and in 21 the origin was considered to be a human one. Overall case-fatality rate was 9%; these 8 deaths occurred sporadically. The low incidence of human MP in this locality is considered to indicate that it has only limited public health importance, even though this is well known to be an enzoonotic area.G.C. Cook
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Humans [VV200], Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820], Public Health and Nuisance Pests [VV300]
+MH  - Monkeypox
+MH  - epidemiology
+MH  - Zoonoses
+MH  - Poxviridae
+MH  - Zaire
+MH  - Africa
+BT  - ACP Countries, Central Africa, Africa South of Sahara, Africa, Francophone Africa, Least Developed Countries, Developing Countries, viruses
+ID  - Human monkeypox
+LG  - English
+PT  - Journal article
+IS  - 0041-3232
+YR  - 1988
+UP  - 198800
+
+
+<65>
+UI  - 19882278656
+AU  - Cook, G. C.
+IN  - Dept Clin. Trop. Med., London Sch. Hyg. & Trop. Med., Keppel St, London WC1E 7HT, England.
+TI  - Human monkeypox: a viral disease with an uncertain future in Africa.
+SO  - Tropical Diseases Bulletin. 1988. 85: 2, R1-R16. 49 ref. 
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820], Public Health and Nuisance Pests [VV300], Parasites, Vectors, Pathogens and Biogenic Diseases of Humans [VV200], Human Health and Biology (General) [VV000]
+MH  - Viral diseases
+MH  - Reviews
+MH  - Zoonoses
+MH  - Man
+MH  - Poxviridae
+BT  - Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals, viruses
+LG  - English
+PT  - Journal article
+IS  - 0041-3240
+YR  - 1988
+UP  - 198800
+
+
+<66>
+UI  - 19862274436
+AU  - Khodakevich, L.
+AU  - Jezek, Z.
+AU  - Kinzanzka, K.
+IN  - Smallpox Eradication Unit, WHO, 1211 Geneva 27, Switzerland.
+TI  - Isolation of monkeypox virus from wild squirrel infected in nature. [Correspondence].
+SO  - Lancet. 1986. I: 8472, 98-99. 3 ref. 
+AB  - Monkeypox virus was isolated from a squirrel (Funisciurus anerythrus) with skin eruptions which had been captured in Zaire near a village where human monkeypox had occurred. Monkeypox-specific antibodies were detected in another six squirrels of the same species.
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820], Parasites, Vectors, Pathogens and Biogenic Diseases of Humans [VV200], Biological Resources (Animal) [PP710]
+MH  - Zoonoses
+MH  - Wild animals
+MH  - viral diseases
+MH  - monkeypox
+MH  - Poxviridae
+MH  - Sciuridae
+MH  - Zaire
+BT  - vertebrates, Chordata, animals, viruses, rodents, mammals, Central Africa, Africa South of Sahara, Africa
+LG  - English
+PT  - Journal article
+YR  - 1986
+UP  - 198600
+
+
+<67>
+UI  - 19842251324
+AU  - Roumillat, L. F.
+AU  - Patton, J. L.
+AU  - Davis, M. L.
+TI  - Monoclonal antibodies to a monkeypox virus polypeptide determinant.
+SO  - Journal of Virology. 1984. 52: 1, 290-292. 17 ref. 
+CC  - Host Resistance and Immunity [HH600], Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - monoclonal antibodies
+MH  - Primates
+MH  - Poxviridae
+MH  - Orthopoxvirus
+BT  - mammals, vertebrates, Chordata, animals, viruses, Chordopoxvirinae, Poxviridae
+LG  - English
+PT  - Journal article
+IS  - 0022-538X
+YR  - 1984
+UP  - 198400
+
+
+<68>
+UI  - 19832225637
+AU  - Manshande, J. P.
+AU  - Kabaya-Wa-Rutenda
+TI  - Human monkeypox transmitted by a Chimpanzee.
+SO  - Lancet. 1983. I: 8333, 1110-1111. 
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820], Animal Health and Hygiene (General) [LL800]
+MH  - Epidemiology
+MH  - Primates
+MH  - Poxviridae
+MH  - Pan
+BT  - mammals, vertebrates, Chordata, animals, viruses, Pongidae, Primates
+LG  - English
+PT  - Journal article
+YR  - 1983
+UP  - 198300
+
+
+<69>
+UI  - 19832223018
+AU  - Mutombo, M. wa
+AU  - Arita, I.
+AU  - Jezek, Z.
+TI  - Human monkeypox transmitted by a chimpanzee in a tropical rain-forest area of Zaire.
+SO  - Lancet. 1983. 1: 8327, 735-737. 6 ref. 
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820], Animal Health and Hygiene (General) [LL800], Public Health and Nuisance Pests [VV300], Parasites, Vectors, Pathogens and Biogenic Diseases of Humans [VV200]
+MH  - zoonoses
+MH  - Primates
+MH  - Poxviridae
+MH  - Pan
+MH  - Zaire
+BT  - mammals, vertebrates, Chordata, animals, viruses, Pongidae, Primates, Central Africa, Africa South of Sahara, Africa
+LG  - English
+PT  - Journal article
+YR  - 1983
+UP  - 198300
+
+
+<70>
+UI  - 19802272765
+AU  - Dumbell, K. R.
+AU  - Archard, L. C.
+TI  - Comparison of white pock (h) mutants of monkeypox virus with parental monkeypox and with variola-like viruses isolated from animals.
+SO  - Nature, UK. 1980. 286: 5768, 29-32. 17 ref. 
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - Poxviridae
+BT  - viruses
+LG  - English
+PT  - Journal article
+YR  - 1980
+UP  - 198000
+
+
+<71>
+UI  - 19802267615
+AU  - Arita, M.
+AU  - Tagaya, I.
+TI  - Virion polypeptides of poxviruses.
+SO  - Archives of Virology. 1980. 63: 34, 209-225. 34 ref. 
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - Vaccinia virus
+MH  - Poxviridae
+MH  - Variola virus
+BT  - Orthopoxvirus, Chordopoxvirinae, Poxviridae, viruses
+ID  - Monkeypox virus
+LG  - English
+PT  - Journal article
+IS  - 0304-8608
+YR  - 1980
+UP  - 198000
+
+
+<72>
+UI  - 19792254002
+AU  - Marennikova, S. S.
+AU  - Shelokhina, E. M.
+AU  - Maltseva, N. N.
+AU  - Matsevich, G. R.
+TI  - Monkeypox virus as a source of whitepox virus.
+SO  - Intervirology. 1979. 11: 6, 333-340. 15 ref. 
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - Poxviridae
+BT  - viruses
+LG  - English
+PT  - Journal article
+IS  - 0300-5526
+YR  - 1979
+UP  - 198000
+
+
+<73>
+UI  - 19792237897
+AU  - Harper, L.
+AU  - Bedson, H. S.
+AU  - Buchan, A.
+IN  - Dep. Med. Microbiol., Med. Sch., Univ., Birmingham B15 2TJ, UK.
+TI  - Identification of orthopoxviruses by polyacrylamide gel electrophoresis of intracellular polypeptides.
+SO  - Virology. 1979. 93: 2, 435-444. 35 ref. 
+AB  - Orthopoxviruses were compared by means of their late intra-cellular polypeptides (ICPs). HeLa cells were labelled with [35S]methionine at 16 hours after infection and the ICPs were analysed by SDS-polyacrylamide gel electrophoresis and auto-radiography. ICPs in three regions of the gels permitted an initial grouping of the 24 viruses examined into four main groups (cowpox, monkeypox, vaccinia, and variola-related viruses). Only cowpox-like viruses had a prominent ICP of MW 177 000, and only monkeypox-like viruses had a heavily labelled ICP of MW 15 500. Viruses in these two groups appeared to have only a single ICP in the 96-103 000 region (MW, 98 000). By contrast, vaccinia-like viruses and variola-like viruses had two ICPs in this region but were distinguished because the ICPs of vaccinia were of higher molecular weight and were apparently reversed with respect to those of variola-like viruses. This was supported by the disappearance on chase of the lower MW vaccinia ICP and the higher MW variola ICP.
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - viral diseases
+MH  - Poxviridae
+MH  - orthopoxvirus
+BT  - viruses, Chordopoxvirinae, Poxviridae
+ID  - electrophoretic classification
+LG  - English
+PT  - Journal article
+YR  - 1979
+UP  - 197900
+
+
+<74>
+UI  - 19792233905
+AU  - Marennikova, S. S.
+AU  - Shelukhina, E. M.
+AU  - Maltseva, N. N.
+TI  - Monkeypox virus and whitepox viruses.
+SO  - Acta Virologica. 1978. 22: 6, 512. 4 ref. 
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - Primates
+MH  - orthopoxvirus
+MH  - Poxviridae
+BT  - mammals, vertebrates, Chordata, animals, Chordopoxvirinae, Poxviridae, viruses
+LG  - English
+PT  - Journal article
+IS  - 0001-723X
+YR  - 1978
+UP  - 197900
+
+
+<75>
+UI  - 19782230297
+AU  - Esposito, J. J.
+AU  - Obijeski, J. F.
+AU  - Nakano, J. H.
+TI  - Variola, monkeypox, and vaccinia virion and soluble antigen proteins.
+SO  - Abstracts of the Annual Meeting of the American Society for Microbiology. 1977. 77: 310. 
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - orthopoxvirus
+MH  - Poxviridae
+BT  - Chordopoxvirinae, Poxviridae, viruses
+LG  - English
+PT  - Journal article
+YR  - 1977
+UP  - 197900
+
+
+<76>
+UI  - 19782226789
+AU  - Lowery, M. L.
+AU  - Rouhandeh, H.
+TI  - Proteins of monkeypox virus.
+SO  - Abstracts of the Annual Meeting of the American Society for Microbiology. 1976. 76: 260. 
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - Poxviridae
+BT  - viruses
+LG  - English
+PT  - Journal article
+YR  - 1976
+UP  - 197900
+
+
+<77>
+UI  - 19782229798
+AU  - Yoshii, T.
+AU  - Kono, R.
+TI  - Differential inhibitory effects of 5-bromodeoxyuridine on vaccinia and monkeypox viruses.
+SO  - Journal of Hygiene. 1978. 81: 2, 171-177. 12 ref. 
+RN  - 59-14-3
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820], Animal Toxicology, Poisoning and Pharmacology [LL900], Techniques and Methodology [ZZ900]
+MH  - Broxuridine
+MH  - Classification
+MH  - techniques
+MH  - antineoplastic agents
+MH  - Poxviridae
+BT  - viruses
+ID  - Vaccina virus
+LG  - English
+PT  - Journal article
+YR  - 1978
+UP  - 197900
+
+
+<78>
+UI  - 19782231782
+AU  - Zuckerman, A.
+AU  - Rondle, C.
+TI  - The enigma of poxviruses.
+SO  - Nature, UK. 1978. 276: 5685, 212-213. 
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - Reviews
+MH  - Monkeypox
+MH  - Smallpox
+MH  - Primates
+MH  - Poxviridae
+BT  - mammals, vertebrates, Chordata, animals, viruses
+ID  - Whitepox
+LG  - English
+PT  - Journal article
+YR  - 1978
+UP  - 197900
+
+
+<79>
+UI  - 19772299384
+AU  - Soekawa, M.
+AU  - Moriguchi, R.
+AU  - Morita, C.
+AU  - Kitamura, T.
+AU  - Tanaka, Y.
+IN  - Res. Center Vet. Sci., Kitasato Inst., 2-6-9, Kiyoshi-ga-oka, Kogane, Matsudo-Shi, Chiba-ken, 270, Japan.
+TI  - Electron-microscopical observations on the development of vaccinia, cowpox and monkeypox viruses in pig skin.
+SO  - Zentralblatt fur Bakteriologie, Parasitenkunde, Infektionskrankheiten und Hygiene, Erste Abteilung Originale. 1977. 237A: 4, 425-443. 19 ref. 
+AB  - Multiformal abnormal configurations of virus particles and virus factories were observed in pig skin inoculated with vaccinia, cowpox and monkeypox viruses. Vaccinia virus induced large numbers of cytoplasmic inclusion bodies. Serous, haemorrhagic and purulent reactions around inoculated sites, oedema in the epidermis and degeneration of infected cells were obvious by 3 days after inoculation with vaccinia virus. Several electron micrographs are given and skin lesions are described.
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - Experimental infection
+MH  - Pathology
+MH  - cytoplasmic inclusions
+MH  - viral diseases
+MH  - Poxviridae
+MH  - vaccinia virus
+BT  - viruses, Orthopoxvirus, Chordopoxvirinae, Poxviridae
+ID  - skin of swine, vaccinia virus in swine skin
+LG  - English
+SL  - German
+PT  - Journal article
+YR  - 1977
+UP  - 197800
+
+
+<80>
+UI  - 19772209142
+AU  - Esposito, J. J.
+AU  - Obijeski, J. F.
+AU  - Nakano, J. H.
+TI  - The virion and soluble antigen proteins of variola, monkeypox, and vaccinia viruses.
+SO  - Journal of Medical Virology. 1977. 1: 2, 95-110. 42 ref. 
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - Poxviridae
+MH  - vaccinia virus
+BT  - viruses, Orthopoxvirus, Chordopoxvirinae, Poxviridae
+ID  - Monkey pox
+LG  - English
+PT  - Journal article
+IS  - 0146-6615
+YR  - 1977
+UP  - 197800
+
+
+<81>
+UI  - 19772200288
+AU  - Baxby, D.
+IN  - Dep. Med. Microbiol., Univ., PO Box 147, Liverpool, L69 3BX, UK.
+TI  - Poxvirus hosts and reservoirs. Brief review.
+SO  - Archives of Virology. 1977. 55: 3, 169-179. 52 ref. 
+AB  - Recent work on poxvirus hosts and reservoirs is reviewed. The isolation of new poxviruses from monkeys, gerbils, raccoons, carnivores and elephants is described and their relationships to established members of the subgroup are discussed. These studies have shown that animals, particularly rodents, are important in the circulation and maintenance of poxvirus infections other than smallpox, and that the terms monkeypox, carnivorepox, elephantpox and cowpox refer only to indicator hosts.
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - Carrier state
+MH  - Classification
+MH  - Epidemiology
+MH  - Host range
+MH  - viral diseases
+MH  - Smallpox
+MH  - Monkeypox
+MH  - BOVINE ORTHOPOXVIRUS
+MH  - Poxviridae
+BT  - Orthopoxvirus, Chordopoxvirinae, Poxviridae, viruses
+ID  - hosts and reservoirs
+LG  - English
+PT  - Journal article
+IS  - 0304-8608
+YR  - 1977
+UP  - 197800
+
+
+<82>
+UI  - 19762278737
+AU  - Marennikova, S. S.
+AU  - Seluhina, E. M.
+IN  - Res. Inst. Virus Preparations, Ministry of Health, WHO Centre, Moscow, USSR.
+TI  - Susceptibility of some rodent species to monkeypox virus, and course of the infection.
+SO  - Bulletin of the World Health Organization. 1976. 53: 1, 13-20. 10 ref. 
+AB  - In studies with rabbit, guinea-pig, hamster, mouse and rat, reactions varied from complete resistance to lethal generalized infection with rash. Rabbits and white mice appeared to be the most susceptible species and young animals were more susceptible than adults. Monkeypox virus was found to infect young animals by natural routes, i.e. by mouth and intranasally. Transmission by contact occurred among 10-day-old rabbits. Since antibodies to monkeypox virus may persist for over a year in the serum of convalescent animals, serological examination of animals is recommended for studying the ecology of this virus.
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - Pathogenesis
+MH  - viral diseases
+MH  - Primates
+MH  - rabbits
+MH  - MICE
+MH  - guineapigs
+MH  - Poxviridae
+BT  - mammals, vertebrates, Chordata, animals, Leporidae, Lagomorpha, Muridae, rodents, Cavia, Caviidae, viruses
+ID  - Hamster, rat, monkeypox virus in rodents
+LG  - English
+SL  - French
+PT  - Journal article
+IS  - 0042-9686
+YR  - 1976
+UP  - 197700
+
+
+<83>
+UI  - 19732235713
+AU  - Peters, J. C.
+ED  - H. Balner
+ED  - W.I.B. Beveridge.
+TI  - An outbreak of monkeypox in the zoo at Rotterdam.
+SO  - Infectious and immunosuppression in subhuman primates,. Munksgaard, Copenhagen., Denmark: 1970. 91-99. 
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820], Animal Health and Hygiene (General) [LL800], Zoo Animals [LL080]
+MH  - animal diseases
+MH  - zoo animals
+MH  - monkeys
+MH  - Netherlands
+BT  - animals, Primates, mammals, vertebrates, Chordata, Western Europe, Europe
+ID  - poxvirus infections
+CP  - Denmark
+LG  - English
+PT  - Miscellaneous
+YR  - 1970
+UP  - 197400
+
+
+<84>
+UI  - 19732216035
+TI  - Monkeypox.
+SO  - British Medical Journal. 1973. 1: 5844, 3-4. 
+CC  - Unallocated Animal Science Records [LL001]
+MH  - animal diseases
+MH  - monkeys
+BT  - Primates, mammals, vertebrates, Chordata, animals
+ID  - poxvirus infections
+LG  - English
+PT  - Journal article
+YR  - 1973
+UP  - 197300
+
+
+<85>
+UI  - 19732215438
+AU  - Heberling, R. L.
+AU  - Eichberg, J.
+AU  - Kalter, S. S.
+MT  - Abstracts of the annual meeting of the American Society for Microbiology, 72nd annual meeting, Philadelphia, Pa., 23-28 April 1972.
+TI  - The course of monkeypox virus infections in conventional and gnotobiotic baboons (Papio cynocephalus).
+SO  - Abstracts of the annual meeting of the American Society for Microbiology, 72nd annual meeting, Philadelphia, Pa., 23-28 April 1972.. American Society for Microbiology, 1913 I St., N.W., Washington, D.C., 1972. 233. 
+CC  - Unallocated Animal Science Records [LL001]
+MH  - primates
+BT  - mammals, vertebrates, Chordata, animals
+ID  - poxvirus infections
+LG  - English
+PT  - Conference paper
+YR  - 1972
+UP  - 197300
+
+
+<86>
+UI  - 19722214108
+AU  - Yau, T. M.
+AU  - Rouhandeh, H.
+TI  - Monkeypox virus (MPV). I. Propagation, purification, and further characterization. II. Uncoating and nucleic acid synthesis.
+SO  - Archiv fur die Gesamte Virusforschung. 1972. 39: 1/3, 140-150; 151-162. 
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - animal diseases
+MH  - monkeys
+BT  - Primates, mammals, vertebrates, Chordata, animals
+ID  - poxvirus
+LG  - English
+PT  - Journal article
+YR  - 1972
+UP  - 197300
+
+
+<87>
+UI  - 19732207432
+AU  - Cho, C. T.
+AU  - Wenner, H. A.
+IN  - Dep. Pediatrics, Univ. Kansas Med. Center, Kansas City, 66103.
+TI  - Monkeypox virus.
+SO  - Bacteriological Reviews. 1973. 37: 1, 1-18. 
+AB  - A review (79 references) of classification, physical, chemical and biological properties, animal host-range, pathogenesis and epizootiology of monkeypox virus.
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - Viral diseases
+MH  - animal diseases
+MH  - monkeypox
+MH  - monkeys
+BT  - Primates, mammals, vertebrates, Chordata, animals
+ID  - Poxvirus infections, poxvirus, pox
+LG  - English
+PT  - Journal article
+YR  - 1973
+UP  - 197300
+
+
+<88>
+UI  - 19732206961
+AU  - Henderson, D. A.
+AU  - Arita, I.
+IN  - Smallpox Eradication, WHO, Geneva, Switzerland.
+TI  - Monkeypox and its relevance to smallpox eradication.
+SO  - WHO Chronicle. 1973. 27: 4, 145-148. 
+AB  - During the past three years, 13 patients in scattered small-pox free areas of Africa have experienced illnesses clinically similar to smallpox. In no instance was there spread of infection from man to man. The responsible virus has been identified as monkeypox, a virus closely related to but distinct from smallpox virus and previously isolated only from outbreaks in captive monkeys. For smallpox, epidemiological findings, as well as other observations, indicate that there is no reservoir other than man. The occurrence of sporadic although not apparently communicable smallpox-like illnesses caused by monkeypox makes this and related poxviruses of considerable research interest.
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Humans [VV200], Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - Zoonoses
+MH  - animal diseases
+MH  - Man
+MH  - monkeys
+BT  - Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals
+ID  - poxvirus infections, monkey pox, pox
+LG  - English
+PT  - Journal article
+IS  - 0042-9694
+YR  - 1973
+UP  - 197300
+
+
+<89>
+UI  - 19712265531
+AU  - Heberling, R. L.
+AU  - Kalter, S. S.
+IN  - Div. Microbiol., Southwest Foundation Res. Educa., San Antonio, Texas.
+TI  - Induction, course, and transmissibility of monkeypox in the baboon (Papio cynocephalus).
+SO  - Journal of Infectious Diseases. 1971. 124: 1, 33-38. 
+AB  - All of six baboons inoculated i/m with monkey pox virus became infected and one died. Two of six sentinel animals also became infected through natural transmission of the virus from infected room-mates. Clinical signs included the formation of vesicular lesions on the extremities, face, lips, and buccal cavity about eight days after infection. At the tame time HI and plaque-neutralizing (PN) antibodies were detected. One week later c.f. antibody was formed, reaching its peak in one week. With the exception of PN antibodies, a gradual decline to a plateau was noted over a 16-week period. All the naturally infected animals withstood a challenge inoculation of monkey pox virus.
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - Primates
+MH  - Papio cynocephalus
+BT  - mammals, vertebrates, Chordata, animals, Papio, Cercopithecidae, Primates
+ID  - Poxvirus infections, monkey pox in the baboon
+LG  - English
+PT  - Journal article
+IS  - 0022-1899
+YR  - 1971
+UP  - 197300
+
+
+<90>
+UI  - 19712256586
+AU  - Cho, C. T.
+TI  - Biological activities of monkeypox virus: studies on growth characteristics in cell culture, pathogenesis in monkeys, and modification of infections by methisazone.
+SO  - Dissertation Abstracts International. 1971. 31B: 11, 6773. 
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - monkeys
+BT  - Primates, mammals, vertebrates, Chordata, animals
+ID  - Poxvirus
+LG  - English
+PT  - Journal article
+YR  - 1971
+UP  - 197300
+
+
+<91>
+UI  - 19722220704
+AU  - Lourie, B.
+AU  - Bingham, P. G.
+AU  - Evans, H. H.
+AU  - Foster, S. O.
+AU  - Nakano, J. H.
+AU  - Hermann, K. L.
+TI  - Human infection with monkeypox virus: laboratory investigation of six cases in West Africa.
+SO  - Bulletin of the World Health Organization;. 1972. 46: 5, 633-639. 
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - Liberia
+MH  - Sierra Leone
+MH  - Nigeria
+BT  - West Africa, Africa South of Sahara, Africa
+ID  - Poxvirus infections
+LG  - English
+SL  - French
+PT  - Journal article
+YR  - 1972
+UP  - 197300
+
+
+<92>
+UI  - 19722220703
+AU  - Marennikova, S. S.
+AU  - Seluhina, E. M.
+AU  - Mal'ceva, N. N.
+AU  - Cimiskjan, K. L.
+AU  - Macevic, G. R.
+TI  - Isolation and properties of the causal agent of a new variola-like disease (monkeypox) in man.
+SO  - Bulletin of the World Health Organization. 1972. 46: 5, 599-611. 
+CC  - Unallocated Animal Science Records [LL001], Parasites, Vectors, Pathogens and Biogenic Diseases of Humans [VV200]
+MH  - Zoonoses
+MH  - Congo
+BT  - Central Africa, Africa South of Sahara, Africa
+ID  - Poxvirus infections, Simian viruses
+LG  - English
+SL  - French
+PT  - Journal article
+IS  - 0042-9686
+YR  - 1972
+UP  - 197300
+
+
+<93>
+UI  - 19722220702
+AU  - Ladnyj, I. D.
+AU  - Ziegler, P.
+AU  - Kima, E.
+TI  - A human infection caused by monkeypox virus in Basankusu Territory, Demoncratic Republic of the Congo.
+SO  - Bulletin of the World Health Organization. 1972. 46: 5, 593-597. 
+CC  - Unallocated Animal Science Records [LL001], Parasites, Vectors, Pathogens and Biogenic Diseases of Humans [VV200]
+MH  - Zoonoses
+MH  - Congo
+BT  - Central Africa, Africa South of Sahara, Africa
+ID  - Poxvirus infections, Simian viruses
+LG  - English
+SL  - French
+PT  - Journal article
+IS  - 0042-9686
+YR  - 1972
+UP  - 197300
+
+
+<94>
+UI  - 19722220701
+AU  - Foster, S. O.
+AU  - Brink, E. W.
+AU  - Hutchins, D. L.
+AU  - Pifer, J. M.
+AU  - Lourie, B.
+AU  - Moser, C. R.
+AU  - Cummings, E. C.
+AU  - Kuteyi, O. E. K.
+AU  - Eke, R. E. A.
+AU  - Titus, J. B.
+AU  - Smith, E. A.
+AU  - Hicks, J. W.
+AU  - Foege, W. H.
+TI  - Human monkeypox.
+SO  - Bulletin of the World Health Organization. 1972. 46: 5, 569-576. 
+CC  - Unallocated Animal Science Records [LL001], Parasites, Vectors, Pathogens and Biogenic Diseases of Humans [VV200]
+MH  - Zoonoses
+MH  - monkeys
+BT  - Primates, mammals, vertebrates, Chordata, animals
+ID  - Poxvirus infections, Simian viruses
+LG  - English
+SL  - French
+PT  - Journal article
+IS  - 0042-9686
+YR  - 1972
+UP  - 197300
+
+
+<95>
+UI  - 19722202743
+AU  - Arita, I.
+AU  - Gispen, R.
+AU  - Kalter, S. S.
+AU  - Wah, L. T.
+AU  - Marennikova, S. S.
+AU  - Netter, R.
+AU  - Tagaya, I.
+IN  - Smallpox Eradication, WHO, Geneva, Switzerland.
+TI  - Outbreaks of monkeypox and serological surveys in nonhuman primates.
+SO  - Bulletin of the World Health Organization. 1972. 46: 5, 625-631. 
+AB  - All 2242 serum samples from monkeys of different species from various parts of Africa and Asia failed to show any indication of poxvirus infection. It is concluded that monkeypox is not widespread and is perhaps localized in small areas.
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - animal diseases
+MH  - monkeypox
+MH  - monkeys
+MH  - Primates
+BT  - Primates, mammals, vertebrates, Chordata, animals
+ID  - Poxvirus infections, Simian viruses
+LG  - English
+SL  - French
+PT  - Journal article
+IS  - 0042-9686
+YR  - 1972
+UP  - 197300
+
+
+<96>
+UI  - 19722202742
+AU  - Marennikova, S. S.
+AU  - Seluhina, E. M.
+AU  - Mal'ceva, N. N.
+AU  - Ladnyj, I. D.
+IN  - Res. Inst. Virus Preparations (WHO Int. Ref. Centre on Smallpox), Moscow, USSR.
+MT  - isolated from a symptomless cynomolgus monkey- 22?*64-9411-.
+TI  - Poxviruses isolated from clinically ill and asymptomatically infected monkeys and a chimpanzee.
+SO  - Bulletin of the World Health Organization. 1972. 46: 5, 613-620. 
+AB  - Poxviruses were isolated from the kidneys of an outwardly healthy chimpanzee trapped in the Congo where a case of monkeypox had recently occurred in man, from the kidneys of clinically healthy cynomolgus monkeys in a colony in the Netherlands, and from monkeys with monkeypox in colonies in the USA. It was established that two of the three viruses isolated from animals asymptomatically infected- namely, strain Chimp-9 Chimp-9 from the chimpanzee and strain 64-7255 from the cynomolgus monkeys- although similar to one another differed from the classical Copenhagen strain of monkeypox virus. These two viruses were characterized by the formation of small, monomorphic, well-defined pocks without haemorrhages on infected chick embryo chorioallantoic membrane, by the small plaques of the proliferative type that they produced in cell cultures, by the absence of reactions when they were injected i/d into rabbits by their intensive replication in pig embryo kidney cell cultures, and by a number of other features. Both the viruses were considered close to the variola virus except that they were more pathogenic for mice after intracerebral inoculation. The other virus isolated from a symptomless cynomolgus monkey-strain 64-9411- resembled the two viruses isolated from monkeys with monkeypox and did not differ from the Copenhagen strain.
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - animal diseases
+MH  - monkeypox
+MH  - monkeys
+BT  - Primates, mammals, vertebrates, Chordata, animals
+ID  - Monkey Chimpanzee, Poxvirus, monkey and chimpanzee strains, Simian viruses, poxviruses
+LG  - English
+SL  - French
+PT  - Journal article
+IS  - 0042-9686
+YR  - 1972
+UP  - 197300
+
+
+<97>
+UI  - 19722202741
+AU  - Gispen, R.
+AU  - Brand-Saathof, B.
+IN  - Dept. Virol., Natn. Inst. Public Hlth, Utrecht, Netherlands.
+TI  - 'White' poxvirus strains from monkeys.
+SO  - Bulletin of the World Health Organization. 1972. 46: 5, 585-592. 
+AB  - Various variola and monkeypox virus strains, as well as virus strains 64-9411, 64-7255 and 64-7275 from healthy monkey kidney, were tested. In chick chorio-allantoic membrane (CAM) culture, monkeypox strains and 64-9411 produced red pocks (0.5 mm after three days). At high dilutions of virus, there were also a few larger (1 mm) white pocks, which became predominant as the temperature was raised from 33 deg to 38 deg C. Inocula of the white pocks passaged through egg membranes yielded a pure mutant, which gave white pocks at 33 deg or 38 deg C, even after passaging in rabbits of RK13 culture. Efforts to isolate a pure 'red pock' strain were unsuccessful. Variola strains and 64-7255 and 64-7275 produced white pocks in CAM, and had similar ceiling temperatures for growth. Monkeypox, white mutant and 64-9411 produced haemorrhagic-necrotic reactions when given i/d to rabbits, and could be transmitted. Strain 64-7255 gave a typical lesion only on the first passage; this strain, 64-7275 and variola virus could not be transmitted in rabbits. In RK13 cell culture, monkeypox, white mutant and 64-9411 formed plaques and could be passaged; variola virus and strains 64-7255 and 64-7275 formed hyperplastic foci in the first passage, but were lost within 3-7 passages. In cytopathic effects on RK13 cells, the white mutant resembled the parent monkeypox strain, white 64-7275 resembled variola virus. Immunofluorescence of infected coverslip cultures of RK13 showed that monkeypox virus infected foci of cells, while variola virus infected cells in a fairly random manner, and strain 64-7275 infected both focally and in a random manner. In chick embryo mortality tests, the D4 value (the log virus dose corresponding to a mean reciprocal survival time of 0.25) of the white mutant monkeypox was 2.4, while those of strains 64-7255 and 64-7275 (5.5 and 5.7 respectively) were similar to that of variola virus (5.1).
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - monkeys
+BT  - Primates, mammals, vertebrates, Chordata, animals
+ID  - Poxvirus, white strains from monkeys, Simian viruses, monkeypox virus
+LG  - English
+SL  - French
+PT  - Journal article
+IS  - 0042-9686
+YR  - 1972
+UP  - 197300
+
+
+<98>
+UI  - 19722202740
+AU  - Rondle, C. J. M.
+AU  - Sayeed, K. A. R.
+IN  - Sch. Hygiene & Trop. Med., London.
+TI  - Studies on monkeypox virus.
+SO  - Bulletin of the World Health Organization. 1972. 46: 5, 577-583. 
+AB  - The growth characteristics, including ceiling temperatures for growth, of three strains of monkeypox virus were studied on chick chorioallantoic membrane, growth and plaque formation were studied in RK13 cells, and growth was studied in rabbit dermis. The three strains could not be distinguished by these tests, but could be differentiated from variola, vaccinia, and cowpox viruses. HI tests with homologous and heterologous antisera also showed that the monkeypox strains were indistinguishable, although they could be differentiated from vaccinia and cowpox, but not from variola, viruses. Similar results were obtained in neutralization tests. It is suggested that the monkeypox strains constitute a homogeneous poxvirus entity. The strains can be differentiated from other poxviruses by their cultural characteristics, but serologically they are more closely related to variola than to vaccinia or cowpox viruses.
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - monkeys
+BT  - Primates, mammals, vertebrates, Chordata, animals
+ID  - Poxvirus, monkeypox virus, Simian viruses
+LG  - English
+SL  - French
+PT  - Journal article
+IS  - 0042-9686
+YR  - 1972
+UP  - 197300
+
+
+<99>
+UI  - 19722200868
+AU  - Cho, C. T.
+AU  - Wenner, H. A.
+IN  - Section for Virus Res., Dep. Pediatrics, Univ. Sch. Med., Kansas City, Kansas 66103.
+TI  - In vitro growth characteristics of monkeypox virus.
+SO  - Proceedings of the Society for Experimental Biology and Medicine. 1972. 139: 3, 916-920. 
+AB  - In African monkey kidney cells, infectious virions of the virus were synthesized intracellularly by 8 to 9 hours after infection; whereas cell-free virus and HA developed at later, but variable, stages of the growth cycle. Viral antigen(s) detected by immunofluorescence appeared 2 to 3 hours earlier than infectious virus. Monkey pox virus was similar to vaccinia and variola viruses in these respects.
+CC  - Parasites, Vectors, Pathogens and Biogenic Diseases of Animals [LL820]
+MH  - animal diseases
+MH  - Viruses
+MH  - monkeys
+BT  - Primates, mammals, vertebrates, Chordata, animals
+ID  - Poxvirus, monkey pox virus, pox
+LG  - English
+PT  - Journal article
+IS  - 0037-9727
+YR  - 1972
+UP  - 197300
+
+
+

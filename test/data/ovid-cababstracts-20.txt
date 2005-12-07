@@ -1,255 +1,682 @@
 <1>
-UI  - 19932287963
-AU  - Meyer, H.
-AU  - Rziha, H. J.
-TI  - Characterization of the gene encoding the A-type inclusion protein of camelpox virus and sequence comparison with other orthopoxviruses.
-SO  - Journal of General Virology. 1993. 74: 8, 1679-1684. 26 ref. 
-AB  - A gene identified in camelpox virus strain CP-1 is similar to the 160K gene of cowpox virus strain Brighton (BR) that encodes the A-type inclusion body protein (ATIP). The CP-1 gene was mapped, sequenced, and the ATIP-specific mRNA was identified. The open reading frame [2178 nucleotides (nt)] was at a similar position in the CP genome as the one reported for the cowpox virus 160K AT1 gene. DNA sequence comparison showed a deletion of two adjacent adenine residues relative to cowpox virus BR, generating a reading frame shift accompanied by the formation of a translational stop codon. An identical deletion has been described for vaccinia virus strain Western Reserve. The DNA sequence of the corresponding region of monkeypox virus strain Copenhagen showed a deletion leading to a putative stop codon 75 nt upstream of the same stop codons in the camelpox and vaccinia virus genes. These findings are consistent with the expression of truncated ATIPs, of 94K in vaccinia and the camelpox viruses and of 92K in monkeypox virus. In addition, a deletion of 789 bp could be localized downstream of the AT1 open reading frame in camelpox virus isolates of different origin. This causes the transcription of a shortened AT1-specific mRNA (3.7 kb) relative to vaccinia and cowpox viruses (both 4.5 kb). The similarity observed in ATIP encoding and flanking sequences suggests that vaccinia and camelpox viruses are descended from a common ancestor.
-MH  - Viral proteins
-MH  - Gene expression
-MH  - Messenger RNA
-MH  - nucleotide sequences
-MH  - Biotechnology
+UI  - 20053192075
+AU  - Imperato, P. J.
+TI  - The growing challenge of avian influenza.
+SO  - Journal of Community Health. Springer Science + Business Media, Dordrecht, Netherlands: 2005. 30: 5, 327-330. 17 ref. 
+CC  - Host Resistance and Immunity [HH600], Animal Immunology [LL650], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210]
+MH  - disease prevention
+MH  - disease transmission
+MH  - epidemiology
+MH  - human diseases
+MH  - immunization
+MH  - influenza
+MH  - poultry
+MH  - public health
+MH  - surveillance
+MH  - vaccination
+MH  - vaccine development
 MH  - viral diseases
+MH  - zoonoses
+MH  - Avian influenzavirus
+MH  - man
+BT  - Influenzavirus, Orthomyxoviridae, viruses, Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals
+ID  - bird flu, emerging infectious diseases
+CP  - Netherlands
+LG  - English
+PT  - Journal article
+UR  - http://springerlink.metapress.com/link.asp?id=101596
+IS  - 0094-5145
+YR  - 2005
+UP  - 200511
 
 
 <2>
-UI  - 19930515941
-AU  - Fenner, F.
-TI  - Patterns of establishment and spread of animal viruses.
-SO  - Introduction of genetically-modified organisms into the environment.. John Wiley & Sons, Chichester, UK: 1990. 99-116. 30 ref. 
-AB  - Patterns of establishment and spread of animal viruses are discussed under the headings: vertical transmission; horizontal transmission; spread in the body; shedding; inapparent infections; survival of viruses in nature; some examples of establishment and spread in new environments (myxoma virus, cowpox virus, human monkeypox); and live virus vaccines (poliovirus vaccines, recombinant vaccinia virus vaccines).
-MH  - Arboviruses
-MH  - Disease transmission
-MH  - Domestic animals
-MH  - Wild animals
-MH  - epidemiology
-MH  - Viral diseases
+UI  - 20053186417
+AU  - Liu YongDe
+AU  - Wang Yi
+AU  - Chen YuLei
+IN  - School of Agriculture and Biology, Shanghai Jiaotong Univ., Shanghai 201101, China.
+TI  - Immunogold probe as a tool for rapid detection of avian influenza virus (AIV).  [Chinese]
+SO  - Journal of Shanghai Jiaotong University - Agricultural Science. Shanghai Jiaotong University, Shanghai, China: 2005. 23: 3, 321-324. 8 ref. 
+AB  - The modified immunogold filtration assay was developed by immunogold probe with purified rabbit antibody against H5, H9 subtypes of AIV for the rapid detection of the H5 and H9 subtypes of AIV in clinical specimens. The method showed high sensitivity for H5 and H9, with 1.62 and 1.25 micro g/ml, respectively, had the same results for positive specimens tested thrice and also showed high specificity in block and cross tests. The positive ratios for AIV detection from samples of experimentally infected chickens were 70% by this method and showed 100% correlation with AIV isolation method when the clinically suspected specimens were evaluated.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Diagnosis of Animal Diseases [LL886], Techniques and Methodology [ZZ900]
+MH  - diagnosis
+MH  - diagnostic techniques
+MH  - experimental infections
+MH  - immunodiagnosis
+MH  - immunological techniques
+MH  - influenza
+MH  - poultry
+CP  - China
+LG  - Chinese
+SL  - English
+PT  - Journal article
+IS  - 1671-9964
+YR  - 2005
+UP  - 200511
 
 
 <3>
-UI  - 19922091228
-AU  - Meyer, A.
-AU  - Esposito, J. J.
-AU  - Gras, F.
-AU  - Kolakowski, T.
-AU  - Fatras, M.
-AU  - Muller, G.
-TI  - First appearance in Gabon of human monkey pox.  [French]
-SO  - Medecine Tropicale. 1991. 51: 1, 53-57. 
-AB  - The authors record the first recognized cases of human monkey-pox infection in Gabon. Four children in a single family were infected simultaneously in mid-1987, and 2 died; diagnosis was based on haematogenous virus-isolation (in one of those who died) and on "clinical and epidemiological findings" in the remainder. The fatal cases presented with some of the manifestations of "haemorrhagic fever" and were not dominated by the classical cutaneous symptoms and signs (especially the exanthem). Both liver and spleen were involved, a feature that the authors consider has not previously been documented in human infection, but has been recorded in infected monkeys. The source of the infection was not delineated; there was no evidence of human-to-human transmission. The authors consider that this zoonosis should be considered in individuals in a potentially endemic area (i.e. the humid forests of Central Africa) presenting with clinical manifestations suggestive of a viral haemorrhagic fever.G.C. Cook
-MH  - Monkeypox
-MH  - children
-MH  - families
+UI  - 20053180792
+AU  - Chen SuJuan
+AU  - Shi HuoYing
+AU  - Sun Lei
+AU  - Liu XiuFan
+IN  - Key Laboratory for Animal Infectious Diseases, Yangzhou University, Yangzhou 225009, China.
+TI  - Recombinant fowlpox virus coexpressing HA from subtype H5N1 and subtype H9N2 of avian influenza virus and its protective efficacy.  [Chinese]
+SO  - Chinese Journal of Virology. Editorial Office of Chinese Journal of Virology, Beijing, China: 2005. 21: 4, 284-288. 10 ref. 
+AB  - The haemagglutinin (HA) genes from subtype H5N1 and H9N2 avian influenza viruses were directly inserted into transferring vector p11S, resulting in the production of recombinant transferring vector p11SH5H9. Then the recombinant transferring vector p11SH5H9 was used to transfect chicken embryo fibroblasts (CEF), which was pre-infected with wild type fowl pox virus, to generate recombinant fowl pox virus co-expressing H5A and H9A (rFPV-11SH5H9). By selection of blue plaques on the CEF, overlaid with agar containing X-gal, rFPV-11SH5H9 was obtained and purified. The in vitro expression of HA by rFPV-11SH5H9 was detected in recombinant virus-infected CEF by indirect immunofluorescence assay. Experiments on chickens demonstrated that rFPV-11SH5H9 had the same protective efficacy to suppress SPF chickens from shedding challenged virus as that of subtype H9N2 inactivated vaccine and to protect SPF chickens against lethal challenge with homologous subtype HSN1 avian influenza virus. The results showed that the rFPV-11SF5H9 has a good applied foreground.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Genetic Engineering, Gene Transfer and Transgenics [WW100], Genetics and Molecular Biology of Microorganisms [ZZ395]
+MH  - gene transfer
+MH  - genes
+MH  - genetic vectors
+MH  - haemagglutinins
+MH  - poultry
+MH  - recombination
+MH  - Avian influenzavirus
+MH  - Fowl pox virus
+MH  - fowls
+BT  - Influenzavirus, Orthomyxoviridae, viruses, Avipoxvirus, Chordopoxvirinae, Poxviridae, Gallus gallus, Gallus, Phasianidae, Galliformes, birds, vertebrates, Chordata, animals, poultry
+ID  - bird flu
+CP  - China
+LG  - Chinese
+SL  - English
+PT  - Journal article
+IS  - 1000-8721
+YR  - 2005
+UP  - 200511
 
 
 <4>
-UI  - 19902202157
-AU  - Czerny, C. P.
-AU  - Meyer, H.
-AU  - Mahnel, H.
-TI  - Establishment of an ELISA for the detection of orthopox viruses based on neutralizing monoclonal and polyclonal antibodies.
-SO  - Journal of Veterinary Medicine. Series B. 1989. 36: 7, 537-546. 27 ref. 
-AB  - Various combinations of polyclonal and neutralizing monoclonal antibodies (MAbs) of distinct specficity were evaluated as capture or detecting antibodies in an orthopox virus antigen ELISA. Acceptable results were achieved in an assay based on polyclonal antibodies. A 10 times higher sensitivity, however, was obtained using a combination of one monoclonal catching antibody reactive with viral envelope epitopes and polyclonal detection antibodies. This configuration was superior in sensitivity to all others. Specificity was confirmed with 5 vaccinia virus strains (including one recombinant virus) and 8 species of orthopox viruses. Monkeypox and mousepox virus reacted exclusively in the polyclonal assay due to lack of the specific epitope for the monoclonal antibody. The detection limit compared to the infectivity titre was 10superscript 3-104 in the monoclonal/polyclonal and 104-105 TCID50/0.1 ml in the polyclonal combination. The correlation between infectivity- and ELISA-titre was demonstrated by a study of the replication cycle of the rabbitpox virus Utrecht in the permanent rabbit kidney cell line RK-13. With the established ELISAs vaccinia virus could also be detected in organ suspensions of lethally infected NMRI-mice, depending on the level of infectivity.
-MH  - Biotechnology
-MH  - Monoclonal antibodies
-MH  - Diagnosis
-MH  - ELISA
-MH  - viral diseases
+UI  - 20053177086
+AU  - Singh, A. P.
+AU  - Gahlot, A. K.
+AU  - Manshi Sharma
+AU  - Dixit, S. K.
+AU  - Tanwar, R. K.
+IN  - Department of Veterinary Clinical Medicine, Ethics and Jurisprudence, College of Veterinary and Animal Science, Bikaner - 334 001, India.
+TI  - Avian influenza - a review.
+SO  - Veterinary Practitioner. Veterinary Practitioner, c/o Dr. A. K. Gahlot, Bikaner, India: 2004. 5: 1, 1-10. many ref. 
+CC  - Pesticides and Drugs; Control [HH405], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Diagnosis of Animal Diseases [LL886]
+MH  - control programmes
+MH  - diagnosis
+MH  - disease control
+MH  - disease course
+MH  - disease transmission
+MH  - geographical distribution
+MH  - morbidity
+MH  - mortality
+MH  - pathogenesis
+MH  - prepatent period
+MH  - reviews
+MH  - Avian influenzavirus
+MH  - birds
+BT  - Influenzavirus, Orthomyxoviridae, viruses, vertebrates, Chordata, animals
+ID  - bird flu
+CP  - India
+LG  - English
+PT  - Journal article
+IS  - 0972-4036
+YR  - 2004
+UP  - 200511
 
 
 <5>
-UI  - 19892289229
-AU  - Fenner, F.
-AU  - Wittek, R.
-AU  - Dumbell, K. R.
-TI  - Monkeypox virus.
-SO  - The orthopoxviruses.. Academic Press Inc., San Diego, CA 92101, USA: 1989. 227-268. 
-MH  - Viral diseases
-MH  - Zoonoses
+UI  - 20053183715
+AU  - Numan, M.
+AU  - Siddique, M.
+AU  - Ashraf, M.
+AU  - Khan, H. A.
+AU  - Yousaf, M. S.
+IN  - Department of Veterinary Microbiology, University of Agriculture, Faisalabad-38040, Pakistan.
+TI  - Quantification of antibodies against avian influenza virus subtype H7N3 in layer flocks in Central Punjab (Pakistan).
+SO  - International Journal of Agriculture and Biology. Friends Science Publishers, Faisalabad, Pakistan: 2005. 7: 4, 564-566. 13 ref. 
+AB  - A serological survey for quantification of antibodies to avian influenza virus (AIV) subtype H7N3 in vaccinated layer flocks was carried out in central Punjab. A total of 288 serum samples were collected (243 from commercial layer farms & 45 from layer breeder farms). Serum samples from commercial layer flocks were divided into four age groups (15-25, 25-35, 35-45, 45-55 weeks) and for layer breeder flocks into three age groups (16, 22, & 26 weeks). Haemagglutination Inhibition (HI) test was performed for the determination of serum antibodies against AIV-subtype H9N2. Calculated geometric mean titers (GMT) for commercial layer groups 15-25, 25-35, 35-45 and 45-55 weeks of age, were found to be 59.7, 104.0, 147.0 and 137.2, respectively. GMT values for layer breeder groups 16, 22, and 26 weeks of age were found to be 111.4, 207.9 and 128.0, respectively. The results showed that the level of protection of vaccinated birds against AIV-subtype H7N3 was found satisfactory in commercial layer flocks as well as in layer breeder flocks.
+CC  - Host Resistance and Immunity [HH600], Animal Immunology [LL650], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821]
+MH  - antibodies
+MH  - haemagglutination tests
+MH  - hens
+MH  - immune response
+MH  - poultry
+MH  - vaccination
+MH  - Avian influenzavirus
+MH  - fowls
+MH  - Pakistan
+MH  - Pakistan Punjab
+BT  - Influenzavirus, Orthomyxoviridae, viruses, Gallus gallus, Gallus, Phasianidae, Galliformes, birds, vertebrates, Chordata, animals, poultry, South Asia, Asia, Developing Countries, Commonwealth of Nations, Pakistan
+ID  - bird flu
+CP  - Pakistan
+LG  - English
+PT  - Journal article
+UR  - http://www.ijab.org
+IS  - 1560-8530
+YR  - 2005
+UP  - 200511
 
 
 <6>
-UI  - 19892289226
-AU  - Fenner, F.
-AU  - Wittek, R.
-AU  - Dumbell, K. R.
-TI  - The orthopoxviruses.
-SO  - The orthopoxviruses.. Academic Press Inc., San Diego, CA 92101, USA: 1989. 432. 45 pp. of ref. 
-AB  - This book is intended to give a comprehensive account of all the known species of orthopoxviruses which includes 2 important viruses, small pox which is now of historical interest and vaccinia virus which has a potential use as a vector for carrying genes from other microorganisms for vaccine production. There are 12 chapters entitled: Historical introduction and overview; Structure and chemical composition of the virion; Replication and morphogenesis of vaccinia virus; The pathogenesis, pathology and immunology or orthopoxvirus infections; Vaccinia virus; The tool for smallpox eradication; Cowpox virus; Variola virus; Monkeypox virus; Ectromelia virus; Other orthopoxviruses; The global spread, control and eradication of smallpox; and Vaccinia virus as a vector for vaccine antigens. There is a bibliography of about 950 references and a subject index.
-MH  - Vaccines
-MH  - Smallpox
-MH  - viral diseases
+UI  - 20053185413
+AU  - Li ChengJun
+AU  - Yu KangZhen
+AU  - Tian GuoBin
+AU  - Yu DanDan
+AU  - Liu LiLing
+AU  - Jing Bo
+AU  - Ping JiHui
+AU  - Chen HuaLan
+IN  - Animal Influenza Laboratory of the Ministry of Agriculture, National Key Laboratory of Veterinary Biotechnology, Harbin Veterinary Research Institute, Chinese Academy of Agricultural Sciences, 427 Maduan Street, Harbin 150001, China.
+TI  - Evolution of H9N2 influenza viruses from domestic poultry in Mainland China.
+SO  - Virology. Elsevier Inc., San Diego, USA: 2005. 340: 1, 70-83. many ref. 
+AB  - H9N2 viruses have circulated in domestic poultry in Mainland China since 1994, and an inactivated vaccine has been used in chickens to control the disease since 1998. The present study analyzed 27 H9N2 avian influenza viruses that were isolated from chickens and ducks from 1996 to 2002. Infection studies indicated that most of the viruses replicate efficiently but none of them is lethal for SPF chickens. However, these viruses exhibit different phenotypes of replication in a mouse model. Five viruses, including 4 early isolates and one 2000 isolate, are not able to replicate in mice; 14 viruses replicate to moderate titers in mouse lungs and cause less than 5% weight loss, while other 8 viruses could replicate to high titers in the lungs and 7 of them induce 10-20% weight loss of the mice on day 5 after inoculation. Most of the viruses isolated after 1996 are antigenically different from the vaccine strain that is currently used in China. Three viruses isolated in central China in 1998 are resistant to adamantanes. Phylogenetic analysis revealed that all of the viruses originated from CK/BJ/1/94-like virus and formed multiple genotypes through complicated reassortment with QA/HK/G1/97-, CK/HK/G9/97-, CK/SH/F/98-, and TY/WI/66-like viruses. This study is a description of the previously uncharacterized H9N2 avian influenza viruses recently circulating in chickens and ducks in Mainland China. Our findings suggest that urgent attention should be paid to the control of H9N2 influenza viruses in animals and to the human's influenza pandemic preparedness.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Molecular Biology and Molecular Genetics [ZZ360], Taxonomy and Evolution [ZZ380], Genetics and Molecular Biology of Microorganisms [ZZ395]
+MH  - animal models
+MH  - antigens
+MH  - evolution
+MH  - genetic analysis
+MH  - genotypes
+MH  - human diseases
+MH  - phenotypes
+MH  - phylogenetics
+MH  - phylogeny
+MH  - poultry
+MH  - public health
+MH  - viral replication
+MH  - zoonoses
+MH  - Avian influenzavirus
+MH  - ducks
+MH  - fowls
+MH  - man
+MH  - mice
+MH  - China
+BT  - Influenzavirus, Orthomyxoviridae, viruses, East Asia, Asia, Developing Countries, Anatidae, Anseriformes, birds, vertebrates, Chordata, animals, poultry, Gallus gallus, Gallus, Phasianidae, Galliformes, Homo, Hominidae, Primates, mammals, Muridae, rodents, small mammals
+ID  - bird flu
+CP  - USA
+LG  - English
+PT  - Journal article
+UR  - http://www.sciencedirect.com/science/journal/00426822
+IS  - 0042-6822
+YR  - 2005
+UP  - 200511
 
 
 <7>
-UI  - 19892059789
-AU  - Khodakevich, L.
-AU  - Jezek, Z.
-AU  - Messinger, D.
-TI  - Monkeypox virus: ecology and public health significance.
-SO  - Bulletin of the World Health Organization. 1988. 66: 6, 747-752. 24 ref. 
-AB  - The ecology of monkeypox virus was investigated in squirrels, terrestrial and arboreal rodents, and bats at Kinshasa, Zaire. In an initial survey carried out at Bumba zone (northern Zaire), blood-samples were obtained from 120 sheep and goats, 67 domestic cats, 172 terrestrial rodents and 21 squirrels (Funisciurus sp. and Heliosciurus sp.) in areas where human monkeypox had previously been reported; the result was that 2 of 18 F. anerythrus squirrels (and none of the other species tested) were seropositive for monkeypox-specific antibodies and 1 of these had pock-like skin lesions-both these and other organs yielded monkeypox virus. The study was later extended to forested country in central and western Zaire. Overall, 1122 terrestrial rodents and insectivores were tested; all were negative. A total of 659 Funisciurus sp. and 101 Heliosciurus sp. squirrels were also studied; 156 (23.7%) and 15 (14.9%) respectively were positive. Of 153 non-human primates tested (most were Cercopithecus ascanius) 12 (7.8%) were seropositive. Experimental studies showed that the virus was efficiently transmitted through air and excreta (vomit and faeces) among captive squirrels and also by skin scarification. However, the virus was not found in ants (which form a significant part of squirrels' diet) which were fed on infected tissues of squirrels.
-MH  - Monkeypox
-MH  - wild animals
-MH  - Ecology
-MH  - Zoonoses
-MH  - Children
-MH  - Viral diseases
-MH  - Human diseases
-MH  - transmission
-MH  - vectors
+UI  - 20053189501
+AU  - Thongcharoen, P.
+TI  - Outbreaks of avian influenza in man and animal (Part 3).  [Thai]
+SO  - Siriraj Hospital Gazette. Faculty of Medicine, Siriraj Hospital, Mahidol University, Bangkok, Thailand: 2005. 57: 1/4, 84-90. 44 ref. 
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210]
 MH  - epidemiology
-MH  - disease transmission
-MH  - disease vectors
+MH  - human diseases
+MH  - outbreaks
+MH  - poultry
+MH  - Avian influenzavirus
+MH  - fowl plague virus
+MH  - fowls
+MH  - man
+BT  - Influenzavirus, Orthomyxoviridae, viruses, avian influenzavirus, Gallus gallus, Gallus, Phasianidae, Galliformes, birds, vertebrates, Chordata, animals, poultry, Homo, Hominidae, Primates, mammals
+ID  - bird flu
+CP  - Thailand
+LG  - Thai
+PT  - Journal article
+IS  - 0125-152x
+YR  - 2005
+UP  - 200511
 
 
 <8>
-UI  - 19892057606
-AU  - Jezek, Z.
-AU  - Szczeniowski, M.
-AU  - Paluku, K. M.
-AU  - Mutombo, M.
-AU  - Grab, B.
-TI  - Human monkeypox: confusion with chickenpox.
-SO  - Acta Tropica. 1988. 45: 4, 297-307. 
-AB  - The authors report results of a study carried out in Zaire to estimate the frequency with which a diagnosis of monkeypox can be confused with other "eruptive diseases" including varicella (chickenpox). About 20% of the initial clinical diagnoses were made by physicians and the remainder by medical assistants and nurses. Between 1981 and 1986, 977 individuals with a skin eruption which was not diagnosed as monkeypox were subjected to laboratory investigation (serology, electron microscopic examination and culture of fluid, or scabs from the eruption). Of 730 cases diagnosed as varicella, 24 (3.3%) were monkeypox; 12 (7.3%) of 165 cases of atypical varicella, and 5 (6.1%) of 82 cases in which a clinical diagnosis of the dermatological condition could not be ascertained, were also shown to be monkeypox. Four of the misdiagnosed monkeypox patients died. "Regional pleomorphism", indefinite body-distribution of skin eruptions, and a centripetal distribution of lesions accounted for misdiagnoses in 46%, 49% and 17%, respectively; 76% of misdiagnosed cases had evidence of regional lymphadenopathy.
-MH  - Monkeypox
-MH  - diagnosis
-MH  - differential diagnosis
+UI  - 20053042852
+AU  - Duan Lian
+AU  - Wang Li
+AU  - Hong WenShan
+AU  - Li KangSheng
+IN  - Department of Microbiology and Immunology, College of Medical Sciences, Shantou University, Shangtou 515031, China.
+TI  - Influenza viruses detected from quails in the poultry markets in south China.  [Chinese]
+SO  - Chinese Journal of Zoonoses. Editorial Committee of Chinese Journal of Zoonoses, Health and Anti-epidemic Station of Fujian Province, Fuzhou, China: 2005. 21: 2, 185-186. 6 ref. 
+AB  - Quails could be an intermediate host of influenza viruses and living quails are very commonly for sale in the poultry markets in south China. Between January and April 2004, 133 healthy quails were randomly chosen from 4 poultry markets (5-10 quails per market weekly) in Shantou (Guangdong province, China). Samples (swabs) were collected from the trachea and the cloacal chamber from each quail and were inoculated into the allantoic cavity of 9-11 days old chicken embryos. The liquid was collected from the allantoic cavity after 48 h incubation (at 35 degrees C) for virus separation and identification. Haemagglutination test detected 34 positive samples, which were all collected from the trachea; the positive rate was 25.56% (34/133). Haemagglutination inhibition test showed that 30 of the positive samples were haemagglutinin subtype H9, 6 were H6 and 1 was H5.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821]
+MH  - allantoic fluid
+MH  - cloaca
+MH  - disease control
+MH  - haemagglutination tests
+MH  - intermediate hosts
+MH  - poultry
+MH  - street markets
+MH  - surveillance
+MH  - trachea
+MH  - avian influenzavirus
+MH  - quails
+MH  - China
+BT  - Influenzavirus, Orthomyxoviridae, viruses, East Asia, Asia, Developing Countries, Coturnix, Phasianidae, Galliformes, birds, vertebrates, Chordata, animals, poultry
+ID  - avian influenza
+CP  - China
+LG  - Chinese
+PT  - Journal article
+IS  - 1002-2694
+YR  - 2005
+UP  - 200511
 
 
 <9>
-UI  - 19892056679
-AU  - Jezek, Z.
-AU  - Grab, B.
-AU  - Szczeniowski, M. V.
-AU  - Paluku, K. M.
-AU  - Mutombo, M.
-TI  - Human monkeypox: secondary attack rates.
-SO  - Bulletin of the World Health Organization. 1988. 66: 4, 465-470. 
-AB  - In 1981 and 1986, 2278 people in Zaire had close contact with a patient (of whom 245 were identified) who had acquired monkeypox from an animal source. During these 6 years, 93 cases were identified in which the infection was considered to have a human origin [see Jezek et al. above]; of these, 69 infections were spread in the first generation, 19 in the second, and 5 in the third or fourth generation. The probability of a close contact becoming ill from a known human case was estimated at 3%. These infections were usually associated with living in an affected household (usually a poorly ventilated hut), under conditions of maximum exposure. The highest attack rate (11.7%) was in unvaccinated household contacts aged <4 years. No evidence was forthcoming that the secondary attack rate differed between 1970-80 and 1981-86. This evidence is considered by the authors to be consistent with the concept that the "monkeypox virus is poorly adapted for sustained transmission between humans and that such transmission does not pose a significant health problem".G.C. Cook
-MH  - Monkeypox
-MH  - epidemiology
+UI  - 20053077065
+AU  - Allwinn, R.
+AU  - Doerr, H. W.
+IN  - Institut fur Medizinische Virologie und Reisemedizinische Impfambulanz, Paul-Ehrlich-Strasse 40, 60596 Frankfurt/Main, Germany.
+TI  - Is avian influenza a human threat?  [German]
+OT  - Ist die Vogelgrippe eine Gefahr fur den Menschen?
+SO  - Deutsche Medizinische Wochenschrift. Georg Thieme Verlag, Stuttgart, Germany: 2005. 130: 15, 946-948. 17 ref. 
+AB  - The current epidemic is affecting poultry from China, Indonesia, Laos, South Korea, Thailand and Vietnam; up to 2005 there have been 52 human cases, of which 39 were fatal. Clinical features, prevention and treatment are discussed. H5N1 influenzavirus infection is not yet a human pandemic.
+OI  - 10.1055/s-2005-866767
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210]
+MH  - epidemics
+MH  - human diseases
+MH  - infectious diseases
+MH  - influenza
+MH  - poultry
+MH  - avian influenzavirus
+MH  - man
+MH  - China
+MH  - Indonesia
+MH  - Korea Republic
+MH  - Laos
+MH  - Thailand
+MH  - Vietnam
+BT  - Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals, Influenzavirus, Orthomyxoviridae, viruses, East Asia, Asia, Developing Countries, South East Asia, ASEAN Countries, Indochina, Least Developed Countries, Threshold Countries, OECD Countries
+ID  - avian influenza, H5N1 influenzavirus
+CP  - Germany
+LG  - German
+PT  - Journal article
+UR  - http://www.thieme-connect.com/ejournals/toc/dmw
+IS  - 0012-0472
+YR  - 2005
+UP  - 200511
 
 
 <10>
-UI  - 19892056678
-AU  - Jezek, Z.
-AU  - Grab, B.
-AU  - Szczeniowski, M.
-AU  - Paluku, K. M.
-AU  - Mutombo, M.
-TI  - Clinico-epidemiological features of monkeypox patients with an animal or human source of infection.
-SO  - Bulletin of the World Health Organization. 1988. 66: 4, 459-464. 
-AB  - Between 1981 and 1986, 338 patients in Zaire were diagnosed as suffering from monkeypox; 245 (72%) were considered to have been infected from an animal, and 93 (28%) a human source. Of the former, children accounted for most cases-27% 3-4 years, 20% 5-6 years, and only 4% were >15 years old; male:female ratio was 58:42. Of the latter, the age distribution was more uniform, and infected adults were more common; male:female ratio was 43:57 (i.e. a reversal of that in the animal-infected cases; P <0.05). Analysis of the clinical data (including fatality rates) obtained from the survey did not support the view that those cases infected from a human source (73 were studied, and compared with 222 infected by animals) were more severe, i.e. passage through the human host did not seem to enhance the virulence of the monkeypox virus.
-MH  - Monkeypox
+UI  - 20053092722
+AU  - Bonfanti, L.
+AU  - Ferre, N.
+AU  - Favero, L.
+AU  - Rossi, E.
+AU  - Vicenzoni, G.
+AU  - Bortolotti, L.
+AU  - Pozza, M. D.
+AU  - Marangon, S.
+TI  - Controlling avian influenza in areas at risk.  [Italian]
+OT  - Controllo dell'influenza aviare nelle aree a rischio.
+SO  - Rivista di Avicoltura. Gruppo Calderini Edagricole Srl, Bologna, Italy: 2005. 74: 3, 24-27. 9 ref. 
+AB  - An account is given of the HPAI H5N2 influenza epidemic, which affected 8 centres of infection in the Veneto and Friuli Venezia Giulia regions in northern Italy in 1997-98, the HPAI H7N1 epidemic, which affected fowls in 413 flocks on the plain of Padua, between 17 December 1999 and 5 April 2000, the LPAI H7N1 epidemic, which occurred between August and November 2000 and affected 845 000 turkeys in the province of Verona, and the LPAI H7N3 epidemic in 2002-2003, which affected 387 flocks of turkeys, laying hens, guinea fowls, ducks and broilers in the Veneto and Lombardy regions. It was concluded that fowls in north-eastern Italy risk catching avian influenza and that more efforts should be made to control and eradicate the disease.
+CC  - Egg Producing Animals [LL130], Meat Producing Animals [LL120], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821]
+MH  - broilers
+MH  - disease control
+MH  - disease prevention
+MH  - epidemics
+MH  - epidemiological surveys
 MH  - epidemiology
+MH  - fowl diseases
+MH  - poultry
+MH  - risk factors
+MH  - avian influenzavirus
+MH  - ducks
+MH  - fowls
+MH  - guineafowls
+MH  - turkeys
+MH  - Italy
+BT  - Influenzavirus, Orthomyxoviridae, viruses, Southern Europe, Europe, Mediterranean Region, Developed Countries, European Union Countries, OECD Countries, Gallus gallus, Gallus, Phasianidae, Galliformes, birds, vertebrates, Chordata, animals, poultry, Meleagris, Numida, Anatidae, Anseriformes
+ID  - avian influenza, disease eradication
+CP  - Italy
+LG  - Italian
+PT  - Journal article
+IS  - 1722-6945
+YR  - 2005
+UP  - 200511
 
 
 <11>
-UI  - 19892056506
-AU  - Fine, P. E. M.
-AU  - Jezek, Z.
-AU  - Grab, B.
-AU  - Dixon, H.
-TI  - The transmission potential of monkeypox virus in human populations.
-SO  - International Journal of Epidemiology. 1988. 17: 3, 643-650. 
-AB  - In order to assess the degree of protection rendered by previous smallpox vaccination (which was discontinued in 1980), and to determine the transmission potential of the monkeypox virus in unvaccinated communities, data on 209 monkeypox cases diagnosed in Zaire during a 5-year period (1980-84) have been analysed. By using scars as the marker of previous vaccination, the authors conclude that this imparted about 85% protection-rate against monkeypox infection. They also consider that the number of human monkeypox cases (which usually have an animal origin) will increase as vaccination-derived protection declines. However, because the monkeypox virus is less transmissible than smallpox was, it will not persist (by person-to-person transmission) in human communities-even in the complete absence of vaccination. The Global Commission for the Certification of Smallpox Eradication recommended (i) the cessation of routine smallpox vaccination in areas endemic for monkeypox, and (ii) encouragement of continuous epidemiological surveillance; this general policy is supported by these authors from their study of this relatively small number of cases.G.C. Cook
-MH  - Monkeypox
+UI  - 20053175266
+AU  - Zhang PingHu
+AU  - Tang YingHua
+AU  - Xue Feng
+AU  - Liu XiaoWen
+AU  - Qian ZhongMing
+AU  - Hao GuiJie
+AU  - Liu XiuFan
+IN  - Key Laboratory of Animal Infectious Diseases, Ministry of Agriculture/Yangzhou University, Yangzhou 225009, China.
+TI  - Sequence analysis of haemagglutinin gene of duck origin avian influenza virus H10 subtype and pathogenicity to SPF chickens and BALB/c mice.  [Chinese]
+SO  - Chinese Journal of Veterinary Science and Technology. Lanzhou Veterinary Research Institute, CAAS, Lanzhou, China: 2005. 35: 9, 684-688. 13 ref. 
+AB  - Several H10 subtype avian influenza A viruses isolated from aquatic birds in East China were identified by specific reverse transcription-polymerase chain reaction (RT-PCR). The haemagglutinin (HA) gene of one representative strain, Dk/YZ/502/03, was sequenced and its pathogenicity to specific pathogen free (SPF) chickens and BALB/c mice were determined. The HA's nucleotide sequence shared a high identity with that of strain A/Mink/Sweden/84 (H10N4)m, and the P-E-I-M-Q-G-R sequence of the cleavage site of the deduced amino acid was characteristic of avian influenzaviruses with low pathogenicity, which agreed with the pathogenicity results of strain Dk/YZ/502/03 to chickens and mice.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Pathogens, Parasites and Infectious Diseases (Wild Animals) [YY700], Genetics and Molecular Biology of Microorganisms [ZZ395]
+MH  - DNA sequencing
+MH  - experimental infections
+MH  - genes
+MH  - nucleotide sequences
+MH  - pathogenicity
+MH  - polymerase chain reaction
+MH  - poultry
+MH  - viral haemagglutinins
+MH  - waterfowl
+MH  - Avian influenzavirus
+MH  - birds
+MH  - ducks
+MH  - fowls
+MH  - influenzavirus A
+MH  - mice
+MH  - China
+BT  - Influenzavirus, Orthomyxoviridae, viruses, East Asia, Asia, Developing Countries, Anatidae, Anseriformes, birds, vertebrates, Chordata, animals, poultry, Gallus gallus, Gallus, Phasianidae, Galliformes, influenza virus A and B, Muridae, rodents, mammals, small mammals
+CP  - China
+LG  - Chinese
+SL  - English
+PT  - Journal article
+IS  - 1000-6419
+YR  - 2005
+UP  - 200511
 
 
 <12>
-UI  - 19882053711
-AU  - Jezek, Z.
-AU  - Grab, B.
-AU  - Paluku, K. M.
-AU  - Szczeniowski, M. V.
-TI  - Human monkeypox: disease pattern, incidence and attack rates in a rural area of northern Zaire.
-SO  - Tropical and Geographical Medicine. 1988. 40: 2, 73-83. 4 ref. 
-AB  - The epidemiological features of 91 cases of monkeypox (MP) reported from 1981 to 1985 in Bumba zone, northern Zaire, are documented. In 68 (75%) cases the clinical diagnosis was confirmed by demonstration of MP virus and by serology. Age range was from 7 months to 29 years; 93% of patients were <15 years old. Smallpox scars were detected in 10 (11%). The cases arose from 61 separate outbreaks; 42 of these consisted of a single recognized case. Average incidence rate in 1981-85 was 0.63 new cases/10 000 population; amongst unvaccinated and vaccinated individuals the average annual primary attack rate was 1.70 and 0.04/10 000, respectively. Secondary attack rates for those with and without a vaccination scar were 0.7% and 4.3%, respectively (P <0.001). Cases occurred throughout the year, and there was evidence of clustering of cases in the northern part of the zone. Many unvaccinated contacts living in close proximity to index cases escaped infection. In 70 cases, an animal source of infection was suspected, and in 21 the origin was considered to be a human one. Overall case-fatality rate was 9%; these 8 deaths occurred sporadically. The low incidence of human MP in this locality is considered to indicate that it has only limited public health importance, even though this is well known to be an enzoonotic area.G.C. Cook
-MH  - Monkeypox
+UI  - 20053181154
+IN  - Avenue Appia 20, 1211 Geneva 27, Switzerland.
+CA  - World Health Organization
+TI  - Avian influenza, Indonesia - update.
+SO  - Weekly Epidemiological Record. World Health Organization, Geneva, Switzerland: 2005. 80: 40, 341-342. 
+AB  - On 29 September 2005, the Ministry of Health in Indonesia confirmed another fatal human case of H5N1 avian influenza. The patient, a 27-year-old woman from Jakarta, developed symptoms on 17 September, was hospitalized on 19 September and died on 26 September. Initial investigation revealed that the woman had direct contact with diseased and dying chickens in her household shortly before the onset of illness. The woman is the fourth patient in Indonesia with laboratory-confirmed of H5N1 infection. Three of these cases were fatal.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210]
+MH  - disease transmission
 MH  - epidemiology
-MH  - Zoonoses
+MH  - fatal infections
+MH  - human diseases
+MH  - influenza
+MH  - viral diseases
+MH  - zoonoses
+MH  - Avian influenzavirus
+MH  - man
+MH  - Indonesia
+BT  - Influenzavirus, Orthomyxoviridae, viruses, South East Asia, Asia, Developing Countries, ASEAN Countries, Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals
+CP  - Switzerland
+LG  - English, French
+PT  - Journal article
+IS  - 0049-8114
+YR  - 2005
+UP  - 200511
 
 
 <13>
-UI  - 19882278656
-AU  - Cook, G. C.
-TI  - Human monkeypox: a viral disease with an uncertain future in Africa.
-SO  - Tropical Diseases Bulletin. 1988. 85: 2, R1-R16. 49 ref. 
-MH  - Viral diseases
-MH  - Reviews
-MH  - Zoonoses
+UI  - 20053193370
+AU  - Munster, V. J.
+AU  - Wallensten, A.
+AU  - Baas, C.
+AU  - Rimmelzwaan, G. F.
+AU  - Schutten, M.
+AU  - Olsen, B.
+AU  - Osterhaus, A. D. M. E.
+AU  - Fouchier, R. A. M.
+IN  - Department of Virology, Erasmus Medical Center Rotterdam, PO Box 1738, 3000 DR Rotterdam, Netherlands.
+TI  - Mallards and highly pathogenic avian influenza ancestral viruses, Northern Europe.
+SO  - Emerging Infectious Diseases. National Center for Infectious Diseases, Centers for Disease Control and Prevention, Atlanta, USA: 2005. 11: 10, 1545-1551. 40 ref. 
+AB  - Outbreaks of highly pathogenic avian influenza (HPAI), which originate in poultry upon transmission of low pathogenic viruses from wild birds, have occurred relatively frequently in the last decade. During our ongoing surveillance studies in wild birds, we isolated several influenza A viruses of haemagglutinin subtype H5 and H7 that contain various neuraminidase subtypes. For each of the recorded H5 and H7 HPAI outbreaks in Europe since 1997, our collection contained closely related virus isolates recovered from wild birds, as determined by sequencing and phylogenetic analyses of the hemagglutinin gene and antigenic characterization of the haemagglutinin glycoprotein. The minor genetic and antigenic diversity between the viruses recovered from wild birds and those causing HPAI outbreaks indicates that influenza A virus surveillance studies in wild birds can help generate prototypic vaccine candidates and design and evaluate diagnostic tests, before outbreaks occur in animals and humans.
+RN  - 9001-67-6
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Pathogens, Parasites and Infectious Diseases (Wild Animals) [YY700], Genetics and Molecular Biology of Microorganisms [ZZ395]
+MH  - disease transmission
+MH  - haemagglutinins
+MH  - human diseases
+MH  - influenza A
+MH  - molecular epidemiology
+MH  - nucleotide sequences
+MH  - outbreaks
+MH  - poultry
+MH  - sialidase
+MH  - vaccine development
+MH  - wild birds
+MH  - avian influenzavirus
+MH  - birds
+MH  - fowls
+MH  - influenzavirus A
+MH  - man
+BT  - Influenzavirus, Orthomyxoviridae, viruses, Gallus gallus, Gallus, Phasianidae, Galliformes, birds, vertebrates, Chordata, animals, poultry, influenza virus A and B, Homo, Hominidae, Primates, mammals
+ID  - phylogenomics
+CP  - USA
+LG  - English
+PT  - Journal article
+IS  - 1080-6040
+YR  - 2005
+UP  - 200511
 
 
 <14>
-UI  - 19862274436
-AU  - Khodakevich, L.
-AU  - Jezek, Z.
-AU  - Kinzanzka, K.
-TI  - Isolation of monkeypox virus from wild squirrel infected in nature. [Correspondence].
-SO  - Lancet. 1986. I: 8472, 98-99. 3 ref. 
-AB  - Monkeypox virus was isolated from a squirrel (Funisciurus anerythrus) with skin eruptions which had been captured in Zaire near a village where human monkeypox had occurred. Monkeypox-specific antibodies were detected in another six squirrels of the same species.
-MH  - Zoonoses
-MH  - Wild animals
-MH  - viral diseases
-MH  - monkeypox
+UI  - 20053193379
+AU  - Olsen, S. J.
+AU  - Laosiritaworn, Y.
+AU  - Pattanasin, S.
+AU  - Prapasiri, P.
+AU  - Dowell, S. F.
+TI  - Poultry-handling practices during avian influenza outbreak, Thailand.
+SO  - Emerging Infectious Diseases. National Center for Infectious Diseases, Centers for Disease Control and Prevention, Atlanta, USA: 2005. 11: 10, 1601-1603. 10 ref. 
+AB  - With poultry outbreaks of avian influenza H5N1 continuing in Thailand, preventing human infection remains a priority. We surveyed residents of rural Thailand regarding avian influenza knowledge, attitudes, and practices. Results suggest that public education campaigns have been effective in reaching those at greatest risk, although some high-risk behaviour continues.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Rural Health [VV550]
+MH  - attitudes
+MH  - disease transmission
+MH  - epidemiology
+MH  - human diseases
+MH  - outbreaks
+MH  - poultry
+MH  - risk assessment
+MH  - risk factors
+MH  - rural areas
+MH  - avian influenzavirus
+MH  - fowls
+MH  - man
+MH  - Thailand
+BT  - Influenzavirus, Orthomyxoviridae, viruses, Gallus gallus, Gallus, Phasianidae, Galliformes, birds, vertebrates, Chordata, animals, poultry, Homo, Hominidae, Primates, mammals, South East Asia, Asia, Developing Countries, ASEAN Countries
+CP  - USA
+LG  - English
+PT  - Journal article
+IS  - 1080-6040
+YR  - 2005
+UP  - 200511
 
 
 <15>
-UI  - 19842251324
-AU  - Roumillat, L. F.
-AU  - Patton, J. L.
-AU  - Davis, M. L.
-TI  - Monoclonal antibodies to a monkeypox virus polypeptide determinant.
-SO  - Journal of Virology. 1984. 52: 1, 290-292. 17 ref. 
-MH  - monoclonal antibodies
+UI  - 20053027242
+AU  - Ma DeHui
+AU  - He HongXuan
+AU  - Qin XiMing
+AU  - Zhang QiangZhe
+IN  - College of Animal Science and Technology, Inner Mongolia Nationality University, Tongliao 028000, Inner Mongolia, China.
+TI  - Isolation and identification of H9N2 subtype avian influenza virus from chicken.  [Chinese]
+SO  - Chinese Journal of Veterinary Medicine. Guoji Shudian (Institute of Scientific and Technological Information of China, China Publications Centre), Beijing, China: 2003. 39: 12, 14. 
+AB  - An avian influenza virus strain was collected from an egg-laying poultry farm in Xinxiang, Henan, China. Based on haemagglutination inhibition test and subtype and RT-PCR [reverse transcription-polymerase chain reaction] identification, the strain was identified as H9N2 subtype. It showed 99.6% homology as compared with the A/Chicken/Shandong/6/96(H9N2) sequence. It contained only 2 discontinuous alkaline amino acids, indicating that it is a low pathogenetic virus strain. On the 4th and 5th day of the challenge experiment, chickens showed the symptoms of temporary languid and a slight loss of appetite, but showed subsequently rapid rehabilitation. The A type avian influenza virus with haemagglutination activity was named A/Chicken/Henan/1/1999 H9N2.
+CC  - Egg Producing Animals [LL130], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Diagnosis of Animal Diseases [LL886], Animal Nutrition (General) [LL500]
+MH  - amino acids
+MH  - appetite
+MH  - diagnosis
+MH  - fowl diseases
+MH  - haemagglutination
+MH  - identification
+MH  - pathogenicity
+MH  - polymerase chain reaction
+MH  - poultry
+MH  - strains
+MH  - symptoms
+MH  - avian influenzavirus
+MH  - fowls
+MH  - China
+BT  - Influenzavirus, Orthomyxoviridae, viruses, East Asia, Asia, Developing Countries, Gallus gallus, Gallus, Phasianidae, Galliformes, birds, vertebrates, Chordata, animals, poultry
+ID  - avian influenza, experimental challenge, reverse transcriptase polymerase chain reaction
+CP  - China
+LG  - Chinese
+PT  - Journal article
+IS  - 0529-6005
+YR  - 2003
+UP  - 200510
 
 
 <16>
-UI  - 19832225637
-AU  - Manshande, J. P.
-AU  - Kabaya-Wa-Rutenda
-TI  - Human monkeypox transmitted by a Chimpanzee.
-SO  - Lancet. 1983. I: 8333, 1110-1111. 
-MH  - Epidemiology
+UI  - 20053031158
+AU  - Zou DongHui
+AU  - Liang Ji
+AU  - Wang WeiLi
+IN  - College of Animal Science and Technology, Jilin Agricultural University, Changchun 130118, Jilin, China.
+TI  - A comparison between fluorescent RT-PCR and classical isolation of virus for detection of AIV.  [Chinese]
+SO  - Chinese Journal of Animal Quarantine. 2004. 21: 9, 25-28. 13 ref. 
+AB  - Three hundred and four samples of chicken meat were used to detect AIV (avian influenza virus) by using fluorescent RT-PCR (reverse transcription polymerase chain reaction). Results showed that 26 positive AIV were detected within 4 hours by fluorescent RT-PCR against 22 positive AIV detected within 15 days by the classical virus isolation technique. In both cases, the repetition rates reached 100%. Compared with the latter, the former is of high specificity, and saves time.
+CC  - Egg Producing Animals [LL130], Meat Producing Animals [LL120], Diagnosis of Animal Diseases [LL886], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Meat Produce [QQ030], Techniques and Methodology [ZZ900]
+MH  - detection
+MH  - diagnosis
+MH  - fowl diseases
+MH  - meat
+MH  - methodology
+MH  - polymerase chain reaction
+MH  - poultry
+MH  - techniques
+MH  - avian influenzavirus
+MH  - fowls
+BT  - Gallus gallus, Gallus, Phasianidae, Galliformes, birds, vertebrates, Chordata, animals, poultry, Influenzavirus, Orthomyxoviridae, viruses
+ID  - avian influenza, reverse transcriptase polymerase chain reaction
+LG  - Chinese
+SL  - English
+PT  - Journal article
+IS  - 1005-944x
+YR  - 2004
+UP  - 200510
 
 
 <17>
-UI  - 19832223018
-AU  - Mutombo, M. wa
-AU  - Arita, I.
-AU  - Jezek, Z.
-TI  - Human monkeypox transmitted by a chimpanzee in a tropical rain-forest area of Zaire.
-SO  - Lancet. 1983. 1: 8327, 735-737. 6 ref. 
-MH  - zoonoses
+UI  - 20053168071
+AU  - Rushton, J.
+AU  - Viscarra, R.
+AU  - Bleich, E. G.
+AU  - McLeod, A.
+IN  - CEVEP, Casilla 10474, La Paz, Bolivia.
+TI  - Impact of avian influenza outbreaks in the poultry sectors of five South East Asian countries (Cambodia, Indonesia, Lao PDR, Thailand, Viet Nam) outbreak costs, responses and potential long term control.
+SO  - World's Poultry Science Journal. World's Poultry Science Association, Beekbergen, Netherlands: 2005. 61: 3, 491-514. 40 ref. 
+AB  - This article discusses the economics and social impact of highly pathogenic avian influenza (HPAI) outbreaks in the poultry sectors of Cambodia, Indonesia, Lao PDR, Thailand and Vietnam. It also discusses the most effective control methods.
+CC  - Veterinary Economics [EE117], Animal Health and Hygiene (General) [LL800], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821]
+MH  - disease control
+MH  - outbreaks
+MH  - poultry
+MH  - poultry diseases
+MH  - avian influenzavirus
+MH  - Cambodia
+MH  - Indonesia
+MH  - Laos
+MH  - Thailand
+MH  - Vietnam
+BT  - Influenzavirus, Orthomyxoviridae, viruses, Indochina, South East Asia, Asia, Least Developed Countries, Developing Countries, ASEAN Countries
+ID  - highly pathogenic avian influenza, highly pathogenic avian influenza virus
+CP  - Netherlands
+LG  - English
+SL  - Chinese, German, Spanish, French, Russian
+PT  - Journal article
+IS  - 0043-9339
+YR  - 2005
+UP  - 200510
 
 
 <18>
-UI  - 19802272765
-AU  - Dumbell, K. R.
-AU  - Archard, L. C.
-TI  - Comparison of white pock (h) mutants of monkeypox virus with parental monkeypox and with variola-like viruses isolated from animals.
-SO  - Nature, UK. 1980. 286: 5768, 29-32. 17 ref. 
+UI  - 20053170184
+AU  - Klenk, H. D.
+IN  - Institut fur Virologie, Philipps-Universitat, Marburg, Germany.
+TI  - Infection of the endothelium by influenza viruses.
+SO  - Thrombosis and Haemostasis. Schattauer GmbH, Stuttgart, Germany: 2005. 94: 2, 262-265. 
+AB  - Highly pathogenic avian influenza viruses are not only the cause of devastating "bird flu" outbreaks in domestic fowl, but are also occasionally the cause of human disease with a high mortality rate as is being currently observed with the H5N1 viruses in South-East Asia. Infection in birds is systemic with hemorrhages and edema as characteristic symptoms, and virus replication in the endothelium appears to play an important role in pathogenesis. Some of the factors determining endotheliotropism have been elucidated at the molecular and cellular level. They include proteolytic activation of the hemagglutinin, polarity of virus budding, and tissue specific expression of virus receptors.
+CC  - Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210]
+MH  - clinical aspects
+MH  - endothelium
+MH  - epidemiology
+MH  - haemorrhage
+MH  - influenza
+MH  - mortality
+MH  - oedema
+MH  - pathogenesis
+MH  - poultry
+MH  - proteolysis
+MH  - viral haemagglutinins
+MH  - viral replication
+MH  - virulence
+MH  - avian influenzavirus
+MH  - fowls
+MH  - Influenzavirus
+MH  - man
+BT  - Influenzavirus, Orthomyxoviridae, viruses, Gallus gallus, Gallus, Phasianidae, Galliformes, birds, vertebrates, Chordata, animals, poultry, Homo, Hominidae, Primates, mammals
+CP  - Germany
+LG  - English
+PT  - Journal article
+UR  - http://www.schattauer.de/zs/thromb/artikel.asp?path=/zs/thromb/2005/94/2/&nummer=th05080262
+IS  - 0340-6245
+YR  - 2005
+UP  - 200510
 
 
 <19>
-UI  - 19802267615
-AU  - Arita, M.
-AU  - Tagaya, I.
-TI  - Virion polypeptides of poxviruses.
-SO  - Archives of Virology. 1980. 63: 34, 209-225. 34 ref. 
+UI  - 20053171271
+AU  - Wang XiuRong
+AU  - Yu KangZhen
+AU  - Deng GuoHua
+AU  - Shi Rui
+AU  - Liu LiLing
+AU  - Qiao ChuanLing
+AU  - Bao HongMei
+AU  - Kong XianGang
+AU  - Chen HuaLan
+IN  - Animal Influenza Laboratory, Ministry of Agriculture and National Key Laboratory of Veterinary Biotechnology, Harbin Veterinary Research Institute, Chinese Academy of Agricultural Sciences, Harbin 150001, China.
+TI  - Subtype identification of avian influenza virus on DNA microarray.
+SO  - Agricultural Sciences in China. Editorial Department of Agricultural Sciences in China, Beijing, China: 2005. 4: 9, 700-706. 21 ref. 
+AB  - A rapid microarray-based assay for the reliable detection of avian influenzavirus (AIV) subtypes H5, H7 and H9 was developed. The strains used in this experiment were A/Goose/Guangdong/1/96 (H5N1), A/African starling/983/79 (H7N1) and A/Turkey/Wisconsin/1/66 (H9N2). The target DNA clones which encoded approximately 500 bp AIV gene fragments obtained by RT-PCR were spotted on a slide-bound microarray. Cy5-labelled fluorescent cDNAs generated from virus RNA during by reverse transcription were hybridized to these target DNAs. These target DNAs contained multiple fragments of the haemagglutinin and matrix protein genes of AIV, used respectively, for subtyping and typing AIV. The arrays were scanned to determine the probe binding sites. The hybridization pattern agreed approximately with the known grid location of each target. Scanning images of H5 and H7 samples were in accordance to those expected. Results showed that cDNAs of influenzaviruses could be detected directly on microchips. Moreover, DNA microarray technology was found to be a useful diagnostic method for AIV.
+CC  - Diagnosis of Animal Diseases [LL886], Genetics and Molecular Biology of Microorganisms [ZZ395], Prion, Viral, Bacterial and Fungal Pathogens of Animals [LL821]
+MH  - binding sites
+MH  - diagnosis
+MH  - diagnostic techniques
+MH  - DNA
+MH  - DNA hybridization
+MH  - genes
+MH  - haemagglutinins
+MH  - matrix proteins
+MH  - poultry
+MH  - reverse transcription
+MH  - RNA
+MH  - avian influenzavirus
+MH  - fowls
+BT  - Influenzavirus, Orthomyxoviridae, viruses, Gallus gallus, Gallus, Phasianidae, Galliformes, birds, vertebrates, Chordata, animals, poultry
+ID  - DNA microarrays
+CP  - China
+LG  - English
+PT  - Journal article
+UR  - http://www.ChinaAgriSci.com
+IS  - 1671-2927
+YR  - 2005
+UP  - 200510
 
 
 <20>
-UI  - 19792254002
-AU  - Marennikova, S. S.
-AU  - Shelokhina, E. M.
-AU  - Maltseva, N. N.
-AU  - Matsevich, G. R.
-TI  - Monkeypox virus as a source of whitepox virus.
-SO  - Intervirology. 1979. 11: 6, 333-340. 15 ref. 
+UI  - 20053171679
+AU  - Moscona, A.
+IN  - Department of Pediatrics, Box 309, Weill Medical College of Cornell University, 515 E. 71st St., Suite 600D, New York, NY 10021, USA.
+TI  - Neuraminidase inhibitors for influenza.
+SO  - New England Journal of Medicine. Massachusetts Medical Society, Waltham, USA: 2005. 353: 13, 1363-1373. 67 ref. 
+AB  - Discussions on the development, mode of action, pharmacokinetics and efficiency of neuraminidase inhibitors as drugs for the treatment of influenza infections are presented. Focus was given on the two most common neuraminidase inhibitors, viz. zanamivir (Relenza) and oseltamivir (Tamiflu). Data from clinical trials for these two drugs, involving adults, the elderly and children, are also presented. The importance of antiviral drugs as part of a strategy in dealing with an influenza pandemic, including avian influenza, is discussed.
+RN  - 9001-67-6
+OI  - 10.1056/NEJMra050740
+CC  - Pesticides and Drugs; Control [HH405], Prion, Viral, Bacterial and Fungal Pathogens of Humans [VV210], Pharmacology [VV730]
+MH  - antiviral agents
+MH  - disease control
+MH  - drug development
+MH  - drug therapy
+MH  - epidemics
+MH  - epidemiology
+MH  - human diseases
+MH  - influenza
+MH  - pharmacokinetics
+MH  - sialidase
+MH  - avian influenzavirus
+MH  - Influenzavirus
+MH  - man
+BT  - Influenzavirus, Orthomyxoviridae, viruses, Homo, Hominidae, Primates, mammals, vertebrates, Chordata, animals
+ID  - oseltamivir, zanamivir
+CP  - USA
+LG  - English
+PT  - Journal article
+UR  - http://www.nejm.org/
+IS  - 0028-4793
+YR  - 2005
+UP  - 200510
 
 
 
