@@ -64,6 +64,9 @@ def description [plain] (request):
     image = SubElement(resp, 'Image')
     image.text = 'http://canarydatabase.org/images/bird-logo.gif'
     
+    developer = SubElement(resp, 'Developer')
+    developer.text = 'Daniel Chudnov'
+    
     contact = SubElement(resp, 'Contact')
     contact.text = config.error_email
 

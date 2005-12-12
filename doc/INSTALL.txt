@@ -40,6 +40,7 @@ All of the following are REQUIRED:
 - PyLucene-0.9.8+
 - Python Imaging Library-1.1.5+
 - matplotlib-0.83+ (many of its own dependencies, including Numeric/NumArray)
+- elementtree-1.2.6+
 
 
 The following are OPTIONAL:
