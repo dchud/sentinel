@@ -61,7 +61,10 @@ def _q_lookup (request, name=''):
             mime_type='text/css', cache_time=60)
     elif name == 'script.js':
         return StaticFile(config.static_html_dir + '/script.js',
-            mime_type='application/x-javascript', cache_time=60)
+            mime_type='text/javascript', cache_time=60)
+    elif name == 'mochikit.js':
+        return StaticFile(config.static_html_dir + '/MochiKit.js',
+            mime_type='text/javascript', cache_time=60)
     elif name == 'robots.txt':
         if config.enable_robots_txt:
             return robots()
