@@ -251,7 +251,7 @@ td#scan_column {
     font-family: Verdana, Geneva, Arial, sans-serif;
     font-size: 10pt;
     line-height: 1.4em;
-    color: 415578;
+    color: #415578;
     margin-top: .3em;
     text-align: left;
     margin-left: 1em;
@@ -295,7 +295,7 @@ td#scan_column {
     border-bottom: none;
     border-left: none;
     border-right: none;
-    border-color: none;
+    border-color: #ffffff; 
     border-style: none;         
     /* dotted dashed solid double groove ridge inset outset  */
     border-width: 0pt;          
