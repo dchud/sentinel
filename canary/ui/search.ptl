@@ -45,6 +45,9 @@ def search [html] (request):
     source_catalog = context.get_source_catalog()
     complete_term_mapping = source_catalog.get_complete_mapping()
     
+    query = form['q']
+    ad_link = '/opensearch/?q=%s' % query
+    
     def render [html] ():
         header("Search the database")
         """
@@ -57,13 +60,13 @@ def search [html] (request):
         or form.has_errors():
         return render()
     
-    header("Search results", show_javascript=True)
+    header("Search results", show_javascript=True,
+        autodiscovery_links=[ad_link])
     
     try:
         search_index = SearchIndex(context)
-        raw_query = utils.fix_double_quotes(form['q'])
-        hits, searcher = search_index.search(raw_query, 
-            require_visible=True)
+        raw_query = utils.fix_double_quotes(query)
+        hits, searcher = search_index.search(raw_query, require_visible=True)
         
         result_set = []
         for i, doc in hits:
