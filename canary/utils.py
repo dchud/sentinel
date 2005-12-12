@@ -45,7 +45,37 @@ class DTable:
         except:
             new_uid = -1
         return new_uid
-        
+    
+
+    def load (self, context):
+        cursor = context.get_cursor()
+        if self.id:
+            cursor.execute("""SELECT * FROM """ + self.TABLE_NAME +
+                """
+                WHERE uid LIKE %s
+                """, (self.uid))
+            fields = [d[0] for d in cursor.description]
+            desc = dtuple.TupleDescriptor([[f] for f in fields])
+            row = cursor.fetchone()
+            if row:
+                row = dtuple.DatabaseTuple(desc, row)
+                for field in fields:
+                    self.set(field, row[field])
+            else:
+                self.logger.debug('No %s "%s"', self.TABLE_NAME, self.uid)
+                raise 'InvalidId'
+                
+
+    def delete (self, context):
+        cursor = context.get_cursor()
+        try:
+            if self.uid >= 0:
+                cursor.execute("""DELETE FROM """ + self.TABLE_NAME +
+                    """
+                    WHERE uid = %s
+                    """, self.uid)
+        except Exception, e:
+            self.logger.error(e)
 
 
 def read_file (file):
@@ -86,7 +116,13 @@ def is_valid_password (passwd):
     else:
         return True
 
-
+def is_valid_user_id (context, id):
+    if not id:
+        return False
+    if ' ' in id:
+        return False
+    return True
+    
 def send_email (from_addr, to_addr, subject='', body='', server='localhost'):
     import smtplib
     if not subject == '':
@@ -154,7 +190,7 @@ def make_sparkline (context, d, context_years=()):
     image_name = '%s.png' % time.time()
     image_data_encoded = StringIO()
     im.save(image_data_encoded, 'png')
-    # NOTE: Add to cache, but only for 30 seconds (names are time-based, 
+    # NOTE: Add to cache, but only for 600 seconds (names are time-based, 
     # so we really only need a few milliseconds, but just to be safe).
     # Theoretically, these could be name-bound to the query url, then
     # we'd really be doing caching... instead we cache each time only
@@ -163,7 +199,7 @@ def make_sparkline (context, d, context_years=()):
     # 
     # Also, verify the cache set was successful.
     cache_result = context.cache_set('image:%s' % image_name, 
-        image_data_encoded.getvalue(), 30)
+        image_data_encoded.getvalue(), time=600)
     # If cache set failed, save to file
     if not cache_result:
         im.save('%s/%s' % (context.config.temp_image_dir, image_name))
@@ -215,7 +251,7 @@ def make_sideways_e (context, studies):
     image_name = '%s-e.png' % time.time()
     image_data_encoded = StringIO()
     im.save(image_data_encoded, 'png') 
-    # NOTE: Add to cache, but only for 30 seconds (names are time-based, 
+    # NOTE: Add to cache, but only for 600 seconds (names are time-based, 
     # so we really only need a few milliseconds, but just to be safe).
     # Theoretically, these could be name-bound to the query url, then
     # we'd really be doing caching... instead we cache each time only
@@ -224,7 +260,7 @@ def make_sideways_e (context, studies):
     # 
     # Also, verify the cache set was successful.
     cache_result = context.cache_set('image:%s' % image_name, 
-        image_data_encoded.getvalue(), 30)
+        image_data_encoded.getvalue(), time=600)
     # If cache set failed, save to file
     if not cache_result:
         im.save('%s/%s' % (context.config.temp_image_dir, image_name))
