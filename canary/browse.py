@@ -89,7 +89,7 @@ def records_by_journal (context, issn, term_map={}):
     return journal_title, queued_records
 
 
-def records_by_journal_index (context,term_map={}):
+def records_by_journal_index (context, term_map={}):
     cursor = context.get_cursor()
     results = []
     issn_terms = term_map['issn']
