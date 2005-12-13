@@ -41,16 +41,16 @@ def _q_index [plain] (request):
 def description [plain] (request):
     context = get_publisher().context
     config = context.config
-
+    
+    request.response.set_content_type('application/opensearch+xml')
+    
     resp = Element('OpenSearchDescription')
-    resp.set('xmlns', 'http://a9.com/-/spec/opensearchdescription/1.0/')
+    resp.set('xmlns', 'http://a9.com/-/spec/opensearch/1.1/')
 
     url = SubElement(resp, 'Url')
-    url.text = config.site_base_url + \
-        '/opensearch/?q={searchTerms}&amp;w={count}&amp;o={startIndex}'
-
-    format = SubElement(resp, 'Format')
-    format.text = 'http://a9.com/-/spec/opensearchrss/1.0/'
+    url.set('type', 'application/rss+xml')
+    url.set('template', config.site_base_url + \
+        '/opensearch/?q={searchTerms}&amp;w={count}&amp;o={startIndex}')
 
     short_name = SubElement(resp, 'ShortName')
     short_name.text = 'Canary Database'
@@ -80,7 +80,7 @@ def opensearch [plain] (request, params):
     complete_term_mapping = source_catalog.get_complete_mapping()
     
     resp = Element('rss')
-    resp.set('xmlns:openSearch', 'http://a9.com/-/spec/opensearchrss/1.0/')
+    resp.set('xmlns:openSearch', 'http://a9.com/-/spec/opensearch/1.1/')
     
     channel = SubElement(resp, 'channel')
     
@@ -166,11 +166,11 @@ def opensearch [plain] (request, params):
         link = SubElement(item, 'link')
         link.text = '%s/record/%s' % (config.site_base_url, record.uid)
         source = mm.get('source', '')
-        abstract = mm.get('abstract', '')
+        author = mm.get('author', '')
         if source:
             item_description = SubElement(item, 'description')
-            if abstract:
-                item_description.text = 'Abstract: %s (%s)' % (abstract, source)
+            if author:
+                item_description.text = '%s.  %s' % (', '.join(author), source)
             else:
                 item_description.text = source
 
