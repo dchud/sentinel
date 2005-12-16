@@ -4,11 +4,11 @@ from unittest import TestCase
 from canary.context import Context
 from canary.search import SearchIndex, RecordSearcher, StudySearcher
 
+
 class SearchTests (TestCase):
 
-    def setUp (self):
-        self.context = Context()
-
+    context = Context()
+    
     def test_context (self):
         self.assertEquals(isinstance(self.context,Context), True)
         

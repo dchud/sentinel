@@ -16,29 +16,38 @@ from os import system
 from sys import argv
 from unittest import TestSuite, TextTestRunner, makeSuite
 
-from test import StatsTests, SearchTests, PubmedMedlineTests, \
-    OvidMedlineTests, OvidBiosisTests, TermTests
 
 # determine if we should all or just one 
-tests = [ 'stats', 'parsing', 'search', 'term' ]
+tests = ['stats', 'search', 'parser', 'term', 'user_functions']
 if len(argv) == 2: 
     tests = [argv[1]]
 
 # add appropriate tests 
 suite = TestSuite()
 if 'stats' in tests:
-    suite.addTest(makeSuite(StatsTests, 'test'))
+    from test.stats import StatsTests
+    suite.addTest(makeSuite(StatsTests))
 
 if 'search' in tests:
-    suite.addTest(makeSuite(SearchTests, 'test'))
+    from test.search import SearchTests
+    suite.addTest(makeSuite(SearchTests))
 
 if 'parser' in tests:
-    suite.addTest(makeSuite(PubmedMedlineTests, 'test'))
-    suite.addTest(makeSuite(OvidMedlineTests, 'test'))
-    suite.addTest(makeSuite(OvidBiosisTests, 'test'))
+    from test.parser import ParserTests, PubmedMedlineTests, OvidMedlineTests, \
+        OvidBiosisTests, OvidCabAbstractsTests
+    suite.addTest(makeSuite(PubmedMedlineTests))
+    suite.addTest(makeSuite(OvidMedlineTests))
+    suite.addTest(makeSuite(OvidBiosisTests))
+    suite.addTest(makeSuite(OvidCabAbstractsTests))
 
 if 'term' in tests:
-    suite.addTest(makeSuite(TermTests, 'test'))
+    from test.term import TermTests
+    suite.addTest(makeSuite(TermTests))
+
+if 'user_functions' in tests:
+    from test.user_functions import UserFunctionTests
+    suite.addTest(makeSuite(UserFunctionTests))
+
 
 # run 'em 
 runner = TextTestRunner(verbosity=2)

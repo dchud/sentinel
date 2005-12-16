@@ -8,21 +8,14 @@ from canary.search import RecordSearcher
 
 class StatsTests (TestCase):
 
-    def __init__ (self, name):
-
-        # call parent initializer
-        TestCase.__init__(self, name);
-
-        # establish context once
-        self.context = Context()
-
-        # get some records for statistics generation once
-        searcher = RecordSearcher(self.context)
-        self.records = searcher.search('environment')
-
+    context = Context()
+    
     def setUp (self):
         # each test gets a new collector
         self.collector = StatCollector(self.context)
+        # get some records for statistics generation once
+        searcher = RecordSearcher(self.context)
+        self.records = searcher.search('environment')
 
     def test_curators (self):
         handler = ArticleTypeHandler()

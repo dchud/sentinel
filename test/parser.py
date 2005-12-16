@@ -15,14 +15,15 @@ class ParserTests (TestCase):
     Hopefully this will change (or go away) as parsing is refactored.
     """
 
+    context = Context()
+
     def __init__ (self, name, source_name):
         TestCase.__init__(self, name)
-        context = Context()
-        source_catalog = context.get_source_catalog()
+        source_catalog = self.context.get_source_catalog()
         source = source_catalog.get_source_by_name(source_name)
         self.mapped_terms = source_catalog.get_mapped_terms(source.uid)
         self.parser = Parser(source)
-
+        
     def parse (self, file_name):
         return self.parser.parse(file_name, self.mapped_terms, False)
 
