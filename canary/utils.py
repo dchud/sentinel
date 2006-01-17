@@ -198,11 +198,11 @@ def make_sparkline (context, d, context_years=()):
     # immediately.
     # 
     # Also, verify the cache set was successful.
-    cache_result = context.cache_set('image:%s' % image_name, 
-        image_data_encoded.getvalue(), time=600)
-    # If cache set failed, save to file
-    if not cache_result:
-        im.save('%s/%s' % (context.config.temp_image_dir, image_name))
+    if config.use_cache:
+        cache_result = context.cache_set('image:%s' % image_name, 
+            image_data_encoded.getvalue(), time=600)
+    # Save to file, whether or not it gets cached (#173)
+    im.save('%s/%s' % (config.temp_image_dir, image_name))
     return image_name
 
 
@@ -212,6 +212,8 @@ def make_sideways_e (context, studies):
     showing the proportion of the records that have the 
     five standard record linkages.
     """
+    config = context.config
+    
     #border_color = '#324362'
     border_color = '#888888'
     fg_color = '#A6BFF2'
@@ -259,11 +261,11 @@ def make_sideways_e (context, studies):
     # immediately.
     # 
     # Also, verify the cache set was successful.
-    cache_result = context.cache_set('image:%s' % image_name, 
-        image_data_encoded.getvalue(), time=600)
-    # If cache set failed, save to file
-    if not cache_result:
-        im.save('%s/%s' % (context.config.temp_image_dir, image_name))
+    if config.use_cache:
+        cache_result = context.cache_set('image:%s' % image_name, 
+            image_data_encoded.getvalue(), time=600)
+    # Save to file, whether or not it gets cached (#173)
+    im.save('%s/%s' % (context.config.temp_image_dir, image_name))
     return image_name
 
 
