@@ -1,6 +1,5 @@
 // $Id$
 
-// FIXME: clean this up, ticket #168
 // Uncomment to remove debugging info
 createLoggingPane(true);
 
