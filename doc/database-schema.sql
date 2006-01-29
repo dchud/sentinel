@@ -1,8 +1,8 @@
 -- MySQL dump 10.9
 --
--- Host: localhost    Database: canary_prod
+-- Host: localhost    Database: canary_sim
 -- ------------------------------------------------------
--- Server version	4.1.8-Max
+-- Server version	4.1.12
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -10,7 +10,8 @@
 /*!40101 SET NAMES utf8 */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE="NO_AUTO_VALUE_ON_ZERO" */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
 -- Table structure for table `categories`
@@ -63,6 +64,20 @@ CREATE TABLE `category_groups` (
   `category_id` int(11) unsigned NOT NULL default '0',
   `name` char(50) NOT NULL default '',
   PRIMARY KEY  (`uid`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `duplicates`
+--
+
+DROP TABLE IF EXISTS `duplicates`;
+CREATE TABLE `duplicates` (
+  `uid` int(11) NOT NULL auto_increment,
+  `new_record_id` int(11) NOT NULL default '0',
+  `old_record_id` int(11) NOT NULL default '0',
+  `term_id` int(4) NOT NULL default '0',
+  PRIMARY KEY  (`uid`),
+  UNIQUE KEY `new_record_id` (`new_record_id`,`old_record_id`,`term_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -119,7 +134,8 @@ CREATE TABLE `exposures` (
   `concept_id` int(11) NOT NULL default '0',
   `concept_source_id` int(11) NOT NULL default '0',
   `term` text,
-  PRIMARY KEY  (`uid`)
+  PRIMARY KEY  (`uid`),
+  KEY `study_id` (`study_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -194,7 +210,9 @@ CREATE TABLE `locations` (
   `feature_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`uid`),
   KEY `study_id` (`study_id`),
-  KEY `feature_id` (`feature_id`)
+  KEY `feature_id` (`feature_id`),
+  KEY `feature_id_2` (`feature_id`),
+  KEY `feature_id_3` (`feature_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -232,7 +250,8 @@ CREATE TABLE `methodologies` (
   `comments` text,
   `date_modified` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_entered` datetime NOT NULL default '0000-00-00 00:00:00',
-  PRIMARY KEY  (`uid`)
+  PRIMARY KEY  (`uid`),
+  KEY `study_id` (`study_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -246,7 +265,8 @@ CREATE TABLE `outcomes` (
   `concept_id` int(11) NOT NULL default '0',
   `concept_source_id` int(11) NOT NULL default '0',
   `term` text,
-  PRIMARY KEY  (`uid`)
+  PRIMARY KEY  (`uid`),
+  KEY `study_id` (`study_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -260,6 +280,7 @@ CREATE TABLE `queued_batches` (
   `source_id` int(3) unsigned NOT NULL default '0',
   `num_records` int(5) NOT NULL default '0',
   `name` varchar(255) default NULL,
+  `notes` varchar(255) default NULL,
   `date_added` date NOT NULL default '0000-00-00',
   PRIMARY KEY  (`uid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -298,9 +319,42 @@ CREATE TABLE `queued_records` (
   `source` text,
   `unique_identifier` text,
   `duplicate_score` int(11) default '0',
+  `needs_paper` tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (`uid`),
-  KEY `queued_batch_uid` (`queued_batch_id`),
-  KEY `status` (`status`)
+  KEY `status` (`status`),
+  KEY `queued_batch_id` (`queued_batch_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `risk_factors`
+--
+
+DROP TABLE IF EXISTS `risk_factors`;
+CREATE TABLE `risk_factors` (
+  `uid` int(11) NOT NULL auto_increment,
+  `study_id` int(11) NOT NULL default '0',
+  `concept_id` int(11) NOT NULL default '0',
+  `concept_source_id` int(11) NOT NULL default '0',
+  `term` text,
+  PRIMARY KEY  (`uid`),
+  KEY `study_id` (`study_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `sessions`
+--
+
+DROP TABLE IF EXISTS `sessions`;
+CREATE TABLE `sessions` (
+  `session_id` varchar(20) NOT NULL default '',
+  `user_id` varchar(50) NOT NULL default '',
+  `remote_addr` text,
+  `creation_time` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `access_time` timestamp NOT NULL default '0000-00-00 00:00:00',
+  `messages` text,
+  `form_tokens` text,
+  PRIMARY KEY  (`session_id`),
+  KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -331,7 +385,8 @@ CREATE TABLE `species` (
   `concept_source_id` int(11) NOT NULL default '0',
   `term` text,
   `types` varchar(24) default NULL,
-  PRIMARY KEY  (`uid`)
+  PRIMARY KEY  (`uid`),
+  KEY `study_id` (`study_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -355,6 +410,7 @@ CREATE TABLE `studies` (
   `comments` text,
   `date_modified` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_entered` datetime NOT NULL default '0000-00-00 00:00:00',
+  `date_curated` datetime default NULL,
   PRIMARY KEY  (`uid`),
   UNIQUE KEY `record_id` (`record_id`),
   KEY `article_type` (`article_type`),
@@ -437,10 +493,76 @@ CREATE TABLE `umls_terms` (
   FULLTEXT KEY `term` (`term`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+--
+-- Table structure for table `user_records`
+--
+
+DROP TABLE IF EXISTS `user_records`;
+CREATE TABLE `user_records` (
+  `uid` int(11) unsigned NOT NULL auto_increment,
+  `user_id` int(11) unsigned NOT NULL default '0',
+  `record_id` int(11) unsigned NOT NULL default '0',
+  `notes` text,
+  `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`uid`),
+  KEY `user_id` (`user_id`),
+  KEY `record_id` (`record_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `user_set_records`
+--
+
+DROP TABLE IF EXISTS `user_set_records`;
+CREATE TABLE `user_set_records` (
+  `uid` int(11) unsigned NOT NULL auto_increment,
+  `user_set_id` int(11) unsigned NOT NULL default '0',
+  `record_id` int(11) unsigned default '0',
+  PRIMARY KEY  (`uid`),
+  KEY `user_set_id` (`user_set_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `user_sets`
+--
+
+DROP TABLE IF EXISTS `user_sets`;
+CREATE TABLE `user_sets` (
+  `uid` int(11) unsigned NOT NULL auto_increment,
+  `user_id` int(11) unsigned NOT NULL default '0',
+  `name` varchar(255) default NULL,
+  `is_locked` tinyint(1) default '0',
+  PRIMARY KEY  (`uid`),
+  KEY `user_id` (`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
+  `uid` int(11) NOT NULL auto_increment,
+  `id` varchar(25) NOT NULL default '',
+  `is_active` tinyint(1) unsigned NOT NULL default '0',
+  `is_admin` tinyint(1) unsigned NOT NULL default '0',
+  `is_editor` tinyint(1) unsigned NOT NULL default '0',
+  `name` varchar(50) NOT NULL default '',
+  `passwd` varchar(50) NOT NULL default '',
+  `is_assistant` tinyint(1) unsigned NOT NULL default '0',
+  `email` varchar(50) NOT NULL default '',
+  `netid` varchar(25) default '',
+  `token` varchar(25) default '',
+  `wants_news` tinyint(1) unsigned default '0',
+  PRIMARY KEY  (`uid`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 

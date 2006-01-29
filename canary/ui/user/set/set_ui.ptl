@@ -1,0 +1,247 @@
+# $Id$
+
+_q_exports = [
+    '_q_index',
+    'lock',
+    'unlock',
+    'delete',
+    ]
+
+import logging
+import traceback
+
+from quixote import get_publisher, get_request
+from quixote.errors import TraversalError
+from quixote import form2
+
+from canary.qx_defs import MyForm
+from canary.ui.browse_ui import UserSetBrowseIndex
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found, add_message, has_messages, render_messages
+import canary.user
+from canary.user import UserSet
+
+
+def _q_index [html] (request):
+    context = get_publisher().context
+    user = request.session.user
+
+    record_ids = [ur.record_id for ur in user.records.values()]
+    record_dict = context.cache_get_multi([str('record:%s') % id for id in record_ids])
+    records = record_dict.values()
+    request.add_form_value('f', 'user')
+    browse_index = UserSetBrowseIndex(request)
+    browse_index.render_records('all my records', records, filter_by='user')
+    
+
+class SetActions:
+
+    _q_exports = ['_q_index',]
+
+    def __init__ (self, set_id):
+        self.set_id = set_id
+        self.logger = logging.getLogger(str(self.__class__))
+
+    def _q_index [html] (self, request):
+        context = get_publisher().context
+        user = request.session.user
+    
+        try:
+            set = [s for s in user.sets if s.uid == self.set_id][0]
+            user_recs = user.record_set_map.get(self.set_id, [])
+            record_dict = context.cache_get_multi([str('record:%s') % r.record_id for r in user_recs])
+            # Sort by year, uid by default
+            records = record_dict.values()
+            print 'Setting f to set-%s' % self.set_id
+            request.add_form_value('f', 'set-%s' % self.set_id)
+            browse_index = UserSetBrowseIndex(request)
+            browse_index.render_records('my set "%s"' % set.name, records,
+                filter_by='set-%s' % self.set_id)
+        except:
+            print traceback.print_exc()
+            return not_found('set')
+
+    def _q_lookup [html] (self, request, action):
+        try:
+            if action == 'lock':
+                return lock(self.set_id)
+            elif action == 'unlock':
+                return unlock(self.set_id)
+            elif action == 'delete':
+                return delete(self.set_id)
+            else:
+                raise TraversalError
+        except:
+            context = get_publisher().context
+            context.logger.error(traceback.print_exc())
+            return not_found('set')
+
+
+
+def lock [html] (set_id):
+    context = get_publisher().context
+    request = get_request()
+    user = request.session.user
+    
+    try:
+        set_id = int(set_id)
+        if not set_id in [s.uid for s in user.sets]:
+            raise 'Invalid set id'
+        set = UserSet(context, set_id)
+    except:
+        context.logger.error(str(traceback.print_exc()))
+        return not_found('set')
+        
+    form = MyForm(context)
+    form.add_submit('submit', 'Lock set "%s"' % set.name)
+
+    def render [html] ():
+        header('Lock set')
+        """
+        <h2>Lock set</h2>
+        <p>
+        Locking a set prevents any changes to the set: no additions, no 
+        removals, no deleting of the set.  This might be useful if you want 
+        to ensure ongoing access to a well-defined set of studies for your
+        research.
+        </p>
+        
+        <p>
+        You will be able to unlock a locked set again!
+        </p>
+        """
+        form.render()
+        footer()
+
+    if not form.is_submitted():
+        return render()
+    
+    try:
+        set.is_locked = int(True)
+        set.save(context)
+        form.logger.info(str('Locked user %s set %s' % (user.get_id(), set_id)))
+        add_message('Locked set %s' % set.name)
+    except:
+        form.logger.error(str('Unable to lock set %s: %s' % (set_id, traceback.print_exc())))
+        add_message('An error occurred.')
+
+    request.redirect(str('/user'))
+
+
+def unlock [html] (set_id):
+    context = get_publisher().context
+    request = get_request()
+    user = request.session.user
+    
+    try:
+        set_id = int(set_id)
+        if not set_id in [s.uid for s in user.sets]:
+            raise 'Invalid set id'
+        set = UserSet(context, set_id)
+    except:
+        context.logger.error(str(traceback.print_exc()))
+        return not_found('set')
+        
+    form = MyForm(context)
+    form.add_submit('submit', 'Unlock set "%s"' % set.name)
+
+    def render [html] ():
+        header('Unlock set')
+        """
+        <h2>Unlock set</h2>
+        <p>
+        If you unlock this set, you will be able to add and remove studies
+        from it, or delete the entire set.
+        </p>
+        
+        <p>
+        You will be able to lock it again.
+        </p>
+        """
+        form.render()
+        footer()
+
+    if not form.is_submitted():
+        return render()
+        
+    if form.has_errors():
+        return render()
+
+    try:
+        set.is_locked = False
+        set.save(context)
+        form.logger.info(str('Unlocked user %s set %s' % (user.get_id(), set_id)))
+        add_message('Unlocked set %s' % set.name)
+    except:
+        form.logger.error(str('Unable to unlock set %s: %s' % (set_id, traceback.print_exc())))
+        add_message('An error occurred.')
+
+    request.redirect(str('/user'))
+
+
+def delete [html] (set_id):
+    context = get_publisher().context
+    request = get_request()
+    user = request.session.user
+    
+    try:
+        set_id = int(set_id)
+        if not set_id in [s.uid for s in user.sets]:
+            raise 'Invalid set id'
+        set = UserSet(context, set_id)
+        if set.is_locked:
+            add_message('Cannot delete locked set.')
+            request.redirect(str('/user'))
+    except:
+        context.logger.error(str(traceback.print_exc()))
+        return not_found('set')
+        
+    form = MyForm(context)
+    form.add_submit('submit', 'Delete set "%s"' % set.name)
+
+    form.add(form2.CheckboxWidget, 'are_you_sure',
+        title='Are you sure you want to delete this set?',
+        value=False)
+
+    def render [html] ():
+        header('Delete set')
+        """
+        <h2>Delete set</h2>
+        <p>
+        If you delete this set, you will not be able to get the set back again - 
+        deleting can not be reversed.  The records in this set will remain in
+        your record list even without this set, and any other sets you have 
+        will be unaffected.
+        </p>
+        
+        <p>
+        You can <a href="/user/set/%s/lock">lock this set</a> to prevent
+        accidental changes to it or deletions.
+        </p>
+        
+        <p>
+        You must click "Are you sure?" to delete it!
+        </p>
+        """
+        form.render()
+        footer()
+        
+    if not form.is_submitted():
+        return render()
+        
+    if form.has_errors():
+        return render()
+    
+    are_you_sure = form['are_you_sure']
+    if are_you_sure:
+        try:
+            set.delete(context)
+            add_message('Deleted set %s' % set_id)
+            form.logger.info(str('Deleted set %s' % set_id))
+        except:
+            form.logger.error(traceback.print_exc())
+            form.logger.info('Unable to delete set %s' % set_id)
+            add_message('Unable to delete set')
+            
+    request.redirect(str('/user'))
+

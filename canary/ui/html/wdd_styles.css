@@ -543,7 +543,7 @@ dl {
 form.quixote {
     padding: 0;
     margin-bottom: 0;
-	font-size: 11px;
+    font-size: 11px;
 }
 
 form.quixote div.hint {
@@ -556,9 +556,10 @@ form.quixote div.title {
 
 input, textarea, select {
     background: #fff;
-    padding: 2px;
+    margin: 3px;
+    padding: 3px;
     border: 1px solid #777;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.02em;
 }
 
 input[type=submit], input[type=button] {
@@ -643,7 +644,7 @@ div.label {
 }
 
 div.hideable div.label {
-    /* foo */
+    text-decoration: none;
 }
 
 #hideable-link {
@@ -764,3 +765,33 @@ div.recordsets {
 span.setlist {
     font-size: small;
 }
+
+.waitimage {
+    padding-left: .2em;
+}
+
+#similar_box {
+    border: 1px solid #AAAAAA;
+    padding: .5em;
+    margin-bottom: 1em;
+}
+
+.similar_row {
+    margin-top: .6em;
+    margin-bottom: .2em;
+    font-size: 11px;
+    background-color: #fafafa;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+/* Wordpress entry styles */
+.post {
+    border: 1px solid #324362;
+    margin: 1em;
+    padding: 1em;
+    text-align: justify;
+}
+

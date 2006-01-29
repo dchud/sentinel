@@ -8,8 +8,9 @@ import logging
 import traceback
 import urllib
 
-from quixote import get_publisher
 from quixote import form2
+from quixote import get_publisher
+from quixote.errors import TraversalError
 
 import canary.context
 from canary.loader import QueuedRecord
@@ -35,6 +36,7 @@ class SearchForm (MyForm):
             title='Search:',
             size=60,
             required=True)
+        self.add_hidden('f', None)
         self.add_submit('go', 'go')
 
 
@@ -68,13 +70,41 @@ def search [html] (request):
         raw_query = utils.fix_double_quotes(query)
         hits, searcher = search_index.search(raw_query, require_visible=True)
         
+        filter_str = ''
+        try:
+            if form['f']:
+                f = form['f']
+                filter_str = 'f=%s&' % f
+                user = request.session.user
+                if f == 'user':
+                    def result_filter (user, record):
+                        if record.uid in user.records.keys():
+                            return True
+                        return False
+                elif f.startswith(str('set-')):
+                    set_id = int(f[4:])
+                    def result_filter (user, record):
+                        if record.uid in [r.record_id for r in user.record_set_map.get(set_id, [])]:
+                            return True
+                        return False
+                else:
+                    def result_filter (user, record):
+                        return True
+        except:
+            context.logger.error('filtering: %s', traceback.print_exc())
+            user = None
+        
         result_set = []
         for i, doc in hits:
             uid = doc.get(str('uid'))
             record = QueuedRecord(context, uid)
             if record.status == record.STATUS_CURATED:
                 score = hits.score(i)
+                if form['f']:
+                    if not result_filter(user, record):
+                        continue
                 result_set.append((record, score))
+                    
         searcher.close()
         
         year_count = {}
@@ -112,87 +142,92 @@ def search [html] (request):
         </p>
         """ % ('%', len(result_set), '%', sparkline_image_file, e_image_file)
         
-        if len(result_set) > 0:
-            years = year_count.keys()
-            years.sort()
-            """
-            <map name='sparkmap'>
-            """
-            for year in years:
-                count = year_count[year]
-                if count > 0:
-                    year_index = years.index(year)
-                    # Don't allow repeated clicks to grow the query forever
-                    try:
-                        if raw_query.index(str('%s[date]' % year)):
-                            #query_str = urllib.quote_plus(raw_query)
-                            query_str = raw_query
-                    except ValueError:
-                        #query_str = urllib.quote_plus(str('%s%s[date]' % \
-                        #    (raw_query, year)))
-                        query_str = '%s %s[date]' % (raw_query, year)
-                    """
-                <area href='/search?q=%s' 
-                    shape='rect'
-                    coords='%s %s %s %s'
-                    alt='%s'
-                    title='%s' />
-                    """ % (query_str,
-                        year_index*3, 0, (year_index*3)+2, 120,
-                        'limit to year %s' % year,
-                        'limit to year %s' % year)
-            """
-            </map>
-            
-            <map name='emap'>
-            """
-            bar_width = 4
-            for att in utils.linkages:
-                token = att.replace(str('_'), str('-'))
-                hint_text = data_points[utils.linkages.index(att)][1].lower()
+        years = year_count.keys()
+        years.sort()
+        """
+        <map name='sparkmap'>
+        """
+        for year in years:
+            count = year_count[year]
+            if count > 0:
+                year_index = years.index(year)
+                # Don't allow repeated clicks to grow the query forever
                 try:
-                    if raw_query.index(str('%s' % token)):
+                    if raw_query.index(str('%s[date]' % year)):
+                        #query_str = urllib.quote_plus(raw_query)
                         query_str = raw_query
                 except ValueError:
-                    query_str = '%s has-%s:1' % (raw_query, token)
-                    
-                xoffset = 2 + (utils.linkages.index(att)*9)
+                    #query_str = urllib.quote_plus(str('%s%s[date]' % \
+                    #    (raw_query, year)))
+                    query_str = '%s %s[date]' % (raw_query, year)
+                query_str = filter_str + 'q=' + query_str
                 """
-                <area href='/search?q=%s'
-                    shape='rect'
-                    coords='%s %s %s %s'
-                    alt='%s'
-                    title='%s' />
+            <area href='/search?%s' 
+                shape='rect'
+                coords='%s %s %s %s'
+                alt='%s'
+                title='%s' />
                 """ % (query_str,
-                    xoffset, 0, xoffset+bar_width, 20,
-                    'limit to studies with %s' % hint_text, 
-                    'limit to studies with %s' % hint_text)
-            
+                    year_index*3, 0, (year_index*3)+2, 120,
+                    'limit to year %s' % year,
+                    'limit to year %s' % year)
+        """
+        </map>
+        
+        <map name='emap'>
+        """
+        bar_width = 4
+        for att in utils.linkages:
+            token = att.replace(str('_'), str('-'))
+            hint_text = data_points[utils.linkages.index(att)][1].lower()
+            try:
+                if raw_query.index(str('%s' % token)):
+                    query_str = raw_query
+            except ValueError:
+                query_str = '%s has-%s:1' % (raw_query, token)
+            query_str = filter_str + 'q=' + query_str
+            xoffset = 2 + (utils.linkages.index(att)*9)
             """
-            </map>
-            
-            
-            <div id="search-result">
-                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-            """
+            <area href='/search?%s'
+                shape='rect'
+                coords='%s %s %s %s'
+                alt='%s'
+                title='%s' />
+            """ % (query_str,
+                xoffset, 0, xoffset+bar_width, 20,
+                'limit to studies with %s' % hint_text, 
+                'limit to studies with %s' % hint_text)
+        
+        """
+        </map>
+        
+        
+        <div id="search-result">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        """
+        if len(result_set) >= 1:
             for rec, score in result_set:
                 render_record_row(rec, score)
-            """
-                </table>
-            </div>
-                
-                </td>
-                
-                <td width='30%' valign='top'>
-            """
-            render_on_this_page([(s, r) for r, s in result_set], raw_query)
-            """
-                </td>
-            </tr>
-            </table>
-            """
         else:
-            '<p>Nothing found.</p>'
+            """
+                <td valign="top">
+                    <p>Nothing found.</p>
+                </td>
+            """
+        """
+            </table>
+        </div>
+            
+            </td>
+            
+            <td width='30%' valign='top'>
+        """
+        render_on_this_page([(s, r) for r, s in result_set], raw_query)
+        """
+            </td>
+        </tr>
+        </table>
+        """
     except Exception, e:
         form.logger.error('Search error: %s', e)
         form.logger.error(traceback.format_exc())

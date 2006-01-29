@@ -6,6 +6,10 @@ import Image, ImageDraw
 import os
 import re
 import time
+import urllib
+
+import feedparser
+
 
 linkages = ['relationships',
     'interspecies',
@@ -284,3 +288,7 @@ def clean_temp_image_dir (context):
             if now - file_time >= interval:
                 os.remove('%s/%s' % (config.temp_image_dir, file))
 
+
+def parse_feed (url):
+    d = feedparser.parse(str(url))
+    

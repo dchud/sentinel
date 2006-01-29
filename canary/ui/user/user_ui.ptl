@@ -1,7 +1,17 @@
 # $Id$
 
+from quixote import form2
+from quixote import get_publisher
+
+import simplejson as json
+
+from canary.qx_defs import MyForm
 from canary.ui.pageframe import header, footer
-from canary.ui.pages import not_found
+from canary.ui.pages import not_found, add_message, has_messages, render_messages
+
+from canary.user import get_user_by_id, get_user_by_yale_netid
+from canary.user import User, UserRecord, UserSet
+from canary import utils
 
 
 _q_exports = [
@@ -10,6 +20,9 @@ _q_exports = [
 
 
 def _q_index [html] (request):
+    context = get_publisher().context
+    config = context.config
+    
     session = request.session
     if session.user == None:
         header('Not logged in.')
@@ -24,33 +37,417 @@ def _q_index [html] (request):
         """
         footer()
     else:
-        header('User %s' % session.user.id)
+        user = session.user
+        header('User %s' % user.id, show_javascript=True)
         """
         <h2>User %s</h2>
-
+        """% (user.id)
+        
+        if has_messages():
+            render_messages()
+            
+        """
         <p>
         From here you can:
         </p>
-        <ul>
-            <li><a href='/logout'>log out</a></li>
-        """ % (session.user.id)
-        if session.user.is_editor:
-            """
-            <li>view <a href='/edit/'>curators' tasks</a></li>
-            """
-        if session.user.is_admin:
-            """
-            <li>view <a href='/admin/'>administrators' tasks</a></li>
-            """
-        if session.user.is_assistant:
-            """
-            <li>view <a href='/assistant/'>assistants' tasks</a></li>
-            """
-
+        
+        <table cellspacing='5' class='gentable' width='90%'>
+            <tbody>
+                <tr>
+                    <th>My Account</th>
+                    <td><a href='/logout'>Log out</a></td>
+                    <td><a href='/user/prefs'>Preferences</a></td>
+                </tr>
         """
-        </ul>
+        
+        if user.is_editor \
+            or user.is_admin \
+            or user.is_assistant:
+            if user.is_editor:
+                """
+                <tr>
+                    <th>Tasks</th>
+                """
+                if user.is_editor:
+                    """
+                    <td><a href='/edit/'>Curate</a></td>
+                    """
+                if user.is_admin:
+                    """
+                    <td><a href='/admin/'>Admin</a></td>
+                    """
+                if user.is_assistant:
+                    """
+                    <td><a href='/assistant/'>Needed paper list</a></td>
+                    """
+                """
+                </tr>
+                """
+        """
+                <tr>
+                    <th>My Records</th>
+                    <td>
+                        <a href='/user/set/'>Browse all</a>
+                        (%s)
+                    </td>
+                    <td colspan='2'>
+                        <form action='/search'>
+                            Search just my records:
+                            <input type='text' name='q' size='20' />
+                            <input type='hidden' name='f' value='user' />
+                        </form>
+                    </td>
+                </tr>
+        """ % len(user.records)
+        
+        """
+                <tr>
+                    <th>My Sets</th>
+                    <td colspan='3'>
+                        <table id='usersets' class='gentable'>
+        """
+        if user.sets:
+            for set in user.sets:
+                """
+                            <tr class='userset'>
+                                <td id='userset-%s'>
+                                    <a href='/user/set/%s'>%s</a>
+                                </td>
+                """ % (set.uid, set.uid, set.name)
+                if len(set.records) == 1:
+                    item_str = 'record'
+                else:
+                    item_str = 'records'
+                """
+                                <td>%s %s</td>
+                                <td>
+                """ % (len(set.records), item_str)
+                if set.is_locked:
+                    """
+                                    [<a href='/user/set/%s/unlock'>unlock</a>]
+                    """ % set.uid
+                else:
+                    """
+                                    [<a href='/user/set/%s/lock'>lock</a>]
+                                    [<a href='/user/set/%s/delete'>delete</a>]
+                    """ % (set.uid, set.uid)
+                """
+                                </td>
+                            </tr>
+                """
+        """
+                            <tr id='addnewset'>
+                                <td id='createuserset' colspan='2'>
+                                    Add new set: 
+                                    <input id='set_name_input' name='set_name' size='30' 
+                                        onkeypress='javascript:addUserSet(event);'/>
+                                </td>
+                                <td id='waitimage'>
+                                </td>
+                            </tr>
+                        </table>
+                        
+                    </td>
+                </tr>
+            </tbody>
+        </table>
         """
         footer()
 
 
 
+def prefs [html] (request):
+    context = get_publisher().context
+    config = context.config
+    
+    form = MyForm(context)
+    form.action_url = config.site_base_url + form.action_url
+    form.add(form2.StringWidget, 'user_email', 
+        title='Your email',
+        hint='See note above!',
+        size=30, 
+        required=True)
+    form.add(form2.StringWidget, 'user_email_verify', 
+        title='Your email (again)',
+        size=30, 
+        required=True)
+    form.add(form2.StringWidget, 'user_name', 
+        title='Your name',
+        size=30, 
+        required=False)
+    form.add(form2.CheckboxWidget, 'user_news',
+        title='Email me site news')
+    form.add(form2.PasswordWidget, 'user_pass',
+        title='Set user password',
+        hint='Leave blank to keep current password',
+        required=False)
+    form.add_submit('update', 'update')
+    
+    def render [html] ():
+        header('Update your preferences')
+        """
+        <h2>Update your preferences:</h2>
+        
+        <p>
+        You can update your email address, change your name, or
+        enable/disable receipt of email with news of site updates.
+        </p>
+        """
+        form.render()
+        footer()
+      
+    
+    user = request.session.user
+    if not form.is_submitted():
+        form.get_widget('user_email').set_value(user.email)
+        form.get_widget('user_email_verify').set_value(user.email)
+        form.get_widget('user_name').set_value(user.name)
+        form.get_widget('user_news').set_value(user.wants_news)
+        return render()
+
+    user_email = form['user_email']
+    user_email_verify = form['user_email_verify']
+    
+    if not user_email or not utils.is_valid_email(user_email):
+        form.set_error('user_email', 'Please enter a valid email address.')
+
+    if user_email_verify != user_email:
+        form.set_error('user_email_verify', 'Email addresses must match')
+    
+    if form['user_pass']:
+        if not utils.is_valid_password(form['user_pass']):
+            form.set_error('user_pass', 'Min. 4 characters')
+    
+    if form.has_errors():
+        return render()
+
+
+    if not user.email == user_email:
+        user.email = user_email
+    
+    if form['user_name']:
+        user.name = form['user_name']
+    else:
+        user.name = str('')
+
+    if form['user_news']:
+        user.wants_news = int(True)
+    else:
+        user.wants_news = int(False)
+    
+    if form['user_pass']:
+        user.set_password(form['user_pass'])
+        
+    user.save(context)
+    form.logger.info(str('Updated user %s' % user.email))
+
+    header('Updated Preferences')
+    """
+    <h3>Updated Preferences</h3>
+    <p>
+    Your account has been updated.
+    </p>
+    """
+    footer()
+
+
+
+
+
+def add_record [plain] (request):
+    context = get_publisher().context
+    config = context.config
+    user = request.session.user
+    
+    request.response.set_content_type('text/plain')
+    form = MyForm(context)
+    form.action_url = config.site_base_url + form.action_url
+    form.add(form2.IntWidget, 'record_id', 
+        title='Record Id',
+        size=10, 
+        required=True)
+    
+    try:
+        record_id = form.get_widget('record_id').parse(request)
+        if not record_id:
+            json.dumps({'status': '406', 'reason': 'Invalid record'})
+        elif record_id in user.records.keys():
+            json.dumps({'status': '406', 
+                'reason': 'Record already saved'})
+        else:
+            user_record = UserRecord(user_id=user.uid, record_id=record_id)
+            user_record.save(context)
+            json.dumps({'status': '200', 'uid': user_record.uid})
+    except:
+        import traceback
+        context.logger.debug(traceback.print_exc())
+        json.dumps({'status': '406', 'reason': 'Form error'})
+
+
+def remove_record [plain] (request):
+    context = get_publisher().context
+    config = context.config
+    user = request.session.user
+    
+    request.response.set_content_type('text/plain')
+    form = MyForm(context)
+    form.action_url = config.site_base_url + form.action_url
+    form.add(form2.IntWidget, 'record_id', 
+        title='Record Id',
+        size=10, 
+        required=True)
+    
+    try:
+        record_id = form.get_widget('record_id').parse(request)
+        if not record_id:
+            json.dumps({'status': '406', 'reason': 'Invalid record'})
+        elif not record_id in user.records.keys():
+            json.dumps({'status': '406', 
+                'reason': 'Record not saved'})
+        else:
+            user_record = user.records[record_id]
+            user_record.delete(context)
+            json.dumps({'status': '200'})
+    except:
+        import traceback
+        context.logger.debug(traceback.print_exc())
+        json.dumps({'status': '406', 'reason': 'Form error'})
+
+
+def add_record_set [plain] (request):
+    context = get_publisher().context
+    config = context.config
+    user = request.session.user
+    
+    request.response.set_content_type('text/plain')
+    form = MyForm(context)
+    form.action_url = config.site_base_url + form.action_url
+    form.add(form2.IntWidget, 'record_id', 
+        title='Record Id',
+        size=10, 
+        required=True)
+    form.add(form2.IntWidget, 'set_id', 
+        title='Set Id',
+        size=10,
+        required=True)
+    
+    try:
+        record_id = form.get_widget('record_id').parse(request)
+        set_id = form.get_widget('set_id').parse(request)
+        if not record_id:
+            json.dumps({'status': '406', 'reason': 'Invalid record'})
+        elif not record_id in user.records.keys():
+            json.dumps({'status': '406', 
+                'reason': 'Record not saved'})
+        elif not set_id \
+            or not set_id in [s.uid for s in user.sets]:
+            json.dumps({'status': '406', 'reason': 'Invalid set'})
+        else:
+            set = [s for s in user.sets if s.uid == set_id][0]
+            record = user.records[record_id]
+            set.add(context, record)
+            json.dumps({'status': '200'})
+    except:
+        import traceback
+        context.logger.debug(traceback.print_exc())
+        json.dumps({'status': '406', 'reason': 'Form error'})
+
+
+def remove_record_set [plain] (request):
+    context = get_publisher().context
+    config = context.config
+    user = request.session.user
+    
+    request.response.set_content_type('text/plain')
+    form = MyForm(context)
+    form.action_url = config.site_base_url + form.action_url
+    form.add(form2.IntWidget, 'record_id', 
+        title='Record Id',
+        size=10, 
+        required=True)
+    form.add(form2.IntWidget, 'set_id', 
+        title='Set Id',
+        size=10,
+        required=True)
+
+    
+    try:
+        record_id = form.get_widget('record_id').parse(request)
+        set_id = form.get_widget('set_id').parse(request)
+        if not record_id:
+            json.dumps({'status': '406', 'reason': 'Invalid record'})
+        elif not record_id in user.records.keys():
+            json.dumps({'status': '406', 
+                'reason': 'Record not saved'})
+        elif not set_id \
+            or not set_id in [s.uid for s in user.sets]:
+            json.dumps({'status': '406', 'reason': 'Invalid set'})
+        else:
+            set = [s for s in user.sets if s.uid == set_id][0]
+            record = user.records[record_id]
+            set.remove(context, record)
+            json.dumps({'status': '200'})
+    except:
+        import traceback
+        context.logger.debug(traceback.print_exc())
+        json.dumps({'status': '406', 'reason': 'Form error'})
+
+    
+
+def create_set [plain] (request):
+    context = get_publisher().context
+    config = context.config
+    user = request.session.user
+    
+    request.response.set_content_type('text/plain')
+    form = MyForm(context)
+    form.action_url = config.site_base_url + form.action_url
+    form.add(form2.StringWidget, 'set_name', 
+        title='Set name',
+        size=30, 
+        required=True)
+    
+    try:
+        set_name = form.get_widget('set_name').parse(request)
+        if not set_name:
+            json.dumps({'status': '406', 'reason': 'Invalid name'})
+        elif set_name in [s.name for s in user.sets]:
+            json.dumps({'status': '406', 
+                'reason': 'Set "%s" exists already!' % set_name})
+        else:
+            set = UserSet(user_id=user.uid, name=set_name)
+            set.save(context)
+            json.dumps({'status': '200', 'uid': set.uid})
+    except:
+        import traceback
+        context.logger.debug(traceback.print_exc())
+        json.dumps({'status': '406', 'reason': 'Form error'})
+
+
+def delete_set [plain] (request):
+    context = get_publisher().context
+    config = context.config
+    user = request.session.user
+    
+    request.response.set_content_type('text/plain')
+    form = MyForm(context)
+    form.action_url = config.site_base_url + form.action_url
+    form.add(form2.IntWidget, 'set_id', 
+        title='Set identifier',
+        size=10, 
+        required=True)
+        
+    try:
+        set_id = int(form.get_widget('set_id').parse(request))
+        if not set_id \
+            or set_id not in [s.uid for s in user.sets]:
+            json.dumps({'status': '406', 'reason': 'Invalid set id'})
+        else:
+            set = UserSet(context, set_id)
+            set.delete(context)
+            json.dumps({'status': '200', 'msg': 'Set "%s" deleted' % set.name})
+    except:
+        import traceback
+        context.logger.debug(traceback.print_exc())
+        json.dumps({'status': '406', 'reason': 'Form error'})
+    

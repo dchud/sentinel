@@ -2,6 +2,7 @@
 
 from cStringIO import StringIO
 import logging
+import random
 import string
 from time import time
 import urllib
@@ -16,7 +17,7 @@ from quixote.util import StaticFile
 from canary.qx_defs import NotLoggedInError, MyForm
 from canary.ui.pageframe import header, footer
 from canary import utils
-from canary.user import get_user_by_id, get_user_by_yale_netid
+from canary.user import User, get_user_by_id, get_user_by_email, get_user_by_yale_netid
 
 
 def _q_index [html] (request):
@@ -113,22 +114,6 @@ def _q_index [html] (request):
     </td>
     </tr>
 </table>
-
-
-    <!--
-    <h2>Note to Testers!</h2>
-
-    <p>
-    Please complete <a href='http://curtis.med.yale.edu/~dlc33/website_tester_feedback_form.doc'>this feedback form</a> (MS Word) and email the form to
-    <b>sentinelstudies@yale.edu</b>, or fax to (203) 785-7391.
-    Feel free to also attach additional comments where appropriate.
-    </p>
-
-    <p>
-    Thank you!
-    </p>
-    -->
-
     """
     footer()
 
@@ -178,8 +163,8 @@ def _q_exception_handler [html] (request=None, exc):
         """
         <form method='post' action='/login'>
         
-        <b>Your user id *</b>: <br />
-        <input type='text' name='user_id' size='10'> <br />
+        <b>Your email</b>: <br />
+        <input type='text' name='user_email' size='20'> <br />
         
         <b>Password *</b>: <br />
         <input type='password' name='user_pass' size='10'> <br />
@@ -229,9 +214,9 @@ def login_general [html] (request):
     form = MyForm(context)
     form.method = 'post'
     form.action_url = '/login'
-    form.add(form2.StringWidget, 'user_id', 
-        title='Your user id',
-        size=10, 
+    form.add(form2.StringWidget, 'user_email', 
+        title='Your email address',
+        size=20, 
         required=True)
     form.add(form2.PasswordWidget, 'user_pass', 
         title='Password',
@@ -240,36 +225,45 @@ def login_general [html] (request):
     form.add_hidden('go', None)
     form.add_submit('login', 'login')
 
+    form_reset_pass = MyForm(context)
+    form_reset_pass.method = 'post'
+    form_reset_pass.action_url = '/resetpass'
+    form_reset_pass.add(form2.StringWidget, 'user_email',
+        title='Your email address',
+        size=20,
+        required=True)
+    form_reset_pass.add_submit('send', 'send')
 
     def render [html] ():
         header('Log in')
         """
         <h3>Log in:</h3>
-        
-        <p>
-        <b>Please note</b> that while the Canary Database is in private beta
-        mode, <b>all access must be authorized</b>.  If you have been invited to be
-        a beta tester and require access, or are having trouble logging in
-        with the access information already provided to you, please 
-        <a href='/about/contact_us'>contact us</a> for assistance.
-        </p>
         """
         form.render()
+        """
+        <h3>Forgot your password?</h3>
+        
+        <p>
+        Enter your email address below.  If your address matches your active
+        account address, we will reset your password and send you a new one.
+        </p>
+        """
+        form_reset_pass.render()
         footer()
 
     if not form.is_submitted():
         return render()
 
-    user_id = form['user_id']
+    user_email = form['user_email']
     user_pass = form['user_pass']
-    user = get_user_by_id(context, user_id)
+    user = get_user_by_email(context, user_email)
     if user == None:
-        form.logger.error('Invalid id %s', user_id)
-        form.set_error('user_id', 'Invalid user id or password.')
+        form.logger.error('Invalid user email %s', user_email)
+        form.set_error('user_email', 'Invalid user email or password.')
     else:
         if not user.valid_password(user_pass):
             form.logger.error('Invalid password')
-            form.set_error('user_id', 'Invalid user id or password')
+            form.set_error('user_email', 'Invalid user email or password')
 
     if form.has_errors():
         return render()
@@ -419,8 +413,8 @@ class TempImage:
                 x = StaticFile(context.config.temp_image_dir +
                     '/%s' % image_id, mime_type='image/png')
                 return x
-        except OSError, e:
-            self.logger.error(e)
+        except:
+            self.logger.error(traceback.print_exc())
             return not_found('image')
 
 
@@ -437,6 +431,16 @@ def robots [plain] ():
             """Disallow: %s\n""" % path  
         # A little extra whitespace, please  
         """\n"""  
+
+
+def news [html] (request):
+    header('Project News')
+    """
+    <h2>Canary Database Project News</h2>
+    """
+    htmltext(utils.load_remote('http://sildin.med.yale.edu/sildincanary'))
+    #print page.read()
+    footer()
 
 
 def add_message (msg):
@@ -478,26 +482,290 @@ def render_messages [html] ():
 # FIXME: hide this somehow or at least discourage abuse better?
 # NOTE: run this regularly from a cronjob with wget or equiv
 def reaper [plain] (request):
-
     context = get_publisher().context
-    
     utils.clean_temp_image_dir(context)
+
+
+def register [html] (request):
+    context = get_publisher().context
+    config = context.config
     
-    # FIXME: Cleaner way of handling realtime config data?
-    ##    db_root = context.get_root()
-    ##    # 3600 is one hour in seconds
-    ##    if db_root.has_key('last_reaper_time') \
-    ##        and time() - db_root['last_reaper_time'] < 3600:
-    ##        return 'not ok: run too recently'
-    ##
-    ##    reap_counter = 0
-    ##    session_mgr = get_session_manager()
-    ##    for session_id in session_mgr.sorted_keys():
-    ##        existing_session = session_mgr[session_id]
-    ##        # 270000 is 75 hours in seconds, long enough to last a weekend
-    ##        if existing_session.get_access_age() > 270000:
-    ##            del(session_mgr[session_id])
-    ##            reap_counter += 1
-    ##
-    ##    db_root['last_reaper_time'] = time()
-    ##    return 'ok: %s session(s) reaped' % reap_counter
+    form = MyForm(context)
+    form.action_url = config.site_base_url + form.action_url
+    form.add(form2.StringWidget, 'user_email', 
+        title='Your email',
+        size=20, 
+        required=True)
+    form.add(form2.StringWidget, 'user_email_verify', 
+        title='Your email (again)',
+        size=20, 
+        required=True)
+    form.add(form2.PasswordWidget, 'user_pass', 
+        title='Password',
+        size=10, 
+        required=True)
+    form.add(form2.StringWidget, 'user_name', 
+        title='Your name',
+        size=20, 
+        required=False)
+    form.add(form2.CheckboxWidget, 'user_news',
+        title='Email me site news')
+    form.add_submit('register', 'register')
+    
+    def render [html] ():
+        header('Register')
+        """
+        <h2>Register:</h2>
+        
+        <p>
+        To sign up for an account, fill in the following information,
+        an be sure to include a valid email address.  You will receive
+        a message at that address with further instructions to follow
+        before your account is activated.
+        </p>
+        
+        <p>
+        <b>Privacy note</b>: we will never share your address with any
+        external party.  We require this information so that we might
+        troubleshoot any problems you might encounter in using the site,
+        to ensure that we have a working address for sending search
+        results, and to send you project news (opt-in only).
+        </p>
+        """
+        form.render()
+        footer()
+        
+    if not form.is_submitted():
+        return render()
+
+    user_email = form['user_email']
+    user_email_verify = form['user_email_verify']
+    user_pass = form['user_pass']
+    
+    if not user_email or not utils.is_valid_email(user_email):
+        form.set_error('user_email', 'Please enter a valid email address.')
+
+    if user_email_verify != user_email:
+        form.set_error('user_pass_verify', 'Email address must match')
+    
+    test_user = get_user_by_email(context, user_email)
+    if test_user:
+        form.set_error('user_email', 'User with this address already exists.')
+    
+    if not utils.is_valid_password(user_pass):
+        form.set_error('user_pass', 'Please enter a password (min. 4 characters)')
+    
+    if form.has_errors():
+        return render()
+
+    user = User(id=user_email, email=user_email,)
+    user.email = user_email
+    user.set_password(user_pass)
+    
+    if form['user_name']:
+        user.name = form['user_name']
+    
+    if form['user_news']:
+        user.wants_news = int(True)
+    
+    # Set a random token for user to verify properly receiving email
+    user.unverify()
+    user.save(context)
+    
+    form.logger.info(str('Created user %s' % user_email))
+
+    verify_url = '%s/verify?user=%s&t=%s' % \
+        (config.site_base_url, user_email, str(user.token))
+        
+    msg_text = '''
+You (or someone using your email address) has signed up 
+for an account at %s.  
+
+To complete registration, please verify that you have 
+received this message by visiting this link:
+
+    %s
+
+You will be able to log in to the Canary Database after you 
+visit the link above.
+
+If you believe this message to be in error, ignore this 
+message and the account will be deleted after 48 hours.
+
+Thanks, -Canary Database staff
+        ''' % (config.site_base_url, verify_url)
+
+    utils.send_email(config.mail_from,
+        user.email, 
+        subject='Canary Database: verify account',
+        body=msg_text,
+        server=config.mail_server)
+        
+
+    header('Register: Verification sent')
+    """
+    <h3>Register: Verification sent</h3>
+    <p>
+    Your account has been created, but you must verify your email
+    address before you can log in.  Follow the instructions you
+    receive in the email address you provided.
+    </p>
+    """
+    footer()
+    
+    
+    
+def verify [html] (request):
+    context = get_publisher().context
+    config = context.config
+    
+    form = MyForm(context, method='get')
+    form.action_url = config.site_base_url + form.action_url
+    form.add(form2.StringWidget, 'user_email', 
+        title='Your email',
+        size=20, 
+        required=True)
+    form.add(form2.StringWidget, 't', 
+        title='Token',
+        size=10, 
+        required=True)
+    form.add_submit('verify', 'verify')
+    
+    def render [html] ():
+        header('Verify')
+        """
+        <h3>Verify:</h3>
+        """
+        form.render()
+        footer()
+        
+    if not form.is_submitted():
+        return render()
+
+    user_email = form['user_email']
+    token = form['t']
+    
+    if user_email:
+        user = get_user_by_email(context, user_email)
+        if user == None:
+            form.set_error('user', 'Invalid user reference.')
+        else:
+            if not token or token != str(user.token):
+                form.set_error('t', 'Invalid verification token.')
+                
+    if form.has_errors():
+        return render()
+
+    success = user.verify(token)
+    if success:
+        user.save(context)
+        form.logger.info(str('Verified user %s' % user_email))
+
+        header('Register: Verified')
+        """
+        <h3>Register: Verified</h3>
+        <p>
+        You have successfully verified your account.  You can now 
+        <a href='%s/login'>log in</a>!
+        </p>
+        """ % config.site_base_url
+        footer()
+    else:
+        form.logged.info(str('Failed user verification for %s' % user_email))
+        header('Register: Verification failed')
+        """
+        <h3>Register: Verification failed</h3>
+        <p>
+        We were unable to verify your account.  Please check your
+        email again and be sure the visit the entire URL it contains.
+        </p>
+        
+        <p>
+        Don't hesitate to contact us if you are having repeated problems
+        verifying your account.
+        </p>
+        """
+        footer()
+        
+        
+
+
+def resetpass [html] (request):
+    context = get_publisher().context
+    config = context.config
+    
+    form = MyForm(context)
+    form.method = 'post'
+    form.action_url = '/resetpass'
+    form.add(form2.StringWidget, 'user_email',
+        title='Your email address',
+        size=20,
+        required=True)
+    form.add_submit('send', 'send')
+
+    def render [html] ():
+        header('Request password copy')
+        """
+        <h3>Forgot your password?</h3>
+        
+        <p>
+        Enter your email address below.  If your address matches your active
+        account address, we will reset your password and send you the new one.
+        </p>
+        """
+        form.render()
+        footer()
+
+
+    if not form.is_submitted():
+        return render()
+
+    user_email = form['user_email']
+    if not utils.is_valid_email(user_email):
+        form.set_error('user_email', 'Please specify a valid email address')
+        
+    user = get_user_by_email(context, user_email)
+    if not user:
+        form.set_error('user_email', 'Email address not found in database')
+        
+    if form.has_errors():
+        return render()
+    
+    new_pass = random.randrange(117593, 993825)
+    user.set_password(str(new_pass))
+    user.save(context)
+    
+    msg_text = """
+You (or someone using your email address) has asked us to reset
+your Canary Database password.  
+
+Your new password is:  %s
+
+To log in, visit:
+
+    %s/login
+
+After you log in successfully, you can update your password by
+following the "Preferences" link under your email address at left.
+
+Thanks, -Canary Database staff
+        """ % (new_pass, config.site_base_url)
+        
+    utils.send_email(config.mail_from,
+        user.email, 
+        subject='Canary Database: Reset account',
+        body=msg_text,
+        server=config.mail_server)
+        
+
+    header('Reset your password')
+    """
+    <h3>Reset your password</h3>
+    <p>
+    We have reset your password, and sent a copy of the new one to the
+    email address "%s".
+    </p>
+    <p>
+    Please check your email inbox for this message.
+    """ % user.email
+    footer()

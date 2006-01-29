@@ -13,6 +13,7 @@ import PyLucene
 import quixote.config
 
 import canary.db_model
+from canary import dtuple
 import canary.gazeteer
 import canary.source_catalog
 
@@ -61,7 +62,39 @@ class Cacheable (object):
         if context.config.use_cache:
             context.cache_set(full_cache_key, item)
         return item
-            
+    
+    
+    def load (self, context):
+        # Can't load a new one; it hasn't been saved yet.
+        if self.uid == -1:
+            return
+
+        # Is it already loaded?  Convenience check for client calls
+        # don't need to verify loads from the cache.
+        if context.config.use_cache:
+            try:
+                if getattr(self, self.CACHE_CHECK_FIELD):
+                    # Already loaded
+                    return
+            except AttributeError:
+                # Note already loaded, so continue
+                pass
+        
+        cursor = context.get_cursor()
+        cursor.execute("""SELECT * FROM """ + self.TABLE_NAME + """
+            WHERE uid = %s
+            """, self.uid)
+        fields = [d[0] for d in cursor.description]
+        desc = dtuple.TupleDescriptor([[f] for f in fields])
+        row = cursor.fetchone()
+        if row:
+            row = dtuple.DatabaseTuple(desc, row)
+            for k, v in row.items():
+                self.set(k, v) 
+        else:
+            context.logger.error('No %s with uid %s' % (self.__class__.__name__,
+                self.uid))
+
             
 class CanaryConfig (quixote.config.Config):
     """

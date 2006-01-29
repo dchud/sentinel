@@ -286,7 +286,7 @@ def delete [html] (user_id=None):
             add_message('Deleted user %s' % user_id)
             form.logger.info(str('Deleted user %s', user_id))
         except:
-            form.logger.error(str('Unable to delete user %s', user_id))
+            form.logger.error(str('Unable to delete user %s' % user_id))
 
     else:
         add_message('Admin: User not deleted')

@@ -71,9 +71,15 @@ class Browse:
             
 
 def render_on_this_page_concept [html] (type, concept_sorted, total, query_string=''):
+    request = get_request()
+    f = request.get_form_var('f', '')
+    filter_str = ''
+    if f:
+        filter_str = 'f=%s&' % f
+        
     """
-        <tr>
-            <td colspan='4' align='left'>
+        <tr style='background-color:#fafafa;'>
+            <td colspan='3' align='left'>
             <h3 style='font-size:12;margin-top:.6em;margin-bottom:.2em;'>%s</h3>
             </td>
         </tr>
@@ -81,23 +87,12 @@ def render_on_this_page_concept [html] (type, concept_sorted, total, query_strin
     for count, con in concept_sorted[0:8]:
         """
         <tr style='background-color:#fafafa;'>
-        """
-        percentage = int((float(count) / total) * 100)
-        count_str = '%s%s' % (percentage, '%')
-        """
-            <td valign='top'>
-                <div class='page-relevance-box' title='%s of studies on this page'>
-                    <div class="relevance" style="width: %s"><img src='/images/pixel.gif' alt='' width='' height=''></div>
-                </div>
-            </td>
-        """ % (count_str, count_str)
-        """
             <td style='margin-right:.3em;' valign='top'>
                 <a style='font-size:11px;' 
-                    href='/search?q="%s"[%s]'
+                    href='/search?%sq="%s"[%s]'
                     title='Search for: "%s" [%s]'>%s</a>
             </td>
-        """ % (con, type, 
+        """ % (str(filter_str), con, type, 
             con, type, con)
         query = '"%s"[%s]' % (con, type)
         or_query = and_query = query_string
@@ -106,21 +101,96 @@ def render_on_this_page_concept [html] (type, concept_sorted, total, query_strin
             and_query = '%s %s' % (query_string, query)
         """
             <td valign='top'>
-                <a href='/search?q=%s' title='Search for: %s'><img src='/images/basic-boolean-and.jpg' alt='Search for: %s' border='0'/></a>
+                <a href='/search?%sq=%s' title='Search for: %s'><img src='/images/basic-boolean-and.jpg' alt='Search for: %s' border='0'/></a>
             </td>
             <td valign='top'>
-                <a href='/search?q=%s' title='Search for: %s'><img src='/images/basic-boolean-or.jpg' alt='Search for: %s' border='0'/></a>
+                <a href='/search?%sq=%s' title='Search for: %s'><img src='/images/basic-boolean-or.jpg' alt='Search for: %s' border='0'/></a>
             </td>
-        """ % (and_query, and_query, and_query,
-            or_query, or_query, or_query)
+        """ % (str(filter_str), and_query, and_query, and_query,
+            str(filter_str), or_query, or_query, or_query)
         """
         </tr>
         """
 
-def render_on_this_page [html] (records, query_string=''):
+def render_now_showing [html] (request, user, query_string=""):
     context = get_publisher().context
+    config = context.config
+    
+    """
+    <h3>Now showing:</h3>
+    """
+    f = request.get_form_var('f', None)
+    mode = 'All records'
+    if f:
+        try:
+            if f == 'user':
+                mode = 'My records'
+            elif f.startswith(str('set-')):
+                set_id = int(str(f)[4:])
+                set = [s for s in user.sets if s.uid == set_id][0]
+                mode = 'My set "%s"' % set.name
+        except:
+            print traceback.print_exc()
+    
+    domains = [
+        (None, 'All records', -1), 
+        ('user', 'My records', -1),
+        ]
+    for set in user.sets:
+        domains.append(('set-%s' % set.uid, 'My set "%s"' % set.name, set.uid))
+    
+    options = []
+    for fval, d, set_id in domains:
+        """
+        <span class='similar_row'>
+        """
+        if mode == d:
+            """
+            <span class="bold">%s</span><br />
+            """ % d
+        else:
+            str_qs = str(query_string)
+            if str_qs.startswith(str('"all my records')) \
+                or str_qs.startswith(str('"my set ')):
+                # Make the links do what users expect: browse "my records" or
+                # "my set foo" if there's *no* search/browse context already
+                if d == 'All records':
+                    # Note: browsing all records doesn't make sense, so no link
+                    """
+                    <span>All records</span> <br />
+                    """
+                elif d == 'My records':
+                    """
+                    <a href='%s/user/set/'>My records (%s)</a> <br />
+                    """ % (config.site_base_url, len(user.records))
+                else:
+                    # It's a set
+                    """
+                    <a href='%s/user/set/%s/'>%s (%s)</a><br />
+                    """ % (config.site_base_url, set_id, str(d), len(user.record_set_map.get(set_id, [])))
+            else:
+                """
+                <a href='%s/search?f=%s&amp;q=%s'>%s</a><br />
+                """ % (config.site_base_url, str(fval), query_string, str(d))
+        """
+        </span>
+        """
+    """
+    <br />
+    """
+
+def render_on_this_page [html] (records, query_string=''):
+    print 'render_on_this_page: query_string ==', query_string
+    context = get_publisher().context
+    config = context.config
     source_catalog = context.get_source_catalog()
-    complete_term_mapping = source_catalog.get_complete_mapping()
+    complete_term_map = source_catalog.get_complete_mapping()
+    
+    request = get_request()
+    try:
+        user = request.session.user
+    except:
+        user = None
     
     num_records = len(records)
     authors = {}
@@ -129,7 +199,7 @@ def render_on_this_page [html] (records, query_string=''):
     species = {}
     for sort_value, rec in records:
         study = Study(context, rec.study_id)
-        mm = rec.get_mapped_metadata(complete_term_mapping)
+        mm = rec.get_mapped_metadata(complete_term_map)
         author = mm['author']
         for a in author:
             try:
@@ -152,61 +222,62 @@ def render_on_this_page [html] (records, query_string=''):
             except KeyError:
                 species[spec.term] = 1
         
+    
+    """
+    <div id='similar_box'>
+    """
+    if user:
+        render_now_showing(request, user, query_string)
+    
+    if records:
+        """
+        <h3>Find similar:</h3>
         
-    
-    """
-    <div style='border:1px solid #AAAAAA;padding:.5em;margin-bottom:1em;'>
-    
-    <h3>Find similar:</h3>
-    
-    <div class='label'>
-        <span id='hideable-link'>Show/hide</span>
-    </div>
-           
-    <div class='hideable'>
-    <table width='100%' border='0' cellspacing='1' cellpadding='0'>
-        <tr style='margin-top:.6em;margin-bottom:.2em;background-color:#fafafa;'>
-            <th style='font-size:11px;' align='center'>%</th>
-            <th style='font-size:11px;'>-</th>
-            <th style='font-size:11px;'>and</th>
-            <th style='font-size:11px;'>&nbsp;or</th>
-        </tr>
-    """
-    
-    exposures_sorted = [(v, k) for k, v in exposures.items()]
-    exposures_sorted.sort()
-    exposures_sorted.reverse()
-    if exposures_sorted:
-        render_on_this_page_concept('exposure', exposures_sorted, num_records,
-            query_string)
-
-    outcomes_sorted = [(v, k) for k, v in outcomes.items()]
-    outcomes_sorted.sort()
-    outcomes_sorted.reverse()
-    if outcomes_sorted:
-        render_on_this_page_concept('outcome', outcomes_sorted, num_records,
-            query_string)
-            
-    species_sorted = [(v, k) for k, v in species.items()]
-    species_sorted.sort()
-    species_sorted.reverse()
-    if species_sorted:
-        render_on_this_page_concept('species', species_sorted, num_records,
-            query_string)
-            
-    authors_sorted = [(v, k) for k, v in authors.items()]
-    authors_sorted.sort()
-    authors_sorted.reverse()
-    if authors_sorted:
-        render_on_this_page_concept('author', authors_sorted, num_records,
-            query_string)
-            
-    """
-    </table>
-    </div>
-    """
+        <div class='similar'>
+        <table width='100%' border='0' cellspacing='1' cellpadding='0'>
+            <tr class='similar_row'>
+                <th style='font-size:11px;'>term</th>
+                <th style='font-size:11px;'>and</th>
+                <th style='font-size:11px;'>&nbsp;or</th>
+            </tr>
+        """
         
-
+        exposures_sorted = [(v, k) for k, v in exposures.items()]
+        exposures_sorted.sort()
+        exposures_sorted.reverse()
+        if exposures_sorted:
+            render_on_this_page_concept('exposure', exposures_sorted, num_records,
+                query_string)
+    
+        outcomes_sorted = [(v, k) for k, v in outcomes.items()]
+        outcomes_sorted.sort()
+        outcomes_sorted.reverse()
+        if outcomes_sorted:
+            render_on_this_page_concept('outcome', outcomes_sorted, num_records,
+                query_string)
+                
+        species_sorted = [(v, k) for k, v in species.items()]
+        species_sorted.sort()
+        species_sorted.reverse()
+        if species_sorted:
+            render_on_this_page_concept('species', species_sorted, num_records,
+                query_string)
+                
+        authors_sorted = [(v, k) for k, v in authors.items()]
+        authors_sorted.sort()
+        authors_sorted.reverse()
+        if authors_sorted:
+            render_on_this_page_concept('author', authors_sorted, num_records,
+                query_string)
+                
+        """
+        </table>
+        """
+    """
+    </div>
+    """
+            
+    
 
 class BrowseIndex:
     
@@ -421,17 +492,37 @@ class BrowseIndex:
 
 
 
-    def render_records [html] (self, name, records):
+    def render_records [html] (self, name, records, filter_by=''):
         context = get_publisher().context
         source_catalog = context.get_source_catalog()
-        complete_term_mapping = source_catalog.get_complete_mapping()
+        complete_term_map = source_catalog.get_complete_mapping()
         
         type_display = self.type.replace(str('_'), str(' '))
         type_search = self.type.replace(str('_'), str('-'))
         header('Browse by %s: %s' % (type_display.capitalize(), name),
             show_javascript=True)
+        
+        filter_str = 'q='
+        if filter_by == 'user':
+            filter_str = 'f=user&q='
+        elif filter_by.startswith('set-'):
+            # Verify it's an int
+            try:
+                set_id = int(str(filter_by)[4:])
+                filter_str = 'f=%s&q=' % filter_by
+            except ValueError:
+                pass
+        
         count = len(records)
-        if count > 0:
+        if count == 0:
+            """
+            <h2>No records found</h2>
+            
+            <p>
+            No records found in '%s'.
+            </p>
+            """ % name
+        else:
             if count == 1:
                 article_text = 'article'
             else:
@@ -447,7 +538,7 @@ class BrowseIndex:
                 for i in range(1965, 2006):
                     year_count[i] = 0
                 for rec in records:
-                    mm = rec.get_mapped_metadata(term_map=complete_term_mapping)
+                    mm = rec.get_mapped_metadata(term_map=complete_term_map)
                     try:
                         year = int(mm['pubdate'][:4])
                         year_count[year] += 1
@@ -464,7 +555,6 @@ class BrowseIndex:
                 p = self.get_pager_params()
 
                 sort_by = p['sort_by']
-                complete_term_map = source_catalog.get_complete_mapping()
                 records_sorted = []
                 for record in records:
                     mm = record.get_mapped_metadata(complete_term_map)
@@ -492,7 +582,8 @@ class BrowseIndex:
                 
                 # Only shade the year-context in the sparkline if it's a 
                 # year sort.
-                if p['sort_by'] == 'year':
+                if records_sliced \
+                    and p['sort_by'] == 'year':
                     try:
                         start_mm = records_sliced[0][1].get_mapped_metadata(complete_term_map)
                         min_year = max_year = int(start_mm[str('pubdate')][:4])
@@ -541,10 +632,13 @@ class BrowseIndex:
                     count = year_count[year]
                     if count > 0:
                         year_index = years.index(year)
-                        query_str = '"%s" [%s] %s [date]' \
-                            % (name, type_search, year)
+                        if filter_str:
+                            query_str = filter_str + '%s [date]' % year
+                        else:
+                            query_str = '"%s" [%s] %s [date]' \
+                                % (name, type_search, year)
                         """
-                    <area href='/search?q=%s' 
+                    <area href='/search?%s' 
                         shape='rect'
                         coords='%s %s %s %s'
                         alt='%s'
@@ -563,11 +657,14 @@ class BrowseIndex:
                     token = att.replace(str('_'), str('-'))
                     # FIXME: a HACK I tell you.  Clean this up!
                     hint_text = data_points[utils.linkages.index(att)][1].lower()
-                    query_str = '"%s" [%s] has-%s' % (name, 
-                        type_search, token)
+                    if filter_str:
+                        query_str = filter_str + 'has-%s' % token
+                    else:
+                        query_str = '"%s" [%s] has-%s' % (name, type_search, 
+                            token)
                     xoffset = 2 + (utils.linkages.index(att)*9)
                     """
-                    <area href='/search?q=%s:1'
+                    <area href='/search?%s:1'
                         shape='rect'
                         coords='%s %s %s %s'
                         alt='%s'
@@ -580,13 +677,11 @@ class BrowseIndex:
                 """
                 </map>
                 
-                <table width='100%' border='0' cellspacing='2' cellpadding='2'>
+                <table width='100%' border='0' cellspacing='0' cellpadding='0'>
                 <tr>
                     <td valign='top'>
                 """
-                
                 self.pager(records, params=p)
-                
                 """
                 <div id="search-result">
                     <table width='100%' border='0' cellspacing='0' cellpadding='0'>
@@ -614,14 +709,25 @@ class BrowseIndex:
             except:
                 context.logger.error(traceback.print_exc())
                 return not_found(self.type)
-        else:
-            return not_found(self.type)
             
         footer()
 
 
 
 
+class UserSetBrowseIndex (BrowseIndex):
+    
+    SORT_FIELDS = ['year', 'journal', '1au']
+    
+    SORT_FIELD_DEFAULT = 'year'
+    
+    SORT_BY_DESCENDING = False
+    
+    def __init__ (self, request):
+        self.type = 'year'
+        self.logger = logging.getLogger(str(self.__class__))
+        
+    
 class YearBrowseIndex (BrowseIndex):
     
     _q_exports = [
@@ -779,7 +885,7 @@ class JournalBrowseIndex (BrowseIndex):
         
     def _q_index [html] (self, request):
 
-        header('Browse by %s' % self.type.capitalize())
+        header('Browse by %s' % self.type.capitalize())#, show_javascript=True)
         """
         <h2><a href='/browse/journal'>Browse by Journal</a></h2>
         """

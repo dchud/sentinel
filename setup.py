@@ -39,6 +39,7 @@ kw = {'name': "canary",
         'canary.ui.edit.study.methodology',
         'canary.ui.html',
         'canary.ui.user',
+        'canary.ui.user.set',
         ],
     'cmdclass': {'build_py': qx_build_py}}
 

@@ -529,7 +529,7 @@ def render_export [html] (mapped_metadata):
                 Additional formats will be added as requested.
                 </p>
                 
-                <ul>
+                <ul class='xoxo'>
                     <li>
                         <a href='?view=export&amp;format=pubmed'>Tagged/Pubmed (NLM)</a>
                     </li>
@@ -813,35 +813,88 @@ def render_record [html] (record, study):
 
 
 def render_record_row [html] (record, score=None):
-    
     context = get_publisher().context
+    config = context.config
     source_catalog = context.get_source_catalog()
     complete_term_mapping = source_catalog.get_complete_mapping()
+    request = get_request()
+    user_id = ''
+    try:
+        user = request.session.user
+        user_id = user.uid
+    except:
+        user = None
+    
     mapped_md = record.get_mapped_metadata(term_map=complete_term_mapping)
     author = mapped_md['author']
     if author == []:
         author = ['[No authors listed]']
     """
-                <tr>
+                <tr class='recordrow'>
                     <td align='left' valign='top'>
-    """
-    if score:
-        score_str = '%s%s' % (int(score * 100), '%')
+                        <div class='record uri' title='tag:canarydatabase.org,2005:record:%s'>
+    """ % record.uid
+    checked_text = ''
+    record_in_sets = 0
+    if user:
+        if record.uid in user.records.keys():
+            checked_text = 'checked="CHECKED"'
+            for set in user.sets:
+                if record.uid in set.records:
+                    checked_text = checked_text + ' disabled="disabled"'
         """
-                        <div class='relevance-box' title='%s relevant'>
-                            <div class="relevance" style="width: %s"><img src='/images/pixel.gif' alt='' width='' height=''></div>
-                        </div>
-        """ % (score_str, score_str)
-        
+                            <div id='recordcheck-%s' class='recordcheck'>
+                                <input id='recordcheckinput-%s' class='recordcheckinput checkbox' 
+                                type='checkbox' onClick='javascript:recordClicked(%s, %s);' %s/>
+                                <br />
+                                <div class='waitimage' id='waitimage-%s'>
+                                </div>
+                            </div>
+        """ % (record.uid, 
+            record.uid, record.uid, user_id, checked_text, 
+            record.uid)
     """
-                    <b><a href='/record/%s'>%s</a></b> 
-                    <br />
-                    %s
-                    <br />
-                    %s
-    """ % (record.uid, ', '.join(author), mapped_md['title'], mapped_md['source'])
+                            <div id='recorddata-%s' class='recorddata'>
+                                <span class='title'><a href='/record/%s'>%s</a></span> 
+                                <br />
+                                %s
+                                <br />
+                                %s
+                            </div>
+    """ % (record.uid, record.uid, ', '.join(author), mapped_md['title'], 
+        mapped_md['source'])
     
+    if user:
+        invisible_text = 'invisible'
+        if record.uid in user.records.keys():
+            invisible_text = ''
+        """
+                            <div id='recordsets-%s' class='recordsets %s'>
+        """ % (record.uid, invisible_text)
+        for set in user.sets:
+            checked_text = ''
+            if record.uid in set.records:
+                checked_text = 'checked="CHECKED"'
+            disabled_text = ''
+            set_name = set.name
+            if set.is_locked:
+                disabled_text = 'disabled="disabled"'
+                set_name = '%s <em>(set locked)</em>' % set.name
+            """
+                <div class='record-%s-set-%s'>
+                    <input %s id='record-%s-set-%s-checkinput' class='checkbox' 
+                    type='checkbox' onClick='javascript:recordSetClicked(%s, %s);' %s />
+                    <a href="%s/user/set/%s">%s</a>
+                </div>
+            """ % (record.uid, set.uid, 
+                disabled_text, record.uid, set.uid, 
+                record.uid, set.uid, checked_text, 
+                config.site_base_url, set.uid, set_name)
+        """
+                            <a href='/user/'>Add a set / change your sets</a>
+        """
     """
+                        </div>
                     </td>
                 </tr>
     """
