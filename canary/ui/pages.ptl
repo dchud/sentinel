@@ -574,7 +574,7 @@ def register [html] (request):
     
     form.logger.info(str('Created user %s' % user_email))
 
-    verify_url = '%s/verify?user=%s&t=%s' % \
+    verify_url = '%s/verify?user_email=%s&t=%s' % \
         (config.site_base_url, user_email, str(user.token))
         
     msg_text = '''
