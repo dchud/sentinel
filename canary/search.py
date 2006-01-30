@@ -77,6 +77,7 @@ SEARCH_FIELDS = {
     'vol':                  'volume',
     'volume':               'volume',
     'word':                 'keyword',
+    'year':                 'pubdate',
     }
 
 
