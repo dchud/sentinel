@@ -40,9 +40,11 @@ class SearchForm (MyForm):
         self.add_submit('go', 'go')
 
 
-def search [html] (request):
 
+def search [html] (request):
     context = get_publisher().context
+    user = request.session.user
+    
     form = SearchForm(context)
     source_catalog = context.get_source_catalog()
     complete_term_mapping = source_catalog.get_complete_mapping()
@@ -72,10 +74,11 @@ def search [html] (request):
         
         filter_str = ''
         try:
+            def result_filter (user, record):
+                return True
             if form['f']:
                 f = form['f']
                 filter_str = 'f=%s&' % f
-                user = request.session.user
                 if f == 'user':
                     def result_filter (user, record):
                         if record.uid in user.records.keys():
@@ -87,25 +90,26 @@ def search [html] (request):
                         if record.uid in [r.record_id for r in user.record_set_map.get(set_id, [])]:
                             return True
                         return False
-                else:
-                    def result_filter (user, record):
-                        return True
         except:
             context.logger.error('filtering: %s', traceback.print_exc())
             user = None
         
-        result_set = []
+        result_pairs = []
         for i, doc in hits:
             uid = doc.get(str('uid'))
-            record = QueuedRecord(context, uid)
-            if record.status == record.STATUS_CURATED:
-                score = hits.score(i)
-                if form['f']:
-                    if not result_filter(user, record):
-                        continue
-                result_set.append((record, score))
-                    
+            score = hits.score(i)
+            result_pairs.append((uid, score))
         searcher.close()
+        result_id_list = list(str('record:%s') % uid for uid, score in result_pairs)
+        result_record_map = context.cache_get_multi(result_id_list)
+        result_set = []
+        for uid, score in result_pairs:
+            record = result_record_map[str('record:%s' % uid)]
+            if record.status == record.STATUS_CURATED:
+                if not result_filter(user, record):
+                    continue
+                else:
+                    result_set.append((record, score))
         
         year_count = {}
         for i in range(1965, 2006):
@@ -120,7 +124,9 @@ def search [html] (request):
                 continue
         sparkline_image_file = utils.make_sparkline(context, year_count)
         
-        studies = [Study(context, rec.study_id) for rec, score in result_set]
+        study_id_list = list(str('%s:%s' % (Study.CACHE_KEY, r.study_id)) for r, score in result_set)
+        study_map = context.cache_get_multi(study_id_list)
+        studies = list(study_map[id] for id in study_id_list)
         e_image_file = utils.make_sideways_e(context, studies)
 
         form.render()
@@ -207,7 +213,7 @@ def search [html] (request):
         """
         if len(result_set) >= 1:
             for rec, score in result_set:
-                render_record_row(rec, score)
+                render_record_row(rec)
         else:
             """
                 <td valign="top">
@@ -222,7 +228,8 @@ def search [html] (request):
             
             <td width='30%' valign='top'>
         """
-        render_on_this_page([(s, r) for r, s in result_set], raw_query)
+        render_on_this_page([(s, r) for r, s in result_set], study_map=study_map,
+            query_string=raw_query)
         """
             </td>
         </tr>

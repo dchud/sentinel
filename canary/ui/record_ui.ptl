@@ -812,7 +812,7 @@ def render_record [html] (record, study):
 
 
 
-def render_record_row [html] (record, score=None):
+def render_record_row [html] (record):
     context = get_publisher().context
     config = context.config
     source_catalog = context.get_source_catalog()

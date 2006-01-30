@@ -216,10 +216,17 @@ class User (DTable):
             """, self.uid)
         fields = [d[0] for d in cursor.description]
         desc = dtuple.TupleDescriptor([[f] for f in fields])
+        set_ids = []
         for row in cursor.fetchall():
             row = dtuple.DatabaseTuple(desc, row)
-            self.sets.append(UserSet(context, row['uid']))
-        
+            set_ids.append(row['uid'])
+        try:
+            set_map = context.cache_get_multi(list('%s:%s' % (UserSet.CACHE_KEY, id) for id in set_ids))
+            self.sets.extend(list(set_map['%s:%s' % (UserSet.CACHE_KEY, id)] for id in set_ids))
+        except:
+            for id in set_ids:
+                self.sets.append(UserSet(context, id))
+
         # Load record->set assignments
         for set in self.sets:
             cursor.execute("""

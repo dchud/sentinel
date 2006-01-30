@@ -179,8 +179,7 @@ def render_now_showing [html] (request, user, query_string=""):
     <br />
     """
 
-def render_on_this_page [html] (records, query_string=''):
-    print 'render_on_this_page: query_string ==', query_string
+def render_on_this_page [html] (records, query_string='', study_map=[]):
     context = get_publisher().context
     config = context.config
     source_catalog = context.get_source_catalog()
@@ -198,7 +197,10 @@ def render_on_this_page [html] (records, query_string=''):
     outcomes = {}
     species = {}
     for sort_value, rec in records:
-        study = Study(context, rec.study_id)
+        try:
+            study = study_map[str('%s:%s' % (Study.CACHE_KEY, rec.study_id))]
+        except:
+            study = Study(context, rec.study_id)
         mm = rec.get_mapped_metadata(complete_term_map)
         author = mm['author']
         for a in author:
