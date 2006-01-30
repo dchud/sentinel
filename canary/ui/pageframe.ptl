@@ -61,15 +61,15 @@ def header [html] (title,
     
     if show_javascript:
         """
-        <script src='/mochikit.js' type='text/javascript'> </script>
-        <script src='/script.js' type='text/javascript'> </script>
+        <script type='text/javascript' src='/mochikit.js'></script>
+        <script type='text/javascript' src='/script.js'></script>
         """
         
     if autodiscovery_links:
         for link in autodiscovery_links:
             rss_url = config.site_base_url + link
             """
-            <link rel="alternate" type="application/rss+xml" title="RSS 1.0" href="%s" />
+        <link rel="alternate" type="application/rss+xml" title="RSS 1.0" href="%s" />
             """ % rss_url
         
     """
@@ -124,7 +124,7 @@ def pageframe [html] ():
                         &nbsp; &nbsp; &nbsp; &nbsp;
                         <span class='search'>
                             Search:
-                            <input type="text" name="q" size="20" tabindex="13">
+                            <input id="search_input" type="text" name="q" size="20" tabindex="13">
                             <input type="submit" name="go" value="go">
                         </span>
                         <a style='font-size:9px;' 

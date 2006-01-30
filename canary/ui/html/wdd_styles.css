@@ -637,28 +637,6 @@ input[type=submit]:hover, input[type=button]:hover {
     text-align: left;
 }
 
-
-div.label {
-    font-size: 11px;
-    margin-bottom:.8em;
-}
-
-div.hideable div.label {
-    text-decoration: none;
-}
-
-#hideable-link {
-    border: 1px solid #ccc;
-    padding: 3px;
-    margin: 2px;
-    background-color: #eee;
-}
-
-#hideable-link:hover {
-    background-color: #f9f7d1;
-    text-decoration: underline;
-}
-
 .mission {
     width: 70%;
     text-align: justify;
@@ -720,6 +698,10 @@ span.required {
 }
 
 span.hidey {
+    color: #000099;
+}
+
+span.hidey:hover {
     text-decoration: underline;
 }
 

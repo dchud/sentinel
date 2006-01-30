@@ -1,25 +1,32 @@
-// $Id$
+// Save keystrokes
+var MK = MochiKit;
 
 // Uncomment to remove debugging info
-createLoggingPane(true);
+var create_logpane_inline = MK.Base.partial(MK.LoggingPane.createLoggingPane, 'true');
+//MK.DOM.addLoadEvent(create_logpane_inline);
 
-// *visible() funcs are suggested code from MochiKit docs
+// Focus the search box on all pages
+var search_input = MK.DOM.getElement('search_input');
+var focus_search_input = MK.Base.partial(MK.DOM.focusOnLoad, 'search_input');
+MK.DOM.addLoadEvent(focus_search_input);
+
+// *visible() funcs are suggested code from MK docs
 function toggleVisible(elem) {
-    toggleElementClass("invisible", elem); 
-}
+    MK.DOM.toggleElementClass("invisible", elem); 
+};
 
 function makeVisible(elem) {
-    removeElementClass(elem, "invisible");
-}
+    MK.DOM.removeElementClass(elem, "invisible");
+};
 
 function makeInvisible(elem) {
-    addElementClass(elem, "invisible");
-}
+    MK.DOM.addElementClass(elem, "invisible");
+};
 
 function isVisible(elem) {
     // you may also want to check for
     // getElement(elem).style.display == "none"
-    return !hasElementClass(elem, "invisible");
+    return !MK.DOM.hasElementClass(elem, "invisible");
 }; 
 
 
@@ -41,10 +48,10 @@ var hidewait = function (waitimage) {
 
 function record_has_sets (record_id) {
     var has_sets = 0;
-    var record_set_checks = getElementsByTagAndClassName('input', 'checkbox');
+    var record_set_checks = MK.DOM.getElementsByTagAndClassName('input', 'checkbox');
     for (i=0; i<record_set_checks.length; i++) {
         var check = record_set_checks[i];
-        var id = getNodeAttribute(check, 'id');
+        var id = MK.DOM.getNodeAttribute(check, 'id');
         if (id.indexOf('record-' + record_id + '-set') >= 0) {
             if (check.checked == true) {
                 has_sets +=1;
@@ -55,11 +62,11 @@ function record_has_sets (record_id) {
 };
 
 function recordClicked (record_id, user_id) {
-    var recordsets = getElement('recordsets-' + record_id);
-    var checkinput = getElement('recordcheckinput-' + record_id);
-    var waitimage = getElement('waitimage-' + record_id);
+    var recordsets = MK.DOM.getElement('recordsets-' + record_id);
+    var checkinput = MK.DOM.getElement('recordcheckinput-' + record_id);
+    var waitimage = MK.DOM.getElement('waitimage-' + record_id);
     waitimage.innerHTML = '<img src="/images/wait.gif" alt="wait" />';
-    var nowait = partial(hidewait, waitimage);
+    var nowait = MK.Base.partial(hidewait, waitimage);
     var url = '';
     if (checkinput.checked == true) {
         url = '/user/add_record?record_id=' + record_id;
@@ -68,7 +75,7 @@ function recordClicked (record_id, user_id) {
         var record_sets = record_has_sets(record_id);
         if (record_sets > 0) {
             if (!confirm("Drop record and its sets?")) {
-                setNodeAttribute(checkinput, 'checked',  'CHECKED');
+                MK.DOM.setNodeAttribute(checkinput, 'checked',  'CHECKED');
                 waitimage.innerHTML = '';
                 return;
             }
@@ -97,10 +104,10 @@ function recordSetClicked (record_id, set_id) {
         var record_sets = record_has_sets(record_id);
         if (record_sets == 0) {
             record_check.disabled = false;
-            setNodeAttribute(record_check, 'checked',  'CHECKED');
+            MK.DOM.setNodeAttribute(record_check, 'checked',  'CHECKED');
         }
     }
-    var d = loadJSONDoc(url);
+    var d = MK.Async.loadJSONDoc(url);
     d.addCallbacks(succeeded, failed);
     d.addBoth(nowait);
 }
@@ -115,11 +122,11 @@ function startCreateSet (id) {
             'size': 30})
         );
     logDebug('Getting createuserset create-set-link-' + id);
-    var createuserset = getElement('create-set-link-' + id);
+    var createuserset = MK.DOM.getElement('create-set-link-' + id);
     if (createuserset) {
-        swapDOM(createuserset, inputForm);
+        MK.DOM.swapDOM(createuserset, inputForm);
     } else {
-        logDebug('createuserset not found');
+        MK.Logging.logDebug('createuserset not found');
     }
 }
 
@@ -128,21 +135,20 @@ function addUserSet (evt) {
     evt = (evt) ? evt : event;
     var charCode = (evt.charCode) ? evt.charCode :
         ((evt.which) ? evt.which : evt.keyCode);
-    logDebug('charCode: ' + charCode);
     if (charCode == 13 || charCode == 3) {
-        var waitimage = getElement('waitimage');
+        var waitimage = MK.DOM.getElement('waitimage');
         waitimage.innerHTML = '<img src="/images/wait.gif" alt="wait" />';
-        var nowait = partial(hidewait, waitimage);
-        var set_name_input = getElement('set_name_input');
+        var nowait = MK.Base.partial(hidewait, waitimage);
+        var set_name_input = MK.DOM.getElement('set_name_input');
         var input = set_name_input.value;
         var url = '/user/create_set?set_name=' + input;
-        var d = loadJSONDoc(url);
+        var d = MK.Async.loadJSONDoc(url);
         var success = function (r) {
             if (r['status'] == '406') {
                 alert(r['reason']);
             } else if (r['status'] == '200') {
                 var uid = r['uid'];
-                var newSet = TR({'id': 'usersetrow-' + uid,
+                var new_set = MK.DOM.TR({'id': 'usersetrow-' + uid,
                         'class': 'userset'},
                     TD({'class': 'userset',
                         'id': 'userset-' + uid},
@@ -159,10 +165,9 @@ function addUserSet (evt) {
                         ']']
                         )
                     );
-                var addnewset = getElement('addnewset');
-                removeElement(addnewset);
-                var usersets = getElement('usersets');
-                appendChildNodes(usersets, newSet, addnewset);
+                var addnewset = MK.DOM.getElement('addnewset');
+                MK.DOM.removeElement(addnewset);
+                MK.DOM.appendChildNodes('usersets-tbody', new_set, addnewset);
                 set_name_input.value = '';
             }
         };

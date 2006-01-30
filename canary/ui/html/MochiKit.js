@@ -15,7 +15,7 @@ if(typeof (dojo)!="undefined"){
 dojo.provide("MochiKit.Base");
 }
 if(typeof (MochiKit)=="undefined"){
-MochiKit={};
+var MochiKit={};
 }
 if(typeof (MochiKit.Base)=="undefined"){
 MochiKit.Base={};
@@ -851,7 +851,7 @@ m.EXPORT_TAGS={":common":m.concat(m.EXPORT_OK),":all":all};
 m.nameFunctions(this);
 };
 MochiKit.Base.__new__();
-compare=MochiKit.Base.compare;
+var compare=MochiKit.Base.compare;
 MochiKit.Base._exportSymbols(this,MochiKit.Base);
 if(typeof (dojo)!="undefined"){
 dojo.provide("MochiKit.Iter");
@@ -1448,7 +1448,7 @@ this.EXPORT_TAGS={":common":this.EXPORT,":all":m.concat(this.EXPORT,this.EXPORT_
 m.nameFunctions(this);
 };
 MochiKit.Iter.__new__();
-reduce=MochiKit.Iter.reduce;
+var reduce=MochiKit.Iter.reduce;
 MochiKit.Base._exportSymbols(this,MochiKit.Iter);
 if(typeof (dojo)!="undefined"){
 dojo.provide("MochiKit.Logging");
@@ -3057,8 +3057,8 @@ this.EXPORT_TAGS={":common":this.EXPORT,":all":m.concat(this.EXPORT,this.EXPORT_
 m.nameFunctions(this);
 };
 MochiKit.DOM.__new__(this);
-withWindow=MochiKit.DOM.withWindow;
-withDocument=MochiKit.DOM.withDocument;
+var withWindow=MochiKit.DOM.withWindow;
+var withDocument=MochiKit.DOM.withDocument;
 MochiKit.Base._exportSymbols(this,MochiKit.DOM);
 if(typeof (dojo)!="undefined"){
 dojo.provide("MochiKit.LoggingPane");

@@ -105,6 +105,7 @@ def _q_index [html] (request):
                     <th>My Sets</th>
                     <td colspan='3'>
                         <table id='usersets' class='gentable'>
+                            <tbody id='usersets-tbody'>
         """
         if user.sets:
             for set in user.sets:
@@ -145,6 +146,7 @@ def _q_index [html] (request):
                                 <td id='waitimage'>
                                 </td>
                             </tr>
+                            </tbody>
                         </table>
                         
                     </td>

@@ -236,8 +236,8 @@ def delete [html] (set_id):
     if are_you_sure:
         try:
             set.delete(context)
-            add_message('Deleted set %s' % set_id)
-            form.logger.info(str('Deleted set %s' % set_id))
+            add_message('Deleted set %s' % set.name)
+            form.logger.info(str('Deleted set "%s"' % set_id))
         except:
             form.logger.error(traceback.print_exc())
             form.logger.info('Unable to delete set %s' % set_id)

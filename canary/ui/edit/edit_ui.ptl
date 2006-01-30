@@ -77,9 +77,9 @@ def _q_index [html] (request):
         <legend>Find/load records</legend>
         
         <h4>
-            <span class='hidey' onclick="javascript:showItem('curator-panel-find');hideItem('curator-panel-pubmed');">Find existing record</span>
+            <span class='hidey' onclick="javascript:makeVisible('curator-panel-find');makeInvisible('curator-panel-pubmed');">Find existing record</span>
             |
-            <span class='hidey' onclick="javascript:showItem('curator-panel-pubmed');hideItem('curator-panel-find');">Load a record from Pubmed</span>
+            <span class='hidey' onclick="javascript:makeVisible('curator-panel-pubmed');makeInvisible('curator-panel-find');">Load a record from Pubmed</span>
         </h4>
         <div id='curator-panel-find'>
     """
@@ -90,7 +90,7 @@ def _q_index [html] (request):
     """
     
     """
-        <div id='curator-panel-pubmed' style='display:none;'>
+        <div id='curator-panel-pubmed' class='invisible'>
     """
     form = LoadPubmedForm(context, 
         batch_options=get_pubmed_batch_list(context))
