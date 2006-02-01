@@ -83,8 +83,8 @@ def _q_index [html] (request):
     """
         <p>
         Subscribe to Canary Database Project News: <br />
-        [<a href="http://news.canarydatabase.org/feed/">RSS</a>]
-        [<a href="http://news.canarydatabase.org/feed/atom/">ATOM</a>]
+        [<a href="http://news.canarydatabase.org/feed/">rss</a>]
+        [<a href="http://news.canarydatabase.org/feed/atom/">atom</a>]
         </p>
 
     </div>

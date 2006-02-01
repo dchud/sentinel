@@ -23,7 +23,7 @@ def header [html] (title,
     "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <!-- ================================================================================ -->
-<!-- Contents Copyright (C) 2004 Yale School of Medicine.-->
+<!-- Contents Copyright (C) 2004-2006 Yale School of Medicine.-->
 <!-- All rights reserved. -->
 <!-- Web site design by Web Design and Development, ITS-Med, Yale School of Medicine. -->
 <!-- http://its.med.yale.edu/wdd/ -->
@@ -38,7 +38,7 @@ def header [html] (title,
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
         <meta name="Publisher" content="Canary Database">
         <meta name="Description" content="">
-        <meta name="Keywords" content="">
+        <meta name="Keywords" content="canary database animal health sentinels human health medicine environmental hazards">
     """
     
     # Only echo the robot/content meta header if it has been specified
