@@ -68,39 +68,27 @@ def _q_index [html] (request):
 
     <div class='news'>
         <div class='news-head'>
-            Project News
+            <a href="http://news.canarydatabase.org/">Project News</a>
         </div>
-        <h3>Related Articles by Canary Database staff</h3>
-        <p>
-        Our article, "<a href='/about/ecohealth-2005-animals.pdf'>Animals as
-        Sentinels of Human Environmental Health Hazards: An Evidence-Based
-        Analysis</a>," was recently published as Ecohealth 2(1):26-27,
-        2005.
+    """
+    
+    for item in utils.parse_feed('http://news.canarydatabase.org/feed/')[:5]:
+        """
+        <p style='padding-bottom: 1em; border-bottom: 1px solid #ddd;'>
+        <a href="%s">%s</a> <br />
+        %s
         </p>
-        
+        """ % (item.link, item.title, item.updated[:-15])
+            
+    """
         <p>
-        Previously, "<a href='/about/ecohealth-2004-outfoxing.pdf'>Outfoxing a
-        Rash: Clinical Example of Human-Wildlife Interaction</a>," by
-        Canary Database curators Rabinowitz and Gordon, was published as
-        Ecohealth 1(4):404-407, 2004.
+        Subscribe to Canary Database Project News: <br />
+        [<a href="http://news.canarydatabase.org/feed/">RSS</a>]
+        [<a href="http://news.canarydatabase.org/feed/atom/">ATOM</a>]
         </p>
-        
-    </div>
 
-    <div class='news'>
-    
-        <div class='news-head'>
-            Take a tour
-        </div>
-        <p>
-        Take a quick tour of the Canary Database.
-    
-            <a href='/about/tour' title='Take a tour'>
-            <img border='0' src='/images/tour-record-small.jpg' 
-            alt='small tour image'/></a>
-        </p>
     </div>
-    
+   
     </td>
     </tr>
 </table>

@@ -291,4 +291,4 @@ def clean_temp_image_dir (context):
 
 def parse_feed (url):
     d = feedparser.parse(str(url))
-    
+    return d.entries

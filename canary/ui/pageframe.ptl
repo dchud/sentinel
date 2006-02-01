@@ -65,11 +65,18 @@ def header [html] (title,
         <script type='text/javascript' src='/script.js'></script>
         """
         
+    # Always show the default news/blog headline autodiscovery links
+    """
+        <link rel="alternate" type="application/rss+xml" title="Canary Database Project News - RSS 2.0" href="http://news.canarydatabase.org/feed/" />
+        <link rel="alternate" type="application/atom+xml" title="Canary Database Project News - ATOM" href="http://news.canarydatabase.org/feed/atom/" />
+    """
+    
+    # And show additional search links, if any
     if autodiscovery_links:
         for link in autodiscovery_links:
             rss_url = config.site_base_url + link
             """
-        <link rel="alternate" type="application/rss+xml" title="RSS 1.0" href="%s" />
+        <link rel="alternate" type="application/rss+xml" title="Canary Database Search - RSS 1.0" href="%s" />
             """ % rss_url
         
     """
@@ -238,6 +245,7 @@ def sidebar [html] ():
             <p>About the project</p>
             <a href="/about/what_are_animal_sentinels">What are animal sentinels?</a>
             <a href="/about/project_mission">Mission</a>
+            <a href="http://news.canarydatabase.org/">Project news</a>
             <a href="/about/project_history">History</a>
             <a href="/about/related_work">Related work</a>
             
