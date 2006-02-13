@@ -317,8 +317,9 @@ def contact [html] ():
         <img src="/images/pixel.gif" alt="" width="1" height="1" hspace="4">
         <br>
         <p class="scanColumnAddress">
-            <a href="http://wildlifedisease.nbii.gov/"><img src="/images/USGS-28-80x22_green.gif" alt="USGS logo" border='0'/></a>
-            <br />
+            <a href="http://wildlifedisease.nbii.gov/"><img src="/images/USGS-28-80x22_green.gif" 
+                alt="USGS logo" border='0' style='margin-bottom:2em;'/></a>
+            
             <a href="http://info.med.yale.edu/intmed/occmed/"><img src="/images/yusm_logo.png" alt="Yale School of Medicine logo." 
                 hspace="30" vspace="0" border="0"></a>
         <br>
