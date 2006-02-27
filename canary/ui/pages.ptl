@@ -168,6 +168,8 @@ def _q_exception_handler [html] (request=None, exc):
 
 
 def not_found [html] (item_type='item'):
+    request = get_request()
+    request.response.set_status(404, "Not Found")
     header('%s not found' % item_type.capitalize())
     """
     <h2>%s not found</h2>
