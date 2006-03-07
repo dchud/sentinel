@@ -8,6 +8,7 @@ _q_exports = [
     'canary_png',
     'advanced_search',
     'opensearch',
+    'unapi',
     'about',
     'admin',
     'edit',
@@ -35,7 +36,7 @@ from canary.ui.browse_ui import Browse
 from canary.ui.pages import _q_index, _q_exception_handler, not_found, reaper
 from canary.ui.pages import login_general, login_yale, logout
 from canary.ui.pages import register, verify, resetpass
-from canary.ui.pages import news, robots, TempImage
+from canary.ui.pages import news, robots, unapi, TempImage
 from canary.ui.search import search, advanced_search
 
 

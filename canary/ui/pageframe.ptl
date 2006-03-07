@@ -56,7 +56,7 @@ def header [html] (title,
             @import url(/wdd_styles.css);
         </style>
         
-        <link rel="stylesheet" type="text/css" media="print" href="/wdd_print.css">
+        <link rel="stylesheet" type="text/css" media="print" href="/wdd_print.css" />
     """
     
     if show_javascript:
@@ -69,6 +69,7 @@ def header [html] (title,
     """
         <link rel="alternate" type="application/rss+xml" title="Canary Database Project News - RSS 2.0" href="http://news.canarydatabase.org/feed/" />
         <link rel="alternate" type="application/atom+xml" title="Canary Database Project News - ATOM" href="http://news.canarydatabase.org/feed/atom/" />
+        <link rel="meta" type="application/xml" title="unAPI" href="http://canarydatabase.org/unapi" />
     """
     
     # And show additional search links, if any

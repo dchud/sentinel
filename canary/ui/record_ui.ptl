@@ -41,9 +41,9 @@ def _q_lookup (request, record_id):
 
 
 def render_tagged_pubmed [plain] (record, mapped_metadata):
+    context = get_publisher().context
     request = get_request()
     request.response.set_content_type('text/plain')
-    context = get_publisher().context
     source_catalog = context.get_source_catalog()
     output = []
     for source_id, term_id in record.metadata.keys():
@@ -259,8 +259,9 @@ def render_locations [html] (study):
             </tr>
     """
 
-def render_metadata_header [html] (mapped_metadata, show_abstract=False):
-    
+def render_metadata_header [html] (uid, mapped_metadata, show_abstract=False):
+    context = get_publisher().context
+    config = context.config
     authors = mapped_metadata['author']
     if authors == []:
         authors = ['[No authors listed]']
@@ -290,6 +291,9 @@ def render_metadata_header [html] (mapped_metadata, show_abstract=False):
         ', '.join(authors),
         mapped_metadata['affiliation'])
 
+    """
+    <span class='unapi-uri' title='%s/record/%s'> </span>
+    """ % (config.site_base_url, uid)
 
     if show_abstract:
         render_abstract(mapped_metadata)
@@ -515,7 +519,10 @@ def render_related [html] (study, mapped_metadata):
     """
     
     
-def render_export [html] (mapped_metadata):
+def render_export [html] (mapped_metadata, record):
+    context = get_publisher().context
+    config = context.config
+    uri = '%s/record/%s' % (config.site_base_url, record.uid)
     """
     <table border='0' cellspacing='5' cellpadding='5'>
         <tr>
@@ -531,14 +538,35 @@ def render_export [html] (mapped_metadata):
                 
                 <ul class='xoxo'>
                     <li>
+                        <span class='unapi-uri' title='%s'>
+                            <a href='/unapi?uri=%s&amp;format=bibtex'>BibTeX</a>
+                        </span>
+                    </li>
+                    <li>
+                        <span class='unapi-uri' title='%s'>
+                            <a href='/unapi?uri=%s&amp;format=endnote'>EndNote</a>
+                        </span>
+                    </li>
+                    <li>
+                        <span class='unapi-uri' title='%s'>
+                            <a href='/unapi?uri=%s&amp;format=mods'>MODS</a>
+                        </span>
+                    </li>
+                    <li>
+                        <span class='unapi-uri' title='%s'>
+                            <a href='/unapi?uri=%s&amp;format=ris'>RIS</a>
+                        </span>
+                    </li>
+                    <li>
                         <a href='?view=export&amp;format=pubmed'>Tagged/Pubmed (NLM)</a>
                     </li>
                 </ul>
+                
             </td>
         </tr>
     </table>
-    """
-
+    """ % (uri, uri, uri, uri,
+        uri, uri, uri, uri)
 
 
 def similar [html] (self, request):
@@ -699,6 +727,11 @@ def render_record [html] (record, study):
     if view == 'export':
         if format == 'pubmed':
             return render_tagged_pubmed(record, mapped_metadata)
+        elif format in ['mods', 'bibtex', 'endnote', 'ris']:
+            return render_other_format([record], format)
+        else:
+            # Ignore everything else
+            pass
 
     # We don't really want anyone indexing abstracts from our site
     if view == 'abstract':
@@ -706,7 +739,7 @@ def render_record [html] (record, study):
     else:
         header('Record %s' % record.uid)
     
-    render_metadata_header(mapped_metadata, show_abstract=False)
+    render_metadata_header(record.uid, mapped_metadata, show_abstract=False)
     """
     <h4>Article type: %s - Canary ID: %s</h4>
     """ % (article_type.capitalize(), record.uid)
@@ -801,7 +834,7 @@ def render_record [html] (record, study):
             render_related(study, mapped_metadata)
             
         elif view == 'export':
-            render_export(mapped_metadata)
+            render_export(mapped_metadata, record)
 
     
     """
@@ -832,7 +865,7 @@ def render_record_row [html] (record):
     """
                 <tr class='recordrow'>
                     <td align='left' valign='top'>
-                        <div class='record uri' title='tag:canarydatabase.org,2005:record:%s'>
+                        <div class='record uri' title='http://canarydatabase.org/record/%s'>
     """ % record.uid
     checked_text = ''
     record_in_sets = 0

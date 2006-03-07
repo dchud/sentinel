@@ -96,11 +96,20 @@ def _q_index [html] (request):
                             <input type='text' name='q' size='20' />
                             <input type='hidden' name='f' value='user' />
                         </form>
+                        
+                        Export all:
+        """ % len(user.records)
+        uri = '%s/user/set/' % config.site_base_url
+        for f, mt in sorted(utils.FORMATS.items()):
+            """
+                [<span class='unapi-uri' title='%s'>
+                    <a href='%s/unapi?uri=%s&amp;format=%s'>%s</a>
+                 </span>]
+            """  % (uri, config.site_base_url, uri, f, f)
+        """
                     </td>
                 </tr>
-        """ % len(user.records)
         
-        """
                 <tr>
                     <th>My Sets</th>
                     <td colspan='3'>
@@ -109,6 +118,7 @@ def _q_index [html] (request):
         """
         if user.sets:
             for set in user.sets:
+                uri = '%s/user/set/%s' % (config.site_base_url, set.uid)
                 """
                             <tr class='userset'>
                                 <td id='userset-%s'>
@@ -120,9 +130,9 @@ def _q_index [html] (request):
                 else:
                     item_str = 'records'
                 """
-                                <td>%s %s</td>
-                                <td>
-                """ % (len(set.records), item_str)
+                                <td width='10%s'>%s %s</td>
+                                <td width='50%s'>
+                """ % ('%', len(set.records), item_str, '%')
                 if set.is_locked:
                     """
                                     [<a href='/user/set/%s/unlock'>unlock</a>]
@@ -132,6 +142,14 @@ def _q_index [html] (request):
                                     [<a href='/user/set/%s/lock'>lock</a>]
                                     [<a href='/user/set/%s/delete'>delete</a>]
                     """ % (set.uid, set.uid)
+                """
+                                    <br />
+                                    Export set: <br />
+                """
+                for f, mt in sorted(utils.FORMATS.items()):
+                    """
+                                        [<span class='unapi-uri' title='%s'><a href='%s/unapi?uri=%s&amp;format=%s'>%s</a></span>]
+                    """  % (uri, config.site_base_url, uri, f, f)
                 """
                                 </td>
                             </tr>

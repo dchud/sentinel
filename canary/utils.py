@@ -6,10 +6,12 @@ import Image, ImageDraw
 import os
 import re
 import time
+import traceback
 import urllib
 
+import elementtree.ElementTree as etree
+from elementtree.ElementTree import Element, SubElement
 import feedparser
-
 
 linkages = ['relationships',
     'interspecies',
@@ -292,3 +294,123 @@ def clean_temp_image_dir (context):
 def parse_feed (url):
     d = feedparser.parse(str(url))
     return d.entries
+
+
+
+FORMATS = {'mods': 'mods', 'endnote': 'end', 'bibtex': 'bib', 'ris': 'ris'}
+    
+def rec2format (context, recs, output_format='mods'):
+    try:
+        config = context.config
+        source_catalog = context.get_source_catalog()
+        ctm = source_catalog.get_complete_mapping()
+        
+        root = Element('modsCollection')
+        root.set('xmlns', 'http://www.loc.gov/mods/v3')
+        root.set('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+        root.set('version', '3.0')
+        root.set('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance')
+        root.set('xsi:schemaLocation',
+            'http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-0.xsd')
+        
+        for rec in recs:
+            try:
+                mods = SubElement(root, 'mods')
+                mm = rec.get_mapped_metadata(ctm)
+                if mm.get('title', ''):
+                    titleInfo = SubElement(mods, 'titleInfo')
+                    title = SubElement(titleInfo, 'title')
+                    title.text = mm['title']
+                if mm.get('author', []):
+                    for au in mm['author']:
+                        name = SubElement(mods, 'name')
+                        name.set('type', 'personal')
+                        # Note: bibutils looks for family/given split
+                        if ' ' in au:
+                            family, given = au.split(' ')
+                            namePart = SubElement(name, 'namePart')
+                            namePart.set('type', 'given')
+                            namePart.text = given
+                            namePart = SubElement(name, 'namePart')
+                            namePart.set('type', 'family')
+                            namePart.text = family
+                        else:
+                            namePart = SubElement(name, 'namePart')
+                            namePart.set('type', 'family')
+                            namePart.text = au
+                        role = SubElement(name, 'role')
+                        roleTerm = SubElement(role, 'roleTerm')
+                        roleTerm.set('type', 'text')
+                        roleTerm.text = 'author'
+                typeOfResource = SubElement(mods, 'typeOfResource')
+                typeOfResource.text = 'text'
+                
+                # The following block is about the "host" journal in which this
+                # article appeared
+                relatedItem = SubElement(mods, 'relatedItem')
+                relatedItem.set('type', 'host')
+                titleInfo = SubElement(relatedItem, 'titleInfo')
+                title = SubElement(titleInfo, 'title')
+                title.text = mm['journal']
+                if mm.get('issn', ''):
+                    identifier = SubElement(relatedItem, 'identifier')
+                    identifier.set('type', 'issn')
+                    identifier.text = mm['issn']
+                originInfo = SubElement(relatedItem, 'originInfo')
+                issuance = SubElement(originInfo, 'issuance')
+                issuance.text = 'continuing'
+                part = SubElement(relatedItem, 'part')
+                if mm.get('volume', ''):
+                    detail = SubElement(part, 'detail')
+                    detail.set('type', 'volume')
+                    number = SubElement(detail, 'number')
+                    number.text = mm['volume']
+                if mm.get('issue', ''):
+                    detail = SubElement(part, 'detail')
+                    detail.set('type', 'issue')
+                    number = SubElement(detail, 'number')
+                    number.text = mm['issue']
+                if mm.get('pages', ''):
+                    extent = SubElement(part, 'extent')
+                    extent.set('unit', 'page')
+                    if '-' in mm['pages']:
+                        start, end = mm['pages'].split('-')
+                        st = SubElement(extent, 'start')
+                        st.text = start
+                        en = SubElement(extent, 'end')
+                        en.text = end
+                    else:
+                        st = SubElement(extent, 'start')
+                        st.text = mm['pages']
+                if mm.get('pubdate', ''):
+                    date = SubElement(part, 'date')
+                    date.text = mm['pubdate'][:4]
+                
+                for subtype in ['subject', 'keyword']:
+                    for sub in mm.get(subtype, []):
+                        subject = SubElement(mods, 'subject')
+                        if subtype == 'subject':
+                            subject.set('authority', 'mesh')
+                        topic = SubElement(subject, 'topic')
+                        topic.text = sub
+                    
+            except:
+                print traceback.print_exc()
+        
+        mods_out = etree.tostring(root)
+        if output_format == 'mods': 
+            return mods_out
+        elif output_format in FORMATS.keys():
+            bibutils_format_name = FORMATS[output_format]
+            filename = '%s/records-%s.mods' % (config.temp_image_dir, time.time())
+            fp = open(filename, 'w')
+            fp.write(mods_out)
+            fp.close()
+            bibutils_call = '/usr/local/bin/xml2%s %s > %s.%s' % (bibutils_format_name,
+                filename, filename, output_format)
+            os.system(bibutils_call)
+            time.sleep(3)
+            return open('%s.%s' % (filename, output_format)).read()
+            
+    except:
+        print traceback.print_exc()

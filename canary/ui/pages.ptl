@@ -3,10 +3,14 @@
 from cStringIO import StringIO
 import logging
 import random
+import re
 import string
 from time import time
+import traceback
 import urllib
 
+import elementtree.ElementTree as etree
+from elementtree.ElementTree import Element, SubElement
 import Image
 
 from quixote import get_publisher, get_request, get_session_manager
@@ -17,6 +21,8 @@ from quixote.util import StaticFile
 from canary.qx_defs import NotLoggedInError, MyForm
 from canary.ui.pageframe import header, footer
 from canary import utils
+from canary.loader import QueuedRecord
+from canary.study import Study
 from canary.user import User, get_user_by_id, get_user_by_email, get_user_by_yale_netid
 
 
@@ -109,6 +115,7 @@ def _q_exception_handler [html] (request=None, exc):
         
     elif isinstance(exc, AccessError):
         
+        request.response.set_status(401, 'Not Authorized')
         path = request.get_path()
         header('Access not allowed')
         """
@@ -155,6 +162,7 @@ def _q_exception_handler [html] (request=None, exc):
         
     else:
         
+        request.response.set_status(400, 'Bad Request')
         header('Oops!')
         """
         <h2>Oops!</h2>
@@ -457,6 +465,93 @@ def render_messages [html] ():
     except Exception, e:
         context = get_publisher().context
         context.logger.error('Could not render session messages: %s', e)
+
+
+# unAPI formats and identifier prefix/namespace regexes for Canary
+
+FORMATS = [
+    ('endnote', 'text/plain'),
+    ('bibtex', 'text/plain'),
+    ('ris', 'text/plain'),
+    ('mods', 'application/xml'),
+    ]
+
+def render_unapi_formats [plain] (uri=''):
+    root = Element('formats')
+    if uri:
+        uri_element = SubElement(root, 'uri')
+        uri_element.text = uri
+    for f, mt in FORMATS:
+        format = SubElement(root, 'format')
+        name = SubElement(format, 'name')
+        name.text = f
+        type = SubElement(format, 'type')
+        type.text = mt
+    return root
+
+def unapi [plain] (request):
+    context = get_publisher().context
+    config = context.config
+    uri = request.get_form_var(str('uri'), '')
+    format = request.get_form_var(str('format'), '')
+
+    URI_PREFIXES = [
+        ('%s/record/([0-9]+)' % config.site_base_url, 'record'),
+        ('^(%s/user/set/$)' % config.site_base_url, 'records'),
+        ('%s/user/set/([0-9]+)' % config.site_base_url, 'set'),
+        ]
+    re_dict = {}
+    for regex, type in URI_PREFIXES:
+        re_dict[type] = (regex, type, re.compile(regex))
+    
+    try:
+        if uri:
+            for type in re_dict.keys():
+                match = re_dict[type][2].match(uri)
+                if match:
+                    if type == 'record':
+                        rec = QueuedRecord(context, match.groups()[0])
+                        study = Study(context, rec.study_id)
+                        if not study.get_status(text=True) == 'curated' \
+                            or study.get_article_type(text=True) == 'irrelevant':
+                            return not_found('record')
+                        records = [rec]
+                    elif type in ('set', 'records'):
+                        user = request.session.user
+                        if not user:
+                            request.response.set_stats(401, 'Not Authorized')
+                            """<h1>Not Authorized</h1>"""
+                        if type == 'set':
+                            set_id = int(match.groups()[0])
+                            user_recs = user.record_set_map.get(set_id, [])
+                            records = [QueuedRecord(context, r.record_id) for r in user_recs]
+                        else:  # type == 'records':
+                            records = [QueuedRecord(context, urec.record_id) for urec in user.records.values()]
+            if not records:
+                return not_found('item')
+            if format:
+                if format in [f for f, mt in FORMATS]:
+                    if format == 'mods':
+                        request.response.set_content_type('application/xml')
+                    else:
+                        request.response.set_content_type('text/plain')
+                    utils.rec2format(context, records, format)
+                else:
+                    request.response.set_status(415, 'Unsupported Media Type')
+                    """
+                    <h1>Unsupported Media Type</h1>
+                    """
+            else:
+                request.response.set_status(300, 'Multiple Choices')
+                request.response.set_content_type('application/xml')
+                return etree.tostring(render_unapi_formats(uri))
+        else:
+            request.response.set_content_type('application/xml')
+            return etree.tostring(render_unapi_formats())
+    except:
+        request.response.set_status(400, 'Bad Request')
+        """<h1>Bad Request</h1>"""
+        print traceback.print_exc()
 
 
 # FIXME: hide this somehow or at least discourage abuse better?

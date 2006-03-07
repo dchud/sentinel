@@ -52,7 +52,6 @@ class SetActions:
             record_dict = context.cache_get_multi([str('record:%s') % r.record_id for r in user_recs])
             # Sort by year, uid by default
             records = record_dict.values()
-            print 'Setting f to set-%s' % self.set_id
             request.add_form_value('f', 'set-%s' % self.set_id)
             browse_index = UserSetBrowseIndex(request)
             browse_index.render_records('my set "%s"' % set.name, records,
