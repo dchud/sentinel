@@ -279,16 +279,20 @@ def clean_temp_image_dir (context):
     """
     Walk through the temp_image_dir and eliminate anything
     older than an hour.  Assumes files are named in time_millis,
-    with dot+three extensions, e.g. '1115775081.08.png'.
+    with dot+three or more extensions, e.g. '1115775081.08.png' and an optional
+    prefix, e.g. 'records-1234567890.12.mods.endnote'.
     """
     config = context.config
     now = int(time.time())
     interval = 60 * 60
+    re_epoch_time = re.compile(r'[a-z-]*([0-9]{10})\..*')
     for root, dirs, files in os.walk(config.temp_image_dir):
         for file in files:
-            file_time = int(file[:file.index('.')])
-            if now - file_time >= interval:
-                os.remove('%s/%s' % (config.temp_image_dir, file))
+            match = re_epoch_time.findall(file)
+            if match:
+                file_time = int(match[0])
+                if now - file_time >= interval:
+                    os.remove('%s/%s' % (config.temp_image_dir, file))
 
 
 def parse_feed (url):
