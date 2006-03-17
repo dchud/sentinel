@@ -866,7 +866,8 @@ def render_record_row [html] (record):
                 <tr class='recordrow'>
                     <td align='left' valign='top'>
                         <div class='record uri' title='http://canarydatabase.org/record/%s'>
-    """ % record.uid
+                            <span class='unapi-uri' title='http://canarydatabase.org/record/%s'></span>
+    """ % (record.uid, record.uid)
     checked_text = ''
     record_in_sets = 0
     if user:
