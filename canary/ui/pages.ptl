@@ -38,34 +38,52 @@ def _q_index [html] (request):
     <tr valign='top'>
     <td width='400' valign='top' class='rightspace'>
 
-    <h1>The Canary Database</h1>
-    <p>
-    The Canary Database contains studies in the biomedical literature
-    that explore the use of wildlife, domestic, and companion animals as
-    &quot;sentinels&quot; for the effects of chemical, biological, and 
-    physical hazards in the environment that may be a risk to human health.
-    </p>
+    <div class="pullquote">
+    Can animals 
+    - like canaries in coal mines -
+    warn humans 
+    about chemical, infectious, and environmental hazards?
+    </div>
 
-    <h3>
-    Try it now!
-    </h3>
+    <p>
+    We select, curate, and index 1000s of scientific studies from MEDLINE,
+    CAB Abstracts, and Agricola so you can review the evidence of 
+    animals as "early warning" sentinels of human health hazards.
+    </p>
     
     <h3>
-    Use the links at left, or try searches like these:
+    Try it now!  Find evidence of animal as sentinels:
     </h3>
     
+    
+    <p>
+    ...for environmental hazards:
     <ul type='circle'>
         <li><a href="/search?q=dogs+lead">Dogs and Lead</a></li>
-        <li><a href="/search?q=cancer+whales">Cancer and Whales</a></li>
         <li><a href='/search?q=birds+"west+nile+virus"'>Birds and West Nile Virus</a></li>
+    </ul>
+    </p>
+    
+    <p>
+    ...for diseases:
+    <ul type='circle'>
+        <li><a href="/search?q=cancer+whales">Cancer and Whales</a></li>
+        <li><a href="/search?q=reproduction+fish">Reproduction and Fish</a></li>
+    </ul>
+    </p>
+
+    <p>
+    ...by location:
+    <ul type='circle'>
         <li><a href="/search?q=anthrax+sverdlovsk">Anthrax and Sverdlovsk</a></li>
         <li><a href='/search?q=wnv+"new+york+city"'>West Nile Virus and New York City</a></li>
     </ul>
+    </p>
 
-    <h3>
-    Also try the <a href="/advanced_search">advanced search</a> page or read
+    <p>
+    Or, try the <a href="/advanced_search">advanced search</a> page, or read
     more about <a href="/about/how_to_search">how to search</a>.
-    </h3>
+    </p>
     
 
     </td>
@@ -78,23 +96,49 @@ def _q_index [html] (request):
         </div>
     """
     
-    for item in utils.parse_feed('http://news.canarydatabase.org/feed/')[:5]:
+    for item in utils.parse_feed('http://news.canarydatabase.org/feed/')[:3]:
         """
-        <p style='padding-bottom: 1em; border-bottom: 1px solid #ddd;'>
-        <a href="%s">%s</a> <br />
+        <p class='story'>
         %s
+        <br />
+        <span class='headline'><a href="%s">%s</a></span>
         </p>
-        """ % (item.link, item.title, item.updated[:-15])
+        """ % (item.updated[:-15], item.link, item.title)
             
     """
         <p>
-        Subscribe to Canary Database Project News: <br />
-        [<a href="http://news.canarydatabase.org/feed/">rss</a>]
-        [<a href="http://news.canarydatabase.org/feed/atom/">atom</a>]
+        See all <a href="http://news.canarydatabase.org/">project news</a>. <br />
+        Subscribe to Project News: 
+        <a href="http://news.canarydatabase.org/feed/"><img src='/images/feed-icon-16x16.png' 
+            alt='Project News Subscription Icon' border='0'/></a>
         </p>
 
     </div>
-   
+
+
+    <div class='news'>
+        <div class='news-head'>
+            <a href="http://news.canarydatabase.org/category/articles">Staff Publications</a>
+        </div>
+    """
+    
+    for item in utils.parse_feed('http://news.canarydatabase.org/category/articles/feed/')[:5]:
+        """
+        <p class='story'>
+        %s
+        <br />
+        <span class='headline'><a href="%s">%s</a></span>
+        </p>
+        """ % (item.updated[:-15], item.link, item.title)
+            
+    """
+        <p>
+        See all <a href="http://news.canarydatabase.org/category/articles">project
+        staff publications</a>.
+        </p>
+    </div>
+
+
     </td>
     </tr>
 </table>

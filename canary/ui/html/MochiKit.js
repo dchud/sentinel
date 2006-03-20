@@ -2780,7 +2780,7 @@ MochiKit.DOM._newCallStack=function(path,once){
 var rval=function(){
 var _360=arguments.callee.callStack;
 for(var i=0;i<_360.length;i++){
-if(_360[i].apply(this,arguments)===false){
+if(_360[i].apply(this,arguments)==false){
 break;
 }
 }
