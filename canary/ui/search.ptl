@@ -102,6 +102,11 @@ def search [html] (request):
         searcher.close()
         result_id_list = list(str('record:%s') % uid for uid, score in result_pairs)
         result_record_map = context.cache_get_multi(result_id_list)
+        # Verify that we got them all from the cache, or force them into the cache
+        if not len(result_record_map) == len(result_id_list):
+            for id in result_id_list:
+                int_id = int(id[7:])
+                result_record_map[id] = QueuedRecord(context, int_id)
         result_set = []
         for uid, score in result_pairs:
             record = result_record_map[str('record:%s' % uid)]
@@ -126,6 +131,11 @@ def search [html] (request):
         
         study_id_list = list(str('%s:%s' % (Study.CACHE_KEY, r.study_id)) for r, score in result_set)
         study_map = context.cache_get_multi(study_id_list)
+        # Verify that we got them all from the cache, or force them into the cache
+        if not len(study_map) == len(study_id_list):
+            for id in study_id_list:
+                int_id = int(id[6:])
+                study_map[id] = Study(context, int_id)
         studies = list(study_map[id] for id in study_id_list)
         e_image_file = utils.make_sideways_e(context, studies)
 
