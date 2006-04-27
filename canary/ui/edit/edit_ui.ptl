@@ -38,6 +38,7 @@ class FindRecordForm (MyForm):
     def __init__ (self, context):
         MyForm.__init__(self, context)
         self.action_url = '/edit/find'
+        self.method = 'GET'
         self.add(form2.SingleSelectWidget, 'field',
             value='author',
             title='Find by:',

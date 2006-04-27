@@ -6,6 +6,8 @@ _q_exports = [
     'update',
     ]
 
+import urllib
+
 from quixote import get_publisher
 from quixote.errors import AccessError, PublishError, TraversalError
 
@@ -205,6 +207,14 @@ def view [html] (request, batch_id=None, show='unfinished', start=0, size=25):
                         """
                             [<a href='/edit/study/%s/curate_one'>edit</a>]
                         """ % record_id
+                    
+                    # Provide a "cheap" dedupe function for curators.
+                    search_url = '/edit/find?field=anything&amp;allow_curated=On&amp;token=%s' % \
+                        urllib.quote_plus(str(record.title))
+                    """
+                            [<a href='%s' target='curator_find_dupes'>search dupes</a>]
+                    """ % search_url
+                        
                     """
                         </td>
                     </tr>
