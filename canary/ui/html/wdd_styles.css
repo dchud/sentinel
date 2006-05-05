@@ -443,6 +443,20 @@ dl {
     padding: 5px;
 }
 
+.summary td {
+    text-align: center;
+}
+
+dt {
+    font-size: large;
+    font-weight: bold:
+    margin-bottom: 1em;
+}
+
+dd {
+    margin-bottom: 2em;
+}
+
 .relevance-box {
     border: 1px solid #324362;
     background-color: #EEEDC0;
