@@ -558,6 +558,18 @@ CREATE TABLE `users` (
   UNIQUE KEY `id` (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+-- 
+-- Table structure for table `human_studies`
+-- 
+
+CREATE TABLE `human_studies` (
+  `uid` int(11) NOT NULL auto_increment,
+  `reference` varchar(255) collate utf8_unicode_ci NOT NULL default '',
+  `comments` varchar(255) collate utf8_unicode_ci default NULL,
+  PRIMARY KEY  (`uid`),
+  UNIQUE KEY `reference` (`reference`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
