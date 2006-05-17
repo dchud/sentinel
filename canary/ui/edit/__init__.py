@@ -6,6 +6,7 @@ _q_exports = [
     'find',
     'pubmed',
     'study',
+    'human',
     ]
 
 
@@ -14,7 +15,7 @@ from quixote.errors import AccessError, PublishError, TraversalError
 from canary.qx_defs import NotLoggedInError
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found
-from canary.ui.edit import batch, edit_ui, study
+from canary.ui.edit import batch, edit_ui, study, human
 
 _q_index = edit_ui._q_index
 find = edit_ui.find

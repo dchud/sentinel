@@ -70,7 +70,10 @@ def _q_index [html] (request):
                 """
                 if user.is_editor:
                     """
-                    <td><a href='/edit/'>Curate</a></td>
+                    <td>
+                        [<a href='/edit/'>Curate</a>]
+                        [<a href='/edit/human'>Human refs</a>]
+                    </td>
                     """
                 if user.is_admin:
                     """

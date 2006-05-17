@@ -1,0 +1,264 @@
+# $Id$
+
+_q_exports = [
+    '_q_index',
+    'add',
+    'update',
+    'delete',
+    ]
+
+import traceback
+import urllib
+
+from quixote import form2
+from quixote import get_publisher, get_request
+from quixote.errors import AccessError, PublishError, TraversalError
+
+from canary import human_study
+from canary.qx_defs import MyForm
+from canary.ui.edit.edit_ui import title_bar
+from canary import human_study
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found
+from canary.ui.pages import has_messages, add_message, render_messages
+
+
+def _q_index [html] (request):
+    
+    context = get_publisher().context
+    
+    header('Edit Human tudies')
+    title_bar('Edit Human studies')
+    
+    """
+    <h2>Add a human reference</h2>
+    """
+    
+    if has_messages:
+        render_messages()
+    
+    form = HumanStudyForm(context)
+    form.add_submit('add', 'add')
+    form.render()
+    
+    studies = human_study.get_studies(context)
+    """
+    <hr />
+    <h3>All human study references</h3>
+    <table class='gentable'>
+        <tbody>
+        <tr>
+            <th>Reference</th>
+            <th>Comments</th>
+            <th>Actions</th>
+        </tr>
+    """
+    for s in studies:
+        """
+        <tr>
+            <td>%s</td>
+            <td>%s</td>
+            <td>
+                [<a href='/edit/human/%s/update'>update</a>]
+                [<a href='/edit/human/%s/delete'>delete</a>]
+            </td>
+        </tr>
+        """ % (s.reference, s.comments, s.uid, s.uid)
+    
+    """
+        </tbody>
+    </table>
+    """
+    footer()
+
+
+class HumanStudyForm (MyForm):
+    
+    def __init__ (self, context):
+        MyForm.__init__(self, context)
+        self.action_url = '/edit/human/add'
+        self.add(form2.TextWidget, 'reference',
+            title='Reference',
+            rows=2,
+            cols=50,
+            required=True)
+        self.add(form2.TextWidget, 'comments',
+            title='Curator comment (private)',
+            rows=3,
+            cols=50,
+            required=False)        
+
+class HumanActions:
+
+    _q_exports = [
+        '_q_index',
+        ]
+
+    def __init__ (self, human_id):
+        print 'HumanActions.__init__'
+        self.human_id = human_id
+
+    def _q_index [html] (self, request):
+        header('Edit: Add human study')
+        """
+        blah
+        """
+        footer()
+
+    def _q_lookup [html] (self, request, action):
+        try:
+            self.human_id = int(self.human_id)
+            if action == 'delete':
+                return delete(self.human_id) 
+            elif action == 'update':
+                return update(self.human_id)
+            else:
+                raise TraversalError
+        except:
+            return not_found('human study')
+
+
+
+def add [html] (request):
+    try:
+        context = get_publisher().context
+        form = HumanStudyForm(context)
+        
+        def render [html] ():
+            header('Edit: Add human study')
+            title_bar('Add human study')
+            form.add_submit('add', 'add')
+            form.render()
+            footer()
+            
+        if not form.is_submitted():
+            return render()
+            
+        reference = form['reference']
+        comments = ''
+        if form['comments']:
+            comments = form['comments']
+                
+        if form.has_errors():
+            return render()
+            
+        try:
+            hs = human_study.HumanStudy()
+            hs.reference = reference
+            hs.comments = comments
+            hs.save(context)
+            add_message('Saved human study %s' % hs.uid)
+            form.logger.info(str('Saved human study %s' % hs.uid))
+        except Exception, e:
+            print traceback.print_exc()
+            add_message('Unable to update. (References must be unique!)')
+            form.logger.info(str('Unable to save human study'))
+            form.logger.error(e)
+            
+        request.redirect(str('/edit/human'))
+    except:
+        print traceback.print_exc()
+    
+
+
+def delete [html] (human_id=None):
+    print 'human_ui.delete()'
+    context = get_publisher().context
+    
+    try:
+        s = human_study.HumanStudy(context, human_id)
+        if s == None:
+            return not_found('human study')
+            
+        form = MyForm(context)
+        form.action_url = str('/edit/human/%s/delete' % human_id)
+        form.add(form2.CheckboxWidget, 'are_you_sure',
+            title='Are you sure you want to delete this human study reference?',
+            value=False)
+        form.add_submit('delete', 'delete')
+    
+        def render [html] ():
+            header('Delete human study')
+            title_bar('Delete human study')
+            """
+            <h3>Delete human study:</h3>
+            <p style='border:1px solid #ccc;padding:1em;'>
+            %s <br />
+            """ % s.reference
+            if s.comments:
+                """
+                Curator comments: "%s"
+                """ % s.comments
+            """
+            </p>
+            """
+                
+            
+            form.render()
+            footer()
+    
+        if not form.is_submitted():
+            return render()
+    
+        if form.has_errors():
+            return render()
+    
+        are_you_sure = form['are_you_sure']
+        if are_you_sure:
+            try:
+                s.delete(context)
+                add_message('Deleted human study %s' % human_id)
+                form.logger.info(str('Deleted human %s', human_id))
+            except:
+                form.logger.error(str('Unable to delete human study %s' % human_id))
+    
+        else:
+            add_message('Admin: Human study not deleted')
+    
+        get_request().redirect(str('/edit/human'))
+    except:
+        print traceback.print_exc()
+
+
+def update [html] (human_id=None):
+    context = get_publisher().context
+
+    s = human_study.HumanStudy(context, human_id)
+    if s == None:
+        return not_found('human study')
+    
+    form = HumanStudyForm(context)
+    form.action_url = str('/edit/human/%s/update' % human_id)
+    form.add_submit('update', 'update')
+        
+    def render [html] ():
+        header('Edit: Add human study')
+        title_bar('Add human study')
+        form.render()
+        footer()
+        
+    if not form.is_submitted():
+        form.get_widget('reference').set_value(s.reference)
+        form.get_widget('comments').set_value(s.comments)
+        return render()
+        
+    reference = form['reference']
+    comments = ''
+    if form['comments']:
+        comments = form['comments']
+            
+    if form.has_errors():
+        return render()
+        
+    try:
+        s.reference = reference
+        s.comments = comments
+        s.save(context)
+        add_message('Updated human study %s' % human_id)
+        form.logger.info(str('Updated human study %s' % human_id))
+    except Exception, e:
+        add_message('Unable to update. (References must be unique!)')
+        form.logger.info(str('Unable to update human study %s' % human_id))
+        form.logger.error(e)
+        
+    get_request().redirect(str('/edit/human'))

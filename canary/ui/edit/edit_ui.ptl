@@ -61,7 +61,6 @@ class FindRecordForm (MyForm):
         self.add_submit('find', 'find')
 
 
-
 def _q_index [html] (request):
     
     context = get_publisher().context
@@ -78,9 +77,11 @@ def _q_index [html] (request):
         <legend>Find/load records</legend>
         
         <h4>
-            <span class='hidey' onclick="javascript:makeVisible('curator-panel-find');makeInvisible('curator-panel-pubmed');">Find existing record</span>
+            <span class='hidey' 
+                onclick="javascript:makeVisible('curator-panel-find');makeInvisible('curator-panel-pubmed');">Find existing record</span>
             |
-            <span class='hidey' onclick="javascript:makeVisible('curator-panel-pubmed');makeInvisible('curator-panel-find');">Load a record from Pubmed</span>
+            <span class='hidey' 
+                onclick="javascript:makeVisible('curator-panel-pubmed');makeInvisible('curator-panel-find');">Load a record from Pubmed</span>
         </h4>
         <div id='curator-panel-find'>
     """
@@ -98,10 +99,12 @@ def _q_index [html] (request):
     form.render()
     """
         </div>
-    </fieldset>
     """
     
     """
+    </fieldset>
+
+
     <h3>Current editing queue</h3>
     
     <table cellspacing='5' class='gentable'>
