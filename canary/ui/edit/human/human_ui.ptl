@@ -27,7 +27,7 @@ def _q_index [html] (request):
     
     context = get_publisher().context
     
-    header('Edit Human tudies')
+    header('Edit Human studies')
     title_bar('Edit Human studies')
     
     """
