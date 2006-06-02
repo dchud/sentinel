@@ -5,6 +5,7 @@ _q_exports = [
     'find',
     'pubmed',
     'view',
+    'auto_human',
     ]
 
 
@@ -14,6 +15,7 @@ from quixote import get_publisher, get_request
 from quixote.errors import AccessError, PublishError, TraversalError
 from quixote import form2
 
+from canary import human_study
 from canary.loader import Batch, QueuedRecord, Queue, Parser
 from canary.qx_defs import MyForm
 import canary.search
@@ -541,7 +543,7 @@ def render_results [html] (results):
                 """
         elif status == record.STATUS_CURATED:
             """
-                [<a href='/edit/study/%s/summary'>edit</a>]
+                [<a href='/edit/study/%s/review'>edit</a>]
             """ % record.uid
             
         """
@@ -554,4 +556,19 @@ def render_results [html] (results):
     """
 
 
-
+def auto_human [html] (request):
+    context = get_publisher().context
+    
+    token = request.get_form_var('token', '')
+    refs = []
+    if len(token) >= 3:
+        refs = human_study.find_references(context, token)[:10]
+    
+    """<ul>"""
+    for r in refs:
+        """
+        <li>[%s] %s</li>
+        """ % (r.uid, r.reference)
+    """</ul>"""
+    
+    

@@ -13,6 +13,7 @@ _q_exports = [
     'concept',
     'category',
     'dv_data',
+    'auto',
     'reload_sources',
     ]
 
@@ -39,7 +40,7 @@ users = admin_ui.users
 source_map = admin_ui.source_map
 sources = admin_ui.sources
 reload_sources = admin_ui.reload_sources
-
+auto = admin_ui.auto
 
 def _q_access (request):
     if request.session.user == None:

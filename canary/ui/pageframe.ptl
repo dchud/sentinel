@@ -13,6 +13,7 @@ ROBOT_CONTENT_VALUES = ('all', 'none', 'noindex', 'nofollow')
 def header [html] (title, 
     show_pageframe=True, 
     show_javascript=False,
+    javascript_files=['mochikit', 'script'],
     autodiscovery_links=[],
     meta_robot=''):
     
@@ -60,10 +61,12 @@ def header [html] (title,
     """
     
     if show_javascript:
-        """
-        <script type='text/javascript' src='/mochikit.js'></script>
-        <script type='text/javascript' src='/script.js'></script>
-        """
+        if javascript_files:
+            for f in javascript_files:
+                """
+        <script type='text/javascript' src='/%s.js'></script>
+                """ % f
+
         
     # Always show the default news/blog headline autodiscovery links
     """

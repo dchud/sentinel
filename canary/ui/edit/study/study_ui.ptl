@@ -7,12 +7,14 @@ _q_exports = [
     'curate_two',
     'curate_three',
     'curate_four',
-    'summary',
+    'curate_five',
+    'review',
     'category',
     'unclaim',
     ]
 
 import time
+import traceback
 
 from quixote import get_publisher, get_request
 from quixote.errors import AccessError, PublishError, TraversalError
@@ -22,13 +24,14 @@ from canary.concept import load_categories, Category
 from canary.loader import QueuedRecord
 from canary.qx_defs import MyForm
 from canary.study import Study, Exposure, RiskFactor, Location, Outcome, Species
+from canary import summary
 from canary.ui import record_ui
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found, add_message, has_messages, render_messages
 from canary.ui.edit.study.utils import is_same_user, render_queued_record
 from canary.ui.edit.study.utils import claimed_by_other_user, render_unclaim_block
 from canary.ui.edit.study.utils import render_exposures, render_risk_factors, render_outcomes
-from canary.ui.edit.study.utils import render_species, render_locations
+from canary.ui.edit.study.utils import render_species, render_locations, render_summaries
 from canary.ui.edit.study.utils import render_subject_selector
 from canary.ui.edit.study.utils import render_pipeline
 from canary.ui.record_ui import render_data_points, render_methodologies
@@ -65,6 +68,7 @@ class StudyActions:
         'outcome',
         'species',
         'location',
+        'summary',
         ]
 
     from canary.ui.edit.study import methodology
@@ -73,7 +77,7 @@ class StudyActions:
     from canary.ui.edit.study import outcome
     from canary.ui.edit.study import species
     from canary.ui.edit.study import location
-    
+    from canary.ui.edit.study import summary
 
     def __init__ (self, queued_record_id):
         try:
@@ -95,8 +99,10 @@ class StudyActions:
                 return curate_three(request, self.queued_record_id)
             elif action == 'curate_four':
                 return curate_four(request, self.queued_record_id)
-            elif action == 'summary':
-                return summary(request, self.queued_record_id)
+            elif action == 'curate_five':
+                return curate_five(request, self.queued_record_id)
+            elif action == 'review':
+                return review(request, self.queued_record_id)
             elif action == 'history':
                 return history(request, self.queued_record_id)
             elif action == 'unclaim':
@@ -113,11 +119,14 @@ class StudyActions:
                 return species
             elif action == 'location':
                 return location
+            elif action == 'summary':
+                return summary
             elif action == 'category':
                 return category(request, self.queued_record_id)
             else:
                 raise TraversalError
         except:
+            print traceback.print_exc()
             return not_found('study')
 
 
@@ -287,7 +296,7 @@ def curate_one [html] (request, queued_record_id):
     article_type = study.get_article_type(text=True)
     
     if article_type in ['irrelevant']:
-        request.redirect(str('summary'))
+        request.redirect(str('review'))
     else:
         request.redirect(str('curate_two'))
 
@@ -312,7 +321,7 @@ def curate_two [html] (request, queued_record_id):
     
     # 'irrelevant' studies don't get this layer of classification
     if article_type in ['irrelevant']:
-        request.redirect(str('summary'))
+        request.redirect(str('review'))
 
     form = MyForm(context)
     form.add(form2.CheckboxWidget, 
@@ -440,7 +449,7 @@ def curate_three [html] (request, queued_record_id):
     article_type = study.get_article_type(text=True)
     
     if article_type in ['irrelevant']:
-        request.redirect(str('summary'))
+        request.redirect(str('review'))
 
     header('Curate: exposures, risk factors, outcomes, species, locations', show_javascript=True)
     """
@@ -611,7 +620,7 @@ def curate_four [html] (request, queued_record_id):
     article_type = study.get_article_type(text=True)
     
     if article_type in ['irrelevant']:
-        request.redirect(str('summary'))
+        request.redirect(str('review'))
 
     header('Curate: specify methodology', show_javascript=True)
     """
@@ -639,7 +648,7 @@ def curate_four [html] (request, queued_record_id):
         </p>
         
         <p>
-        You can <a href='summary'>continue to the summary</a>.
+        You can <a href='curate_five'>add summaries</a>.
         """
     """
     </p>
@@ -648,7 +657,7 @@ def curate_four [html] (request, queued_record_id):
     footer()
 
 
-def summary [html] (request, queued_record_id):
+def curate_five [html] (request, queued_record_id):
     
     context = get_publisher().context
     session = request.session
@@ -659,142 +668,266 @@ def summary [html] (request, queued_record_id):
     if queued_record.status == queued_record.STATUS_CLAIMED:
         if not is_same_user(queued_record):
             return claimed_by_other_user()
-
+    
     study = Study(context, queued_record.study_id)
     article_type = study.get_article_type(text=True)
     
-    if article_type == 'unknown':
-        add_message('Article type set to "general".')
-        study.set_article_type('general')
-        study.add_history(curator_user_id=session.user.get_id(),
-            message='Set article type to general')
-        study.save(context)
-        request.redirect(str('summary'))
+    if article_type in ['irrelevant']:
+        request.redirect(str('review'))
+
+    header('Curate: summarize concepts', show_javascript=True,
+        javascript_files=['prototype', 'scriptaculous', 'scriptacle'])
         
-    if article_type == 'curated':
-        
-        if len(study.exposures) == 0:
-            add_message('You must add at least one exposure.')
-        
-        if len(study.outcomes) == 0:
-            add_message('You must add at least one outcome.')
-        
-        if len(study.species) == 0:
-            add_message('You must add at least one species')
-        
+    """
+    <h3>Curate: summarize</h3>
+    """
+    render_pipeline(article_type, step=5)
+    render_queued_record(queued_record)
     if has_messages():
-        return request.redirect(str('curate_three'))
+        render_messages()
 
-
-    form = MyForm(context)
-    form.add(form2.TextWidget, 'comments', title='General comments',
-        value=study.comments,
-        rows='4', cols='60', wrap='virtual', 
-        required=False) 
-    form.add_submit('update', 'update')
-    form.add_submit('finish', 'finish')
+    # Load and display all summaries for this study
+    sums = summary.get_summaries_from_study(context, study)
+    if sums:
+        """
+        <h3>Summaries</h3>
+        
+        <table class='gentable'>
+            <tbody>
+                <tr>
+                    <th>Methodology</th>
+                    <th>Exp/Out/Spec</th>
+                    <th>Positive</th>
+                    <th>Negative</th>
+                    <th># Human Refs</th>
+                    <th>Public Notes</th>
+                    <th>Actions</th>
+                </tr>
+        """
+        for s in sums:
+            """
+                <tr>
+            """
+            meth = [m for m in study.methodologies if m.uid == s.methodology_id][0]
+            """
+                    <td valign='top'>%s</td>
+            """ % meth.get_study_type(True)
+            """
+                    <td valign='top'>
+            """
+            for concept in ['exposures', 'outcomes', 'species']:
+                concept = str(concept)
+                cons = getattr(s, concept)
+                if cons:
+                    loaded_cons = [c for c in getattr(study, concept) \
+                        if c.uid in [sumc.study_concept_id for sumc in cons]]
+                    """
+                    <span style='text-decoration:underline;'>%s</span>: <br />
+                    %s <br />
+                    """ % (concept.capitalize(), 
+                        str(', ').join([str(lc.term) for lc in loaded_cons]))
+            """
+                    </td>
+                    <td valign='top'>&nbsp;
+            """
+            linkages =  ['susceptibility', 'exposure_risk', 'latency', 'warning']
+            positives = [l for l in linkages if getattr(s, str('has_%s' % str(l)))]
+            """
+            %s
+            """ % str(', ').join([str(p) for p in positives])
+            """
+                    </td>
+                    <td valign='top'>&nbsp;
+            """
+            negatives = [l for l in linkages if getattr(s, str('hasnt_%s' % str(l)))]
+            """
+            %s
+            """ % str(', ').join([str(n) for n in negatives])
+            """
+                    </td>
+                    <td valign='top'>
+                    %s
+            """ % len(s.human_refs)
+            """
+                    </td>
+                    <td valign='top'>&nbsp;
+                    %s
+            """ % s.public_notes
+            """
+                    </td>
+                    <td valign='top'>
+                    [<a href='/edit/study/%s/summary/%s/delete'>delete</a>]
+            """ % (queued_record_id, s.uid)
+            """
+                    </td>
+                </tr>
+            """
+        """
+            </tbody>
+        </table>
+        """
+        
     
-    def render [html] ():
-        header('Curate: summary', show_javascript=True)
-        """
-        <h3>Curate: summary</h3>
-        """
-        render_pipeline(article_type, step=5)
-        render_queued_record(queued_record)
+    """
+    <br />
+    <h3>Add new summary</h3>
+    """
+    render_summaries(study)
+    render_unclaim_block()
+    footer()
+
+
+
+def review [html] (request, queued_record_id):
+    print 'study_ui.review()'
+    try:
+        context = get_publisher().context
+        session = request.session
+        queued_record = QueuedRecord(context, queued_record_id)
+        if not queued_record:
+            return not_found('study')
+    
+        if queued_record.status == queued_record.STATUS_CLAIMED:
+            if not is_same_user(queued_record):
+                return claimed_by_other_user()
+    
+        study = Study(context, queued_record.study_id)
+        article_type = study.get_article_type(text=True)
+        
+        if article_type == 'unknown':
+            add_message('Article type set to "general".')
+            study.set_article_type('general')
+            study.add_history(curator_user_id=session.user.get_id(),
+                message='Set article type to general')
+            study.save(context)
+            request.redirect(str('review'))
+            
+        if article_type == 'curated':
+            
+            if len(study.exposures) == 0:
+                add_message('You must add at least one exposure.')
+            
+            if len(study.outcomes) == 0:
+                add_message('You must add at least one outcome.')
+            
+            if len(study.species) == 0:
+                add_message('You must add at least one species')
+            
         if has_messages():
-            render_messages()
-        """
-        <p>
-        Please review all of the information you have provided
-        and make changes as needed.
-        </p>
-        """
-        
-        """
-        <h4>Article type: %s</h4>
-        """ % article_type
-
-        if not article_type in ['irrelevant']:
-            
-            render_data_points(study)
-            
-            """
-            <table class='gentable' id='summary'>
-            """
-            
-            if study.has_exposures \
-                and len(study.exposures) > 0:
-                render_summary_concept_row(study.exposures, 'exposures')
-                
-            if study.risk_factors:
-                render_summary_concept_row(study.risk_factors, 'risk factors')
-                
-            if study.has_outcomes \
-                and len(study.outcomes) > 0:
-                render_summary_concept_row(study.outcomes, 'outcomes')
-                
-            if len(study.species) > 0:
-                render_summary_concept_row(study.species, 'species')
-            
-            if len(study.locations) > 0:
-                record_ui.render_locations(study)
-            """
-            </table>
-            """
-
-        if not article_type in ['irrelevant']:
-            render_methodologies(study)
-        
-        form.render()
-        render_unclaim_block()
-        footer()
-        
-    if not form.is_submitted():
-        return render()
-        
-    if form.has_errors():
-        return render()
+            return request.redirect(str('curate_three'))
     
-    history_messages = []
     
-    if form['comments']:
-        comments = form['comments']
-        if not comments.strip() == study.comments:
-            study.comments = comments.strip()
-            add_message('Updated comments')
-            history_messages.append('Updated comments to "%s"' % study.comments)
-    else:
-        if not study.comments == '':
-            study.comments = str('')
-            add_message('Updated comments')
-            history_messages.append('Updated comments to ""')
-
-    if form.get_submit() == str('update'):
-        if history_messages:
-            study.add_history(curator_user_id=session.user.get_id(),
-                message='; '.join(history_messages))
-        study.save(context)
-        form.logger.info(str('Updated study %s' % study.uid))
-        request.redirect(str('summary'))
-    elif form.get_submit() == str('finish'):
-        queued_record.status = queued_record.STATUS_CURATED
-        queued_record.duplicate_score = 0
-        queued_record.save(context)
-        if not study.get_status(text=True) == 'curated':
-            study.set_status(str('curated'))
-            study.date_curated = time.strftime(str('%Y-%m-%d'))
-            history_messages.append('Set record status to curated')
+        form = MyForm(context)
+        form.add(form2.TextWidget, 'comments', title='General comments',
+            value=study.comments,
+            rows='4', cols='60', wrap='virtual', 
+            required=False) 
+        form.add_submit('update', 'update')
+        form.add_submit('finish', 'finish')
+        
+        def render [html] ():
+            header('Curate: review', show_javascript=True)
+            """
+            <h3>Curate: review</h3>
+            """
+            render_pipeline(article_type, step=6)
+            render_queued_record(queued_record)
+            if has_messages():
+                render_messages()
+            """
+            <p>
+            Please review all of the information you have provided
+            and make changes as needed.
+            </p>
+            """
+            
+            """
+            <h4>Article type: %s</h4>
+            """ % article_type
+    
+            if not article_type in ['irrelevant']:
+                
+                render_data_points(study)
+                
+                """
+                <table class='gentable' id='review'>
+                """
+                
+                if study.has_exposures \
+                    and len(study.exposures) > 0:
+                    render_review_concept_row(study.exposures, 'exposures')
+                    
+                if study.risk_factors:
+                    render_review_concept_row(study.risk_factors, 'risk factors')
+                    
+                if study.has_outcomes \
+                    and len(study.outcomes) > 0:
+                    render_review_concept_row(study.outcomes, 'outcomes')
+                    
+                if len(study.species) > 0:
+                    render_review_concept_row(study.species, 'species')
+                
+                if len(study.locations) > 0:
+                    record_ui.render_locations(study)
+                """
+                </table>
+                """
+    
+            if not article_type in ['irrelevant']:
+                render_methodologies(study)
+            
+            form.render()
+            render_unclaim_block()
+            footer()
+            
+        if not form.is_submitted():
+            return render()
+            
+        if form.has_errors():
+            return render()
+        
+        history_messages = []
+        
+        if form['comments']:
+            comments = form['comments']
+            if not comments.strip() == study.comments:
+                study.comments = comments.strip()
+                add_message('Updated comments')
+                history_messages.append('Updated comments to "%s"' % study.comments)
         else:
-            history_messages.append('Updated record')
-        if history_messages:
-            study.add_history(curator_user_id=session.user.get_id(),
-                message='; '.join(history_messages))
-        study.save(context)
-        form.logger.info(str('Finished curating study %s' % study.uid))
-        request.redirect(str('/edit'))
-    else:
-        request.redirect(str('summary'))
-
+            if not study.comments == '':
+                study.comments = str('')
+                add_message('Updated comments')
+                history_messages.append('Updated comments to ""')
+    
+        if form.get_submit() == str('update'):
+            if history_messages:
+                study.add_history(curator_user_id=session.user.get_id(),
+                    message='; '.join(history_messages))
+            study.save(context)
+            form.logger.info(str('Updated study %s' % study.uid))
+            request.redirect(str('review'))
+        elif form.get_submit() == str('finish'):
+            queued_record.status = queued_record.STATUS_CURATED
+            queued_record.duplicate_score = 0
+            queued_record.save(context)
+            if not study.get_status(text=True) == 'curated':
+                study.set_status(str('curated'))
+                study.date_curated = time.strftime(str('%Y-%m-%d'))
+                history_messages.append('Set record status to curated')
+            else:
+                history_messages.append('Updated record')
+            if history_messages:
+                study.add_history(curator_user_id=session.user.get_id(),
+                    message='; '.join(history_messages))
+            study.save(context)
+            form.logger.info(str('Finished curating study %s' % study.uid))
+            request.redirect(str('/edit'))
+        else:
+            request.redirect(str('review'))
+    except:
+        print traceback.print_exc()
+        
 
 def unclaim [html] (request, queued_record_id):
     
@@ -1014,7 +1147,7 @@ def not_claimed [html] ():
     footer()
     
 
-def render_summary_concept_row [html] (concepts, concept_name):
+def render_review_concept_row [html] (concepts, concept_name):
     """
     <tr>
         <th>%s</th>

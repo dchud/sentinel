@@ -324,14 +324,16 @@ def render_abstract [html] (mapped_metadata):
     </table>
     """
 
-def render_medline [html] (mapped_metadata):
+def render_reference [html] (record, mapped_metadata):
+    # Note: we will behave differently depending on metadata sources, even if
+    # we have to hard-code stuff. :(
     """
     <table border='0' cellspacing='5' cellpadding='5'>
 
         <tr>
             
             <td align='left' valign='top' width='40%'>
-                <h4>MeSH Terms</h4>
+                <h4>Subject Terms</h4>
                 <p>
     """
 
@@ -356,38 +358,42 @@ def render_medline [html] (mapped_metadata):
     """
                 </p>
             </td>
+            
+            <td align='left' valign='top'>
     """
     
-    pubmed_record_url = \
-        "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=retrieve&db=pubmed&dopt=abstract&list_uids=%s" % \
-        mapped_metadata['unique_identifier']
-        
-    pubmed_related_url = \
-        "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=link&db=pubmed&dbFrom=pubmed&from_uid=%s" % \
-        mapped_metadata['unique_identifier']
-
-    """
-            <td align='left' valign='top'>
+    # ovid-medline is 10, pubmed is 13
+    source_id_list = [source_id for source_id, term_id in record.metadata]
+    if 10 in source_id_list \
+        or 13 in source_id_list:
+        pubmed_record_url = \
+            "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=retrieve&db=pubmed&dopt=abstract&list_uids=%s" % \
+            mapped_metadata['unique_identifier']
             
-                <h4>COinS:</h4>
-                <p>
-                <span class="Z3988" 
-                    title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info:ofi/fmt:kev:mtx:journal&amp;rft_id=info:pmid/%s&amp;url_ctx_fmt=ori:fmt:kev:mtx:ctx">
-                    <!-- COinS -->
-                </span>
-                </p>
-
-                <h4>PMID: %s</h4>
-    """ % (mapped_metadata['unique_identifier'],
-        mapped_metadata['unique_identifier'])
-
-    """
-                <h4>Go to Pubmed:</h4>
-                <p>
-                [<a href='%s'>This Article</a>]
-                [<a href='%s'>Related Articles</a>]
-                </p>
-    """ % (pubmed_record_url, pubmed_related_url)
+        pubmed_related_url = \
+            "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=link&db=pubmed&dbFrom=pubmed&from_uid=%s" % \
+            mapped_metadata['unique_identifier']
+    
+        """
+                    <h4>COinS:</h4>
+                    <p>
+                    <span class="Z3988" 
+                        title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info:ofi/fmt:kev:mtx:journal&amp;rft_id=info:pmid/%s&amp;url_ctx_fmt=ori:fmt:kev:mtx:ctx">
+                        <!-- COinS -->
+                    </span>
+                    </p>
+    
+                    <h4>PMID: %s</h4>
+        """ % (mapped_metadata['unique_identifier'],
+            mapped_metadata['unique_identifier'])
+    
+        """
+                    <h4>Go to Pubmed:</h4>
+                    <p>
+                    [<a href='%s'>This Article</a>]
+                    [<a href='%s'>Related Articles</a>]
+                    </p>
+        """ % (pubmed_record_url, pubmed_related_url)
             
     if len(mapped_metadata['keyword']) > 0:
         """
@@ -754,7 +760,7 @@ def render_record [html] (record, study):
     for view_mode, view_name in (
         ('canary', 'Canary data'),
         ('abstract', 'Abstract'),
-        ('medline', 'MEDLINE'),
+        ('reference', 'Reference'),
         ('related', 'Related'),
         ('export', 'Export'),
         ):
@@ -827,8 +833,8 @@ def render_record [html] (record, study):
         elif view == 'abstract':
             render_abstract(mapped_metadata)
             
-        elif view == 'medline':
-            render_medline(mapped_metadata)
+        elif view == 'reference':
+            render_reference(record, mapped_metadata)
         
         elif view == 'related':
             render_related(study, mapped_metadata)

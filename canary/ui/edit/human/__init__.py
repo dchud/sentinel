@@ -5,6 +5,7 @@ _q_exports = [
     'add',
     'update',
     'delete',
+    'query',
     ]
 
 from quixote.errors import TraversalError
@@ -14,6 +15,7 @@ from canary.ui.edit.human.human_ui import HumanActions
 
 _q_index = human_ui._q_index
 add = human_ui.add
+query = human_ui.query
 
 def _q_lookup (request, human_id):
     try:

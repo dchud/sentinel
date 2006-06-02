@@ -302,6 +302,206 @@ def render_locations [html] (study):
     """
 
 
+def order_methodologies (study):
+    """
+    Rank methodologies by evidence level:
+    3 = Experimental or cohort studies 
+    2 = Case control, cross sectional, disease model, or aggregate studies 
+    1 = Case report or expert opinion (aka descriptive)
+    
+    Note: where to put "disease model"?
+    """
+    strata = {1:[], 2:[], 3:[]}
+    for m in study.methodologies:
+        if m.study_type_id in [m.TYPES['experimental'], m.TYPES['cohort']]:
+            strata[3].append(m)
+        elif m.study_type_id in [m.TYPES['case control'], m.TYPES['cross sectional'],
+            m.TYPES['aggregate'], m.TYPES['disease model']]:
+            strata[2].append(m)
+        elif m.study_type_id in [m.TYPES['descriptive']]:
+            strata[1].append(m)
+    return strata
+
+
+def render_strata [html] (study, strata, level):
+    """
+    <div class='strata'>
+    """
+    for i in range(level):
+        """
+        <img src='/images/24-em-check.png' />
+        """
+    """
+        <br />
+    """
+    if not strata[level]:
+        """- <br />"""
+    elif len(study.methodologies) == 1:
+        m = strata[level][0]
+        name = "methodology-%s" % m.uid
+        """
+    <input type="radio" name="methodology" value="%s" checked="checked" />
+    %s (N=%s) 
+    [<a target='edit-meth' href='/edit/study/%s/methodology/%s/edit'>edit</a>]
+    <br />
+        """ % (name,
+            m.get_study_type(text=True), m.sample_size,
+            study.record_id, m.uid)
+    else:
+        for m in strata[level]:
+            name = "methodology-%s" % m.uid
+            """
+    <input type="radio" name="methodology" value="%s" />
+    %s (N=%s)
+    [<a target='edit-meth' href='/edit/study/%s/methodology/%s/edit'>edit</a>]
+    <br />
+            """ % (name,
+                m.get_study_type(text=True), m.sample_size,
+                study.record_id, m.uid)
+    """
+    </div>
+    """
+
+def render_summaries [html] (study, summary=None):
+    reason = ''
+    if len(study.methodologies) == 0:
+        reason = 'You must first add a methodology.'
+    elif len(study.species) == 0:
+        reason = 'You must first add a species.'
+    elif len(study.exposures) == 0 \
+        and len(study.outcomes) == 0:
+        reason = 'You must first add an exposure or an outcome.'
+    if reason:
+        """
+        <p>
+        We cannot add a summary yet.  %s
+        </p>
+        """ % reason
+    else:
+    
+        """
+        <form action='/edit/study/%s/summary/add' method='post' id='summary_form'
+            onSubmit='return verifySummary();'>
+        """ % study.record_id
+        """
+        <table class='gentable' id='summaries' width='100%'>
+            <tbody>
+            <tr>
+                <th width='25%' valign='top'>
+                Methodology
+                <br />
+                Level 1 = 3 checks
+                <br />
+                Level 2 = 2 checks
+                <br />
+                Level 3 = 1 check
+                </th>
+                <td width='75%' valign='top'>
+        """
+        strata = order_methodologies(study)
+        for s in (3, 2, 1):
+            render_strata(study, strata, s)
+                    
+        """
+                 </td>
+            </tr>
+        """
+        
+        for concept in [str(x) for x in ['exposures', 'outcomes', 'species']]:
+            """
+            <tr>
+                <th valign='top'>%s</th>
+                <td valign='top'>
+            """ % concept.capitalize()
+            for c in getattr(study, concept):
+                """
+            <input name='%s-%s' type='checkbox' /> %s <br />
+                """ % (concept, c.uid, c.term)
+            """
+                </td>
+            </tr>
+            """
+
+        """
+            <tr>
+                <th valign='top'>Positive linkages</th>
+                <td valign='top'>
+        """
+        for b, bt in [
+            ('has_susceptibility', 'Greater susceptibility'),
+            ('has_latency', 'Shorter latency'),
+            ('has_exposure_risk', 'Greater exposure risk'),
+            ('has_warning', 'Human warning'),
+            ]:
+            """
+        <input type='checkbox' name='%s' /> %s <br />
+            """ % (b, bt)
+        """
+                </td>
+            </tr>
+        """
+
+        """
+            <tr>
+                <th valign='top'>Negative linkages</th>
+                <td valign='top'>
+        """
+        for b, bt in [
+            ('hasnt_susceptibility', 'Greater susceptibility'),
+            ('hasnt_latency', 'Shorter latency'),
+            ('hasnt_exposure_risk', 'Greater exposure risk'),
+            ('hasnt_warning', 'Human warning'),
+            ]:
+            """
+        <input type='checkbox' name='%s' /> %s <br />
+            """ % (b, bt)
+        """
+                </td>
+            </tr>
+        """
+
+
+        # Human reference auto-lookup
+            
+        """
+            <tr>
+                <th valign='top'>Human refs</th>
+                <td valign='top'>
+                    <div id='human-refs'></div>
+        <br />
+        First author [<a target='update-refs' href='/edit/human'>Add/change refs</a>]: 
+        <img id='waitimage' src='/images/wait.gif' alt='waiting' style='display:none;' />
+        <br />
+        <input type="text" id="autocomplete_input" 
+            size="60" name="token"/>
+        <div id="autocomplete_choices" class="autocomplete"></div>
+        <script type='text/javascript'>
+    new Ajax.Autocompleter("autocomplete_input", "autocomplete_choices", 
+        "/edit/auto_human", {indicator: "waitimage", minchars: 3, afterUpdateElement: addSummaryRef});
+        </script>
+                </td>
+            </tr>
+            
+            <tr>
+                <th valign='top'>Public Notes</th>
+                <td valign='top'>
+                    <textarea rows='3' cols='50' wrap='virtual' name='public_notes'></textarea>
+                </td>
+            </tr>
+            
+            <tr>
+                <th>Submit</th>
+                <td>
+                    <input type='submit' name='submit' value='add' />
+                </td>
+            </tr>
+            
+            </tbody>
+        </table>
+        </form>
+        """
+
+
 def render_pipeline [html] (article_type, step=1, url_prefix='.'):
     # Note that placeholder at steps[0] allows step number == steps[N]
     steps = [
@@ -310,7 +510,8 @@ def render_pipeline [html] (article_type, step=1, url_prefix='.'):
         ('curate_two', 'Data?'),
         ('curate_three', 'Exp/Out/Spec/Loc'),
         ('curate_four', 'Methodology'),
-        ('summary', 'Summary'),
+        ('curate_five', 'Summarize'),
+        ('review', 'Review'),
         ]
         
     """
@@ -327,28 +528,38 @@ def render_pipeline [html] (article_type, step=1, url_prefix='.'):
         render_pipeline_item(steps[2], url_prefix=url_prefix)
         render_pipeline_item(steps[3], url_prefix=url_prefix)
         render_pipeline_item(steps[4], url_prefix=url_prefix)
+        render_pipeline_item(steps[5], url_prefix=url_prefix)
     else:
         if step == 2:
             render_pipeline_item(steps[2], url_prefix=url_prefix, is_link=True, is_active=True)
             render_pipeline_item(steps[3], url_prefix=url_prefix, is_link=True)
             render_pipeline_item(steps[4], url_prefix=url_prefix, is_link=True)
+            render_pipeline_item(steps[5], url_prefix=url_prefix, is_link=True)
         elif step == 3:
             render_pipeline_item(steps[2], url_prefix=url_prefix, is_link=True)
             render_pipeline_item(steps[3], url_prefix=url_prefix, is_link=True, is_active=True)
             render_pipeline_item(steps[4], url_prefix=url_prefix, is_link=True)
+            render_pipeline_item(steps[5], url_prefix=url_prefix, is_link=True)
         elif step == 4:
             render_pipeline_item(steps[2], url_prefix=url_prefix, is_link=True)
             render_pipeline_item(steps[3], url_prefix=url_prefix, is_link=True)
             render_pipeline_item(steps[4], url_prefix=url_prefix, is_link=True, is_active=True)
+            render_pipeline_item(steps[5], url_prefix=url_prefix, is_link=True)
+        elif step == 5:
+            render_pipeline_item(steps[2], url_prefix=url_prefix, is_link=True)
+            render_pipeline_item(steps[3], url_prefix=url_prefix, is_link=True)
+            render_pipeline_item(steps[4], url_prefix=url_prefix, is_link=True)
+            render_pipeline_item(steps[5], url_prefix=url_prefix, is_link=True, is_active=True)
         else:
             render_pipeline_item(steps[2], url_prefix=url_prefix, is_link=True)
             render_pipeline_item(steps[3], url_prefix=url_prefix, is_link=True)
             render_pipeline_item(steps[4], url_prefix=url_prefix, is_link=True)
+            render_pipeline_item(steps[5], url_prefix=url_prefix, is_link=True)
         
-    if step == 5:
-        render_pipeline_item(steps[5], url_prefix=url_prefix, is_link=True, is_active=True)
+    if step == 6:
+        render_pipeline_item(steps[6], url_prefix=url_prefix, is_link=True, is_active=True)
     else:
-        render_pipeline_item(steps[5], url_prefix=url_prefix, is_link=True)
+        render_pipeline_item(steps[6], url_prefix=url_prefix, is_link=True)
     
     """    
         </ul>

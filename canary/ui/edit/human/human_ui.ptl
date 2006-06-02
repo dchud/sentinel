@@ -5,6 +5,7 @@ _q_exports = [
     'add',
     'update',
     'delete',
+    'query',
     ]
 
 import traceback
@@ -95,7 +96,6 @@ class HumanActions:
         ]
 
     def __init__ (self, human_id):
-        print 'HumanActions.__init__'
         self.human_id = human_id
 
     def _q_index [html] (self, request):
@@ -120,49 +120,68 @@ class HumanActions:
 
 
 def add [html] (request):
-    try:
-        context = get_publisher().context
-        form = HumanStudyForm(context)
-        
-        def render [html] ():
-            header('Edit: Add human study')
-            title_bar('Add human study')
-            form.add_submit('add', 'add')
-            form.render()
-            footer()
-            
-        if not form.is_submitted():
-            return render()
-            
-        reference = form['reference']
-        comments = ''
-        if form['comments']:
-            comments = form['comments']
-                
-        if form.has_errors():
-            return render()
-            
-        try:
-            hs = human_study.HumanStudy()
-            hs.reference = reference
-            hs.comments = comments
-            hs.save(context)
-            add_message('Saved human study %s' % hs.uid)
-            form.logger.info(str('Saved human study %s' % hs.uid))
-        except Exception, e:
-            print traceback.print_exc()
-            add_message('Unable to update. (References must be unique!)')
-            form.logger.info(str('Unable to save human study'))
-            form.logger.error(e)
-            
-        request.redirect(str('/edit/human'))
-    except:
-        print traceback.print_exc()
+    context = get_publisher().context
+    form = HumanStudyForm(context)
     
+    def render [html] ():
+        header('Edit: Add human study')
+        title_bar('Add human study')
+        form.add_submit('add', 'add')
+        form.render()
+        footer()
+        
+    if not form.is_submitted():
+        return render()
+        
+    reference = form['reference']
+    comments = ''
+    if form['comments']:
+        comments = form['comments']
+            
+    if form.has_errors():
+        return render()
+        
+    try:
+        hs = human_study.HumanStudy()
+        hs.reference = str(reference)
+        hs.comments = str(comments)
+        hs.save(context)
+        add_message('Saved human study %s' % hs.uid)
+        form.logger.info(str('Saved human study %s' % hs.uid))
+    except Exception, e:
+        add_message('Unable to update. (References must be unique!)')
+        form.logger.info(str('Unable to save human study'))
+        form.logger.error(e)
+        
+    request.redirect(str('/edit/human'))
+
+
+def query [html] (request):
+    
+    context = get_publisher().context
+
+    token = request.get_form_var('token', '')
+    refs = []
+    if len(token) >= 3:
+        refs = human_study.find_refs(context, token)[:10]
+    
+    """<ul>"""
+    for ref in refs:
+        """
+        <li><span class='bold'>%s</span>
+        """ % c.term
+        syns = [syn for syn in c.synonyms if not syn==c.term]
+        if len(syns) >= 1:
+            """
+        <br />
+        Syn: %s
+        </li>
+            """ % str(', ').join(syns)
+    """</ul>"""
+
 
 
 def delete [html] (human_id=None):
-    print 'human_ui.delete()'
     context = get_publisher().context
     
     try:
@@ -191,8 +210,13 @@ def delete [html] (human_id=None):
                 """ % s.comments
             """
             </p>
+
+            <h2>Warning!</h2>
+            <p>
+            Deleting this reference will also remove it from any summaries to 
+            which it has been related.
+            </p>
             """
-                
             
             form.render()
             footer()

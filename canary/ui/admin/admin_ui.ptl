@@ -7,6 +7,7 @@ import logging
 from quixote import get_publisher
 from quixote.errors import AccessError, PublishError, TraversalError
 
+from canary import concept
 from canary.source_catalog import SourceCatalog
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import has_messages, add_message, render_messages
@@ -26,7 +27,8 @@ def title_bar [html] (action=''):
 
 
 def _q_index [html] (request):
-    header('Admin')
+    header('Admin', show_javascript=True, javascript_files=['prototype', 
+        'scriptaculous',])
     title_bar()
     
     session = request.session
@@ -74,7 +76,16 @@ def _q_index [html] (request):
                 <input type='text' size='30' name='search_term' />
                 <input type='submit' name='find' value='find' />
             </form>
+            
             <hr />
+            
+            Auto:<input autocomplete="off" type="text" id="autocomplete_input" 
+                size="50" name="token"/>
+            <div id="autocomplete_choices" class="autocomplete"></div>
+            <script type='text/javascript'>new Ajax.Autocompleter("autocomplete_input", "autocomplete_choices", "/admin/auto", {minchars: 3});</script>
+                
+            <hr />
+            
             Categories:
                 [<a href='/admin/category/'>List</a>]
                 [<a href='/admin/category/create'>Create</a>]
@@ -173,17 +184,24 @@ def source_map [html] (request):
             
             for source_name, source_id in sources:
                 if not source_name == 'mapping-source':
-                    mapped_term = source_catalog.get_mapped_term(mapping_term.name,
+                    mapped_terms = source_catalog.get_mapped_term(mapping_term.name,
                         source_id)
-                    if mapped_term:
-                        """
-                    <td><a href='/admin/term/%s/edit'>%s</a></td>
+                    """
+                <td>
+                    """
+                    if mapped_terms:
+                        for mapped_term in mapped_terms:
+                            """
+                    <a href='/admin/term/%s/edit'>%s</a>
                         """ % (mapped_term.uid, mapped_term.token)
                     else:
                         """
-                    <td>-</td>
+                    -
                         """
-            
+                    """
+                </td>
+                    """
+                
             """
             </tr>
             """
@@ -239,14 +257,14 @@ def sources [html] (request):
 
 
 def reload_sources [html] (request):
+    context = get_publisher().context
     header('Admin: Reload sources')
     title_bar('Reload Sources')
     try:
-        context = get_publisher().context
         source_catalog = SourceCatalog()
         source_catalog.load(context)
         context.set_source_catalog(source_catalog)
-        logger = logging.getLogger('reload_sources')
+        logger = logging.getLogger(str('reload_sources'))
         logger.info(str('Sources reloaded'))
         """
         <p>
@@ -254,22 +272,33 @@ def reload_sources [html] (request):
         </p>
         """
     except:
+        import traceback
+        print traceback.print_exc()
         raise PublishError
     footer()
 
 
-##    FIXME: add a function to administer sessions in db
-##
-##    <h3>Session keys</h3>
-##    <ul>
-##    """
-##    session_mgr = get_publisher().session_mgr
-##    keys = session_mgr.sorted_keys()
-##    for key in keys:
-##        """
-##        <li>%s:\t%s (<a href='/admin/session/%s/delete'>delete</a>)</li>\n
-##        """ % (key, session_mgr[key], key)
-##    """
-##    </ul>
-##    """
-##    footer()
+
+def auto [html] (request):
+    context = get_publisher().context
+    
+    token = request.get_form_var('token', '')
+    concepts = []
+    if len(token) >= 3:
+        concepts = concept.find_concepts(context, token)[:10]
+    
+    """<ul>"""
+    for c in concepts:
+        """
+        <li><span class='bold'>%s</span>
+        """ % c.term
+        syns = [syn for syn in c.synonyms if not syn==c.term]
+        if len(syns) >= 1:
+            """
+        <br />
+        Syn: %s
+        </li>
+            """ % str(', ').join(syns)
+    """</ul>"""
+    
+    

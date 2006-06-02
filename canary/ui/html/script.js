@@ -1,14 +1,22 @@
+// General javascript routines, specific to mochikit usage.
+// functions requiring scriptaculous should be placed in scriptacle.js.
+//
+// $Id$
+
 // Uncomment to remove debugging info
 var create_logpane_inline = partial(createLoggingPane, 'true');
 //addLoadEvent(create_logpane_inline);
+
 
 // Does not work.  Why?
 //addLoadEvent(roundClass("div", "pullquote", {corners: "all", compact: 'true'}));
 
 // Focus the search box on all pages
 var search_input = getElement('search_input');
-var focus_search_input = partial(focusOnLoad, 'search_input');
-addLoadEvent(focus_search_input);
+if (has_mochikit == true) {
+    var focus_search_input = partial(focusOnLoad, 'search_input');
+    addLoadEvent(focus_search_input);
+}
 
 // *visible() funcs are suggested code from MK docs
 function toggleVisible(elem) {

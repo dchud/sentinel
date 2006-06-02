@@ -7,6 +7,7 @@ _q_exports = [
     'pubmed',
     'study',
     'human',
+    'auto_human',
     ]
 
 
@@ -20,7 +21,7 @@ from canary.ui.edit import batch, edit_ui, study, human
 _q_index = edit_ui._q_index
 find = edit_ui.find
 pubmed = edit_ui.pubmed
-
+auto_human = edit_ui.auto_human
 
 def _q_access (request):
     if request.session.user == None:

@@ -7,8 +7,28 @@ from canary.utils import DTable
 import dtuple
 
 
-def get_studies (context):
+def find_references (context, token=''):
+    if not token:
+        return get_studies(context)
+    studies = []
+    cursor = context.get_cursor()
+    cursor.execute("""
+        SELECT uid
+        FROM human_studies
+        WHERE reference LIKE %s
+        ORDER BY reference
+        """, '%s%s' % (token, '%'))
+    fields = [d[0] for d in cursor.description]
+    desc = dtuple.TupleDescriptor([[f] for f in fields])
+    rows = cursor.fetchall()
+    for row in rows:
+        row = dtuple.DatabaseTuple(desc, row)
+        hs = HumanStudy(context, row['uid'])
+        studies.append(hs)
+    return studies
     
+
+def get_studies (context):
     studies = []
     cursor = context.get_cursor()
     cursor.execute("""
@@ -25,7 +45,7 @@ def get_studies (context):
         hs = HumanStudy(context, row['uid'])
         studies.append(hs)
     return studies
-    
+
 
 class HumanStudy (canary.context.Cacheable, DTable):
     
@@ -108,6 +128,12 @@ class HumanStudy (canary.context.Cacheable, DTable):
     def delete (self, context):
         cursor = context.get_cursor()
         try:
+            # First, delete from summary_human_refs
+            cursor.execute("""
+                DELETE FROM summary_human_refs
+                WHERE human_study_id = %s
+                """, self.uid)
+            
             cursor.execute("""
                 DELETE FROM human_studies
                 WHERE uid = %s

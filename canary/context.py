@@ -94,6 +94,16 @@ class Cacheable (object):
         else:
             context.logger.error('No %s with uid %s' % (self.__class__.__name__,
                 self.uid))
+                
+    
+    def cache_set (self, context):
+        if context.config.use_cache:
+            context.cache_set('%s:%s' % (self.CACHE_KEY, self.uid), self)
+
+
+    def cache_delete (self, context):
+        if context.config.use_cache:
+            context.cache_delete('%s:%s' % (self.CACHE_KEY, self.uid))
 
             
 class CanaryConfig (quixote.config.Config):

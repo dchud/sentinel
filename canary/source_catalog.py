@@ -99,8 +99,8 @@ class SourceCatalog:
         mapping_source = self.get_source(mapping_source_id)
         source = self.get_source(source_id)
         mapping_term = mapping_source.get_term_from_name(term_name)
-        source_term = source.get_term_from_mapped_id(mapping_term.uid)
-        return source_term
+        source_terms = source.get_terms_from_mapped_id(mapping_term.uid)
+        return source_terms
         
     
     def get_mapped_terms (self, source_id, term_names=[], mapping_source_id=12):
@@ -118,9 +118,9 @@ class SourceCatalog:
             if term_names == []:
                 term_names = [term.name for term in self.get_source(mapping_source_id).terms.values()]
             for term_name in term_names:
-                term = self.get_mapped_term(term_name, source_id, mapping_source_id)
-                if not term == None:
-                    terms[term_name] = term
+                mapped_terms = self.get_mapped_term(term_name, source_id, mapping_source_id)
+                if mapped_terms:
+                    terms[term_name] = mapped_terms
             return terms
         except:
             return {}
@@ -140,12 +140,13 @@ class SourceCatalog:
                     # Don't map mapped terms to the mapping_source
                     if source_id == mapping_source_id:
                         continue
-                    mapped_term = self.get_mapped_term(term_name, source_id, mapping_source_id)
-                    if not mapped_term == None:
-                        if terms.has_key(term_name):
-                            terms[term_name].append(mapped_term)
-                        else:
-                            terms[term_name] = [mapped_term]
+                    mapped_terms = self.get_mapped_term(term_name, source_id, mapping_source_id)
+                    if mapped_terms:
+                        for mapped_term in mapped_terms:
+                            try:
+                                terms[term_name].append(mapped_term)
+                            except:
+                                terms[term_name] = [mapped_term]
             return terms
         except:
             return {}                
@@ -236,11 +237,9 @@ class Source (CatalogItem):
         return None
         
     
-    def get_term_from_mapped_id (self, id):
-        for term in self.terms.values():
-            if term.mapped_term_id == id:
-                return term
-        return None
+    def get_terms_from_mapped_id (self, id):
+        return [t for t in self.terms.values() \
+            if t.mapped_term_id == id]
 
 
     def load (self, context, load_terms=True):

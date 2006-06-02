@@ -1,0 +1,191 @@
+# $Id$
+
+_q_exports = [
+    '_q_index',
+    'delete',
+    ]
+
+import traceback
+import urllib
+
+from quixote import get_publisher, get_request
+from quixote.errors import TraversalError
+from quixote import form2
+
+from canary.human_study import HumanStudy
+from canary.loader import QueuedRecord
+from canary.qx_defs import MyForm
+from canary.study import Study
+from canary.summary import Summary, SummaryConcept
+from canary.ui.pageframe import header, footer
+from canary.ui.pages import not_found, add_message, has_messages, render_messages
+from canary.ui.edit.study.utils import is_same_user, render_queued_record
+from canary.ui.edit.study.utils import render_unclaim_block, claimed_by_other_user
+from canary.ui.edit.study.utils import render_summaries, render_pipeline
+
+
+def _q_index [html] (request):
+    header('Summaries:')
+    """
+    <h2>Summaries</h2>
+    """
+    footer()
+
+
+class SummaryActions:
+
+    _q_exports = [
+        '_q_index',
+        ]
+
+    def __init__ (self, summary_id):
+        self.summary_id = summary_id
+
+    def _q_index [html] (self, request):
+        header('blah')
+        """
+        blah
+        """
+        footer()
+
+    def _q_lookup [html] (self, request, action):
+        try:
+            self.summary_id = int(self.summary_id)
+            if action == 'add':
+                return add()
+            elif action == 'delete':
+                return delete(self.summary_id)
+            else:
+                raise TraversalError
+        except:
+            print traceback.print_exc()
+            return not_found('summary')
+
+
+
+def add [html] (request):
+    
+    context = get_publisher().context
+    queued_record = QueuedRecord(context, request.queued_record_id)
+    
+    if queued_record.status == queued_record.STATUS_CLAIMED:
+        if not is_same_user(queued_record):
+            return claimed_by_other_user()
+    
+    study = Study(context, queued_record.study_id)
+    summary = Summary()
+    
+    # Note: assume the javascript routine has caught all errors with input
+    # combinations.  That's not really a good assumption.
+    #
+    # Note 2:  the substring offsets are the length of the matching tokens
+    # plus '-'.
+    for k, v in request.formiter():
+        if k.startswith(str('methodology')):
+            # methodology form element is a radio button set, so they 
+            # all have the name "methodology"; parse the value
+            summary.methodology_id = int(v[12:])
+        elif k.startswith(str('exposures')):
+            con = SummaryConcept()
+            con.summary_type = 'e'
+            con.study_concept_id = int(k[10:])
+            summary.exposures.append(con)
+        elif k.startswith(str('outcomes')):
+            con = SummaryConcept()
+            con.summary_type = 'o'
+            con.study_concept_id = int(k[9:])
+            summary.outcomes.append(con)
+        elif k.startswith(str('species')):
+            con = SummaryConcept()
+            con.summary_type = 's'
+            con.study_concept_id = int(k[8:])
+            summary.species.append(con)
+        elif k.startswith(str('has')):
+            # If checkbox is checked, it must be True, or it would not 
+            # be in the form
+            setattr(summary, str(k), True)
+        elif k == 'public_notes':
+            summary.public_notes = str(v)
+        elif k.startswith(str('human-ref')):
+            summary.human_refs.append(int(k[10:]))
+                
+    try:
+        summary.save(context)
+        study.add_history(curator_user_id=request.session.user.get_id(),
+            message='Added summary "%s"' % summary.uid)
+        study.save(context)
+        add_message('Added summary')
+        request.redirect(str('../curate_five'))
+    except:
+        print traceback.print_exc()
+        add_message('Unable to add summary')
+        request.redirect(str('../curate_five'))
+
+
+
+def delete [html] (summary_id):
+    
+    request = get_request()
+    context = get_publisher().context
+    queued_record = QueuedRecord(context, request.queued_record_id)
+    
+    if queued_record.status == queued_record.STATUS_CLAIMED:
+        if not is_same_user(queued_record):
+            return claimed_by_other_user()
+    
+    try:
+        study = Study(context, queued_record.study_id)
+        s = Summary(context, summary_id)
+        if not s:
+            raise 'Invalid summary id'
+    except:
+        return not_found('summary')
+
+    form = MyForm(context)
+    form.add(form2.CheckboxWidget, 'are_you_sure',
+        title='Are you sure you want to delete this summary?',
+        value=False)
+    form.add_submit('delete', 'delete')
+
+    def render [html] ():
+        header('Delete summary', show_javascript=True)
+        """
+        <h3>Delete summary</h3>
+        """
+        render_pipeline(study.get_article_type(text=True), 
+            url_prefix=str('../..'), step=4)
+        render_queued_record(queued_record)
+        render_messages()
+        """
+        <p>
+        Deleting summary %s.
+        </p>
+        """ % summary_id
+        form.render()
+        render_unclaim_block()
+        footer()
+
+    if not form.is_submitted():
+        return render()
+
+    if form.has_errors():
+        return render()
+    
+    if form['are_you_sure']:
+        try:
+            s.delete(context)
+            study.add_history(curator_user_id=request.session.user.get_id(),
+                message='Deleted summary "%s"' % summary_id)
+            study.save(context)
+            add_message('Summary deleted')
+            form.logger.info(str('Deleted summary %s' % summary_id))
+        except:
+            add_message('Unable to delete summary')
+            form.logger.error(str('Unable to delete summary %s' % summary_id))
+    else:
+        add_message('Summary not deleted')
+
+    request.redirect(str('/edit/study/%s/curate_five' % request.queued_record_id))
+    
+    
+    

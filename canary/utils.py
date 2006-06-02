@@ -13,6 +13,8 @@ import elementtree.ElementTree as etree
 from elementtree.ElementTree import Element, SubElement
 import feedparser
 
+from canary import dtuple
+
 linkages = ['relationships',
     'interspecies',
     'exposure_linkage',
@@ -55,7 +57,7 @@ class DTable:
 
     def load (self, context):
         cursor = context.get_cursor()
-        if self.id:
+        if self.uid:
             cursor.execute("""SELECT * FROM """ + self.TABLE_NAME +
                 """
                 WHERE uid LIKE %s
