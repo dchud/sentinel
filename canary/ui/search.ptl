@@ -101,8 +101,10 @@ def search [html] (request):
             result_pairs.append((uid, score))
         searcher.close()
         result_id_list = list(str('record:%s') % uid for uid, score in result_pairs)
-        result_record_map = context.cache_get_multi(result_id_list)
-        # Verify that we got them all from the cache, or force them into the cache
+        result_record_map = {}
+        if context.config.use_cache:
+            result_record_map = context.cache_get_multi(result_id_list)
+        # Make sure we got them all, from the cache, or from the db
         if not len(result_record_map) == len(result_id_list):
             for id in result_id_list:
                 int_id = int(id[7:])
@@ -130,7 +132,9 @@ def search [html] (request):
         sparkline_image_file = utils.make_sparkline(context, year_count)
         
         study_id_list = list(str('%s:%s' % (Study.CACHE_KEY, r.study_id)) for r, score in result_set)
-        study_map = context.cache_get_multi(study_id_list)
+        study_map = {}
+        if context.config.use_cache:
+            study_map = context.cache_get_multi(study_id_list)
         # Verify that we got them all from the cache, or force them into the cache
         if not len(study_map) == len(study_id_list):
             for id in study_id_list:
