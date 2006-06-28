@@ -29,6 +29,9 @@ if __name__ == '__main__':
 
     si = canary.search.SearchIndex(context)
     writer = context.get_search_index_writer(True)
+    # Tweak for better performance
+    writer.mergeFactor = 100
+    writer.minMergeDocs = 100
     
     # Index all records
     record_count = 0
