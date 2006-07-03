@@ -70,7 +70,8 @@ class DTable:
                 for field in fields:
                     self.set(field, row[field])
             else:
-                self.logger.debug('No %s "%s"', self.TABLE_NAME, self.uid)
+                context.logger.debug('No %s "%s"', self.TABLE_NAME, self.uid)
+                print 'No %s "%s"' % (self.TABLE_NAME, self.uid)
                 raise 'InvalidId'
                 
 
@@ -83,7 +84,7 @@ class DTable:
                     WHERE uid = %s
                     """, self.uid)
         except Exception, e:
-            self.logger.error(e)
+            context.logger.error(e)
 
 
 def read_file (file):

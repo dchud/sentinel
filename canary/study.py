@@ -115,6 +115,8 @@ class ExposureRoute (DTable):
 
 class Methodology (DTable):
 
+    TABLE_NAME = 'methodologies'
+    
     # A Methodology must have one TYPE
     TYPES = {
         'experimental' : 1,
@@ -182,6 +184,22 @@ class Methodology (DTable):
         out.append('/>')
         return '\n'.join(out)
         
+
+    def evidence_level (self):
+        """
+        Return the evidence level relative to the type of study 
+        performed.
+        """
+        text_value = self.get_text_value(self.TYPES, self.study_type_id)
+        if text_value in ['experimental', 'cohort']:
+            return 3
+        elif text_value in ['case control', 'cross sectional', 'aggregate']:
+            return 2
+        elif text_value in ['descriptive', 'disease model']:
+            return 1
+        else:
+            return 0
+
 
     def get_text_value (self, lookup_table, value):
         for k, v in lookup_table.iteritems():
@@ -611,6 +629,8 @@ def find_exposures (context, search_term):
 
 class Exposure (DTable):
     
+    TABLE_NAME = 'exposures'
+    
     UMLS_SOURCES = {
         75: 'MeSH',
         85: 'NCBI Taxonomy',
@@ -728,6 +748,8 @@ def find_outcomes (context, search_term):
 
 
 class Outcome (DTable):
+    
+    TABLE_NAME = 'outcomes'
     
     UMLS_SOURCES = {
         75: 'MeSH',
@@ -961,6 +983,8 @@ def find_species (context,search_term):
 
 class Species (DTable):
     
+    TABLE_NAME = 'species'
+    
     UMLS_SOURCES = {
         75: 'MeSH',
         85: 'NCBI Taxonomy',
@@ -1085,6 +1109,8 @@ class Species (DTable):
 
 class Location (DTable):
     
+    TABLE_NAME = 'locations'
+    
     def __init__ (self, uid=-1):
         self.uid = uid
         self.study_id = -1
@@ -1139,6 +1165,8 @@ class Location (DTable):
         
 class Study (canary.context.Cacheable, DTable):
 
+    TABLE_NAME = 'studies'
+    
     # FIXME:  does this only belong here or on loader.QueuedRecord?
     # A Study has only one STATUS_TYPE
     STATUS_TYPES = {

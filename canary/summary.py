@@ -3,20 +3,60 @@
 import sys
 import traceback
 
+from canary.concept import Concept
 import canary.context
 from canary.human_study import HumanStudy
-from canary.study import Exposure, Outcome, Species
+from canary import study
 from canary.utils import DTable
 import dtuple
 
 
-def get_summaries_from_study (con, study):
+this_module = sys.modules[__name__]
+
+def summary_set_from_concept (context, concept_id, concept_type):
+    """
+    For a given concept_id with a particular concept_type, return
+    the set of summary/study pairs for that concept.
+    """
+    if concept_type in ('exposure', 'outcome'):
+        table_name = concept_type + 's'
+    elif concept_type == 'species':
+        table_name = concept_type
+    else:
+        return None
+
+    pairs = []
+    try:
+        cursor = context.get_cursor()
+        query = """
+            SELECT summary_concepts.*, %s.study_id
+            FROM %s, summary_concepts 
+            WHERE %s.uid = summary_concepts.study_concept_id
+            AND %s.concept_id =
+            """ % (table_name, table_name, table_name, table_name)
+        cursor.execute(query + " %s ", int(concept_id))
+        fields = [d[0] for d in cursor.description]
+        desc = dtuple.TupleDescriptor([[f] for f in fields])
+        for row in cursor.fetchall():
+            row = dtuple.DatabaseTuple(desc, row)
+            summary = Summary(context, row['summary_id'])
+            st = study.Study(context, row['study_id'])
+            pairs.append((summary, st))
+    except Exception, e:
+        context.logger.error(e)
+        print traceback.print_exc()
+        return None
+
+    return SummarySet(concept_type, concept_id, pairs)
+
+
+def get_summaries_from_study (context, study):
     """
     For a given Study, return a list of all relevant Summary objects.
     """
     summaries = []
     try:
-        cursor = con.get_cursor()
+        cursor = context.get_cursor()
         for m in study.methodologies:
             cursor.execute("""
                 SELECT uid
@@ -26,13 +66,34 @@ def get_summaries_from_study (con, study):
                 """, m.uid)
             rows = cursor.fetchall()
             for row in rows:
-                s = Summary(con, row[0])
+                s = Summary(context, row[0])
                 summaries.append(s)
     except Exception, e:
         context.logger.error(e)
     
     return summaries
     
+
+
+def get_study_concept (concept_type, ):
+    """For a SummaryConcept, get the concept instance related to the
+    Study itself from the appropriate table (which we must determine
+    dynamically)."""
+    
+    # Figure out which table to use
+    table_name = self.CONCEPT_TYPES.get(self.concept_type, '')
+    if not table_name:
+        return None
+    
+    # First, get the related study concept
+    this_module = sys.modules[__name__]
+    # Tricky:  getattr should return one of (Exposure, Outcome, Species),
+    # then the parameters passed in should instantiate one of those types
+    study_concept = getattr(this_module, 
+        table_name.capitalize())(context, self.study_concept_id)
+    return study_concept
+
+
 
 class SummaryConcept (DTable):
     """
@@ -48,23 +109,6 @@ class SummaryConcept (DTable):
         self.concept_type = ''
         self.study_concept_id = -1
         
-    def get_study_concept (self, context):
-        """For a SummaryConcept, get the concept instance related to the
-        Study itself from the appropriate table (which we must determine
-        dynamically)."""
-        
-        # Figure out which table to use
-        table_name = self.CONCEPT_TYPES.get(self.concept_type, '')
-        if not table_name:
-            return None
-        
-        # First, get the related study concept
-        this_module = sys.modules[__name__]
-        # Tricky:  getattr should return one of (Exposure, Outcome, Species),
-        # then the parameters passed in should instantiate one of those types
-        study_concept = getattr(this_module, 
-            table_name.capitalize())(context, self.study_concept_id)
-        return study_concept
     
     
 class Summary (canary.context.Cacheable, DTable):
@@ -148,6 +192,8 @@ class Summary (canary.context.Cacheable, DTable):
             desc = dtuple.TupleDescriptor([[f] for f in fields])
             rows = cursor.fetchall()
             if not rows:
+                print 'Tried to load summary with id', self.uid
+                print traceback.print_exc()
                 raise ValueError
             row = dtuple.DatabaseTuple(desc, rows[0])
             for f in fields:
@@ -185,8 +231,8 @@ class Summary (canary.context.Cacheable, DTable):
                 self.human_refs.append(row[0])
             
             self.cache_set(context)
-        except ValueError:
-            raise ValueError
+        #except ValueError:
+        #    raise ValueError
         except:
             print traceback.print_exc()
 
@@ -281,3 +327,97 @@ class Summary (canary.context.Cacheable, DTable):
             self.cache_delete(context)
         except Exception, e:
             context.logger.error(e)
+
+
+
+class SummaryRow:
+    """
+    A single row in a user-visible SummarySet table.  Provides
+    convenient access for rendering.
+    """
+
+    pass
+
+
+class SummarySet:
+    """
+    A set of studies and summaries pertaining to a particular pair of species,
+    exposure, or outcome, in these combinations:
+    
+        exposure -> species
+        outcome -> species
+        species -> exposure
+    """
+    
+    LEVELS = ['susceptibility', 'latency', 'exposure_risk', 'warning']
+
+    def __init__ (self, concept_type, concept_id, summary_pairs=[]):
+        """
+        summary_pairs are (a_summary, its_study) tuples.
+        """
+        self.concept_type = concept_type
+        self.concept_id = concept_id
+        self.summary_pairs = summary_pairs
+        self.study_concepts = {'exposures':{}, 'outcomes':{}, 
+            'species':{}}
+        self.concepts = {'exposures':{}, 'outcomes':{}, 'species':{}}
+        self.scores = {}
+        self.rows = []
+        for level in self.LEVELS:
+            setattr(self, 'has_%s' % level, 0)
+            setattr(self, 'hasnt_%s' % level, 0)
+        
+    def set_scores (self, summary, meth):
+        try:
+            pass
+        except: 
+            pass
+            
+                        
+
+    def summarize (self, context):
+        """
+        Generate summary rows suitable for rendering in the UI.
+        """
+        self.study_concept = Concept(context, self.concept_id)
+        for summary, st in self.summary_pairs:
+            meth = study.Methodology()
+            meth.uid = summary.methodology_id
+            meth.load(context)
+            level = meth.evidence_level()             
+            #self.set_scores(summary, meth)
+            for attr, concept_type in (
+                ('exposures', 'Exposure'), 
+                ('outcomes', 'Outcome'), 
+                ('species', 'Species')):
+                for con in getattr(summary, attr):
+                    concept = getattr(study, concept_type)()
+                    concept.uid = con.study_concept_id
+                    concept.load(context)
+                    score_key = '%s:%s' % (concept_type, concept.term)
+                    if not self.scores.has_key(score_key):
+                        self.scores[score_key] = {}
+
+                    for l in self.LEVELS:
+                        has_level = 'has_%s' % l
+                        if getattr(summary, has_level):
+                            try:
+                                self.scores[score_key][has_level] = \
+                                    max(self.scores[score_key][has_level], level)
+                            except:
+                                self.scores[score_key][has_level] = level
+
+                        hasnt_level = 'hasnt_%s' % l
+                        if getattr(summary, hasnt_level):
+                            try:
+                                self.scores[score_key][hasnt_level] = \
+                                    max(self.scores[score_key][hasnt_level], level)
+                            except:
+                                self.scores[score_key][hasnt_level] = level
+                            
+        import pprint
+        pprint.pprint(self.scores)
+
+
+        
+
