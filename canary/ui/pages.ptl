@@ -520,23 +520,20 @@ FORMATS = [
     ('mods', 'application/xml'),
     ]
 
-def render_unapi_formats [plain] (uri=''):
+def render_unapi_formats [plain] (id=''):
     root = Element('formats')
-    if uri:
-        uri_element = SubElement(root, 'uri')
-        uri_element.text = uri
+    if id:
+        root.set('id', id)
     for f, mt in FORMATS:
         format = SubElement(root, 'format')
-        name = SubElement(format, 'name')
-        name.text = f
-        type = SubElement(format, 'type')
-        type.text = mt
+        format.set('name', f)
+        format.set('type', mt)
     return root
 
 def unapi [plain] (request):
     context = get_publisher().context
     config = context.config
-    uri = request.get_form_var(str('uri'), '')
+    id = request.get_form_var(str('id'), '')
     format = request.get_form_var(str('format'), '')
 
     URI_PREFIXES = [
@@ -549,9 +546,9 @@ def unapi [plain] (request):
         re_dict[type] = (regex, type, re.compile(regex))
     
     try:
-        if uri:
+        if id:
             for type in re_dict.keys():
-                match = re_dict[type][2].match(uri)
+                match = re_dict[type][2].match(id)
                 if match:
                     if type == 'record':
                         rec = QueuedRecord(context, match.groups()[0])
@@ -588,7 +585,7 @@ def unapi [plain] (request):
             else:
                 request.response.set_status(300, 'Multiple Choices')
                 request.response.set_content_type('application/xml')
-                return etree.tostring(render_unapi_formats(uri))
+                return etree.tostring(render_unapi_formats(id))
         else:
             request.response.set_content_type('application/xml')
             return etree.tostring(render_unapi_formats())

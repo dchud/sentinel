@@ -292,7 +292,7 @@ def render_metadata_header [html] (uid, mapped_metadata, show_abstract=False):
         mapped_metadata['affiliation'])
 
     """
-    <span class='unapi-uri' title='%s/record/%s'> </span>
+    <abbr class='unapi-id' title='%s/record/%s'> </abbr>
     """ % (config.site_base_url, uid)
 
     if show_abstract:
@@ -544,24 +544,16 @@ def render_export [html] (mapped_metadata, record):
                 
                 <ul class='xoxo'>
                     <li>
-                        <span class='unapi-uri' title='%s'>
-                            <a href='/unapi?uri=%s&amp;format=bibtex'>BibTeX</a>
-                        </span>
+                        <a href='/unapi?id=%s&amp;format=bibtex'>BibTeX</a>
                     </li>
                     <li>
-                        <span class='unapi-uri' title='%s'>
-                            <a href='/unapi?uri=%s&amp;format=endnote'>EndNote</a>
-                        </span>
+                        <a href='/unapi?id=%s&amp;format=endnote'>EndNote</a>
                     </li>
                     <li>
-                        <span class='unapi-uri' title='%s'>
-                            <a href='/unapi?uri=%s&amp;format=mods'>MODS</a>
-                        </span>
+                        <a href='/unapi?id=%s&amp;format=mods'>MODS</a>
                     </li>
                     <li>
-                        <span class='unapi-uri' title='%s'>
-                            <a href='/unapi?uri=%s&amp;format=ris'>RIS</a>
-                        </span>
+                        <a href='/unapi?id=%s&amp;format=ris'>RIS</a>
                     </li>
                     <li>
                         <a href='?view=export&amp;format=pubmed'>Tagged/Pubmed (NLM)</a>
@@ -571,8 +563,7 @@ def render_export [html] (mapped_metadata, record):
             </td>
         </tr>
     </table>
-    """ % (uri, uri, uri, uri,
-        uri, uri, uri, uri)
+    """ % (uri, uri, uri, uri)
 
 
 def similar [html] (self, request):
@@ -872,7 +863,7 @@ def render_record_row [html] (record):
                 <tr class='recordrow'>
                     <td align='left' valign='top'>
                         <div class='record uri' title='http://canarydatabase.org/record/%s'>
-                            <span class='unapi-uri' title='http://canarydatabase.org/record/%s'></span>
+                            <abbr class='unapi-id' title='http://canarydatabase.org/record/%s'></abbr>
     """ % (record.uid, record.uid)
     checked_text = ''
     record_in_sets = 0
