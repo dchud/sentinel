@@ -54,17 +54,17 @@ def header [html] (title,
     
     """
         <style type="text/css" media="screen">
-            @import url(/wdd_styles.css);
+            @import url(/static/wdd_styles.css);
         </style>
         
-        <link rel="stylesheet" type="text/css" media="print" href="/wdd_print.css" />
+        <link rel="stylesheet" type="text/css" media="print" href="/static/wdd_print.css" />
     """
     
     if show_javascript:
         if javascript_files:
             for f in javascript_files:
                 """
-        <script type='text/javascript' src='/%s.js'></script>
+        <script type='text/javascript' src='/static/%s.js'></script>
                 """ % f
 
         
