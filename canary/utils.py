@@ -421,3 +421,18 @@ def rec2format (context, recs, output_format='mods'):
             
     except:
         print traceback.print_exc()
+
+
+
+def get_sfx_link (context, source_id, unique_identifier, resolver=None):
+    source_catalog = context.get_source_catalog()
+    source = source_catalog.get_source(source_id)
+    query_string = source.sfx_pattern.replace('[[UI]]', unique_identifier)
+    # FIXME!
+    base_url = 'http://sfx.library.yale.edu/sfx_local?'
+    if resolver:
+        base_url = resolver.base_url
+    if base_url.endswith('?'):
+        return '%s%s' % (base_url, query_string)
+    else:
+        return '%s?%s' % (base_url, query_string)

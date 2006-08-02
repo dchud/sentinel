@@ -58,13 +58,15 @@ def is_same_user (queued_record):
         return False
         
 
-def get_sfx_link (source_id, unique_identifier):
+def get_sfx_link (source_id, unique_identifier, resolver=None):
     context = get_publisher().context
     source_catalog = context.get_source_catalog()
     source = source_catalog.get_source(source_id)
     query_string = source.sfx_pattern.replace('[[UI]]', unique_identifier)
     # FIXME!
     base_url = 'http://sfx.library.yale.edu/sfx_local?'
+    if resolver:
+        base_url = resolver.base_url
     return base_url + query_string
     
     

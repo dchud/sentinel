@@ -15,6 +15,7 @@ from quixote.errors import TraversalError
 import canary.context
 from canary.loader import QueuedRecord
 from canary.qx_defs import MyForm
+from canary.resolver import find_resolver
 from canary.search import Search, SearchIndex
 from canary.study import Study
 from canary.ui.browse_ui import BrowseIndex, render_on_this_page
@@ -43,11 +44,20 @@ class SearchForm (MyForm):
 
 def search [html] (request):
     context = get_publisher().context
-    user = request.session.user
-    
-    form = SearchForm(context)
     source_catalog = context.get_source_catalog()
     complete_term_mapping = source_catalog.get_complete_mapping()
+    
+    user = request.session.user
+    ip_address = request.get_environ('REMOTE_ADDR')
+    try:
+        resolver = find_resolver(context, ip_address)
+        if not resolver:
+            raise 'NoResolverFound'
+    except:
+        print 'No resolver for ip %s: %s' % (ip_address, traceback.print_exc())
+        resolver = None
+
+    form = SearchForm(context)
     
     query = form['q']
     ad_link = '/opensearch/?q=%s' % query
@@ -227,7 +237,7 @@ def search [html] (request):
         """
         if len(result_set) >= 1:
             for rec, score in result_set:
-                render_record_row(rec)
+                render_record_row(rec, resolver)
         else:
             """
                 <td valign="top">

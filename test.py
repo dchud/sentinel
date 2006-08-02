@@ -48,6 +48,10 @@ if 'user_functions' in tests:
     from test.user_functions import UserFunctionTests
     suite.addTest(makeSuite(UserFunctionTests))
 
+if 'resolver' in tests:
+    from test.resolver import ResolverTests
+    suite.addTest(makeSuite(ResolverTests))
+
 
 # run 'em 
 runner = TextTestRunner(verbosity=2)

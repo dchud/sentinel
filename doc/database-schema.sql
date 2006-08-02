@@ -2,7 +2,7 @@
 --
 -- Host: localhost    Database: canary_sim
 -- ------------------------------------------------------
--- Server version	4.1.12
+-- Server version	4.1.20
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -200,6 +200,19 @@ CREATE TABLE `gazeteer_fips_codes` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
+-- Table structure for table `human_studies`
+--
+
+DROP TABLE IF EXISTS `human_studies`;
+CREATE TABLE `human_studies` (
+  `uid` int(11) NOT NULL auto_increment,
+  `reference` varchar(255) collate utf8_unicode_ci NOT NULL default '',
+  `comments` varchar(255) collate utf8_unicode_ci default NULL,
+  PRIMARY KEY  (`uid`),
+  UNIQUE KEY `reference` (`reference`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
 -- Table structure for table `locations`
 --
 
@@ -326,6 +339,26 @@ CREATE TABLE `queued_records` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
+-- Table structure for table `resolvers`
+--
+
+DROP TABLE IF EXISTS `resolvers`;
+CREATE TABLE `resolvers` (
+  `uid` int(11) unsigned NOT NULL auto_increment,
+  `ip_address` varchar(15) collate utf8_unicode_ci NOT NULL default '127.0.0.1',
+  `record_xml` text collate utf8_unicode_ci,
+  `institution` varchar(255) collate utf8_unicode_ci default NULL,
+  `base_url` mediumtext collate utf8_unicode_ci,
+  `icon_url` mediumtext collate utf8_unicode_ci,
+  `link_text` tinytext collate utf8_unicode_ci,
+  `supports_01` tinyint(4) NOT NULL default '1',
+  `supports_10` tinyint(4) NOT NULL default '1',
+  `date_modified` datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`uid`),
+  UNIQUE KEY `ip_address` (`ip_address`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
 -- Table structure for table `risk_factors`
 --
 
@@ -432,6 +465,54 @@ CREATE TABLE `study_history` (
   KEY `study_id` (`study_id`),
   KEY `curator_user_id` (`curator_user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `summaries`
+--
+
+DROP TABLE IF EXISTS `summaries`;
+CREATE TABLE `summaries` (
+  `uid` int(11) unsigned NOT NULL auto_increment,
+  `methodology_id` int(11) NOT NULL default '0',
+  `public_notes` varchar(255) collate utf8_unicode_ci default NULL,
+  `has_susceptibility` tinyint(1) NOT NULL default '0',
+  `has_latency` tinyint(1) NOT NULL default '0',
+  `has_exposure_risk` tinyint(1) NOT NULL default '0',
+  `has_warning` tinyint(1) NOT NULL default '0',
+  `hasnt_susceptibility` tinyint(1) NOT NULL default '0',
+  `hasnt_latency` tinyint(1) NOT NULL default '0',
+  `hasnt_exposure_risk` tinyint(1) NOT NULL default '0',
+  `hasnt_warning` tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (`uid`),
+  KEY `study_id` (`methodology_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Table structure for table `summary_concepts`
+--
+
+DROP TABLE IF EXISTS `summary_concepts`;
+CREATE TABLE `summary_concepts` (
+  `uid` int(11) unsigned NOT NULL auto_increment,
+  `summary_id` int(11) NOT NULL default '0',
+  `concept_type` set('e','o','s') collate utf8_unicode_ci NOT NULL default '',
+  `study_concept_id` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`uid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Table structure for table `summary_human_refs`
+--
+
+DROP TABLE IF EXISTS `summary_human_refs`;
+CREATE TABLE `summary_human_refs` (
+  `uid` int(11) unsigned NOT NULL auto_increment,
+  `summary_id` int(11) NOT NULL default '0',
+  `human_study_id` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`uid`),
+  KEY `summary_id` (`summary_id`),
+  KEY `human_study_id` (`human_study_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `terms`
@@ -557,18 +638,6 @@ CREATE TABLE `users` (
   PRIMARY KEY  (`uid`),
   UNIQUE KEY `id` (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
--- 
--- Table structure for table `human_studies`
--- 
-
-CREATE TABLE `human_studies` (
-  `uid` int(11) NOT NULL auto_increment,
-  `reference` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-  `comments` varchar(255) collate utf8_unicode_ci default NULL,
-  PRIMARY KEY  (`uid`),
-  UNIQUE KEY `reference` (`reference`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

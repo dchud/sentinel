@@ -16,6 +16,7 @@ from canary.browse import records_by_author, records_by_author_index
 from canary.browse import records_by_concept, records_by_concept_index
 from canary.concept import Concept
 from canary.qx_defs import NotLoggedInError
+from canary.resolver import find_resolver
 from canary.study import Methodology, Study
 from canary.ui.pages import not_found
 from canary.ui.pageframe import header, footer
@@ -499,6 +500,15 @@ class BrowseIndex:
         source_catalog = context.get_source_catalog()
         complete_term_map = source_catalog.get_complete_mapping()
         
+        ip_address = get_request().get_environ('REMOTE_ADDR')
+        try:
+            resolver = find_resolver(context, ip_address)
+            if not resolver:
+                raise 'NoResolverFound'
+        except:
+            print 'No resolver for ip %s: %s' % (ip_address, traceback.print_exc())
+            resolver = None
+            
         type_display = self.type.replace(str('_'), str(' '))
         type_search = self.type.replace(str('_'), str('-'))
         header('Browse by %s: %s' % (type_display.capitalize(), name),
@@ -689,7 +699,10 @@ class BrowseIndex:
                     <table width='100%' border='0' cellspacing='0' cellpadding='0'>
                 """
                 for sort_val, rec in records_sliced:
-                    render_record_row(rec)
+                    if resolver:
+                        render_record_row(rec, resolver)
+                    else:
+                        render_record_row(rec)
                 """
                     </table>
                 </div>

@@ -569,7 +569,7 @@ class SearchIndex:
                 writer.close()
         except Exception, e:
             self.logger.error('Failed to index record: %s', e)
-            self.logger.error(traceback.format_stack())
+            self.logger.error(traceback.print_exc())
         
 
     def unindex_record (self, record):

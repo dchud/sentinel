@@ -1,6 +1,7 @@
 # $Id$
 
 import string
+import traceback
 import urllib
 
 from quixote import get_publisher, get_request
@@ -10,6 +11,7 @@ from canary.gazeteer import Feature
 from canary.loader import QueuedRecord
 from canary.pubmed import Pubmed
 from canary.qx_defs import NotLoggedInError
+from canary.resolver import find_resolver
 from canary.study import Study
 from canary.ui.pageframe import header, footer
 from canary.ui.pages import not_found
@@ -259,9 +261,14 @@ def render_locations [html] (study):
             </tr>
     """
 
-def render_metadata_header [html] (uid, mapped_metadata, show_abstract=False):
+def render_metadata_header [html] (record, show_abstract=False, resolver=None):
     context = get_publisher().context
     config = context.config
+
+    source_catalog = context.get_source_catalog()
+    complete_term_map = source_catalog.get_complete_mapping()
+    mapped_metadata = record.get_mapped_metadata(complete_term_map)
+    
     authors = mapped_metadata['author']
     if authors == []:
         authors = ['[No authors listed]']
@@ -293,7 +300,15 @@ def render_metadata_header [html] (uid, mapped_metadata, show_abstract=False):
 
     """
     <abbr class='unapi-id' title='%s/record/%s'> </abbr>
-    """ % (config.site_base_url, uid)
+    """ % (config.site_base_url, record.uid)
+
+    if resolver:
+        # NOTE: record.metadata.keys()[0][0] is a hack to guess a source_id
+        sfx_link = utils.get_sfx_link(context, record.metadata.keys()[0][0],
+            mapped_metadata['unique_identifier'], resolver)
+        """
+    <a href="%s" alt="%s"><img src="%s" alt="%s icon" border="0" /></a>
+        """ % (sfx_link, resolver.link_text, resolver.icon_url, resolver.link_text)
 
     if show_abstract:
         render_abstract(mapped_metadata)
@@ -710,10 +725,19 @@ def render_summary_concept_row [html] (concepts, concept_name):
 
 
 def render_record [html] (record, study):
-    
     context = get_publisher().context
     source_catalog = context.get_source_catalog()
     complete_term_map = source_catalog.get_complete_mapping()
+    
+    ip_address = get_request().get_environ('REMOTE_ADDR')
+    resolver = None
+    try:
+        resolver = find_resolver(context, ip_address)
+        if not resolver:
+            raise 'NoResolverFound'
+    except:
+        print 'No resolver for ip %s: %s' % (ip_address, traceback.print_exc())
+    
     article_type = study.get_article_type(text=True)
 
     view = get_request().get_form_var('view', default='canary')
@@ -736,7 +760,7 @@ def render_record [html] (record, study):
     else:
         header('Record %s' % record.uid)
     
-    render_metadata_header(record.uid, mapped_metadata, show_abstract=False)
+    render_metadata_header(record, show_abstract=False, resolver=resolver)
     """
     <h4>Article type: %s - Canary ID: %s</h4>
     """ % (article_type.capitalize(), record.uid)
@@ -842,7 +866,7 @@ def render_record [html] (record, study):
 
 
 
-def render_record_row [html] (record):
+def render_record_row [html] (record, resolver=None):
     context = get_publisher().context
     config = context.config
     source_catalog = context.get_source_catalog()
@@ -891,10 +915,22 @@ def render_record_row [html] (record):
                                 %s
                                 <br />
                                 %s
-                            </div>
     """ % (record.uid, record.uid, ', '.join(author), mapped_md['title'], 
         mapped_md['source'])
+
+    if resolver:
+        # NOTE: record.metadata.keys()[0][0] is a hack to guess a source_id
+        sfx_link = utils.get_sfx_link(context, record.metadata.keys()[0][0],
+            mapped_md['unique_identifier'], resolver)
+        """
+                                <br />
+                                <a href="%s" alt="%s"><img src="%s" alt="%s icon" border="0" /></a>
+        """ % (sfx_link, resolver.link_text, resolver.icon_url, resolver.link_text)
     
+    """
+                            </div>
+    """
+
     if user:
         invisible_text = 'invisible'
         if record.uid in user.records.keys():

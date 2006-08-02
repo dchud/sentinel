@@ -26,6 +26,9 @@ class Cacheable (object):
     # Subclasses must define
     CACHE_KEY = ''
     
+    # Subclasses may refine
+    CACHE_ID_FIELD = 'uid'
+    
     def __new__ (cls, *args, **kwargs):
         context = None
         uid = -1
@@ -36,16 +39,22 @@ class Cacheable (object):
         elif kwargs:
             context = kwargs.get('context', None)
             uid = kwargs.get('uid', None)
+        cache_id_field = kwargs.get(cls.CACHE_ID_FIELD, None)
         
         if context == None \
             or uid == -1:
+            #if cache_id_field == -1:
             item = object.__new__(cls)
             item.__init__(*args, **kwargs)
             return item
-            
-        full_cache_key = '%s:%s' % (cls.CACHE_KEY, uid)
+    
+        if cls.CACHE_ID_FIELD == 'uid':
+            full_cache_key = '%s:%s' % (cls.CACHE_KEY, uid)
+        else:
+            full_cache_key = '%s:%s' % (cls.CACHE_KEY, cache_id_field)
         if context.config.use_cache:
             try:
+                #print 'Fetch %s from cache' % full_cache_key
                 item = context.cache_get(full_cache_key)
                 if item:
                     context.logger.debug('HIT %s', full_cache_key)
@@ -57,6 +66,7 @@ class Cacheable (object):
                 context.logger.error('ERROR %s', e)
                 
         item = object.__new__(cls)
+        #print 'Load %s with args: %s, kwargs: %s' % (cls.__class__.__name__, args, kwargs)
         item.__init__(*args, **kwargs)
         item.load(context)
         if context.config.use_cache:
@@ -80,6 +90,10 @@ class Cacheable (object):
                 # Note already loaded, so continue
                 pass
         
+        self.load_from_db(context)
+
+
+    def load_from_db (self, context):
         cursor = context.get_cursor()
         cursor.execute("""SELECT * FROM """ + self.TABLE_NAME + """
             WHERE uid = %s
@@ -92,18 +106,22 @@ class Cacheable (object):
             for k, v in row.items():
                 self.set(k, v) 
         else:
-            context.logger.error('No %s with uid %s' % (self.__class__.__name__,
-                self.uid))
+            context.logger.error('No %s with %s %s' % (self.__class__.__name__,
+                self.CACHE_ID_FIELD, getattr(self, self.CACHE_ID_FIELD)))
                 
     
+    def get_cache_key (self):
+        return '%s:%s' % (self.CACHE_KEY, getattr(self, self.CACHE_ID_FIELD))
+
+
     def cache_set (self, context):
         if context.config.use_cache:
-            context.cache_set('%s:%s' % (self.CACHE_KEY, self.uid), self)
+            context.cache_set(self.get_cache_key(), self)
 
 
     def cache_delete (self, context):
         if context.config.use_cache:
-            context.cache_delete('%s:%s' % (self.CACHE_KEY, self.uid))
+            context.cache_delete(self.get_cache_key())
 
             
 class CanaryConfig (quixote.config.Config):
