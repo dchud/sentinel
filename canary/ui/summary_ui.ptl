@@ -139,7 +139,7 @@ class SummaryIndex:
                 
             """
                 <tr>
-                    <th><a href="%s/search?%s">%s</a></th>
+                    <th><a href="%s/search?q=%s">%s</a></th>
             """ % (context.config.site_base_url, search_string, target_term)
                 
             for level in summary_set.LEVELS:
