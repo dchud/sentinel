@@ -75,7 +75,7 @@ def get_summaries_from_study (context, study):
     
 
 
-def get_study_concept (concept_type, ):
+def get_study_concept (concept_type):
     """For a SummaryConcept, get the concept instance related to the
     Study itself from the appropriate table (which we must determine
     dynamically)."""
@@ -415,8 +415,7 @@ class SummarySet:
                             except:
                                 self.scores[score_key][hasnt_level] = level
                             
-        import pprint
-        pprint.pprint(self.scores)
+        return self.scores
 
 
         

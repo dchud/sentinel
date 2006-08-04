@@ -1,0 +1,246 @@
+# $Id$
+
+import logging
+import string
+import traceback
+import urllib
+
+from quixote import get_publisher, get_request
+
+from canary.concept import Concept
+from canary.summary import summary_set_from_concept
+from canary.ui.pages import not_found
+from canary.ui.pageframe import header, footer
+from canary import utils
+
+
+class Summary:
+
+    _q_exports = [
+        '_q_index',
+        ]
+        
+    def __init__ (self, request):
+        pass
+
+    def _q_index [html] (self, request):
+        header('Summary')
+        """
+        <h2>Summary</h2>
+        
+        <p>
+        This part of the Canary Database allows you to view evidence table
+        summaries of exposures, outcomes, and species.  Normally you'll arrive
+        here from a link that will drop you right into a summary evidence
+        table, and you won't see this message!
+        </p>
+        """
+        footer()
+    
+    def _q_lookup (self, request, name):
+        try:
+            if name == 'exposure':
+                return SummaryIndex(request, 'exposure')
+            elif name == 'outcome':
+                return SummaryIndex(request, 'outcome')
+            elif name == 'species':
+                return SummaryIndex(request, 'species')
+            else:
+                raise 'NotFoundError'
+        except:
+            return not_found('summary')
+
+
+class SummaryIndex:
+
+    _q_exports = []
+    
+    def __init__ (self, request, type='exposure'):
+        self.type = type
+    
+
+    def _q_lookup (self, request, concept_id=None):
+        try:
+            self.concept_id = int(concept_id)
+            return self.summary_table(request)
+        except:
+            print traceback.print_exc()
+            return not_found('summary')
+        
+        
+    def summary_table [html] (self, request):
+        context = get_publisher().context
+        
+        concept = Concept(context, self.concept_id, load_synonyms=True)
+        
+        title = "%s as Sentinel %s" % (concept.term, self.type.capitalize())
+        header(title)
+        """
+        <h2>%s</h2>
+        """ % (title)
+        """
+        <p>
+        This table summarizes studies curated in the Canary Database about the 
+        overall quality of published evidence supporting sentinels of human health 
+        hazards with respect to the %s %s.
+        </p>
+
+        <p>
+        Empty cells indicate a lack of evidence in the data the Canary Database 
+        comprises. 
+        </p>
+        """ % (self.type, concept.term)
+        
+        summary_set = summary_set_from_concept(context, self.concept_id, self.type)
+        if not summary_set:
+            print 'No summary_set for %s, %s' % (self.concept_id, self.type)
+            raise not_found('pickle')
+            
+        summary = summary_set.summarize(context)
+        if not summary:
+            print 'No summary for %s, %s' % (self.concept_id, self.type)
+            raise not_found('relish')
+        
+        # target_type reflects the type of left-hand column items to show for this
+        # concept type.
+        if self.type == 'exposure':
+            target_type = 'species'
+        elif self.type == 'outcome':
+            target_type = 'species'
+        else:
+            # self.type == 'species'
+            target_type = 'exposure'
+            
+        target_type = str(target_type)
+        
+        # Looking through items like 
+        #   "'Exposure:Chemical Warfare Agents': {'has_exposure_risk': 3}"
+        # ...so match on the first token against target_type
+        targets = [(k, v) for k, v in summary.items() \
+            if str(k).startswith(target_type.capitalize())]
+        
+        """
+        <table class='gentable summary' width='100%s'>
+            <tbody>
+                <tr>
+                    <th>%s</th>
+                    <th>Greater susceptibility</th>
+                    <th>Shorter latency</th>
+                    <th>Greater exposure risk</th>
+                    <th>Early warning</th>
+                </tr>
+        """ % ('%', target_type.capitalize())
+
+        for target_name, target_scores in targets:
+            target_term = target_name[len(target_type)+1:] # +1 to drop the ':'
+            search_string = '"%s".%s "%s".%s' % (target_term, target_type,
+                concept.term, self.type)
+            search_string = urllib.quote_plus(str(search_string))
+                
+            """
+                <tr>
+                    <th><a href="%s/search?%s">%s</a></th>
+            """ % (context.config.site_base_url, search_string, target_term)
+                
+            for level in summary_set.LEVELS:
+                """
+                    <td>
+                """
+                has_score = target_scores.get('has_%s' % level, 0)
+                hasnt_score = target_scores.get('hasnt_%s' % level, 0)
+                if has_score:
+                    for i in range(has_score):
+                        """
+                        <img src='/images/24-em-check.png' />
+                        """
+                    if hasnt_score:
+                        """
+                        <br />
+                        """
+                if hasnt_score:
+                    for i in range(has_score):
+                        """
+                        <img src='/images/20-px-negative.png' />
+                        """
+                if not has_score \
+                    and not hasnt_score:
+                    # Ensure there's *something* to render the cell
+                    """
+                        &nbsp;
+                    """
+                """
+                    </td>
+                """
+            """
+                </tr>
+            """ 
+        
+        """
+            </tbody>
+        </table>
+        """
+        """
+        <br />
+
+        <h3>Legend</h3>
+        
+        <dl>
+        <dd>
+        <img src='/images/24-em-check.png' />
+        <img src='/images/24-em-check.png' />
+        <img src='/images/24-em-check.png' />
+        - 
+        Experimental or cohort studies
+        </dd>
+        
+        <br />
+        
+        <dd>
+        <img src='/images/24-em-check.png' />
+        <img src='/images/24-em-check.png' />
+        -
+        Case control, cross sectional, or aggregate studies
+        </dd>
+         
+        <br />
+        
+        <dd>
+        <img src='/images/24-em-check.png' />
+        -
+        Case report or expert opinion
+        </dd>
+        
+        <dt>
+        Greater susceptibility
+        
+        </dt>
+        <dd>
+        Species more susceptible than humans
+        </dd>
+        
+        <dt>
+        Shorter latency
+        </dt>
+        <dd>
+        Species affected by exposure more rapidly than humans
+        </dd>
+        
+        <dt>
+        Greater exposure risk
+        </dt>
+        <dd>
+        Species at increased risk of exposure compared with humans
+        
+        </dd>
+        
+        <dt>
+        Early warning
+        </dt>
+        <dd>
+        Species provided early warning of human health hazards
+        </dd>
+        
+        </dl>
+        """
+        footer()
+    

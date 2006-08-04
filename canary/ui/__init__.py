@@ -38,7 +38,7 @@ from canary.ui.pages import login_general, login_yale, logout
 from canary.ui.pages import register, verify, resetpass
 from canary.ui.pages import news, robots, unapi, TempImage
 from canary.ui.search import search, advanced_search
-
+from canary.ui.summary_ui import Summary
 
 record = record_ui
 
@@ -73,5 +73,7 @@ def _q_lookup (request, name=''):
         return Browse(request)
     elif name == 'timage':
         return TempImage()
+    elif name == 'summary':
+        return Summary(request)
     else:
         return not_found()
