@@ -116,7 +116,7 @@ class SummaryIndex:
         # Looking through items like 
         #   "'Exposure:Chemical Warfare Agents': {'has_exposure_risk': 3}"
         # ...so match on the first token against target_type
-        targets = [(k, v) for k, v in summary.items() \
+        targets = [(k.lower(), k, v) for k, v in summary.items() \
             if str(k).startswith(target_type.capitalize())]
         
         """
@@ -131,7 +131,7 @@ class SummaryIndex:
                 </tr>
         """ % ('%', target_type.capitalize())
 
-        for target_name, target_scores in targets:
+        for target_name_lower, target_name, target_scores in sorted(targets):
             target_term = target_name[len(target_type)+1:] # +1 to drop the ':'
             search_string = '"%s".%s "%s".%s' % (target_term, target_type,
                 concept.term, self.type)
