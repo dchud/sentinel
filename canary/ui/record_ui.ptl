@@ -105,12 +105,10 @@ data_points = [
 def render_data_points [html] (study):
     context = get_publisher().context
     
-    e_image_name = utils.make_sideways_e(context, [study])
     """
         <div class='studytable'>
             <table cellspacing='0'>
                 <tr>
-                    <th><acronym title='Linkages between human and animal health'>Linkages</acronym></th>
     """
     for key, short, full in data_points:
         """
@@ -120,8 +118,7 @@ def render_data_points [html] (study):
                 </tr>
             
                 <tr>
-                    <td><img src='/timage/%s' alt='Small linkage graph' /></td>
-    """ % e_image_name
+    """
     for key, short, full in data_points:
         if getattr(study, str(key)):
             """

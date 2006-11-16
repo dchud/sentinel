@@ -129,7 +129,7 @@ def search [html] (request):
                     result_set.append((record, score))
         
         year_count = {}
-        for i in range(1965, 2006):
+        for i in range(1965, 2007):
             year_count[i] = 0
         for rec, score in result_set:
             mm = rec.get_mapped_metadata(term_map=complete_term_mapping)
@@ -151,7 +151,6 @@ def search [html] (request):
                 int_id = int(id[6:])
                 study_map[id] = Study(context, int_id)
         studies = list(study_map[id] for id in study_id_list)
-        e_image_file = utils.make_sideways_e(context, studies)
 
         form.render()
         """
@@ -165,12 +164,9 @@ def search [html] (request):
         %s of hits by year:
             <span style='font-weight:bold;font-size:x-small;'>1965</span>
             <img border='0' src='/timage/%s' type='image/png' usemap='#sparkmap'/>
-            <span style='font-weight:bold;font-size:x-small;'>2005</span>
-            &nbsp;
-            <acronym title='Linkages between human and animal health'>Linkages</acronym>:
-            <img border='0' src='/timage/%s' type='image/png' usemap='#emap'/>
+            <span style='font-weight:bold;font-size:x-small;'>2007</span>
         </p>
-        """ % ('%', len(result_set), '%', sparkline_image_file, e_image_file)
+        """ % ('%', len(result_set), '%', sparkline_image_file)
         
         years = year_count.keys()
         years.sort()
@@ -203,34 +199,6 @@ def search [html] (request):
                     'limit to year %s' % year)
         """
         </map>
-        
-        <map name='emap'>
-        """
-        bar_width = 4
-        for att in utils.linkages:
-            token = att.replace(str('_'), str('-'))
-            hint_text = data_points[utils.linkages.index(att)][1].lower()
-            try:
-                if raw_query.index(str('%s' % token)):
-                    query_str = raw_query
-            except ValueError:
-                query_str = '%s has-%s:1' % (raw_query, token)
-            query_str = filter_str + 'q=' + query_str
-            xoffset = 2 + (utils.linkages.index(att)*9)
-            """
-            <area href='/search?%s'
-                shape='rect'
-                coords='%s %s %s %s'
-                alt='%s'
-                title='%s' />
-            """ % (query_str,
-                xoffset, 0, xoffset+bar_width, 20,
-                'limit to studies with %s' % hint_text, 
-                'limit to studies with %s' % hint_text)
-        
-        """
-        </map>
-        
         
         <div id="search-result">
             <table width="100%" border="0" cellspacing="0" cellpadding="0">

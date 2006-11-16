@@ -547,7 +547,7 @@ class BrowseIndex:
             
             try:
                 year_count = {}
-                for i in range(1965, 2006):
+                for i in range(1965, 2007):
                     year_count[i] = 0
                 for rec in records:
                     mm = rec.get_mapped_metadata(term_map=complete_term_map)
@@ -617,8 +617,6 @@ class BrowseIndex:
                 
                 try:
                     studies = [Study(context, rec.study_id) for sort_value, rec in records_sorted]
-                    e_image_file = utils.make_sideways_e(context, studies)
-                    context.logger.debug('e_image_file: %s', e_image_file)
                 except:
                     context.logger.error(traceback.print_exc())
 
@@ -628,13 +626,9 @@ class BrowseIndex:
                     <span style='font-weight:bold;font-size:x-small;'>1965</span>
                     <img border='0' src='/timage/%s' type='image/png' 
                         alt='Small chart of records by year' usemap='#sparkmap'/>
-                    <span style='font-weight:bold;font-size:x-small;'>2005</span>
-                    &nbsp;
-                    <acronym title='Linkages between human and animal health'>Linkages</acronym>:
-                    <img border='0' src='/timage/%s' type='image/png' 
-                        alt='Small chart of number of records by linkage type' usemap='#emap'/>
+                    <span style='font-weight:bold;font-size:x-small;'>2007</span>
                 </p>
-                """ % ('%', sparkline_image_file, e_image_file)
+                """ % ('%', sparkline_image_file)
                 
                 """
                 <map name='sparkmap'>
@@ -659,33 +653,6 @@ class BrowseIndex:
                             year_index*3, 0, (year_index*3)+2, 120,
                             'limit to year %s' % year,
                             'limit to year %s' % year)
-                """
-                </map>
-                
-                <map name='emap'>
-                """
-                bar_width = 4
-                for att in utils.linkages:
-                    token = att.replace(str('_'), str('-'))
-                    # FIXME: a HACK I tell you.  Clean this up!
-                    hint_text = data_points[utils.linkages.index(att)][1].lower()
-                    if filter_str:
-                        query_str = filter_str + 'has-%s' % token
-                    else:
-                        query_str = '"%s" [%s] has-%s' % (name, type_search, 
-                            token)
-                    xoffset = 2 + (utils.linkages.index(att)*9)
-                    """
-                    <area href='/search?%s:1'
-                        shape='rect'
-                        coords='%s %s %s %s'
-                        alt='%s'
-                        title='%s' />
-                    """ % (query_str,
-                        xoffset, 0, xoffset+bar_width, 20,
-                        'limit to studies with %s' % hint_text, 
-                        'limit to studies with %s' % hint_text)
-                
                 """
                 </map>
                 
