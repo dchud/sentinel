@@ -563,6 +563,12 @@ class SearchIndex:
                 doc.add(PyLucene.Field('all', 
                     meth.get_study_type(text=True),
                     False, True, True))
+                # And each exposure route term
+                for route in meth.get_routes(True):
+                    doc.add(PyLucene.Field('exposure_route',
+                        route, False, True, True))
+                    doc.add(PyLucene.Field('all',
+                        route, False, True, True))
             
             writer.addDocument(doc)
             if not had_writer:
