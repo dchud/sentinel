@@ -842,3 +842,15 @@ div.strata {
 .summary-submit:hover {
     background: #fff;
 }
+
+.large {
+    font-size: large;
+}
+
+
+#summary-hype {
+    border: 1px solid #AAAAAA;
+    padding: .5em;
+    margin-bottom: 1em;
+}
+

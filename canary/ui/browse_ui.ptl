@@ -14,10 +14,11 @@ from canary.browse import records_by_journal, records_by_journal_index
 from canary.browse import records_by_methodology, records_by_methodology_index
 from canary.browse import records_by_author, records_by_author_index
 from canary.browse import records_by_concept, records_by_concept_index
-from canary.concept import Concept
+from canary.concept import Concept, find_concepts
 from canary.qx_defs import NotLoggedInError
 from canary.resolver import find_resolver
 from canary.study import Methodology, Study
+from canary.summary import summary_set_from_concept
 from canary.ui.pages import not_found
 from canary.ui.pageframe import header, footer
 from canary.ui.record_ui import render_record_row, data_points
@@ -72,7 +73,9 @@ class Browse:
             
 
 def render_on_this_page_concept [html] (type, concept_sorted, total, query_string=''):
+    context = get_publisher().context
     request = get_request()
+    
     f = request.get_form_var('f', '')
     filter_str = ''
     if f:
@@ -86,16 +89,30 @@ def render_on_this_page_concept [html] (type, concept_sorted, total, query_strin
         </tr>
     """ % type.capitalize()
     for count, con in concept_sorted[0:8]:
-        """
-        <tr style='background-color:#fafafa;'>
-            <td style='margin-right:.3em;' valign='top'>
-                <a style='font-size:11px;' 
-                    href='/search?%sq="%s"[%s]'
-                    title='Search for: "%s" [%s]'>%s</a>
-            </td>
-        """ % (str(filter_str), con, type, 
-            con, type, con)
-        query = '"%s"[%s]' % (con, type)
+        if type == 'author':
+            """
+            <tr style='background-color:#fafafa;'>
+                <td style='margin-right:.3em;' valign='top'>
+                    <a style='font-size:11px;' 
+                        href='/search?%sq="%s"[%s]'
+                        title='Search for: "%s" [%s]'>%s</a>
+                </td>
+            """ % (str(filter_str), con, type, 
+                con, type, con)
+            query = '"%s"[%s]' % (con, type)
+        else:
+            concept = Concept(context, con)
+            """
+            <tr style='background-color:#fafafa;'>
+                <td style='margin-right:.3em;' valign='top'>
+                    <a style='font-size:11px;' 
+                        href='/browse/%s/%s'
+                        title='Browse %s "%s"'>%s</a>
+                </td>
+            """ % (type, con, 
+                type, concept.term, concept.term)
+            # Hack 
+            query = '"%s"[%s]' % (concept.term, type)
         or_query = and_query = query_string
         if not str(query) in str(query_string):
             or_query = '%s OR %s' % (query_string, query)
@@ -211,19 +228,19 @@ def render_on_this_page [html] (records, query_string='', study_map=[]):
                 authors[a] = 1
         for exp in study.exposures:
             try:
-                exposures[exp.term] += 1
+                exposures[exp.concept_id] += 1
             except KeyError:
-                exposures[exp.term] = 1
+                exposures[exp.concept_id] = 1
         for out in study.outcomes:
             try:
-                outcomes[out.term] += 1
+                outcomes[out.concept_id] += 1
             except KeyError:
-                outcomes[out.term] = 1
+                outcomes[out.concept_id] = 1
         for spec in study.species:
             try:
-                species[spec.term] += 1
+                species[spec.concept_id] += 1
             except KeyError:
-                species[spec.term] = 1
+                species[spec.concept_id] = 1
         
     
     """
@@ -499,7 +516,7 @@ class BrowseIndex:
         context = get_publisher().context
         source_catalog = context.get_source_catalog()
         complete_term_map = source_catalog.get_complete_mapping()
-        
+            
         ip_address = get_request().get_environ('REMOTE_ADDR')
         try:
             resolver = find_resolver(context, ip_address)
@@ -655,7 +672,30 @@ class BrowseIndex:
                             'limit to year %s' % year)
                 """
                 </map>
+                """
                 
+                try:
+                    if getattr(self, str('concept'), None):
+                        summary_set = summary_set_from_concept(context, self.concept.uid, type_search)
+                        if summary_set:
+                            summary = summary_set.summarize(context)
+                            if summary:
+                                """
+                                <div id='summary-hype'>
+                                    <img src='/images/24-em-check.png' />
+                                    <span class='large'>/</span>
+                                    <img src='/images/20-px-negative.png' />
+                                    &nbsp;<a href='/summary/%s/%s'>See the Canary summary for %s</a>
+                                    <img src='/images/24-em-check.png' />
+                                    <span class='large'>/</span>
+                                    <img src='/images/20-px-negative.png' />
+                                </div>
+                                """ % (self.type, self.concept.uid, self.concept.term)
+                except:
+                    print traceback.print_exc()
+                    
+                    
+                """
                 <table width='100%' border='0' cellspacing='0' cellpadding='0'>
                 <tr>
                     <td valign='top'>
@@ -1178,12 +1218,12 @@ class ConceptBrowseIndex (BrowseIndex):
     def _q_lookup (self, request, concept_id=''):
         context = get_publisher().context
         try:
-            concept_id = int(concept_id)
-            if concept_id:
-                records = records_by_concept(context, self.type, concept_id)
+            self.concept_id = int(concept_id)
+            if self.concept_id:
+                records = records_by_concept(context, self.type, self.concept_id)
                 if len(records) == 0:
                     raise Exception('No records found')
-                concept = Concept(context, concept_id)
-                return self.render_records(concept.term, records)
+                self.concept = Concept(context, self.concept_id)
+                return self.render_records(self.concept.term, records)
         except:
             return not_found(self.type)

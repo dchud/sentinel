@@ -39,12 +39,8 @@ class Summary:
     
     def _q_lookup (self, request, name):
         try:
-            if name == 'exposure':
-                return SummaryIndex(request, 'exposure')
-            elif name == 'outcome':
-                return SummaryIndex(request, 'outcome')
-            elif name == 'species':
-                return SummaryIndex(request, 'species')
+            if name in ('exposure', 'outcome', 'species'):
+                return SummaryIndex(request, name)
             else:
                 raise 'NotFoundError'
         except:
@@ -99,7 +95,6 @@ class SummaryIndex:
         summary = summary_set.summarize(context)
         if not summary:
             print 'No summary for %s, %s' % (self.concept_id, self.type)
-            raise not_found('relish')
         
         # target_type reflects the type of left-hand column items to show for this
         # concept type.
@@ -131,6 +126,13 @@ class SummaryIndex:
                 </tr>
         """ % ('%', target_type.capitalize())
 
+        if not summary:
+            """
+                <tr>
+                    <td colspan='5' align='center'>No Canary summary data yet.</td>
+                </tr>
+            """
+            
         for target_name_lower, target_name, target_scores in sorted(targets):
             target_term = target_name[len(target_type)+1:] # +1 to drop the ':'
             search_string = '"%s".%s "%s".%s' % (target_term, target_type,
@@ -189,6 +191,10 @@ class SummaryIndex:
         <img src='/images/24-em-check.png' />
         <img src='/images/24-em-check.png' />
         <img src='/images/24-em-check.png' />
+        <span class='large'>/</span>
+        <img src='/images/20-px-negative.png' />
+        <img src='/images/20-px-negative.png' />
+        <img src='/images/20-px-negative.png' />
         - 
         Experimental or cohort studies
         </dd>
@@ -198,6 +204,9 @@ class SummaryIndex:
         <dd>
         <img src='/images/24-em-check.png' />
         <img src='/images/24-em-check.png' />
+        <span class='large'>/</span>
+        <img src='/images/20-px-negative.png' />
+        <img src='/images/20-px-negative.png' />
         -
         Case control, cross sectional, or aggregate studies
         </dd>
@@ -206,6 +215,8 @@ class SummaryIndex:
         
         <dd>
         <img src='/images/24-em-check.png' />
+        <span class='large'>/</span>
+        <img src='/images/20-px-negative.png' />
         -
         Case report or expert opinion
         </dd>

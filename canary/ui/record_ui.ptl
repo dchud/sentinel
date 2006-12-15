@@ -494,22 +494,41 @@ def render_related [html] (study, mapped_metadata):
             </td>
     """ % (mapped_metadata['issn'], mapped_metadata['journal'])
     
-    for concept in ('exposures', 'outcomes', 'species', 'risk_factors'):
-        items = getattr(study, str(concept))
+    for concept, field in (('exposure', 'exposures'),
+        ('outcome', 'outcomes'),
+        ('species', 'species')):
+        items = getattr(study, str(field))
         if items:
             """
             <td align='left' valign='top'>
                 <h4>%s</h4>
                 <p>
-            """ % concept.capitalize()
+            """ % field.capitalize()
             for item in items:
                 """
-                    <a href='/search?q=%s:"%s"'>%s</a> <br />
-                """ % (concept, item.term, item.term)
+                    <a href='/browse/%s/%s'>%s</a> <br />
+                """ % (concept, item.concept_id, item.term)
             """
                 </p>
             </td>
             """
+            
+        
+    risk_factors = study.risk_factors
+    if risk_factors:
+        """
+        <td align='left' valign='top'>
+            <h4>Risk factors</h4>
+            <p>
+        """
+        for rf in risk_factors:
+            """
+                <a href='/search?q=risk_factor:"%s"'>%s</a> <br />
+            """ % (item.term, item.term)
+        """
+            </p>
+        </td>
+        """
             
     if study.locations:
         """
