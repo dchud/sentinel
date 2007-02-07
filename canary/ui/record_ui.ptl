@@ -299,6 +299,10 @@ def render_metadata_header [html] (record, show_abstract=False, resolver=None):
     <abbr class='unapi-id' title='%s/record/%s'> </abbr>
     """ % (config.site_base_url, record.uid)
 
+    """
+    <span class="Z3988"  title="ctx_ver=Z39.88-2004&amp;rfr_id=canarydatabase.org:canarydb&amp;rft_val_fmt=info:ofi/fmt:kev:mtx:journal&amp;rft_id=info:pmid/%s&amp;url_ctx_fmt=ori:fmt:kev:mtx:ctx">
+                        <!-- COinS -->
+    """ % mapped_metadata['unique_identifier']
     if resolver:
         # NOTE: record.metadata.keys()[0][0] is a hack to guess a source_id
         sfx_link = utils.get_sfx_link(context, record.metadata.keys()[0][0],
@@ -306,7 +310,10 @@ def render_metadata_header [html] (record, show_abstract=False, resolver=None):
         """
     <a href="%s" alt="%s"><img src="%s" alt="%s icon" border="0" /></a>
         """ % (sfx_link, resolver.link_text, resolver.icon_url, resolver.link_text)
-
+    """
+    </span>
+    """
+    
     if show_abstract:
         render_abstract(mapped_metadata)
 
@@ -390,7 +397,7 @@ def render_reference [html] (record, mapped_metadata):
                     <h4>COinS:</h4>
                     <p>
                     <span class="Z3988" 
-                        title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info:ofi/fmt:kev:mtx:journal&amp;rft_id=info:pmid/%s&amp;url_ctx_fmt=ori:fmt:kev:mtx:ctx">
+                        title="ctx_ver=Z39.88-2004&amp;rfr_id=canarydatabase.org:canarydb&amp;rft_val_fmt=info:ofi/fmt:kev:mtx:journal&amp;rft_id=info:pmid/%s&amp;url_ctx_fmt=ori:fmt:kev:mtx:ctx">
                         <!-- COinS -->
                     </span>
                     </p>
@@ -654,7 +661,7 @@ def similar [html] (self, request):
             <a href='http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=PubMed&cmd=Display&dopt=pubmed_pubmed&from_uid=%s'>Pubmed related articles</a>
 
             <!-- leave out for now...
-            <a href="http://sfx.library.yale.edu/links?id=pmid:%s">
+            <a href="http://sfx.library.yale.edu/links?sid=canarydatabase.org:canarydb&amp;id=pmid:%s">
                 <img border='0' src='/yale_sfx2_gif'>
             </a>
             -->
@@ -934,16 +941,20 @@ def render_record_row [html] (record, resolver=None):
     """ % (record.uid, record.uid, ', '.join(author), mapped_md['title'], 
         mapped_md['source'])
 
+    """
+                                <br />
+                                <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rfr_id=info:sid/canarydatabase.org:canarydb&amp;rft_val_fmt=info:ofi/fmt:kev:mtx:journal&amp;rft_id=info:pmid/%s&amp;url_ctx_fmt=ori:fmt:kev:mtx:ctx">
+                                <!-- COinS -->
+    """ % mapped_md['unique_identifier']
     if resolver:
         # NOTE: record.metadata.keys()[0][0] is a hack to guess a source_id
         sfx_link = utils.get_sfx_link(context, record.metadata.keys()[0][0],
             mapped_md['unique_identifier'], resolver)
         """
-                                <br />
-                                <a href="%s" alt="%s"><img src="%s" alt="%s icon" border="0" /></a>
+                                    <a href="%s" alt="%s"><img src="%s" alt="%s icon" border="0" /></a>
         """ % (sfx_link, resolver.link_text, resolver.icon_url, resolver.link_text)
-    
     """
+                            </span>
                             </div>
     """
 

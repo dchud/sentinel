@@ -20,19 +20,18 @@ def find_resolver (context, ip_address='127.0.0.1'):
     
     r = Resolver(context, -1, ip_address)
     if r.base_url:
-        print 'Found automatically'
         return r
         
     r.load_from_db(context)
     if r.base_url:
-        print 'Found in db'
         return r
         
     r.load_from_xml(context)
     r.save(context)
-    print 'Loaded from OCLC and saved'
-        
-    return r
+    if r.base_url == 'http://worldcatlibraries.org/registry/gateway':
+        return None
+    else:
+        return r
     
 
 class Resolver (canary.context.Cacheable, DTable):
