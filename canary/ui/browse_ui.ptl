@@ -676,7 +676,8 @@ class BrowseIndex:
                 
                 try:
                     if getattr(self, str('concept'), None):
-                        summary_set = summary_set_from_concept(context, self.concept.uid, type_search)
+                        summary_set = summary_set_from_concept(context, 
+                            self.concept.uid, type_search)
                         if summary_set:
                             summary = summary_set.summarize(context)
                             if summary:

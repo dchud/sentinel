@@ -1288,6 +1288,23 @@ class Study (canary.context.Cacheable, DTable):
         else:
             return self.article_type
     
+    def get_concept_from_concept (self, concept):
+        """
+        For use in matching searches for exposure/species/outcome against
+        summary data. 
+       
+        NOTE: not checking 'risk_factor', but that should be refactored in
+        with a broader concept code refactoring.
+        """
+        for concept_type in ('exposures', 'outcomes', 'species'):
+            for c in getattr(self, concept_type):
+                if c.concept_id == concept.uid:
+                    # Eliminate trailing 's'
+                    if concept_type in ('exposures', 'outcomes'):
+                        concept_type = concept_type[:-1]
+                    return c, concept_type
+        return None, None
+
     
     def add_methodology (self, methodology):
         for meth in self.methodologies:

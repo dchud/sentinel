@@ -854,3 +854,12 @@ div.strata {
     margin-bottom: 1em;
 }
 
+.summary_set_link:hover {
+    border-color: #000099;
+    /*
+    background-color: #EEEDC0;
+    background-color: #FFC;
+    */
+    background-color: #A6BFF2;
+    cursor:pointer;
+}

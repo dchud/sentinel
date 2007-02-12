@@ -44,7 +44,6 @@ def summary_set_from_concept (context, concept_id, concept_type):
             pairs.append((summary, st))
     except Exception, e:
         context.logger.error(e)
-        print traceback.print_exc()
         return None
 
     return SummarySet(concept_type, concept_id, pairs)
@@ -399,8 +398,11 @@ class SummarySet:
                         self.scores[score_key] = {}
 
                     for l in self.LEVELS:
+                        store_record_id = False
+                        
                         has_level = 'has_%s' % l
                         if getattr(summary, has_level):
+                            store_record_id = True
                             try:
                                 self.scores[score_key][has_level] = \
                                     max(self.scores[score_key][has_level], level)
@@ -409,11 +411,20 @@ class SummarySet:
 
                         hasnt_level = 'hasnt_%s' % l
                         if getattr(summary, hasnt_level):
+                            store_record_id = True
                             try:
                                 self.scores[score_key][hasnt_level] = \
                                     max(self.scores[score_key][hasnt_level], level)
                             except:
                                 self.scores[score_key][hasnt_level] = level
+                        
+                        if store_record_id:
+                            # Save a list of record ids for easy searching later
+                            record_set_name = '%s_recs' % l
+                            try:
+                                self.scores[score_key][record_set_name].append(st.record_id)
+                            except:
+                                self.scores[score_key][record_set_name] = [st.record_id]
                             
         return self.scores
 

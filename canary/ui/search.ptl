@@ -12,12 +12,14 @@ from quixote import form2
 from quixote import get_publisher
 from quixote.errors import TraversalError
 
+from canary.concept import find_concepts
 import canary.context
 from canary.loader import QueuedRecord
 from canary.qx_defs import MyForm
 from canary.resolver import find_resolver
 from canary.search import Search, SearchIndex
 from canary.study import Study
+from canary.summary import summary_set_from_concept
 from canary.ui.browse_ui import BrowseIndex, render_on_this_page
 from canary.ui.pageframe import header, footer
 from canary.ui.record_ui import render_record_row, data_points
@@ -199,7 +201,47 @@ def search [html] (request):
                     'limit to year %s' % year)
         """
         </map>
+        """
         
+        # Find any summaries (should be API-level!)
+        #if studies:
+        # First, figure out what the concepts are:
+        matching_concepts = find_concepts(context, raw_query)
+        # Then, find a matching concept from a study (warning: could be > 1)
+        study0 = studies[0]
+        for matching_concept in matching_concepts:
+            matcher, matcher_type = study0.get_concept_from_concept(matching_concept)
+            if not matcher:
+                continue
+            else:
+                #print 'MATCH on %s "%s" (%s)' % (matcher_type, matcher.term, matcher.uid)
+                try:
+                    #print 'Finding summary set'
+                    summary_set = summary_set_from_concept(context, matcher.concept_id, matcher_type)
+                    if summary_set:
+                        summary = summary_set.summarize(context)
+                        if summary:
+                            """
+    <div id='summary-hype'>
+        <img src='/images/24-em-check.png' />
+        <span class='large'>/</span>
+        <img src='/images/20-px-negative.png' />
+        &nbsp;<a href='/summary/%s/%s'>See the Canary summary for %s</a>
+        <img src='/images/24-em-check.png' />
+        <span class='large'>/</span>
+        <img src='/images/20-px-negative.png' />
+    </div>
+                            """ % (matcher_type, matching_concept.uid, matching_concept.term)
+                        else:
+                            print 'No summary'
+                    else:
+                        print 'No summary_set'
+                except:
+                    print traceback.print_exc()
+                break
+        
+        
+        """
         <div id="search-result">
             <table width="100%" border="0" cellspacing="0" cellpadding="0">
         """

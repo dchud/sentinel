@@ -145,34 +145,42 @@ class SummaryIndex:
             """ % (context.config.site_base_url, search_string, target_term)
                 
             for level in summary_set.LEVELS:
-                """
-                    <td>
-                """
                 has_score = target_scores.get('has_%s' % level, 0)
                 hasnt_score = target_scores.get('hasnt_%s' % level, 0)
-                if has_score:
-                    for i in range(has_score):
+                record_ids = target_scores.get('%s_recs' % level, [])
+                if has_score or hasnt_score:
+                    if record_ids:
+                        record_search_link = \
+                            str('/search?q=uid:(%s)' % ' OR '.join([str(id) for id in record_ids]))
                         """
-                        <img src='/images/24-em-check.png' />
+                        <td class='summary_set_link' onclick='window.location.href="%s";'>
+                        """ % record_search_link
+                    else:
                         """
+                        <td>
+                        """
+                    if has_score:
+                        for i in range(has_score):
+                            """
+                            <img src='/images/24-em-check.png' />
+                            """
+                        if hasnt_score:
+                            """
+                            <br />
+                            """
                     if hasnt_score:
-                        """
-                        <br />
-                        """
-                if hasnt_score:
-                    for i in range(has_score):
-                        """
-                        <img src='/images/20-px-negative.png' />
-                        """
-                if not has_score \
-                    and not hasnt_score:
+                        for i in range(has_score):
+                            """
+                            <img src='/images/20-px-negative.png' />
+                            """
+                    """
+                    </td>
+                    """
+                else:
                     # Ensure there's *something* to render the cell
                     """
-                        &nbsp;
+                        <td>&nbsp;</td>
                     """
-                """
-                    </td>
-                """
             """
                 </tr>
             """ 
