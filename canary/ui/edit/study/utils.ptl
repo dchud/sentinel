@@ -1,8 +1,10 @@
 # $Id$
 
 from quixote import get_publisher, get_request
+from quixote.html import htmltext
 
 from canary.gazeteer import Feature
+from canary.human_study import HumanStudy
 from canary.loader import QueuedRecord
 from canary.record import SubjectHeading
 from canary.study import Study
@@ -364,7 +366,7 @@ def render_strata [html] (study, strata, level):
     </div>
     """
 
-def render_summaries [html] (study, summary=None):
+def render_summaries [html] (context, study, summary=None):
     reason = ''
     if len(study.methodologies) == 0:
         reason = 'You must first add a methodology.'
@@ -380,11 +382,13 @@ def render_summaries [html] (study, summary=None):
         </p>
         """ % reason
     else:
-    
+        form_action = '/edit/study/%s/summary/add' % study.record_id
+        if summary:
+            form_action = '/edit/study/%s/summary/%s/edit' % (study.record_id, summary.uid)
         """
-        <form action='/edit/study/%s/summary/add' method='post' id='summary_form'
+        <form action='%s' method='post' id='summary_form'
             onSubmit='return verifySummary();'>
-        """ % study.record_id
+        """ % form_action
         """
         <table class='gentable' id='summaries' width='100%'>
             <tbody>
@@ -409,16 +413,20 @@ def render_summaries [html] (study, summary=None):
             </tr>
         """
         
-        for concept in [str(x) for x in ['exposures', 'outcomes', 'species']]:
+        for concept_type in [str(x) for x in ['exposures', 'outcomes', 'species']]:
             """
             <tr>
                 <th valign='top'>%s</th>
                 <td valign='top'>
-            """ % concept.capitalize()
-            for c in getattr(study, concept):
+            """ % concept_type.capitalize()
+            for c in getattr(study, concept_type):
+                checked_info = ''
+                if summary:
+                    if summary.get_concept(context, concept_type, c.uid):
+                        checked_info = 'checked="checked" value="yes"'
                 """
-            <input name='%s-%s' type='checkbox' /> %s <br />
-                """ % (concept, c.uid, c.term)
+            <input name='%s-%s' type='checkbox' %s /> %s <br />
+                """ % (concept_type, c.uid, checked_info, c.term)
             """
                 </td>
             </tr>
@@ -435,9 +443,13 @@ def render_summaries [html] (study, summary=None):
             ('has_exposure_risk', 'Greater exposure risk'),
             ('has_warning', 'Human warning'),
             ]:
+            checked_info = ''
+            if summary:
+                if getattr(summary, str(b)):
+                    checked_info = 'checked="checked" value="yes"'
             """
-        <input type='checkbox' name='%s' /> %s <br />
-            """ % (b, bt)
+        <input type='checkbox' name='%s' %s /> %s <br />
+            """ % (b, checked_info, bt)
         """
                 </td>
             </tr>
@@ -454,9 +466,13 @@ def render_summaries [html] (study, summary=None):
             ('hasnt_exposure_risk', 'Greater exposure risk'),
             ('hasnt_warning', 'Human warning'),
             ]:
+            checked_info = ''
+            if summary:
+                if getattr(summary, str(b)):
+                    checked_info = 'checked="checked" value="yes"'
             """
-        <input type='checkbox' name='%s' /> %s <br />
-            """ % (b, bt)
+        <input type='checkbox' name='%s' %s /> %s <br />
+            """ % (b, checked_info, bt)
         """
                 </td>
             </tr>
@@ -464,12 +480,25 @@ def render_summaries [html] (study, summary=None):
 
 
         # Human reference auto-lookup
-            
+        human_refs = ''
+        if summary:
+            hrs = []
+            for hrid in summary.human_refs:
+                hr = HumanStudy(context, hrid)
+                hrs.append(str("""
+                <div id='wrap-human-ref-%s'>
+                    <input id='human-ref-%s' type='checkbox' name='human-ref-%s' checked='checked' />
+                    [%s] %s
+                </div>
+                """ % (hr.uid, hr.uid, hr.uid, hr.uid, hr.reference)))
+            human_refs = htmltext(str('\n').join(hrs))
         """
             <tr>
                 <th valign='top'>Human refs</th>
                 <td valign='top'>
-                    <div id='human-refs'></div>
+                    <div id='human-refs'>%s</div>
+        """ % human_refs
+        """
         <br />
         First author [<a target='update-refs' href='/edit/human'>Add/change refs</a>]: 
         <img id='waitimage' src='/images/wait.gif' alt='waiting' style='display:none;' />
@@ -483,21 +512,30 @@ def render_summaries [html] (study, summary=None):
         </script>
                 </td>
             </tr>
-            
+        """
+        public_notes = ''
+        if summary:
+            public_notes = summary.public_notes
+        """
             <tr>
                 <th valign='top'>Public Notes</th>
                 <td valign='top'>
-                    <textarea rows='3' cols='50' wrap='virtual' name='public_notes'></textarea>
+                    <textarea rows='3' cols='50' wrap='virtual' name='public_notes'>%s</textarea>
                 </td>
             </tr>
-            
+        """ % public_notes
+        submit_value = 'add'
+        if summary:
+            submit_value = 'edit'
+        """
             <tr>
                 <th>Submit</th>
                 <td>
-                    <input type='submit' name='submit' value='add' />
+                    <input type='submit' name='submit' value='%s' />
                 </td>
             </tr>
-            
+        """ % submit_value
+        """
             </tbody>
         </table>
         </form>

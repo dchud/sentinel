@@ -162,6 +162,15 @@ class Summary (canary.context.Cacheable, DTable):
                 return HumanStudy(context, ref_id)
         return None
 
+    def get_concept (self, context, concept_type, ref_id):
+        """Get a particular exp/out/spec by id."""
+        if not concept_type in ('exposures', 'outcomes', 'species'):
+            return None
+        for c in getattr(self, concept_type):
+            if c.study_concept_id == ref_id:
+                return c
+        return None
+
 
     def load (self, context):
         if self.uid == -1:

@@ -3,6 +3,7 @@
 _q_exports = [
     '_q_index',
     'delete',
+    'edit',
     ]
 
 import traceback
@@ -55,6 +56,8 @@ class SummaryActions:
                 return add()
             elif action == 'delete':
                 return delete(self.summary_id)
+            elif action == 'edit':
+                return edit(self.summary_id)
             else:
                 raise TraversalError
         except:
@@ -62,18 +65,10 @@ class SummaryActions:
             return not_found('summary')
 
 
-
-def add [html] (request):
-    
-    context = get_publisher().context
-    queued_record = QueuedRecord(context, request.queued_record_id)
-    
-    if queued_record.status == queued_record.STATUS_CLAIMED:
-        if not is_same_user(queued_record):
-            return claimed_by_other_user()
-    
-    study = Study(context, queued_record.study_id)
+def process_summary_form (request, orig_summary=None):
     summary = Summary()
+    if orig_summary:
+        summary.uid = orig_summary.uid
     
     # Note: assume the javascript routine has caught all errors with input
     # combinations.  That's not really a good assumption.
@@ -108,6 +103,21 @@ def add [html] (request):
             summary.public_notes = str(v)
         elif k.startswith(str('human-ref')):
             summary.human_refs.append(int(k[10:]))
+
+    return summary
+    
+    
+def add [html] (request):
+    
+    context = get_publisher().context
+    queued_record = QueuedRecord(context, request.queued_record_id)
+    
+    if queued_record.status == queued_record.STATUS_CLAIMED:
+        if not is_same_user(queued_record):
+            return claimed_by_other_user()
+    
+    study = Study(context, queued_record.study_id)
+    summary = process_summary_form(request)
                 
     try:
         summary.save(context)
@@ -153,7 +163,7 @@ def delete [html] (summary_id):
         <h3>Delete summary</h3>
         """
         render_pipeline(study.get_article_type(text=True), 
-            url_prefix=str('../..'), step=4)
+            url_prefix=str('../..'), step=5)
         render_queued_record(queued_record)
         render_messages()
         """
@@ -187,5 +197,54 @@ def delete [html] (summary_id):
 
     request.redirect(str('/edit/study/%s/curate_five' % request.queued_record_id))
     
+
+
+def edit [html] (summary_id):
     
+    request = get_request()
+    context = get_publisher().context
+    queued_record = QueuedRecord(context, request.queued_record_id)
+    
+    if queued_record.status == queued_record.STATUS_CLAIMED:
+        if not is_same_user(queued_record):
+            return claimed_by_other_user()
+    
+    try:
+        study = Study(context, queued_record.study_id)
+        s = Summary(context, summary_id)
+        if not s:
+            raise 'Invalid summary id'
+    except:
+        return not_found('summary')
+
+    if not request.get_form_var('submit'):
+        header('Edit summary', show_javascript=True, 
+            javascript_files=['prototype', 'scriptaculous', 'scriptacle'])
+        """
+        <h3>Edit summary</h3>
+        """
+        render_pipeline(study.get_article_type(text=True), 
+            url_prefix=str('../..'), step=5)
+        render_queued_record(queued_record)
+        render_messages()
+        render_summaries(context, study, s)
+        render_unclaim_block()
+        footer()
+
+    else:
+        summary = process_summary_form(request, orig_summary=s)
+    
+        try:
+            summary.save(context)
+            study.add_history(curator_user_id=request.session.user.get_id(),
+                message='Edited summary "%s"' % summary_id)
+            study.save(context)
+            add_message('Summary edited')
+            context.logger.info(str('Edited summary %s' % summary_id))
+        except:
+            add_message('Unable to edit summary')
+            context.logger.error(str('Unable to edit summary %s' % summary_id))
+    
+        request.redirect(str('/edit/study/%s/curate_five' % request.queued_record_id))
+
     
