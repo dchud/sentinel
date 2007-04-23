@@ -151,7 +151,7 @@ def _q_index [html] (request):
                 """
                 for f, mt in sorted(utils.FORMATS.items()):
                     """
-                                        [<abbr class='unapi-id' title='%s'><a href='%s/unapi?id=%s&amp;format=%s'>%s</a></span>]
+                                        [<abbr class='unapi-id' title='%s'><a href='%s/unapi?id=%s&amp;format=%s'>%s</a></abbr>]
                     """  % (uri, config.site_base_url, uri, f, f)
                 """
                                 </td>
