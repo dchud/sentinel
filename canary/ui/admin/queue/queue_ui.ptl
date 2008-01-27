@@ -296,6 +296,7 @@ def list [html] (request):
     sort_list = [(b.name.lower(), b) for b in queue.batches]
     sort_list.sort()
     for n, batch in sort_list:
+        batch.load(context)
         batch_stats = batch.get_statistics(context)
 
         source_id = batch.source_id
@@ -311,7 +312,7 @@ def list [html] (request):
         
         # Avoid division by zero for empty batches
         if batch.num_records > 0:
-            percent_done = float(batch_stats['curated']) / batch.num_records * 100.0
+            percent_done = float(batch_stats['curated']) / batch_stats['total'] * 100.0
         else:
             percent_done = 0
         """
@@ -319,7 +320,7 @@ def list [html] (request):
         """ % (batch_stats['unclaimed'],
             batch_stats['claimed'],
             batch_stats['curated'],
-            batch.num_records,
+            batch_stats['total'],
             str('%2.1f' % percent_done),
             str('%'))
         """
