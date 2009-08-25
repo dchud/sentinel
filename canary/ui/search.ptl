@@ -206,7 +206,11 @@ def search [html] (request):
         # Find any summaries (should be API-level!)
         #if studies:
         # First, figure out what the concepts are:
+        # NOTE:  This probably NEVER works and KILLS the db if it's
+        # not in fine [myisamchk] repair AND it might NOT EVEN WORK
+        # so FIXME FIXME FIXME FIXME
         matching_concepts = find_concepts(context, raw_query)
+        #matching_concepts = []
         # Then, find a matching concept from a study (warning: could be > 1)
         study0 = studies[0]
         for matching_concept in matching_concepts:
