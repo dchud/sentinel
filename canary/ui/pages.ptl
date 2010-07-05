@@ -2,6 +2,7 @@
 
 from cStringIO import StringIO
 import logging
+import os
 import random
 import re
 import string
@@ -427,10 +428,10 @@ class TempImage:
     def _q_index (self):
         return not_found('image')
         
-    def _q_lookup (self, request, image_id):
+    def _q_lookup (self, request, image_id=None):
         context = get_publisher().context
         try:
-            request.response.set_content_type('image/png')
+            # Don't set the mime_type unless we know we have a png
             image_string = context.cache_get('image:%s' % image_id)
             # Verify that the cache get succeeded
             if image_string:
@@ -438,13 +439,15 @@ class TempImage:
                 im_data_encoded = StringIO()
                 im.save(im_data_encoded, "png") 
                 data = im_data_encoded.getvalue()
+                request.response.set_content_type('image/png')
                 return data
             else:
                 # If it failed, return the file itself.
                 # Note: this assumes that the cache set failed as well,
                 # so the image save process saved the file.
-                x = StaticFile(context.config.temp_image_dir +
-                    '/%s' % image_id, mime_type='image/png')
+                path = context.config.temp_image_dir + '/' + image_id
+                x = StaticFile(path, mime_type='image/png')
+                request.response.set_content_type('image/png')
                 return x
         except:
             self.logger.error(traceback.print_exc())

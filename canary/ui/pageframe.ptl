@@ -24,7 +24,7 @@ def header [html] (title,
     "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <!-- ================================================================================ -->
-<!-- Contents Copyright (C) 2004-2006 Yale School of Medicine.-->
+<!-- Contents Copyright (C) 2004-2010 Yale School of Medicine.-->
 <!-- All rights reserved. -->
 <!-- Web site design by Web Design and Development, ITS-Med, Yale School of Medicine. -->
 <!-- http://its.med.yale.edu/wdd/ -->
@@ -388,7 +388,7 @@ def footer [html] ():
                                 <a href="http://www.med.yale.edu/">Yale University School of Medicine </a>
                             </p>
                             <p class="footer">
-                                Copyright 2004-2007, Yale University School of Medicine, New Haven,  
+                                Copyright 2004-2010, Yale University School of Medicine, New Haven,  
                                 Connecticut, USA.
                                 <br />
                                 All rights reserved. 
