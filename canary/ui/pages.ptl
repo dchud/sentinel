@@ -120,11 +120,11 @@ def _q_index [html] (request):
 
     <div class='news'>
         <div class='news-head'>
-            <a href="http://news.canarydatabase.org/category/articles">Staff Publications</a>
+            <a href="http://news.canarydatabase.org/category/publications">Staff Publications</a>
         </div>
     """
     
-    for item in utils.parse_feed('http://news.canarydatabase.org/category/articles/feed/')[:5]:
+    for item in utils.parse_feed('http://news.canarydatabase.org/category/publications/feed/')[:3]:
         """
         <p class='story'>
         %s
@@ -135,7 +135,7 @@ def _q_index [html] (request):
             
     """
         <p>
-        See all <a href="http://news.canarydatabase.org/category/articles">project
+        See all <a href="http://news.canarydatabase.org/category/publications">project
         staff publications</a>.
         </p>
     </div>
