@@ -39,7 +39,6 @@ All of the following are REQUIRED:
 - pyparsing-1.3+
 - PyLucene-0.9.8+
 - Python Imaging Library-1.1.5+
-- matplotlib-0.83+ (many of its own dependencies, including Numeric/NumArray)
 - elementtree-1.2.6+
 - simplejson-1.1+
 
@@ -48,6 +47,7 @@ The following are OPTIONAL:
 
 - memcached >= 1.11 (running somewhere) 
 - python-memcached >= 1.2
+- matplotlib-0.83+ (many of its own dependencies, including Numeric/NumArray)
 
 
 App configuration:

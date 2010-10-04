@@ -6,7 +6,6 @@ import os
 import pprint
 import traceback
 
-import memcache
 import MySQLdb
 import PyLucene
 
@@ -214,6 +213,7 @@ class Context:
         # If not set to use_cache==True, all memcache calls will be
         # avoided.  See self.cache_*.
         if self.config.use_cache:
+            import memcache
             if not self.__dict__.has_key('_cache'):
                 self.logger.info('Connecting to cache')
                 self._cache = memcache.Client(self.config.cache_server_list, 
