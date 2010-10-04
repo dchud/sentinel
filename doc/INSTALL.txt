@@ -82,12 +82,12 @@ App configuration:
           SetHandler None
       </Location>
 
-    # Get javascript directly from the filesystem.
-    Alias /static "/home/dlc33/sites/canarydb.med.yale.edu/current/canary-trunk/canary/ui/html"
-    <Location /static>
-        SCGIHandler Off
-        SetHandler None
-    </Location>
+      # Get javascript directly from the filesystem.
+      Alias /static "/home/dlc33/sites/canarydb.med.yale.edu/current/canary-trunk/canary/ui/html"
+      <Location /static>
+          SCGIHandler Off
+          SetHandler None
+      </Location>
 
   </VirtualHost>
 
