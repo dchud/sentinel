@@ -41,6 +41,7 @@ All of the following are REQUIRED:
 - Python Imaging Library-1.1.5+
 - elementtree-1.2.6+
 - simplejson-1.1+
+- feedparser-4.1 (grab the trunk, there's a bug)
 
 
 The following are OPTIONAL:
@@ -80,6 +81,13 @@ App configuration:
           SCGIHandler Off
           SetHandler None
       </Location>
+
+    # Get javascript directly from the filesystem.
+    Alias /static "/home/dlc33/sites/canarydb.med.yale.edu/current/canary-trunk/canary/ui/html"
+    <Location /static>
+        SCGIHandler Off
+        SetHandler None
+    </Location>
 
   </VirtualHost>
 

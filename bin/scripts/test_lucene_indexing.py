@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.3
+#!/usr/bin/env python
 
 # Test creation of a lucene search index using canary database.
 #
