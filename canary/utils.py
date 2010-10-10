@@ -12,6 +12,7 @@ import urllib
 import elementtree.ElementTree as etree
 from elementtree.ElementTree import Element, SubElement
 import feedparser
+from unidecode import unidecode
 
 from canary import dtuple
 
@@ -437,3 +438,27 @@ def get_sfx_link (context, source_id, unique_identifier, resolver=None):
         return '%s%s&amp;%s' % (base_url, canarydb_sid, query_string)
     else:
         return '%s?%s&amp;%s' % (base_url, canarydb_sid, query_string)
+
+
+def google_location_string (context, loc):
+    """
+    Clean up a set of location information to avoid repeat values,
+    parentheses, and un-urllib.quote()-able unicode chars.
+
+    name, type, region_name, country_name = loc[1]
+    """
+    try:
+        # using a set de-dupes 
+        s = set()
+        name, type, region_name, country_name = loc[1]
+        # unidecode makes strings more likely markable in the quote() function
+        for n in [unidecode(n) for n in (name, region_name, country_name)]:
+            # some locations have parenthesized category info we don't want
+            if '(' in n:
+                s.add(n[:n.index('(')].strip())
+            else:
+                s.add(n)
+        return ', '.join(s)
+    except:
+        context.logger.error(traceback.print_exc())
+    return ''

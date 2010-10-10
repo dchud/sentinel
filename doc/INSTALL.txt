@@ -42,6 +42,8 @@ All of the following are REQUIRED:
 - elementtree-1.2.6+
 - simplejson-1.1+
 - feedparser-4.1 (grab the trunk, there's a bug)
+- motionless-1.1+
+- unidecode-0.04.1+
 
 
 The following are OPTIONAL:

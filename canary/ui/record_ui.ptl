@@ -4,6 +4,8 @@ import string
 import traceback
 import urllib
 
+import motionless
+
 from quixote import get_publisher, get_request
 from quixote.errors import TraversalError
 
@@ -197,7 +199,6 @@ def render_methodologies [html] (study, show_actions=False):
 def render_locations [html] (study):
     # Sort the locations by country, then region, for a nice display
     context = get_publisher().context
-    gazeteer = context.get_gazeteer()
     if not study.locations:
         return
         
@@ -206,12 +207,23 @@ def render_locations [html] (study):
                 <th valign='top'>Locations</th>
                 <td>
     """
-    
+
     locs = study.get_locations_sorted(context)
-    current_country = current_region = ''
+    
+    # Draw the map first
+    map = motionless.DecoratedMap(maptype='terrain', size_x=480, size_y=360)
+    for loc in locs:
+        gls = utils.google_location_string(context, loc)
+        map.add_marker(motionless.AddressMarker(gls))
+    """
+        <img alt='location map' src='%s' border='0'/>
+        <br />
+    """ % map.generate_url()
+
     """
     <table class='locationtable' border='0' cellspacing='0'>
     """
+    current_country = current_region = ''
     for loc in locs:
         name, type, region_name, country_name = loc[1]
         """
@@ -251,9 +263,14 @@ def render_locations [html] (study):
         current_country = country_name
         current_region = region_name
         
+
     """
     </table>
+    """
+
+
     
+    """
                 </td>
             </tr>
     """
