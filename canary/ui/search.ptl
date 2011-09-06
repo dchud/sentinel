@@ -46,6 +46,7 @@ class SearchForm (MyForm):
 
 def search [html] (request):
     context = get_publisher().context
+    request.response.cache = 300
     source_catalog = context.get_source_catalog()
     complete_term_mapping = source_catalog.get_complete_mapping()
     

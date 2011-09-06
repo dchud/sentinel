@@ -1,5 +1,7 @@
 build/*
 conf/canary_config.py
+bin/scgi_handler.py
+bin/startup.sh
 *.swp
 *.pid
 *.log

@@ -47,6 +47,7 @@ class Browse:
         footer()
     
     def _q_lookup (self, request, name):
+        request.response.cache = 300
         try:
             if name == 'year':
                 return YearBrowseIndex(request)

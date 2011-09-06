@@ -4,7 +4,7 @@ import os
 import time
 
 TEMP_DIR = '/canary/temp'
-MAX_AGE = 60 * 60 * 24 * 5 # Two days old
+MAX_AGE = 60 * 60 * 24 * 2 # Two days old
 
 count = 0
 total = 0

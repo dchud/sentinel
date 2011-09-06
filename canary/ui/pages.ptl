@@ -458,6 +458,7 @@ class TempImage:
 def robots [plain] ():
 
     request = get_request()  
+    request.response.cache = 3600
     request.response.set_content_type('text/plain')  
  
     config = get_publisher().config  
@@ -537,6 +538,7 @@ def render_unapi_formats [plain] (id=''):
 
 def unapi [plain] (request):
     context = get_publisher().context
+    request.response.cache = 300
     config = context.config
     id = request.get_form_var(str('id'), '')
     format = request.get_form_var(str('format'), '')

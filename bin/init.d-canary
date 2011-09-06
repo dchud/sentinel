@@ -1,0 +1,47 @@
+#!/bin/bash
+#
+# canary
+#
+# chkconfig: 2345 99 99
+# description:  executes cloud-init user scripts if discovered in user-data,
+#               if any are available
+# pidfile: /canary/sentinel/scgi.pid
+
+# source function library
+. /etc/rc.d/init.d/functions
+
+RETVAL=0
+LOGFILE=/var/log/canary.log
+pidfile=${PIDFILE-/canary/sentinel/scgi.pid}
+
+start() {
+        echo -n $"Running canary"
+        /canary/sentinel/bin/startup.sh >>$LOGFILE && success || failure
+        echo
+}
+
+stop () {
+        echo -n $"Stopping canary:" && success
+        killproc -p $pidfile
+        RETVAL=$?
+        echo
+        [ $RETVAL = 0 ] && rm -f ${pidfile}
+}
+
+case "$1" in
+        start)
+                start
+                ;;
+        stop)
+                stop
+                ;;
+        restart)
+                stop
+                start
+                ;;
+        *)
+                echo $"Usage: $0 {start|stop|restart}"
+                RETVAL=1
+esac
+exit $RETVAL
+
