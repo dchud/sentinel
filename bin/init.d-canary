@@ -5,14 +5,15 @@
 # chkconfig: 2345 99 99
 # description:  executes cloud-init user scripts if discovered in user-data,
 #               if any are available
-# pidfile: /canary/sentinel/scgi.pid
+# pidfile: /var/run/canary.pid
 
 # source function library
 . /etc/rc.d/init.d/functions
 
 RETVAL=0
 LOGFILE=/var/log/canary.log
-pidfile=${PIDFILE-/canary/sentinel/scgi.pid}
+#pidfile=${PIDFILE-/var/run/canary.pid}
+pidfile=/var/run/canary.pid
 
 start() {
         echo -n $"Running canary"
