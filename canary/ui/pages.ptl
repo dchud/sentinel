@@ -28,6 +28,7 @@ from canary.user import User, get_user_by_id, get_user_by_email, get_user_by_yal
 
 
 def _q_index [html] (request):
+    request.response.cache = 300
     package_name = str('.').join(__name__.split(str('.'))[:-1])
     module_name = __name__
     module_file = __file__
@@ -148,7 +149,7 @@ def _q_index [html] (request):
     footer()
 
 
-def _q_exception_handler [html] (request=None, exc):
+def _q_exception_handler [html] (request, exc=None):
     
     context = get_publisher().context
     err_text = '::'.join((request.get_path(), exc.title, exc.description,))

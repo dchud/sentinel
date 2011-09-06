@@ -1,6 +1,4 @@
-#!/usr/bin/env python2.4
-
-# $Id$
+#!/usr/bin/env python
 
 import os
 

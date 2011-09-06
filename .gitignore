@@ -1,0 +1,5 @@
+build/*
+conf/canary_config.py
+*.swp
+*.pid
+*.log
