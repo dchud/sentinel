@@ -132,7 +132,7 @@ def search [html] (request):
                     result_set.append((record, score))
         
         year_count = {}
-        for i in range(1965, 2010):
+        for i in range(1965, 2011):
             year_count[i] = 0
         for rec, score in result_set:
             mm = rec.get_mapped_metadata(term_map=complete_term_mapping)
@@ -167,7 +167,7 @@ def search [html] (request):
         %s of hits by year:
             <span style='font-weight:bold;font-size:x-small;'>1965</span>
             <img border='0' src='/timage/%s' type='image/png' usemap='#sparkmap'/>
-            <span style='font-weight:bold;font-size:x-small;'>2010</span>
+            <span style='font-weight:bold;font-size:x-small;'>2011</span>
         </p>
         """ % ('%', len(result_set), '%', sparkline_image_file)
         

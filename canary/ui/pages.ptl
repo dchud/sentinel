@@ -365,11 +365,6 @@ def login_yale [html] (request):
     <h3>Log in</h3>
 
     <p>
-    You are not logged in.  Please <a 
-    href="http://canarydatabase.org/login">log in here</a>.
-    </p>
-    
-    <p>
     If you are Canary project staff at Yale,
     please log in through the <a href='%s'>Yale CAS</a>.
     </p>
@@ -431,6 +426,7 @@ class TempImage:
         
     def _q_lookup (self, request, image_id=None):
         context = get_publisher().context
+        request.response.cache = 300
         try:
             # Don't set the mime_type unless we know we have a png
             image_string = context.cache_get('image:%s' % image_id)

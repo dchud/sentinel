@@ -565,7 +565,7 @@ class BrowseIndex:
             
             try:
                 year_count = {}
-                for i in range(1965, 2010):
+                for i in range(1965, 2011):
                     year_count[i] = 0
                 for rec in records:
                     mm = rec.get_mapped_metadata(term_map=complete_term_map)

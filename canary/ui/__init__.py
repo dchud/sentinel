@@ -57,13 +57,13 @@ def _q_lookup (request, name=''):
         return request.redirect('/images/favicon.ico')
     elif name == 'wdd_styles.css':
         return StaticFile(config.static_html_dir + '/wdd_styles.css',
-            mime_type='text/css')
+            mime_type='text/css', cache_time=300)
     elif name == 'wdd_print.css':
         return StaticFile(config.static_html_dir + '/wdd_print.css',
-            mime_type='text/css')
+            mime_type='text/css', cache_time=300)
     elif name.endswith('.js'):
         return StaticFile(config.static_html_dir + '/%s' % name,
-            mime_type='text/javascript')
+            mime_type='text/javascript', cache_time=300)
     elif name == 'robots.txt':
         if config.enable_robots_txt:
             return robots()
