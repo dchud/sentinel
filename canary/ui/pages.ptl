@@ -95,11 +95,13 @@ def _q_index [html] (request):
 
     <div class='news'>
         <div class='news-head'>
-            <a href="http://news.canarydatabase.org/">Project News</a>
+            <!-- <a href="http://news.canarydatabase.org/">Project News</a> -->
+            <a href="http://deohs.washington.edu/cohr/blog">Project News</a>
         </div>
     """
     
-    for item in utils.parse_feed('http://news.canarydatabase.org/feed/')[:3]:
+    # for item in utils.parse_feed('http://news.canarydatabase.org/feed/')[:3]:
+    for item in utils.parse_feed('http://deohs.washington.edu/cohr/blog/rss')[:5]:
         """
         <p class='story'>
         %s
@@ -110,15 +112,18 @@ def _q_index [html] (request):
             
     """
         <p>
-        See all <a href="http://news.canarydatabase.org/">project news</a>. <br />
+        <!-- See all <a href="http://news.canarydatabase.org/">project news</a>. <br /> -->
+        See all <a href="http://deohs.washington.edu/cohr/blog">project news</a>. <br />
         Subscribe to Project News: 
-        <a href="http://news.canarydatabase.org/feed/"><img src='/images/feed-icon-16x16.png' 
+        <!-- <a href="http://news.canarydatabase.org/feed/"><img src='/images/feed-icon-16x16.png' -->
+        <a href="http://deohs.washington.edu/cohr/blog/rss"><img src='/images/feed-icon-16x16.png' 
             alt='Project News Subscription Icon' border='0'/></a>
         </p>
 
     </div>
 
 
+    <!--
     <div class='news'>
         <div class='news-head'>
             <a href="http://news.canarydatabase.org/category/publications">Staff Publications</a>
@@ -140,6 +145,7 @@ def _q_index [html] (request):
         staff publications</a>.
         </p>
     </div>
+    -->
 
 
     </td>
