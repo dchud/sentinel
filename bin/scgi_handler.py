@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/canary/ENV/bin/python
 
 import os
 

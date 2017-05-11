@@ -180,7 +180,7 @@ class Context:
         self.config = config
         if not self.config:
             self.config = CanaryConfig()
-            self.config.read_file('conf/canary_config.py')
+            self.config.read_file('/canary/sentinel/conf/canary_config.py')
  
         # Get a logger to use
         self.init_logging()
