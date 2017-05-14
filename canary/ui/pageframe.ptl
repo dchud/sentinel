@@ -183,15 +183,27 @@ def print_header [html] ():
     <!-- ### PRINT HEADER  -- VISIBLE ONLY FOR PRINTING ######################################### -->
     <div id="print_banner">
         <p class="printHeader2">
+            <!-- 
             Canary Database, Yale School of Medicine
+            -->
+            Canary Database, Center for One Health Research
         </p>
         <p class="printHeader1">
             The Canary Database<br>
+            <!--
             Yale Occupational and Environmental Medicine Program<br>
             135 College St
             Room 366
             New Haven, CT, USA<br>
             06510-2283<br>
+            -->
+            The Center for One Health Research
+            Department of Environment & Occupational Health Sciences
+            School of Public Health
+            University of Washington
+            Box 357234
+            Seattle, WA, USA <br />
+            98195-7234
             <br>
             Home URL: http://canarydatabase.org/
         </p>
@@ -245,10 +257,12 @@ def sidebar [html] ():
             
             <p>About the project</p>
             <a href="/about/what_are_animal_sentinels">What are animal sentinels?</a>
+            <!--
             <a href="/about/project_mission">Mission</a>
             <a href="http://news.canarydatabase.org/">Project news</a>
             <a href="/about/project_history">History</a>
             <a href="/about/related_work">Related work</a>
+            -->
             
             <p>About us</p>
             <a href="/about/project_team">Project team</a>
@@ -318,16 +332,24 @@ def contact [html] ():
             <a href="http://wildlifedisease.nbii.gov/"><img src="/images/USGS-28-80x22_green.gif" 
                 alt="USGS logo" border='0' style='margin-bottom:2em;'/></a>
             
+            <!--
             <a href="http://info.med.yale.edu/intmed/occmed/"><img src="/images/yusm_logo.png" alt="Yale School of Medicine logo." 
                 hspace="30" vspace="0" border="0"></a>
+            -->
+            <a href="http://deohs.washington.edu/cohr/"><img src="http://deohs.washington.edu/sites/deohs.washington.edu.cohr/themes/boundless_cohr/images/COHR%20LOGOCircleOnly400by400.png" alt="Center for One Health Research logo." 
+                width="80" hspace="30" vspace="0" border="0"></a>
         <br>
-            The Canary Database<br />
+            The Canary Database <br />
+            <!--
             Yale Occupational and 
             Environmental Medicine Program<br />
             135 College St <br />
             Room 366<br />
             New Haven, CT, USA<br />
             06510-2283<br />
+            -->
+            Center for One Health Research <br />
+            University of Washington <br />
         </p>
         <img src="/images/pixel.gif" alt="" width="1" height="1" vspace="4">
         <br> 
@@ -376,24 +398,36 @@ def footer [html] ():
                             </a>
                             <br>
                             <p class="footerLinks">
+                                <!--
                                 <a href="http://info.med.yale.edu/intmed/occmed/">Yale University 
                                     Occupational and Environmental Medicine</a>
                                 &nbsp; &nbsp;
                                 <a href="http://www.med.yale.edu/">Yale University School of Medicine </a>
+                                -->
+                                <a href="http://deohs.washington.edu/cohr/">
+                                University of Washington Center for One Health Research</a>
                             </p>
                             <p class="footer">
+                                Department of Environmental and Occupational Health Sciences
+                                <br />
+                                School of Public Health 
+                                <br />
+                                University of Washington, Seattle, WA, USA
+                                <br />
+                                <!--
                                 Copyright 2004-2017, Yale University School of Medicine, New Haven,  
                                 Connecticut, USA.
                                 <br />
                                 All rights reserved. 
                                 <br />
+                                -->
                                 Please review our <a href='/about/disclaimer'>site disclaimer</a>.
                                 <br />
-                                This project is supported by <a href="http://www.nlm.nih.gov/">National Library of Medicine</a> Information Systems Grant #1 G08 LM07881-01.
+                                This project was supported by <a href="http://www.nlm.nih.gov/">National Library of Medicine</a> Information Systems Grant #1 G08 LM07881-01.
 
                                 <br />
                                 <a href='/about/contact_us'>Contact us</a> with
-                                    comments or suggestions.
+                                    comments or suggestions.  Stay in touch on <a href="http://http//www.facebook.com/centerforonehealthresearch">Facebook</a>, <a href="https://twitter.com/UWCOHR">Twitter</a>, and <a href="https://www.linkedin.com/groups?home=7gid=7401464">LinkedIn</a>.
                             </p>
                         </td>
                         <td width="4%" valign="top">

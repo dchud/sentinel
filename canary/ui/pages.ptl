@@ -41,16 +41,20 @@ def _q_index [html] (request):
     <td width='400' valign='top' class='rightspace'>
 
     <div class="pullquote">
+    <!--
     Can animals 
     - like canaries in coal mines -
     warn humans 
     about chemical, infectious, and physical
     environmental hazards?
+    -->
+    What are the animals trying to tell us about health hazards
+    in a changing environment?
     </div>
 
     <p>
-    We select, curate, and index 1000s of scientific studies from MEDLINE,
-    CAB Abstracts, and Agricola so you can review the evidence of 
+    We select, curate, and index 1000s of scientific studies <!-- from MEDLINE,
+    CAB Abstracts, and Agricola --> so you can review the evidence of 
     animals as "early warning" sentinels of human health hazards.
     </p>
     
@@ -113,11 +117,13 @@ def _q_index [html] (request):
     """
         <p>
         <!-- See all <a href="http://news.canarydatabase.org/">project news</a>. <br /> -->
-        See all <a href="http://deohs.washington.edu/cohr/blog">project news</a>. <br />
+        See all <a href="http://deohs.washington.edu/cohr/">project news</a>. <br />
+        <!--
         Subscribe to Project News: 
-        <!-- <a href="http://news.canarydatabase.org/feed/"><img src='/images/feed-icon-16x16.png' -->
+        <a href="http://news.canarydatabase.org/feed/"><img src='/images/feed-icon-16x16.png'
         <a href="http://deohs.washington.edu/cohr/blog/rss"><img src='/images/feed-icon-16x16.png' 
             alt='Project News Subscription Icon' border='0'/></a>
+        -->
         </p>
 
     </div>

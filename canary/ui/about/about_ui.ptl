@@ -16,15 +16,15 @@ from canary.utils import is_valid_email, send_email
 
 def contact_us [html] (request):
 
-    context = get_publisher().context
-    form = MyForm(context)
-    form.add(form2.StringWidget, 'user_name', title='Your name',
-             size=30, required=False)
-    form.add(form2.StringWidget, 'user_email', title='Your email address',
-             size=30, required=True)
-    form.add(form2.TextWidget, 'user_text', title='Your message',
-             rows=8, cols='60', wrap='virtual', required=True)
-    form.add_submit('send', 'send')
+    # context = get_publisher().context
+    # form = MyForm(context)
+    # form.add(form2.StringWidget, 'user_name', title='Your name',
+    #          size=30, required=False)
+    # form.add(form2.StringWidget, 'user_email', title='Your email address',
+    #          size=30, required=True)
+    # form.add(form2.TextWidget, 'user_text', title='Your message',
+    #          rows=8, cols='60', wrap='virtual', required=True)
+    # form.add_submit('send', 'send')
 
     def render [html] ():
         header('Contact Us')
@@ -32,9 +32,12 @@ def contact_us [html] (request):
         <h2>Contact us</h2>
 
         <p>
+        <br />
         We can be contacted at:
+         <h2><a href="http://deohs.washington.edu/cohr/">deohs.washington.edu/cohr</a></h2>
         </p>
 
+        <!--
         <p>
         <b>The Canary Database at Yale</b> <br/>
         Yale Occupational and Environmental Medicine Program <br/>
@@ -46,50 +49,53 @@ def contact_us [html] (request):
         You can also send us email using this form below.  We will
         <b>only</b> ever use your address to respond.
         </p>
+        -->
         """
-        form.render()
+        # form.render()
         footer()
 
-    if not form.is_submitted():
-        return render()
+    return render()
 
-    user_name = form['user_name']
-    user_email = form['user_email']
-    user_text = form['user_text']
-    if not user_name or user_name == '':
-        user_name = 'Anonymous'
-    if not user_email or not is_valid_email(user_email):
-        form.set_error('user_email', 'Please enter a valid email address.')
-    if not user_text or user_text == '':
-        form.set_error('user_text', 'Please enter your message to us.')
+    # if not form.is_submitted():
+    #     return render()
 
-    if form.has_errors():
-        return render()
+    # user_name = form['user_name']
+    # user_email = form['user_email']
+    # user_text = form['user_text']
+    # if not user_name or user_name == '':
+    #     user_name = 'Anonymous'
+    # if not user_email or not is_valid_email(user_email):
+    #     form.set_error('user_email', 'Please enter a valid email address.')
+    # if not user_text or user_text == '':
+    #     form.set_error('user_text', 'Please enter your message to us.')
 
-    config = get_publisher().config
+    # if form.has_errors():
+    #     return render()
+
+    # config = get_publisher().config
     # FIXME: better To: address
-    send_email(user_email,
-               config.mail_debug_addr,
-               subject='Message from a Canary site visitor',
-               body='%s writes:\n\n%s\n' % (user_name, user_text),
-               server=config.mail_server)
+    # send_email(user_email,
+    #            config.mail_debug_addr,
+    #            subject='Message from a Canary site visitor',
+    #            body='%s writes:\n\n%s\n' % (user_name, user_text),
+    #            server=config.mail_server)
 
-    form.logger.info(str('Mailed admins from %s' % user_email))
+    # form.logger.info(str('Mailed admins from %s' % user_email))
 
-    header('Contact us: Message sent')
-    """
-    <h2>Message sent</h2>
+    # header('Contact us: Message sent')
+    # """
+    # <h2>Message sent</h2>
 
-    <p>
-    Thank you for your message.  We will see it within a few business days,
-    and will respond, if appropriate, as quickly as we can.
-    </p>
+    # <p>
+    # Thank you for your message.  We will see it within a few business days,
+    # and will respond, if appropriate, as quickly as we can.
+    # </p>
 
-    <p>
-    <a href='/'>Click here</a> to return to the home page.
-    </p>
-    """
-    footer()
+    # <p>
+    # <a href='/'>Click here</a> to return to the home page.
+    # </p>
+    # """
+    # footer()
 
 
 def disclaimer [html] (request):
